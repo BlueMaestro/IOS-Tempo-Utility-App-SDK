@@ -24,7 +24,7 @@ typedef enum : NSInteger {
 
 // Insert code here to declare functionality of your managed object subclass
 
-@property (nonatomic, strong) LGPeripheral *peripheral;
+@property (nullable ,nonatomic, strong) LGPeripheral *peripheral;
 
 + (TempoDevice*)deviceWithName:(NSString*)name data:(NSDictionary*)data uuid:(NSString*)uuid context:(NSManagedObjectContext*)context;
 - (void)fillWithData:(NSDictionary*)data name:(NSString*)name uuid:(NSString*)uuid;

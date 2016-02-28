@@ -8,9 +8,10 @@
 
 #import "TDDeviceInfoViewController.h"
 #import <LGBluetooth/LGBluetooth.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 #import "AppDelegate.h"
 
-#define kDeviceConnectTimeout 30.0
+#define kDeviceConnectTimeout 10.0
 
 //independent tasks
 #define TEMPO_CUSTOM @"20652000-02F3-4F75-848F-323AC2A6AF8A"
@@ -36,6 +37,8 @@
 @interface TDDeviceInfoViewController ()
 
 @property (nonatomic, strong) NSDateFormatter *formatterLastDownload;
+
+@property (nonatomic, strong) MBProgressHUD *hudDownloadData;
 
 @end
 
@@ -71,7 +74,7 @@
 
 - (void)setupView {
 	_formatterLastDownload = [[NSDateFormatter alloc] init];
-	_formatterLastDownload.dateFormat = @"hh:mm EEEE d";
+	_formatterLastDownload.dateFormat = @"HH:mm EEEE d";
 	
 	_buttonDownload.layer.borderColor = [UIColor blackColor].CGColor;
 	_buttonDownload.layer.borderWidth = 1.0;
@@ -93,7 +96,67 @@
 
 #pragma mark - Sync
 
+- (void)downloadDataFromPeripheral:(LGPeripheral*)peripheral {
+	_hudDownloadData.labelText = NSLocalizedString(@"Downlading data...", nil);
+	[peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *connectError) {
+		if (!connectError) {
+			_hudDownloadData.labelText = NSLocalizedString(@"Discovering services", nil);
+			[peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *discoverError) {
+				if (!discoverError) {
+					LGService *dataDownloadService;
+					for (LGService *service in services) {
+						if ([[service.UUIDString uppercaseString] isEqualToString:TEMPO_CUSTOM]) {
+							dataDownloadService = service;
+						}
+					}
+					if (dataDownloadService) {
+						_hudDownloadData.labelText = NSLocalizedString(@"Discovering characteristics", nil);
+						[dataDownloadService discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *discoverCharacteristicsError) {
+							if (!discoverCharacteristicsError) {
+								LGCharacteristic *wcChar;
+								LGCharacteristic *dataChar;
+								LGCharacteristic *timeSyncChar;
+								for (LGCharacteristic *characteristic in characteristics) {
+									//get time characteristics
+									if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_TEMP]) {
+										timeSyncChar = characteristic;
+									}
+									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_TEMP]) {
+										wcChar = characteristic;
+									}
+									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_TEMP]) {
+										dataChar = characteristic;
+									}
+								}
+								if (wcChar && dataChar && timeSyncChar) {
+									[self startDataDownloadWithTimeSyncCharacteristic:timeSyncChar windowCharacteristic:wcChar dataCharacteristic:dataChar];
+								}
+								else {
+									[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find all characteristics for data download", nil)];
+								}
+							}
+							else {
+								[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error discovering charachteristics for service: %@", discoverCharacteristicsError.localizedDescription]];
+							}
+						}];
+					}
+					else {
+						[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find service with data download UUID", nil)];
+					}
+				}
+				else {
+					[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error discovering services for peripheral: %@", discoverError.localizedDescription]];
+				}
+			}];
+		}
+		else {
+			[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error connecting to peripheral: %@", connectError.localizedDescription]];
+		}
+	}];
+}
+
 - (void)startDataDownloadWithTimeSyncCharacteristic:(LGCharacteristic*)time windowCharacteristic:(LGCharacteristic*)windowControl dataCharacteristic:(LGCharacteristic*)window {
+	_hudDownloadData.labelText = NSLocalizedString(@"Downloading data", nil);
 	[time readValueWithBlock:^(NSData *readData, NSError *error) {
 		char *data = (char *)[readData bytes];
 		if (data != nil) {
@@ -174,54 +237,47 @@
 						[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 						[self fillData];
 					}
-					[self abortConnectionWithErrorMessage:nil];
+					[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Downloaded %ld new samples", (long)collection.count]];
 				}
 			}];
 		}];
 	}
 }
 
-- (void)abortConnectionWithErrorMessage:(NSString*)message {
+- (void)abortConnectionWithErrorMessage:(NSString*)message  {
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+	UIAlertController *controller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download finished", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+	[controller addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+	[self presentViewController:controller animated:YES completion:nil];
+	[TDDefaultDevice sharedDevice].selectedDevice.peripheral = nil;
 }
 
 #pragma mark - Actions
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
-	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	_hudDownloadData.labelText = NSLocalizedString(@"Searching for device...", nil);
 	LGPeripheral *peripheral = [TDDefaultDevice sharedDevice].selectedDevice.peripheral;
 	if (peripheral) {
-		[peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
-			[peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error) {
-				for (LGService *service in services) {
-					if ([[service.UUIDString uppercaseString] isEqualToString:TEMPO_CUSTOM]) {
-						[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error) {
-							LGCharacteristic *wcChar;
-							LGCharacteristic *dataChar;
-							LGCharacteristic *timeSyncChar;
-							for (LGCharacteristic *characteristic in characteristics) {
-								//get time characteristics
-								if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_TEMP]) {
-									timeSyncChar = characteristic;
-								}
-								else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_TEMP]) {
-									wcChar = characteristic;
-								}
-								else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_TEMP]) {
-									dataChar = characteristic;
-								}
-							}
-							if (wcChar && dataChar && timeSyncChar) {
-								[self startDataDownloadWithTimeSyncCharacteristic:timeSyncChar windowCharacteristic:wcChar dataCharacteristic:dataChar];
-							}
-							else {
-								[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-							}
-						}];
-					}
+		[self downloadDataFromPeripheral:peripheral];
+	}
+	else {
+		[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
+			LGPeripheral *targetPeripheral;
+			for (LGPeripheral *peripheral in peripherals) {
+				if ([peripheral.cbPeripheral.identifier.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.uuid]) {
+					targetPeripheral = peripheral;
+					break;
 				}
-			}];
+			}
+			if (targetPeripheral) {
+				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = targetPeripheral;
+				[self downloadDataFromPeripheral:targetPeripheral];
+			}
+			else {
+				[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find device peripheral", nil)];
+			}
 		}];
 	}
 }
