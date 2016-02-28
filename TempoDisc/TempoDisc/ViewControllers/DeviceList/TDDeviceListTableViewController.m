@@ -10,6 +10,7 @@
 #import <LGBluetooth/LGBluetooth.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "TDDeviceTableViewCell.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 #define MANUF_ID_BLUE_MAESTRO 0x0133
 #define BM_MODEL_T30 0
@@ -34,6 +35,8 @@ int getInt(char lsb,char msb)
 	/**
 	 *	Wait until ready to perform scan
 	 **/
+	MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
+	hud.labelText = NSLocalizedString(@"Scanning...", nil);
 	[[LGCentralManager sharedInstance] addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
 }
 
@@ -53,16 +56,18 @@ int getInt(char lsb,char msb)
 #pragma mark - Private methods
 
 - (void)setupView {
+	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 - (void)scanForDevices {
 	[[LGCentralManager sharedInstance]
-	 scanForPeripheralsByInterval:10
+	 scanForPeripheralsByInterval:2
 	 services:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
-		_dataSource = peripherals;
-		[self.tableView reloadData];
+		 _dataSource = peripherals;
+		 [self.tableView reloadData];
+		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
 	 }];
 	
 	/*[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
