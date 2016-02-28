@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Test1.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15C50" minimumToolsVersion="Automatic">
+    <entity name="Reading" representedClassName="Reading" syncable="YES">
+        <attribute name="avgValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="maxValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="minValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="type" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="readings" inverseEntity="ReadingType" syncable="YES"/>
+    </entity>
+    <entity name="ReadingType" representedClassName="ReadingType" syncable="YES">
+        <attribute name="lastHarvest" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TempoDevice" inverseName="readingTypes" inverseEntity="TempoDevice" syncable="YES"/>
+        <relationship name="readings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Reading" inverseName="type" inverseEntity="Reading" syncable="YES"/>
+    </entity>
+    <entity name="TempoDevice" representedClassName="TempoDevice" syncable="YES">
+        <attribute name="battery" optional="YES" attributeType="Decimal" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentHumidity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentPressure" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentTemperature" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="modelType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="version" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="readingTypes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="device" inverseEntity="ReadingType" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="163"/>
+        <element name="ReadingType" positionX="-90" positionY="75" width="128" height="103"/>
+        <element name="Reading" positionX="115" positionY="132" width="128" height="118"/>
+    </elements>
 </model>
