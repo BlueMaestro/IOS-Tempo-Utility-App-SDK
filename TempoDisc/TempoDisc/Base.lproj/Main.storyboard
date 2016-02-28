@@ -267,13 +267,42 @@
                     <connections>
                         <segue destination="tMM-iH-sIM" kind="relationship" relationship="viewControllers" id="jf6-4S-Tt9"/>
                         <segue destination="1ae-lz-4lE" kind="relationship" relationship="viewControllers" id="aCt-Wx-fvp"/>
-                        <segue destination="1bC-56-CRA" kind="relationship" relationship="viewControllers" id="sb7-PJ-DNc"/>
+                        <segue destination="h74-9A-Tqz" kind="relationship" relationship="viewControllers" id="sfr-Cn-FEs"/>
                         <segue destination="tuN-LB-SFY" kind="relationship" relationship="viewControllers" id="21C-DJ-qj4"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TT4-V3-l0R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1058" y="408"/>
+        </scene>
+        <!--Table-->
+        <scene sceneID="aFV-dB-Pch">
+            <objects>
+                <tableViewController id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDataTable" id="Xdk-gP-6Fx">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xdk-gP-6Fx" id="qlD-Qy-O2j">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="h74-9A-Tqz" id="YKi-lt-O3w"/>
+                            <outlet property="delegate" destination="h74-9A-Tqz" id="OT1-RB-Hz7"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Table" id="1ts-yA-chD"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jP9-Bp-Is7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1914" y="599"/>
         </scene>
         <!--Settings-->
         <scene sceneID="tZZ-mL-km1">
@@ -305,37 +334,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TlT-KU-z7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1914" y="1292"/>
-        </scene>
-        <!--Table-->
-        <scene sceneID="Udv-JN-z5m">
-            <objects>
-                <viewController id="1bC-56-CRA" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="PVo-k2-t7V"/>
-                        <viewControllerLayoutGuide type="bottom" id="6DF-ex-zAX"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="UnD-ir-d3e">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Table" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QzC-OO-C8e">
-                                <rect key="frame" x="279" y="290" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="QzC-OO-C8e" firstAttribute="centerX" secondItem="UnD-ir-d3e" secondAttribute="centerX" id="Y1A-21-Mev"/>
-                            <constraint firstItem="QzC-OO-C8e" firstAttribute="centerY" secondItem="UnD-ir-d3e" secondAttribute="centerY" id="wg2-I7-JsL"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Table" id="Bwb-42-ON7"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rG8-Kf-rkB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1914" y="632"/>
         </scene>
     </scenes>
 </document>

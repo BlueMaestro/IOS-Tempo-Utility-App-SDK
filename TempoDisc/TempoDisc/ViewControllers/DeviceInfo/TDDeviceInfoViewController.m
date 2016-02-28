@@ -157,6 +157,7 @@
 					if (min == INVALID_TEMP_VALUE) {
 						NSLog(@"Invalid Temperature value. Aborting...");
 						newTotal = 0;
+						break;
 					} else {
 						
 						[collection addObject:[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:min],[NSNumber numberWithFloat:avg], [NSNumber numberWithFloat:max], nil]];

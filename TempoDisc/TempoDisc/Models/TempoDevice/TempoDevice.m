@@ -108,14 +108,15 @@ int getInt(char lsb,char msb)
 			targetReadingType = readingType;
 		}
 	}
-	if (!targetReadingType) {
-		targetReadingType = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context];
-		targetReadingType.device = self;
-	}
 	//delete all data and insert again
-	for (Reading *reading in self.readingTypes) {
-		[context deleteObject:reading];
+	if (targetReadingType) {
+		[context deleteObject:targetReadingType];
 	}
+	
+	targetReadingType = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context];
+	[self addReadingTypesObject:targetReadingType];
+	targetReadingType.type = type;
+	
 	for (NSArray *sample in data) {
 		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
 		reading.type = targetReadingType;
@@ -130,6 +131,18 @@ int getInt(char lsb,char msb)
 	}
 	NSError *saveError;
 	[context save:&saveError];
+	if (saveError) {
+		NSLog(@"Error saving data import: %@", saveError);
+	}
+}
+
+- (NSArray *)readingsForType:(NSString *)typeOfReading {
+	for (ReadingType *readingType in self.readingTypes) {
+		if ([readingType.type isEqualToString:typeOfReading]) {
+			return [readingType.readings allObjects];
+		}
+	}
+	return @[];
 }
 
 @end
