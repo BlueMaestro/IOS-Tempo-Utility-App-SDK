@@ -6,6 +6,7 @@
 target 'TempoDisc' do
 
 pod "LGBluetooth", "~> 1.1.5"
+pod 'MBProgressHUD', '~> 0.9'
 
 end
 
