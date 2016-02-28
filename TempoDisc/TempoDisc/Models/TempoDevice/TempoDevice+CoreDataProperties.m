@@ -13,13 +13,17 @@
 
 @implementation TempoDevice (CoreDataProperties)
 
+@dynamic uuid;
 @dynamic name;
 @dynamic battery;
 @dynamic modelType;
 @dynamic version;
 @dynamic currentTemperature;
+@dynamic currentMaxTemperature;
+@dynamic currentMinTemperature;
 @dynamic currentHumidity;
 @dynamic currentPressure;
+@dynamic currentPressureDelta;
 @dynamic readingTypes;
 
 @end

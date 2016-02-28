@@ -11,15 +11,8 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "TDDeviceTableViewCell.h"
 #import <MBProgressHUD/MBProgressHUD.h>
-
-#define MANUF_ID_BLUE_MAESTRO 0x0133
-#define BM_MODEL_T30 0
-#define BM_MODEL_THP 1
-
-int getInt(char lsb,char msb)
-{
-	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
-}
+#import "TempoDevice.h"
+#import "AppDelegate.h"
 
 @interface TDDeviceListTableViewController()
 
@@ -57,6 +50,15 @@ int getInt(char lsb,char msb)
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+	UIRefreshControl *control = [[UIRefreshControl alloc] init];
+	[control addTarget:self action:@selector(handlePullRefresh:) forControlEvents:UIControlEventValueChanged];
+	self.refreshControl = control;
+}
+
+- (void)handlePullRefresh:(UIRefreshControl*)refreshControl {
+	if (refreshControl.isRefreshing) {
+		[self scanForDevices];
+	}
 }
 
 - (void)scanForDevices {
@@ -65,7 +67,15 @@ int getInt(char lsb,char msb)
 	 services:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
-		 _dataSource = peripherals;
+		 NSMutableArray *devices = [NSMutableArray array];
+		 for (LGPeripheral *peripheral in peripherals) {
+			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
+			 if (device) {
+				 [devices addObject:device];
+			 }
+		 }
+		 _dataSource = devices;
+		 [self.refreshControl endRefreshing];
 		 [self.tableView reloadData];
 		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
 	 }];
@@ -74,6 +84,34 @@ int getInt(char lsb,char msb)
 		_dataSource = peripherals;
 		[self.tableView reloadData];
 	}];*/
+}
+
+- (TempoDevice*)findOrCreateDeviceForPeripheral:(LGPeripheral*)peripheral {
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
+	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
+	NSError *fetchError;
+	NSManagedObjectContext *context = [(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	NSArray *result = [context executeFetchRequest:request error:&fetchError];
+	
+	TempoDevice *device;
+	if (!fetchError && result.count > 0) {
+		device = [result firstObject];
+		[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
+	}
+	else if (!fetchError) {
+		device = [TempoDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+	}
+	else {
+		NSLog(@"Error fetching devices: %@", fetchError.localizedDescription);
+	}
+	
+	NSError *saveError;
+	[context save:&saveError];
+	if (saveError) {
+		NSLog(@"Error saving device named %@: %@", peripheral.name, saveError.localizedDescription);
+	}
+	
+	return device;
 }
 
 #pragma mark - UITableViewDelegate
@@ -93,52 +131,11 @@ int getInt(char lsb,char msb)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	TDDeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDevice" forIndexPath:indexPath];
 	
-	LGPeripheral *device = _dataSource[indexPath.row];
+	TempoDevice *device = _dataSource[indexPath.row];
 	
 	cell.labelDeviceName.text = device.name;
-	
-	NSData *custom = [device.advertisingData objectForKey:@"kCBAdvDataManufacturerData"];
-	
-	bool isTempoLegacy =  (custom == nil && [device.name isEqualToString:@"Tempo "]);
-	bool isTempoT30 = false;
-	bool isTempoTHP = false;
-	NSString *deviceType = nil;
-	
-	//BlueMaestro device
-	if (custom != nil)
-	{
-		unsigned char * d = (unsigned char*)[custom bytes];
-		unsigned int manuf = d[1] << 8 | d[0];
-		
-		//Is this one of ours?
-		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_T30) {
-				deviceType = @"TEMPO_T30";
-				isTempoT30 = true;
-			} else if (d[2] == BM_MODEL_THP) {
-				deviceType = @"TEMPO_THP";
-				isTempoTHP = true;
-			}
-		}
-	}
-	else {
-		//device is legacy
-		deviceType = @"TEMPO_LEGACY";
-	}
-	
-	char * data = (char*)[custom bytes];
-	float min = getInt(data[3],data[4]) / 10.0f;
-	float avg = getInt(data[5],data[6]) / 10.0f;
-	float max = getInt(data[7],data[8]) / 10.0f;
-	
-	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", avg];
-	
-	if (isTempoTHP) {
-		int humidity = data[9];
-		int pressure = getInt(data[10],data[11]);
-		int pressureDelta = getInt(data[12],data[13]);
-		cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)humidity];
-	}
+	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", device.currentTemperature.floatValue];
+	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	
 	return cell;
 }

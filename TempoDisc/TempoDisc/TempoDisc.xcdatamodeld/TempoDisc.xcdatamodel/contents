@@ -16,15 +16,19 @@
     <entity name="TempoDevice" representedClassName="TempoDevice" syncable="YES">
         <attribute name="battery" optional="YES" attributeType="Decimal" defaultValueString="0" syncable="YES"/>
         <attribute name="currentHumidity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentMaxTemperature" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="currentMinTemperature" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="currentPressure" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentPressureDelta" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="currentTemperature" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
         <attribute name="modelType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="version" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="readingTypes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="device" inverseEntity="ReadingType" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="163"/>
+        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="223"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="103"/>
         <element name="Reading" positionX="115" positionY="132" width="128" height="118"/>
     </elements>
