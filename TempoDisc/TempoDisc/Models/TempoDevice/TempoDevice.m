@@ -100,4 +100,36 @@ int getInt(char lsb,char msb)
 	}
 }
 
+
+- (void)addData:(NSArray *)data forReadingType:(NSString *)type context:(NSManagedObjectContext *)context {
+	ReadingType *targetReadingType;
+	for (ReadingType *readingType in self.readingTypes) {
+		if ([readingType.type isEqualToString:type]) {
+			targetReadingType = readingType;
+		}
+	}
+	if (!targetReadingType) {
+		targetReadingType = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context];
+		targetReadingType.device = self;
+	}
+	//delete all data and insert again
+	for (Reading *reading in self.readingTypes) {
+		[context deleteObject:reading];
+	}
+	for (NSArray *sample in data) {
+		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
+		reading.type = targetReadingType;
+		if (sample.count > 2) {
+			reading.minValue = [sample firstObject];
+			reading.maxValue = [sample lastObject];
+			reading.avgValue = sample[1];
+		}
+		else {
+			reading.avgValue = [sample firstObject];
+		}
+	}
+	NSError *saveError;
+	[context save:&saveError];
+}
+
 @end

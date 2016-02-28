@@ -31,6 +31,8 @@ typedef enum : NSInteger {
 
 - (TempoDeviceType)deviceType;
 
+- (void)addData:(NSArray*)data forReadingType:(NSString*)type context:(NSManagedObjectContext*)context;
+
 @end
 
 NS_ASSUME_NONNULL_END

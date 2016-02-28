@@ -10,6 +10,7 @@
 //
 
 #import "ReadingType.h"
+#import "Reading.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,16 +19,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *type;
 @property (nullable, nonatomic, retain) NSDate *lastHarvest;
 @property (nullable, nonatomic, retain) TempoDevice *device;
-@property (nullable, nonatomic, retain) NSSet<NSManagedObject *> *readings;
+@property (nullable, nonatomic, retain) NSSet<Reading *> *readings;
 
 @end
 
 @interface ReadingType (CoreDataGeneratedAccessors)
 
-- (void)addReadingsObject:(NSManagedObject *)value;
-- (void)removeReadingsObject:(NSManagedObject *)value;
-- (void)addReadings:(NSSet<NSManagedObject *> *)values;
-- (void)removeReadings:(NSSet<NSManagedObject *> *)values;
+- (void)addReadingsObject:(Reading *)value;
+- (void)removeReadingsObject:(Reading *)value;
+- (void)addReadings:(NSSet<Reading *> *)values;
+- (void)removeReadings:(NSSet<Reading *> *)values;
 
 @end
 

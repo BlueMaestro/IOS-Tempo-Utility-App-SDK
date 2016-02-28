@@ -10,6 +10,7 @@
 //
 
 #import "TempoDevice.h"
+#import "ReadingType.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,16 +29,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *currentPressureDelta;
 @property (nullable, nonatomic, retain) NSDate *lastDownload;
 
-@property (nullable, nonatomic, retain) NSSet<NSManagedObject *> *readingTypes;
+@property (nullable, nonatomic, retain) NSSet<ReadingType *> *readingTypes;
 
 @end
 
 @interface TempoDevice (CoreDataGeneratedAccessors)
 
-- (void)addReadingTypesObject:(NSManagedObject *)value;
-- (void)removeReadingTypesObject:(NSManagedObject *)value;
-- (void)addReadingTypes:(NSSet<NSManagedObject *> *)values;
-- (void)removeReadingTypes:(NSSet<NSManagedObject *> *)values;
+- (void)addReadingTypesObject:(ReadingType *)value;
+- (void)removeReadingTypesObject:(ReadingType *)value;
+- (void)addReadingTypes:(NSSet<ReadingType *> *)values;
+- (void)removeReadingTypes:(NSSet<ReadingType *> *)values;
 
 @end
 
