@@ -24,12 +24,13 @@
         <attribute name="lastDownload" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="modelType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="peripheral" optional="YES" transient="YES" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="version" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="readingTypes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="device" inverseEntity="ReadingType" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="238"/>
+        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="253"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="103"/>
         <element name="Reading" positionX="115" positionY="132" width="128" height="118"/>
     </elements>

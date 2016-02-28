@@ -14,6 +14,8 @@
 #import "TempoDevice.h"
 #import "AppDelegate.h"
 
+#define kDeviceScanInterval 2.0
+
 @interface TDDeviceListTableViewController()
 
 @property (nonatomic, strong) NSArray *dataSource;
@@ -63,7 +65,7 @@
 
 - (void)scanForDevices {
 	[[LGCentralManager sharedInstance]
-	 scanForPeripheralsByInterval:2
+	 scanForPeripheralsByInterval:kDeviceScanInterval
 	 services:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
@@ -71,6 +73,7 @@
 		 for (LGPeripheral *peripheral in peripherals) {
 			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
 			 if (device) {
+				 device.peripheral = peripheral;
 				 [devices addObject:device];
 			 }
 		 }

@@ -14,5 +14,6 @@
 
 #import "TDHelper.h"
 #import "TDDefaultDevice.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 #endif /* TempoDiscPCH_pch */
