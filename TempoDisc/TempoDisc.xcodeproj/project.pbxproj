@@ -16,6 +16,8 @@
 		CB16BA481C82E67E00C99C41 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB16BA461C82E67E00C99C41 /* LaunchScreen.storyboard */; };
 		CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA541C82E75F00C99C41 /* TDDeviceListTableViewController.m */; };
 		CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA5A1C82ECFE00C99C41 /* TDDeviceTableViewCell.m */; };
+		CB16BA5D1C82EFA800C99C41 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */; };
+		CB16BA601C82FB0900C99C41 /* TDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA5F1C82FB0900C99C41 /* TDHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,10 @@
 		CB16BA541C82E75F00C99C41 /* TDDeviceListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceListTableViewController.m; sourceTree = "<group>"; };
 		CB16BA591C82ECFE00C99C41 /* TDDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB16BA5A1C82ECFE00C99C41 /* TDDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceTableViewCell.m; sourceTree = "<group>"; };
+		CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		CB16BA5E1C82FB0900C99C41 /* TDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHelper.h; sourceTree = "<group>"; };
+		CB16BA5F1C82FB0900C99C41 /* TDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHelper.m; sourceTree = "<group>"; };
+		CB16BA611C82FB4E00C99C41 /* TempoDiscPCH.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempoDiscPCH.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB16BA5D1C82EFA800C99C41 /* CoreBluetooth.framework in Frameworks */,
 				728E8D601974D0A026D23615 /* libPods-TempoDisc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				CB16BA361C82E67E00C99C41 /* main.m */,
+				CB16BA611C82FB4E00C99C41 /* TempoDiscPCH.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -114,6 +122,8 @@
 		CB16BA501C82E70C00C99C41 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				CB16BA5E1C82FB0900C99C41 /* TDHelper.h */,
+				CB16BA5F1C82FB0900C99C41 /* TDHelper.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -162,6 +172,7 @@
 		D1C4DF213B5628AD5B36CA9E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */,
 				03C960A4789B2BDCCD7404E0 /* libPods-TempoDisc.a */,
 			);
 			name = Frameworks;
@@ -293,6 +304,7 @@
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,
+				CB16BA601C82FB0900C99C41 /* TDHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +417,7 @@
 			baseConfigurationReference = 96C4C692DB4298041AE2D241 /* Pods-TempoDisc.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
@@ -417,6 +430,7 @@
 			baseConfigurationReference = 55CCD904E784162299EFA2AA /* Pods-TempoDisc.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
