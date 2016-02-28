@@ -24,6 +24,7 @@
 @dynamic currentHumidity;
 @dynamic currentPressure;
 @dynamic currentPressureDelta;
+@dynamic lastDownload;
 @dynamic readingTypes;
 
 @end

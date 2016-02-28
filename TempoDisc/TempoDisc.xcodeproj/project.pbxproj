@@ -17,13 +17,15 @@
 		CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA541C82E75F00C99C41 /* TDDeviceListTableViewController.m */; };
 		CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA5A1C82ECFE00C99C41 /* TDDeviceTableViewCell.m */; };
 		CB16BA5D1C82EFA800C99C41 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */; };
-		CB16BA601C82FB0900C99C41 /* TDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA5F1C82FB0900C99C41 /* TDHelper.m */; };
 		CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA651C83007B00C99C41 /* Reading+CoreDataProperties.m */; };
 		CB16BA731C83007B00C99C41 /* Reading.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA671C83007B00C99C41 /* Reading.m */; };
 		CB16BA741C83007B00C99C41 /* ReadingType+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA6A1C83007B00C99C41 /* ReadingType+CoreDataProperties.m */; };
 		CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA6C1C83007B00C99C41 /* ReadingType.m */; };
 		CB16BA761C83007B00C99C41 /* TempoDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA6F1C83007B00C99C41 /* TempoDevice+CoreDataProperties.m */; };
 		CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA711C83007B00C99C41 /* TempoDevice.m */; };
+		CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7A1C83123A00C99C41 /* TDHelper.m */; };
+		CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7E1C83126600C99C41 /* TDDefaultDevice.m */; };
+		CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,8 +46,6 @@
 		CB16BA591C82ECFE00C99C41 /* TDDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB16BA5A1C82ECFE00C99C41 /* TDDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		CB16BA5E1C82FB0900C99C41 /* TDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHelper.h; sourceTree = "<group>"; };
-		CB16BA5F1C82FB0900C99C41 /* TDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHelper.m; sourceTree = "<group>"; };
 		CB16BA611C82FB4E00C99C41 /* TempoDiscPCH.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempoDiscPCH.pch; sourceTree = "<group>"; };
 		CB16BA641C83007B00C99C41 /* Reading+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Reading+CoreDataProperties.h"; sourceTree = "<group>"; };
 		CB16BA651C83007B00C99C41 /* Reading+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Reading+CoreDataProperties.m"; sourceTree = "<group>"; };
@@ -59,6 +59,12 @@
 		CB16BA6F1C83007B00C99C41 /* TempoDevice+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDevice+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CB16BA701C83007B00C99C41 /* TempoDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempoDevice.h; sourceTree = "<group>"; };
 		CB16BA711C83007B00C99C41 /* TempoDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempoDevice.m; sourceTree = "<group>"; };
+		CB16BA791C83123A00C99C41 /* TDHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHelper.h; sourceTree = "<group>"; };
+		CB16BA7A1C83123A00C99C41 /* TDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHelper.m; sourceTree = "<group>"; };
+		CB16BA7D1C83126600C99C41 /* TDDefaultDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDefaultDevice.h; sourceTree = "<group>"; };
+		CB16BA7E1C83126600C99C41 /* TDDefaultDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDefaultDevice.m; sourceTree = "<group>"; };
+		CB16BA811C8313ED00C99C41 /* TDDeviceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceInfoViewController.h; sourceTree = "<group>"; };
+		CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceInfoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,8 +147,8 @@
 		CB16BA501C82E70C00C99C41 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				CB16BA5E1C82FB0900C99C41 /* TDHelper.h */,
-				CB16BA5F1C82FB0900C99C41 /* TDHelper.m */,
+				CB16BA7C1C83125600C99C41 /* DefaultDevice */,
+				CB16BA781C83123A00C99C41 /* Helper */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -151,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				CB16BA521C82E74200C99C41 /* DeviceList */,
+				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -229,6 +236,33 @@
 				CB16BA711C83007B00C99C41 /* TempoDevice.m */,
 			);
 			path = TempoDevice;
+			sourceTree = "<group>";
+		};
+		CB16BA781C83123A00C99C41 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				CB16BA791C83123A00C99C41 /* TDHelper.h */,
+				CB16BA7A1C83123A00C99C41 /* TDHelper.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		CB16BA7C1C83125600C99C41 /* DefaultDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CB16BA7D1C83126600C99C41 /* TDDefaultDevice.h */,
+				CB16BA7E1C83126600C99C41 /* TDDefaultDevice.m */,
+			);
+			path = DefaultDevice;
+			sourceTree = "<group>";
+		};
+		CB16BA801C8313CD00C99C41 /* DeviceInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB16BA811C8313ED00C99C41 /* TDDeviceInfoViewController.h */,
+				CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */,
+			);
+			path = DeviceInfo;
 			sourceTree = "<group>";
 		};
 		D1C4DF213B5628AD5B36CA9E /* Frameworks */ = {
@@ -363,16 +397,18 @@
 			files = (
 				CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */,
 				CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */,
+				CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
+				CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,
 				CB16BA731C83007B00C99C41 /* Reading.m in Sources */,
 				CB16BA741C83007B00C99C41 /* ReadingType+CoreDataProperties.m in Sources */,
 				CB16BA761C83007B00C99C41 /* TempoDevice+CoreDataProperties.m in Sources */,
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,
-				CB16BA601C82FB0900C99C41 /* TDHelper.m in Sources */,
+				CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -117,8 +117,10 @@
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	LGPeripheral *selectedDevice = _dataSource[indexPath.row];
+	TempoDevice *selectedDevice = _dataSource[indexPath.row];
+	[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
 	NSLog(@"Selected device: %@", selectedDevice.name);
+	[self performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
 	
 }
 
