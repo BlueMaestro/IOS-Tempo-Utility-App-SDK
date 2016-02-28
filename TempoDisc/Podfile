@@ -5,5 +5,7 @@
 
 target 'TempoDisc' do
 
+pod "LGBluetooth", "~> 1.1.5"
+
 end
 
