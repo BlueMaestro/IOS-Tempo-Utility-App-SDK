@@ -97,7 +97,7 @@
 #pragma mark - Sync
 
 - (void)downloadDataFromPeripheral:(LGPeripheral*)peripheral {
-	_hudDownloadData.labelText = NSLocalizedString(@"Downlading data...", nil);
+	_hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
 	[peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *connectError) {
 		if (!connectError) {
 			_hudDownloadData.labelText = NSLocalizedString(@"Discovering services", nil);
