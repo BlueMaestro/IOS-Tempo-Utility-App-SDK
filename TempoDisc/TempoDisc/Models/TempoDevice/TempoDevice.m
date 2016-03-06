@@ -11,6 +11,7 @@
 #define MANUF_ID_BLUE_MAESTRO 0x0133
 #define BM_MODEL_T30 0
 #define BM_MODEL_THP 1
+#define BM_MODEL_DISC 16
 
 int getInt(char lsb,char msb)
 {
@@ -39,6 +40,7 @@ int getInt(char lsb,char msb)
 	bool isTempoLegacy =  (custom == nil && [name isEqualToString:@"Tempo "]);
 	bool isTempoT30 = false;
 	bool isTempoTHP = false;
+	bool isTempoDisc = false;
 	NSString *deviceType = nil;
 	
 	//BlueMaestro device
@@ -56,6 +58,10 @@ int getInt(char lsb,char msb)
 				deviceType = @"TEMPO_THP";
 				isTempoTHP = true;
 			}
+			else if (d[2] == BM_MODEL_DISC) {
+				deviceType = @"TEMPO_DISC";
+				isTempoDisc = true;
+			}
 		}
 	}
 	else {
@@ -63,7 +69,7 @@ int getInt(char lsb,char msb)
 		self.modelType = @"TEMPO_LEGACY";
 	}
 	
-	if (isTempoT30 || isTempoTHP) {
+	if (!isTempoLegacy) {
 		char * data = (char*)[custom bytes];
 		float min = getInt(data[3],data[4]) / 10.0f;
 		float avg = getInt(data[5],data[6]) / 10.0f;
@@ -75,14 +81,17 @@ int getInt(char lsb,char msb)
 		self.currentMaxTemperature = [NSNumber numberWithFloat:max];
 		self.currentTemperature = [NSNumber numberWithFloat:avg];
 		
-		if (isTempoTHP) {
+		if (!isTempoT30) {
 			int humidity = data[9];
-			int pressure = getInt(data[10],data[11]);
-			int pressureDelta = getInt(data[12],data[13]);
-			
-			self.currentPressure = [NSNumber numberWithInt:pressure];
 			self.currentHumidity = [NSNumber numberWithInt:humidity];
-			self.currentPressureDelta = [NSNumber numberWithInt:pressureDelta];
+			
+			if (isTempoTHP) {
+				int pressure = getInt(data[10],data[11]);
+				int pressureDelta = getInt(data[12],data[13]);
+				
+				self.currentPressure = [NSNumber numberWithInt:pressure];
+				self.currentPressureDelta = [NSNumber numberWithInt:pressureDelta];
+			}
 		}
 	}
 }
