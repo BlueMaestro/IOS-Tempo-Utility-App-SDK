@@ -68,29 +68,53 @@ int getInt(char lsb,char msb)
 		//device is legacy
 		self.modelType = @"TEMPO_LEGACY";
 	}
-	
 	if (!isTempoLegacy) {
-		char * data = (char*)[custom bytes];
-		float min = getInt(data[3],data[4]) / 10.0f;
-		float avg = getInt(data[5],data[6]) / 10.0f;
-		float max = getInt(data[7],data[8]) / 10.0f;
-		
 		self.modelType = deviceType;
-		
-		self.currentMinTemperature = [NSNumber numberWithFloat:min];
-		self.currentMaxTemperature = [NSNumber numberWithFloat:max];
-		self.currentTemperature = [NSNumber numberWithFloat:avg];
-		
-		if (!isTempoT30) {
-			int humidity = data[9];
-			self.currentHumidity = [NSNumber numberWithInt:humidity];
+		char * data = (char*)[custom bytes];
+		if (isTempoDisc) {
+			/**
+			 *	Status bits
+			 *	Not sure about data read
+			 **/
+			float temperatureStatus = (data[3] && 128) >> 7;
+			float humidityStatus = (data[3] && 64) >> 6;
+			float pressureStatus = ((data[3] && 32) >> 5);
+			float accelerometerStatus = ((data[3] && 16) >> 4);
+			float irStatus = (data[3] && 8) >> 3;
 			
-			if (isTempoTHP) {
-				int pressure = getInt(data[10],data[11]);
-				int pressureDelta = getInt(data[12],data[13]);
+			float min = getInt(data[11],data[12]) / 10.0f;
+			float avg = getInt(data[13],data[14]) / 10.0f;
+			float max = getInt(data[15],data[16]) / 10.0f;
+			
+			float humidity = data[17];
+			float pressure = getInt(data[18], data[19]);
+			
+			self.currentMinTemperature = [NSNumber numberWithFloat:min];
+			self.currentMaxTemperature = [NSNumber numberWithFloat:max];
+			self.currentTemperature = [NSNumber numberWithFloat:avg];
+			self.currentHumidity = @(humidity);
+			self.currentPressure = [NSNumber numberWithInt:pressure];
+		}
+		else {
+			float min = getInt(data[3],data[4]) / 10.0f;
+			float avg = getInt(data[5],data[6]) / 10.0f;
+			float max = getInt(data[7],data[8]) / 10.0f;
+			
+			self.currentMinTemperature = [NSNumber numberWithFloat:min];
+			self.currentMaxTemperature = [NSNumber numberWithFloat:max];
+			self.currentTemperature = [NSNumber numberWithFloat:avg];
+			
+			if (!isTempoT30) {
+				int humidity = data[9];
+				self.currentHumidity = [NSNumber numberWithInt:humidity];
 				
-				self.currentPressure = [NSNumber numberWithInt:pressure];
-				self.currentPressureDelta = [NSNumber numberWithInt:pressureDelta];
+				if (isTempoTHP) {
+					int pressure = getInt(data[10],data[11]);
+					int pressureDelta = getInt(data[12],data[13]);
+					
+					self.currentPressure = [NSNumber numberWithInt:pressure];
+					self.currentPressureDelta = [NSNumber numberWithInt:pressureDelta];
+				}
 			}
 		}
 	}
