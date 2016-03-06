@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) NSArray *dataSourceReadings;
 
+@property (nonatomic, assign) TempoReadingType currentReadingType;
+
 @end
 
 @implementation TDDeviceDataTableViewController
@@ -26,12 +28,18 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self setupView];
+	_currentReadingType = TempoReadingTypeTemperature;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	_dataSourceReadings = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"];
+	[self loadDataForType:_currentReadingType];
+	self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Temperature" style:UIBarButtonItemStyleDone target:self action:@selector(buttonChangeReadingTypeClicked:)];
 	[self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	self.parentViewController.navigationItem.rightBarButtonItem = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,6 +51,35 @@
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+}
+
+- (void)loadDataForType:(TempoReadingType)type {
+	NSString *readingType;
+	switch (type) {
+  case TempoReadingTypeTemperature:
+			readingType = @"Temperature";
+			break;
+		case TempoReadingTypeHumidity:
+			readingType = @"Humidity";
+			
+  default:
+			break;
+	}
+	if (readingType) {
+		_dataSourceReadings = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType];
+	}
+	else {
+		_dataSourceReadings = @[];
+	}
+	[self.tableView reloadData];
+}
+
+#pragma mark - Actions
+
+- (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
+	_currentReadingType = _currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature;
+	[self loadDataForType:_currentReadingType];
+	[sender setTitle:(_currentReadingType == TempoReadingTypeTemperature) ? @"Temperature" : @"Humidity"];
 }
 
 #pragma mark - Table view data source

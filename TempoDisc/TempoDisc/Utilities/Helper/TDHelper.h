@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSInteger {
+	TempoReadingTypeTemperature,
+	TempoReadingTypeHumidity,
+	TempoReadingTypePressure
+} TempoReadingType;
+
 @interface TDHelper : NSObject
 
 @end

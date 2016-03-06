@@ -32,7 +32,11 @@
 #define TEMPO_FIND @"20652011-02F3-4F75-848F-323AC2A6AF8A"
 #define TEMPO_iBEACON @"20652012-02F3-4F75-848F-323AC2A6AF8A"
 
+#define TEMP_SAMPLES_IN_DATA 3
+#define HUMIDTY_SAMPLES_IN_DATA 12
+
 #define INVALID_TEMP_VALUE -3276.8f
+#define INVALID_HUMIDITY_VALUE -1
 
 @interface TDDeviceInfoViewController ()
 
@@ -40,13 +44,71 @@
 
 @property (nonatomic, strong) MBProgressHUD *hudDownloadData;
 
+@property (nonatomic, strong) LGCharacteristic* temperatureWindow;
+@property (nonatomic, strong) LGCharacteristic *temperatureControl;
+@property (nonatomic, strong) LGCharacteristic *temperatureTimeSync;
+
+@property (nonatomic, strong) LGCharacteristic* humidityWindow;
+@property (nonatomic, strong) LGCharacteristic *humidityControl;
+@property (nonatomic, strong) LGCharacteristic *humidityTimeSync;
+
 @end
 
 @implementation TDDeviceInfoViewController
 
+#pragma mark - Data Parse
+
 - (int)getIntLsb:(char)lsb msb:(char)msb {
 	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
 }
+
+- (int)parseTempData:(int)numSamples characteristic:(CBCharacteristic*)dataChar collection:(NSMutableArray*)collection {
+	char *data = (char *)[dataChar.value bytes];
+	
+	for (int i = 0;i< TEMP_SAMPLES_IN_DATA && numSamples > 0 ; i++)
+	{
+		float min = [self getIntLsb:data[0 + i*6] msb:data[3 + i*6]] / 10.0f;
+		float avg = [self getIntLsb:data[2 + i*6] msb:data[3 + i*6]] / 10.0f;
+		float max = [self getIntLsb:data[4 + i*6] msb:data[5 + i*6]] / 10.0f;
+		
+		NSLog(@"Min %f  Avg %f Max %f",min,avg,max);
+		if (min == INVALID_TEMP_VALUE) {
+			NSLog(@"Invalid Temperature value. Aborting...");
+			numSamples = 0;
+		} else {
+			
+			[collection addObject:[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:min],[NSNumber numberWithFloat:avg], [NSNumber numberWithFloat:max], nil]];
+			
+			numSamples--;
+		}
+	}
+	
+	return numSamples;
+}
+
+- (int)parseHumidityValue:(int)numSamples characeristic:(CBCharacteristic*)dataChar collection:(NSMutableArray*)collection {
+	char *data = (char *)[dataChar.value bytes];
+	
+	for (int i = 0;i< HUMIDTY_SAMPLES_IN_DATA && numSamples > 0 ; i++)
+	{
+		int value = data[i];
+		
+		NSLog(@"Humidity value: %d",value);
+		if (value == INVALID_HUMIDITY_VALUE) {
+			NSLog(@"Invalid Humidity value. Aborting...");
+			numSamples = 0;
+		} else {
+			
+			[collection addObject:[[NSArray alloc] initWithObjects:[NSNumber numberWithInt:value], nil]];
+			
+			numSamples--;
+		}
+	}
+	
+	return numSamples;
+}
+
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -113,23 +175,35 @@
 						_hudDownloadData.labelText = NSLocalizedString(@"Discovering characteristics", nil);
 						[dataDownloadService discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *discoverCharacteristicsError) {
 							if (!discoverCharacteristicsError) {
-								LGCharacteristic *wcChar;
-								LGCharacteristic *dataChar;
-								LGCharacteristic *timeSyncChar;
+								_temperatureTimeSync = nil;
+								_temperatureControl = nil;
+								_temperatureWindow = nil;
+								_humidityControl = nil;
+								_humidityTimeSync = nil;
+								_humidityWindow = nil;
 								for (LGCharacteristic *characteristic in characteristics) {
 									//get time characteristics
 									if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_TEMP]) {
-										timeSyncChar = characteristic;
+										_temperatureTimeSync = characteristic;
 									}
 									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_TEMP]) {
-										wcChar = characteristic;
+										_temperatureControl = characteristic;
 									}
 									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_TEMP]) {
-										dataChar = characteristic;
+										_temperatureWindow = characteristic;
+									}
+									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_HUMIDITY]) {
+										_humidityTimeSync = characteristic;
+									}
+									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_HUMIDITY]) {
+										_humidityControl = characteristic;
+									}
+									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_HUMIDITY]) {
+										_humidityWindow = characteristic;
 									}
 								}
-								if (wcChar && dataChar && timeSyncChar) {
-									[self startDataDownloadWithTimeSyncCharacteristic:timeSyncChar windowCharacteristic:wcChar dataCharacteristic:dataChar];
+								if (_temperatureWindow && _temperatureControl && _temperatureControl) {
+									[self startDataDownloadWithTimeSyncCharacteristic:_temperatureTimeSync windowCharacteristic:_temperatureControl dataCharacteristic:_temperatureWindow type:TempoReadingTypeTemperature];
 								}
 								else {
 									[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find all characteristics for data download", nil)];
@@ -155,7 +229,7 @@
 	}];
 }
 
-- (void)startDataDownloadWithTimeSyncCharacteristic:(LGCharacteristic*)time windowCharacteristic:(LGCharacteristic*)windowControl dataCharacteristic:(LGCharacteristic*)window {
+- (void)startDataDownloadWithTimeSyncCharacteristic:(LGCharacteristic*)time windowCharacteristic:(LGCharacteristic*)windowControl dataCharacteristic:(LGCharacteristic*)window type:(TempoReadingType)type {
 	_hudDownloadData.labelText = NSLocalizedString(@"Downloading data", nil);
 	[time readValueWithBlock:^(NSData *readData, NSError *error) {
 		char *data = (char *)[readData bytes];
@@ -184,7 +258,7 @@
 				} else {
 					//dummy read
 					[time readValueWithBlock:^(NSData *data, NSError *error) {
-						[self readDataFromCharacteristic:window withControl:windowControl totalSamples:totalNeeded windowNumber:sampleCount collection:[NSMutableArray array]];
+						[self readDataFromCharacteristic:window withControl:windowControl totalSamples:totalNeeded windowNumber:sampleCount collection:[NSMutableArray array] type:type];
 					}];
 					
 					//Wait for the read to complete
@@ -196,7 +270,7 @@
 	}];
 }
 
-- (void)readDataFromCharacteristic:(LGCharacteristic*)window withControl:(LGCharacteristic*)windowControl totalSamples:(int)total windowNumber:(int)page collection:(NSMutableArray*)collection {
+- (void)readDataFromCharacteristic:(LGCharacteristic*)window withControl:(LGCharacteristic*)windowControl totalSamples:(int)total windowNumber:(int)page collection:(NSMutableArray*)collection type:(TempoReadingType)type {
 	__block int newTotal = total;
 	NSLog(@"reading sample page %ld/%ld", (long)page, (long)total);
 	if (total == 0) {
@@ -208,40 +282,60 @@
 		value[1] = (page >> 8) &0xFF;
 		[windowControl writeValue:[NSData dataWithBytes:&value length:sizeof(value)] completion:^(NSError *error) {
 			[window readValueWithBlock:^(NSData *readData, NSError *error) {
-				char *data = (char *)[readData bytes];
-    
-				for (int i = 0; i< 3 && total > 0 ; i++)
-				{
-					float min = [self getIntLsb:data[0 + i*6] msb:data[1 + i*6]] / 10.0f;
-					float avg = [self getIntLsb:data[2 + i*6] msb:data[3 + i*6]] / 10.0f;
-					float max = [self getIntLsb:data[4 + i*6] msb:data[5 + i*6]] / 10.0f;
-					
-					NSLog(@"Min %f  Avg %f Max %f",min,avg,max);
-					if (min == INVALID_TEMP_VALUE) {
-						NSLog(@"Invalid Temperature value. Aborting...");
-						newTotal = 0;
-						break;
-					} else {
-						
-						[collection addObject:[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:min],[NSNumber numberWithFloat:avg], [NSNumber numberWithFloat:max], nil]];
-						
-						newTotal--;
-					}
+				if (type == TempoReadingTypeTemperature) {
+					newTotal = [self parseTempData:newTotal characteristic:window.cbCharacteristic collection:collection];
 				}
-				if (newTotal > 0) {
-					[self readDataFromCharacteristic:window withControl:windowControl totalSamples:newTotal windowNumber:page+3 collection:collection];
+				else if (type == TempoReadingTypeHumidity) {
+					newTotal = [self parseHumidityValue:newTotal characeristic:window.cbCharacteristic collection:collection];
 				}
 				else {
-					if (collection.count > 0) {
-						[[TDDefaultDevice sharedDevice].selectedDevice addData:collection forReadingType:@"Temperature" context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
-						[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
-						[self fillData];
-					}
-					[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Downloaded %ld new samples", (long)collection.count]];
+					newTotal = 0;
+				}
+				if (newTotal > 0) {
+					[self readDataFromCharacteristic:window withControl:windowControl totalSamples:newTotal windowNumber:page+3 collection:collection type:type];
+				}
+				else {
+					[self finishedDataReadForDataType:type collection:collection];
 				}
 			}];
 		}];
 	}
+}
+
+- (void)insertData:(NSArray*)collection forReadingType:(TempoReadingType)type {
+	NSString *readingType;
+	switch (type) {
+  case TempoReadingTypeTemperature:
+			readingType = @"Temperature";
+			break;
+		case TempoReadingTypeHumidity:
+			readingType = @"Humidity";
+  default:
+			break;
+	}
+	if (readingType) {
+		[[TDDefaultDevice sharedDevice].selectedDevice addData:collection forReadingType:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+	}
+}
+
+- (void)finishedDataReadForDataType:(TempoReadingType)type collection:(NSMutableArray*)collection {
+	if (collection.count > 0) {
+		[self insertData:collection forReadingType:type];
+	}
+	switch (type) {
+  case TempoReadingTypeTemperature:
+			[self startDataDownloadWithTimeSyncCharacteristic:_humidityTimeSync windowCharacteristic:_humidityControl dataCharacteristic:_humidityWindow type:TempoReadingTypeHumidity];
+			break;
+			
+  default:
+			if (collection.count > 0) {
+				[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+				[self fillData];
+			}
+			[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Downloaded %ld samples", (long)collection.count]];
+			break;
+	}
+	
 }
 
 - (void)abortConnectionWithErrorMessage:(NSString*)message  {
