@@ -4,7 +4,7 @@
         <attribute name="avgValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="maxValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="minValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="timestamp" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="type" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="readings" inverseEntity="ReadingType" syncable="YES"/>
     </entity>
     <entity name="ReadingType" representedClassName="ReadingType" syncable="YES">
@@ -30,7 +30,7 @@
         <relationship name="readingTypes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="device" inverseEntity="ReadingType" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Reading" positionX="115" positionY="132" width="128" height="118"/>
+        <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
         <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="253"/>
     </elements>

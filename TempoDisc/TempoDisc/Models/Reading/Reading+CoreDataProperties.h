@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSDecimalNumber *avgValue;
 @property (nullable, nonatomic, retain) NSDecimalNumber *minValue;
 @property (nullable, nonatomic, retain) NSDecimalNumber *maxValue;
-@property (nullable, nonatomic, retain) NSDecimalNumber *timestamp;
+@property (nullable, nonatomic, retain) NSDate *timestamp;
 @property (nullable, nonatomic, retain) ReadingType *type;
 
 @end

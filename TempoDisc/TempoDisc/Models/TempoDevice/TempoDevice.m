@@ -128,6 +128,8 @@ int getInt(char lsb,char msb)
 	[self addReadingTypesObject:targetReadingType];
 	targetReadingType.type = type;
 	
+	NSDate *currentDate = [NSDate date];
+	NSInteger index = 0;
 	for (NSArray *sample in data) {
 		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
 		reading.type = targetReadingType;
@@ -139,6 +141,8 @@ int getInt(char lsb,char msb)
 		else {
 			reading.avgValue = [sample firstObject];
 		}
+		reading.timestamp = [currentDate dateByAddingTimeInterval:-3600*index];
+		index++;
 	}
 	NSError *saveError;
 	[context save:&saveError];

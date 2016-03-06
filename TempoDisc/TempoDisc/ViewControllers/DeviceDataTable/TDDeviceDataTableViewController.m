@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) NSArray *dataSourceReadings;
 
+@property (nonatomic, strong) NSDateFormatter *formatterTimestamp;
+
 @property (nonatomic, assign) TempoReadingType currentReadingType;
 
 @end
@@ -51,6 +53,8 @@
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+	_formatterTimestamp = [[NSDateFormatter alloc] init];
+	_formatterTimestamp.dateFormat = @"hh:mm:ssa dd-MM-yyyy";
 }
 
 - (void)loadDataForType:(TempoReadingType)type {
@@ -66,7 +70,7 @@
 			break;
 	}
 	if (readingType) {
-		_dataSourceReadings = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType];
+		_dataSourceReadings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
 	}
 	else {
 		_dataSourceReadings = @[];
@@ -99,7 +103,13 @@
     // Configure the cell...
 	Reading *reading = _dataSourceReadings[indexPath.row];
 	
-	cell.textLabel.text = [NSString stringWithFormat:@"avg: %@, min: %@, max: %@", reading.avgValue.stringValue, reading.minValue.stringValue, reading.maxValue.stringValue];
+	if (reading.minValue || reading.maxValue) {
+		cell.textLabel.text = [NSString stringWithFormat:@"avg: %@, min: %@, max: %@", reading.avgValue.stringValue, reading.minValue.stringValue, reading.maxValue.stringValue];
+	}
+	else {
+		cell.textLabel.text = [NSString stringWithFormat:@"avg: %@", reading.avgValue.stringValue];
+	}
+	cell.detailTextLabel.text = [_formatterTimestamp stringFromDate:reading.timestamp];
     
     return cell;
 }
