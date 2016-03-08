@@ -1,0 +1,5 @@
+TempoDisc/Pods
+.DS_Store
+*.xcuserstate
+xcschememanagement.plist
+*.xcbkptlist
