@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		728E8D601974D0A026D23615 /* libPods-TempoDisc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C960A4789B2BDCCD7404E0 /* libPods-TempoDisc.a */; };
+		368E870AE3B76835E2481750 /* libPods-TempoDisc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82FB1A59C65FBE25B230ABA8 /* libPods-TempoDisc.a */; };
 		CB16BA371C82E67E00C99C41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA361C82E67E00C99C41 /* main.m */; };
 		CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA391C82E67E00C99C41 /* AppDelegate.m */; };
 		CB16BA401C82E67E00C99C41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB16BA3E1C82E67E00C99C41 /* Main.storyboard */; };
@@ -30,9 +30,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		03C960A4789B2BDCCD7404E0 /* libPods-TempoDisc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TempoDisc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		55CCD904E784162299EFA2AA /* Pods-TempoDisc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TempoDisc.release.xcconfig"; path = "Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc.release.xcconfig"; sourceTree = "<group>"; };
-		96C4C692DB4298041AE2D241 /* Pods-TempoDisc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TempoDisc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc.debug.xcconfig"; sourceTree = "<group>"; };
+		2013146B1AC6BFF856356C17 /* Pods-TempoDisc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TempoDisc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc.debug.xcconfig"; sourceTree = "<group>"; };
+		82FB1A59C65FBE25B230ABA8 /* libPods-TempoDisc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TempoDisc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AACEF50CE43906B2DAB7D75A /* Pods-TempoDisc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TempoDisc.release.xcconfig"; path = "Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc.release.xcconfig"; sourceTree = "<group>"; };
 		CB16BA321C82E67E00C99C41 /* TempoDisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TempoDisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB16BA361C82E67E00C99C41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CB16BA381C82E67E00C99C41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -76,18 +76,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB16BA5D1C82EFA800C99C41 /* CoreBluetooth.framework in Frameworks */,
-				728E8D601974D0A026D23615 /* libPods-TempoDisc.a in Frameworks */,
+				368E870AE3B76835E2481750 /* libPods-TempoDisc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5BC96D5A0DAF27AC283DCA16 /* Pods */ = {
+		93111F856E28513BB75AD76A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				96C4C692DB4298041AE2D241 /* Pods-TempoDisc.debug.xcconfig */,
-				55CCD904E784162299EFA2AA /* Pods-TempoDisc.release.xcconfig */,
+				2013146B1AC6BFF856356C17 /* Pods-TempoDisc.debug.xcconfig */,
+				AACEF50CE43906B2DAB7D75A /* Pods-TempoDisc.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -97,8 +97,8 @@
 			children = (
 				CB16BA341C82E67E00C99C41 /* TempoDisc */,
 				CB16BA331C82E67E00C99C41 /* Products */,
-				5BC96D5A0DAF27AC283DCA16 /* Pods */,
 				D1C4DF213B5628AD5B36CA9E /* Frameworks */,
+				93111F856E28513BB75AD76A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -282,7 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */,
-				03C960A4789B2BDCCD7404E0 /* libPods-TempoDisc.a */,
+				82FB1A59C65FBE25B230ABA8 /* libPods-TempoDisc.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -294,12 +294,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CB16BA4C1C82E67E00C99C41 /* Build configuration list for PBXNativeTarget "TempoDisc" */;
 			buildPhases = (
-				4308E525AA55D7954055DBFC /* Check Pods Manifest.lock */,
+				C4F3E125765D4FCB3E31C94E /* Check Pods Manifest.lock */,
 				CB16BA2E1C82E67E00C99C41 /* Sources */,
 				CB16BA2F1C82E67E00C99C41 /* Frameworks */,
 				CB16BA301C82E67E00C99C41 /* Resources */,
-				16B2CDAABE831E38A6D38019 /* Embed Pods Frameworks */,
-				CF5A1A779D166D06CD4E629C /* Copy Pods Resources */,
+				BE0F373F93A4DD57968C6DD8 /* Embed Pods Frameworks */,
+				87030393AA58A3B2D706F8E1 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -356,7 +356,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		16B2CDAABE831E38A6D38019 /* Embed Pods Frameworks */ = {
+		87030393AA58A3B2D706F8E1 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BE0F373F93A4DD57968C6DD8 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -371,7 +386,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		4308E525AA55D7954055DBFC /* Check Pods Manifest.lock */ = {
+		C4F3E125765D4FCB3E31C94E /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -384,21 +399,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		CF5A1A779D166D06CD4E629C /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -532,7 +532,7 @@
 		};
 		CB16BA4D1C82E67E00C99C41 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96C4C692DB4298041AE2D241 /* Pods-TempoDisc.debug.xcconfig */;
+			baseConfigurationReference = 2013146B1AC6BFF856356C17 /* Pods-TempoDisc.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
@@ -545,7 +545,7 @@
 		};
 		CB16BA4E1C82E67E00C99C41 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 55CCD904E784162299EFA2AA /* Pods-TempoDisc.release.xcconfig */;
+			baseConfigurationReference = AACEF50CE43906B2DAB7D75A /* Pods-TempoDisc.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
