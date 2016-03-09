@@ -71,10 +71,12 @@
 	 completion:^(NSArray *peripherals) {
 		 NSMutableArray *devices = [NSMutableArray array];
 		 for (LGPeripheral *peripheral in peripherals) {
-			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
-			 if (device) {
-				 device.peripheral = peripheral;
-				 [devices addObject:device];
+			 if ([TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData]) {
+				 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
+				 if (device) {
+					 device.peripheral = peripheral;
+					 [devices addObject:device];
+				 }
 			 }
 		 }
 		 _dataSource = devices;

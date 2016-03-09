@@ -30,6 +30,24 @@ int getInt(char lsb,char msb)
 	return device;
 }
 
++ (BOOL)isTempoDiscDeviceWithAdvertisementData:(NSDictionary*)data {
+	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+	//BlueMaestro device
+	if (custom != nil)
+	{
+		unsigned char * d = (unsigned char*)[custom bytes];
+		unsigned int manuf = d[1] << 8 | d[0];
+		
+		//Is this one of ours?
+		if (manuf == MANUF_ID_BLUE_MAESTRO) {
+			if (d[2] == BM_MODEL_DISC) {
+				return YES;
+			}
+		}
+	}
+	return NO;
+}
+
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid {
 	
 	self.uuid = uuid;
