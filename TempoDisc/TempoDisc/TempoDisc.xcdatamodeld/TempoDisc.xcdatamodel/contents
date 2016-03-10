@@ -21,6 +21,7 @@
         <attribute name="currentPressure" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="currentPressureDelta" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="currentTemperature" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="isTempoDiscDevice" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="lastDownload" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="modelType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -32,6 +33,6 @@
     <elements>
         <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
-        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="253"/>
+        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="270"/>
     </elements>
 </model>

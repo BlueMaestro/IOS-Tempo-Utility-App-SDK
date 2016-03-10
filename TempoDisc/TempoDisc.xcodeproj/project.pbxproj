@@ -27,6 +27,7 @@
 		CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7E1C83126600C99C41 /* TDDefaultDevice.m */; };
 		CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
+		CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,8 @@
 		CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceInfoViewController.m; sourceTree = "<group>"; };
 		CB6895611C83355700EB1A65 /* TDDeviceDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceDataTableViewController.h; sourceTree = "<group>"; };
 		CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceDataTableViewController.m; sourceTree = "<group>"; };
+		CB9421E81C91E6D5000724B5 /* TDOtherDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDOtherDeviceTableViewCell.h; sourceTree = "<group>"; };
+		CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDOtherDeviceTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,7 @@
 		CB16BA561C82ECC600C99C41 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				CB9421E71C91E6C1000724B5 /* OtherDevice */,
 				CB16BA581C82ECE700C99C41 /* Device */,
 			);
 			path = Cells;
@@ -276,6 +280,15 @@
 				CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */,
 			);
 			path = DeviceDataTable;
+			sourceTree = "<group>";
+		};
+		CB9421E71C91E6C1000724B5 /* OtherDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CB9421E81C91E6D5000724B5 /* TDOtherDeviceTableViewCell.h */,
+				CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */,
+			);
+			path = OtherDevice;
 			sourceTree = "<group>";
 		};
 		D1C4DF213B5628AD5B36CA9E /* Frameworks */ = {
@@ -412,6 +425,7 @@
 				CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */,
 				CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
+				CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */,
 				CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */,
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,

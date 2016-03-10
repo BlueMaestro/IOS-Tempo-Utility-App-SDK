@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *currentPressure;
 @property (nullable, nonatomic, retain) NSNumber *currentPressureDelta;
 @property (nullable, nonatomic, retain) NSDate *lastDownload;
+@property (nullable, nonatomic, retain) NSNumber *isTempoDiscDevice;
 
 @property (nullable, nonatomic, retain) NSSet<ReadingType *> *readingTypes;
 

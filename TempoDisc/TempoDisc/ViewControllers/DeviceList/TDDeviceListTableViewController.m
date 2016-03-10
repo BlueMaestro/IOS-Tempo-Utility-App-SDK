@@ -10,6 +10,7 @@
 #import <LGBluetooth/LGBluetooth.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "TDDeviceTableViewCell.h"
+#import "TDOtherDeviceTableViewCell.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "TempoDevice.h"
 #import "AppDelegate.h"
@@ -71,12 +72,10 @@
 	 completion:^(NSArray *peripherals) {
 		 NSMutableArray *devices = [NSMutableArray array];
 		 for (LGPeripheral *peripheral in peripherals) {
-			 if ([TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData]) {
-				 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
-				 if (device) {
-					 device.peripheral = peripheral;
-					 [devices addObject:device];
-				 }
+			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
+			 if (device) {
+				 device.peripheral = peripheral;
+				 [devices addObject:device];
 			 }
 		 }
 		 _dataSource = devices;
@@ -92,6 +91,8 @@
 }
 
 - (TempoDevice*)findOrCreateDeviceForPeripheral:(LGPeripheral*)peripheral {
+	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
+	
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
 	NSError *fetchError;
@@ -101,10 +102,23 @@
 	TempoDevice *device;
 	if (!fetchError && result.count > 0) {
 		device = [result firstObject];
-		[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
+		if (isTempoDiscDevice) {
+			[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
+		}
+		else {
+			device.name = peripheral.name;
+		}
+		device.isTempoDiscDevice = @(isTempoDiscDevice);
 	}
 	else if (!fetchError) {
-		device = [TempoDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+		if (isTempoDiscDevice) {
+			device = [TempoDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+		}
+		else {
+			device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
+			device.name = peripheral.name;
+		}
+		device.isTempoDiscDevice = @(isTempoDiscDevice);
 	}
 	else {
 		NSLog(@"Error fetching devices: %@", fetchError.localizedDescription);
@@ -119,14 +133,30 @@
 	return device;
 }
 
+#pragma mark - Cell fill
+
+- (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TempoDevice*)device {
+	cell.labelDeviceName.text = device.name;
+	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", device.currentTemperature.floatValue];
+	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
+}
+
+- (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
+	cell.labelDeviceName.text = device.name;
+}
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *selectedDevice = _dataSource[indexPath.row];
-	[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
-	NSLog(@"Selected device: %@", selectedDevice.name);
-	[self performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
-	
+	if (selectedDevice.isTempoDiscDevice.boolValue) {
+		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
+		NSLog(@"Selected device: %@", selectedDevice.name);
+		[self performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
+	}
+	else {
+		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	}
 }
 
 #pragma mark - UITableViewDataSource
@@ -136,13 +166,24 @@
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	TDDeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDevice" forIndexPath:indexPath];
-	
 	TempoDevice *device = _dataSource[indexPath.row];
 	
-	cell.labelDeviceName.text = device.name;
-	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", device.currentTemperature.floatValue];
-	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
+	NSString *reuse = @"";
+	if (device.isTempoDiscDevice.boolValue) {
+		reuse = @"cellDeviceTempoDisc";
+	}
+	else {
+		reuse = @"cellDeviceOther";
+	}
+	
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
+	
+	if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
+		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isKindOfClass:[TDOtherDeviceTableViewCell class]]) {
+		[self fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:device];
+	}
 	
 	return cell;
 }

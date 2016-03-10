@@ -26,5 +26,6 @@
 @dynamic currentPressureDelta;
 @dynamic lastDownload;
 @dynamic readingTypes;
+@dynamic isTempoDiscDevice;
 
 @end
