@@ -10,4 +10,7 @@
 
 @interface TDGraphViewController : UIViewController
 
+@property (strong, nonatomic) IBOutlet UIView *viewGraphTemperature;
+@property (strong, nonatomic) IBOutlet UIView *viewGraphHumidity;
+
 @end

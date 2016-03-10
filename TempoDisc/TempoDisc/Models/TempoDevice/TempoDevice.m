@@ -94,11 +94,11 @@ int getInt(char lsb,char msb)
 			 *	Status bits
 			 *	Not sure about data read
 			 **/
-			float temperatureStatus = (data[3] && 128) >> 7;
-			float humidityStatus = (data[3] && 64) >> 6;
-			float pressureStatus = ((data[3] && 32) >> 5);
-			float accelerometerStatus = ((data[3] && 16) >> 4);
-			float irStatus = (data[3] && 8) >> 3;
+			float temperatureStatus = (data[3] & 0x80) >> 7;
+			float humidityStatus = (data[3] & 0x40) >> 6;
+			float pressureStatus = ((data[3] & 0x20) >> 5);
+			float accelerometerStatus = ((data[3] & 0x10) >> 4);
+			float irStatus = (data[3] & 0x8) >> 3;
 			
 			float min = getInt(data[11],data[12]) / 10.0f;
 			float avg = getInt(data[13],data[14]) / 10.0f;

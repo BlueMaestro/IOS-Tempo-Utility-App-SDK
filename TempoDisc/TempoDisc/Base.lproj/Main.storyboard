@@ -148,7 +148,7 @@
         <!--Graph-->
         <scene sceneID="cD1-Ya-ggw">
             <objects>
-                <viewController id="1ae-lz-4lE" customClass="TDGraphViewController" sceneMemberID="viewController">
+                <viewController title="Graph" id="1ae-lz-4lE" customClass="TDGraphViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sun-aC-tAM"/>
                         <viewControllerLayoutGuide type="bottom" id="Ghr-Nz-4Ce"/>
@@ -157,29 +157,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Graph" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6os-uG-7j5">
-                                <rect key="frame" x="276" y="290" width="48" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zba-qg-7bC">
+                                <rect key="frame" x="20" y="74" width="560" height="229"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JFD-EF-IsQ">
+                                <rect key="frame" x="20" y="313" width="560" height="228"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6os-uG-7j5" firstAttribute="centerX" secondItem="xnb-Gi-QGJ" secondAttribute="centerX" id="Ap7-aL-WMg"/>
-                            <constraint firstItem="6os-uG-7j5" firstAttribute="centerY" secondItem="xnb-Gi-QGJ" secondAttribute="centerY" id="GiS-bR-4og"/>
+                            <constraint firstItem="JFD-EF-IsQ" firstAttribute="top" secondItem="Zba-qg-7bC" secondAttribute="bottom" constant="10" id="91T-GV-nDt"/>
+                            <constraint firstItem="Ghr-Nz-4Ce" firstAttribute="top" secondItem="JFD-EF-IsQ" secondAttribute="bottom" constant="10" id="9Im-Hp-199"/>
+                            <constraint firstItem="JFD-EF-IsQ" firstAttribute="height" secondItem="Zba-qg-7bC" secondAttribute="height" id="BGR-ai-bmx"/>
+                            <constraint firstItem="Zba-qg-7bC" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="Dsa-j8-ewM"/>
+                            <constraint firstAttribute="trailing" secondItem="JFD-EF-IsQ" secondAttribute="trailing" constant="20" id="V3B-38-htQ"/>
+                            <constraint firstItem="Zba-qg-7bC" firstAttribute="top" secondItem="sun-aC-tAM" secondAttribute="bottom" constant="10" id="ZW2-xl-wGD"/>
+                            <constraint firstItem="JFD-EF-IsQ" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="agF-BF-49c"/>
+                            <constraint firstAttribute="trailing" secondItem="Zba-qg-7bC" secondAttribute="trailing" constant="20" id="apk-YL-H1y"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" id="pYQ-gk-v3r"/>
+                    <connections>
+                        <outlet property="viewGraphHumidity" destination="JFD-EF-IsQ" id="jrT-SO-C8p"/>
+                        <outlet property="viewGraphTemperature" destination="Zba-qg-7bC" id="Q3i-gu-DfN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tLd-KV-4zV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1914" y="-56"/>
         </scene>
-        <!--Current-->
+        <!--Device Info-->
         <scene sceneID="UIT-ad-UoF">
             <objects>
-                <viewController storyboardIdentifier="viewControllerDeviceInfo" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tMM-iH-sIM" customClass="TDDeviceInfoViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="viewControllerDeviceInfo" title="Device Info" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tMM-iH-sIM" customClass="TDDeviceInfoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uhR-bj-DHK"/>
                         <viewControllerLayoutGuide type="bottom" id="88I-2I-oGl"/>
@@ -299,10 +311,10 @@
             </objects>
             <point key="canvasLocation" x="1058" y="408"/>
         </scene>
-        <!--Table-->
+        <!--Table Data-->
         <scene sceneID="aFV-dB-Pch">
             <objects>
-                <tableViewController id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
+                <tableViewController title="Table Data" id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -347,7 +359,7 @@
         <!--Settings-->
         <scene sceneID="tZZ-mL-km1">
             <objects>
-                <viewController id="tuN-LB-SFY" sceneMemberID="viewController">
+                <viewController title="Settings" id="tuN-LB-SFY" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ZUi-HB-CgG"/>
                         <viewControllerLayoutGuide type="bottom" id="TMf-hD-5Bv"/>
