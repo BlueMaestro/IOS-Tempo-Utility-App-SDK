@@ -15,11 +15,12 @@
 #import "TempoDevice.h"
 #import "AppDelegate.h"
 
-#define kDeviceScanInterval 2.0
+#define kDeviceScanInterval 5.0
 
 @interface TDDeviceListTableViewController()
 
 @property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, assign) BOOL scanning;
 
 @end
 
@@ -31,9 +32,8 @@
 	/**
 	 *	Wait until ready to perform scan
 	 **/
-	MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
-	hud.labelText = NSLocalizedString(@"Scanning...", nil);
-	[[LGCentralManager sharedInstance] addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
+	[[LGCentralManager sharedInstance]
+	 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 #pragma mark - KVO
@@ -42,7 +42,10 @@
 	if ([keyPath isEqualToString:@"centralReady"]) {
 		if ([LGCentralManager sharedInstance].isCentralReady) {
 			dispatch_async(dispatch_get_main_queue(), ^{
+				//Bluetooth is ready. Start scan.
 				[self scanForDevices];
+				
+				//we dont need to listen to changes anymore since everything is set up
 				[[LGCentralManager sharedInstance] removeObserver:self forKeyPath:@"centralReady"];
 			});
 		}
@@ -53,23 +56,33 @@
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-	UIRefreshControl *control = [[UIRefreshControl alloc] init];
-	[control addTarget:self action:@selector(handlePullRefresh:) forControlEvents:UIControlEventValueChanged];
-	self.refreshControl = control;
-}
-
-- (void)handlePullRefresh:(UIRefreshControl*)refreshControl {
-	if (refreshControl.isRefreshing) {
-		[self scanForDevices];
-	}
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+											  initWithTitle:NSLocalizedString(@"Scan", nil)
+											  style:UIBarButtonItemStyleDone
+											  target:self
+											  action:@selector(buttonScanClicked:)];
 }
 
 - (void)scanForDevices {
+	//prevent double scan
+	if (_scanning) {
+		return;
+	}
+	_scanning = YES;
+	
+	//show progress indicator
+	MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
+	hud.labelText = NSLocalizedString(@"Scanning...", nil);
+	
+	//start scan
 	[[LGCentralManager sharedInstance]
 	 scanForPeripheralsByInterval:kDeviceScanInterval
 	 services:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
+		 //handle scan result
+		 
+		 //create list of devices
 		 NSMutableArray *devices = [NSMutableArray array];
 		 for (LGPeripheral *peripheral in peripherals) {
 			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
@@ -78,19 +91,20 @@
 				 [devices addObject:device];
 			 }
 		 }
+		 
 		 _dataSource = devices;
-		 [self.refreshControl endRefreshing];
 		 [self.tableView reloadData];
+		 
+		 //cleanup
 		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
+		 _scanning = NO;
 	 }];
-	
-	/*[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
-		_dataSource = peripherals;
-		[self.tableView reloadData];
-	}];*/
 }
 
 - (TempoDevice*)findOrCreateDeviceForPeripheral:(LGPeripheral*)peripheral {
+	/**
+	 *	TDT-2 Non Tempo Disc devices should still be visible, with limited data
+	 **/
 	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
@@ -101,6 +115,7 @@
 	
 	TempoDevice *device;
 	if (!fetchError && result.count > 0) {
+		//found existing device
 		device = [result firstObject];
 		if (isTempoDiscDevice) {
 			[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
@@ -111,6 +126,7 @@
 		device.isTempoDiscDevice = @(isTempoDiscDevice);
 	}
 	else if (!fetchError) {
+		//detected new device
 		if (isTempoDiscDevice) {
 			device = [TempoDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
 		}
@@ -133,6 +149,12 @@
 	return device;
 }
 
+#pragma mark - Actions
+
+- (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
+	[self scanForDevices];
+}
+
 #pragma mark - Cell fill
 
 - (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TempoDevice*)device {
@@ -150,11 +172,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *selectedDevice = _dataSource[indexPath.row];
 	if (selectedDevice.isTempoDiscDevice.boolValue) {
+		//Selected device is tempo disc. Set global singleton reference and go to details
 		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
 		NSLog(@"Selected device: %@", selectedDevice.name);
 		[self performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
 	}
 	else {
+		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
 }
