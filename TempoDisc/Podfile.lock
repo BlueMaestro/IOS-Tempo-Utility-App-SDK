@@ -1,15 +1,18 @@
 PODS:
+  - CorePlot (2.0)
   - LGBluetooth (1.1.5)
   - MBProgressHUD (0.9.2)
 
 DEPENDENCIES:
+  - CorePlot (~> 2.0)
   - LGBluetooth (~> 1.1.5)
   - MBProgressHUD (~> 0.9)
 
 SPEC CHECKSUMS:
+  CorePlot: b7f422ad363f2b0e48152471d6da45ce232eb8c6
   LGBluetooth: 8407d2de27bcbd4a9e11243290b928293ffa8881
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
 
-PODFILE CHECKSUM: e738060772174c694c8c90f98978db628cd3cbd4
+PODFILE CHECKSUM: 06498a423b7d57b4ef0bfe11bf29e8288999a042
 
 COCOAPODS: 1.0.0.beta.3

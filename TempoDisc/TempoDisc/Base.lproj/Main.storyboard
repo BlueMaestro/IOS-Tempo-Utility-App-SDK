@@ -148,7 +148,7 @@
         <!--Graph-->
         <scene sceneID="cD1-Ya-ggw">
             <objects>
-                <viewController id="1ae-lz-4lE" sceneMemberID="viewController">
+                <viewController id="1ae-lz-4lE" customClass="TDGraphViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sun-aC-tAM"/>
                         <viewControllerLayoutGuide type="bottom" id="Ghr-Nz-4Ce"/>
