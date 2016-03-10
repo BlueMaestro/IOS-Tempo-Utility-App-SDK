@@ -36,6 +36,11 @@
 	 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	[self.tableView reloadData];
+}
+
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
@@ -161,6 +166,18 @@
 	cell.labelDeviceName.text = device.name;
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", device.currentTemperature.floatValue];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
+	if (device.battery.integerValue > 0) {
+		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@", nil), device.battery.stringValue];
+	}
+	else {
+		cell.labelDeviceBattery.text = NSLocalizedString(@"No Battery info", nil);
+	}
+	if (device.version) {
+		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version: %@", nil), device.version];
+	}
+	else {
+		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
+	}
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {

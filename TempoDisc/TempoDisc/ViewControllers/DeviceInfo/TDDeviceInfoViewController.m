@@ -15,6 +15,10 @@
 
 //independent tasks
 #define TEMPO_CUSTOM @"20652000-02F3-4F75-848F-323AC2A6AF8A"
+#define TEMPO_BATTERY_SERVICE @"180F"
+#define TEMPO_VERSION_SERVICE @"180A"
+#define TEMPO_BATTERY @"2A19"
+#define TEMPO_VERSION @"2A28"
 
 #define TEMPO_TS_TEMP @"20653010-02F3-4F75-848F-323AC2A6AF8A"
 #define TEMPO_TS_HUMIDITY @"20653020-02F3-4F75-848F-323AC2A6AF8A"
@@ -43,6 +47,10 @@
 @property (nonatomic, strong) NSDateFormatter *formatterLastDownload;
 
 @property (nonatomic, strong) MBProgressHUD *hudDownloadData;
+
+@property (nonatomic, strong) LGService *dataDownloadService;
+@property (nonatomic, strong) LGService *batteryService;
+@property (nonatomic, strong) LGService *versionService;
 
 @property (nonatomic, strong) LGCharacteristic* temperatureWindow;
 @property (nonatomic, strong) LGCharacteristic *temperatureControl;
@@ -159,72 +167,162 @@
 #pragma mark - Sync
 
 - (void)downloadDataFromPeripheral:(LGPeripheral*)peripheral {
-	_hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
+	_hudDownloadData.labelText = NSLocalizedString(@"Searching for device...", nil);
 	[peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *connectError) {
 		if (!connectError) {
 			_hudDownloadData.labelText = NSLocalizedString(@"Discovering services", nil);
+			//discover all services
 			[peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *discoverError) {
 				if (!discoverError) {
-					LGService *dataDownloadService;
+					_dataDownloadService = nil;
+					_batteryService = nil;
+					_versionService = nil;
 					for (LGService *service in services) {
 						if ([[service.UUIDString uppercaseString] isEqualToString:TEMPO_CUSTOM]) {
-							dataDownloadService = service;
+							_dataDownloadService = service;
+						}
+						else if ([[service.UUIDString uppercaseString] isEqualToString:TEMPO_BATTERY_SERVICE]) {
+							_batteryService = service;
+						}
+						else if ([[service.UUIDString uppercaseString] isEqualToString:TEMPO_VERSION_SERVICE]) {
+							_versionService = service;
 						}
 					}
-					if (dataDownloadService) {
-						_hudDownloadData.labelText = NSLocalizedString(@"Discovering characteristics", nil);
-						[dataDownloadService discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *discoverCharacteristicsError) {
-							if (!discoverCharacteristicsError) {
-								_temperatureTimeSync = nil;
-								_temperatureControl = nil;
-								_temperatureWindow = nil;
-								_humidityControl = nil;
-								_humidityTimeSync = nil;
-								_humidityWindow = nil;
-								for (LGCharacteristic *characteristic in characteristics) {
-									//get time characteristics
-									if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_TEMP]) {
-										_temperatureTimeSync = characteristic;
-									}
-									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_TEMP]) {
-										_temperatureControl = characteristic;
-									}
-									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_TEMP]) {
-										_temperatureWindow = characteristic;
-									}
-									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_HUMIDITY]) {
-										_humidityTimeSync = characteristic;
-									}
-									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_HUMIDITY]) {
-										_humidityControl = characteristic;
-									}
-									else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_HUMIDITY]) {
-										_humidityWindow = characteristic;
-									}
-								}
-								if (_temperatureWindow && _temperatureControl && _temperatureControl) {
-									[self startDataDownloadWithTimeSyncCharacteristic:_temperatureTimeSync windowCharacteristic:_temperatureControl dataCharacteristic:_temperatureWindow type:TempoReadingTypeTemperature];
-								}
-								else {
-									[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find all characteristics for data download", nil)];
-								}
-							}
-							else {
-								[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error discovering charachteristics for service: %@", discoverCharacteristicsError.localizedDescription]];
-							}
-						}];
+					/**
+					 *	Start download process in order
+					 *	1. Battery
+					 *	2. Version
+					 *	3. Data
+					 **/
+					if (_batteryService) {
+						[self downloadBatteryDataFromService:_batteryService];
 					}
 					else {
-						[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find service with data download UUID", nil)];
+						[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find service with battery download UUID", nil)];
 					}
 				}
 				else {
-					[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error discovering services for peripheral: %@", discoverError.localizedDescription]];
+					[self abortConnectionWithErrorMessage:[NSString stringWithFormat:NSLocalizedString(@"Error discovering services for peripheral: %@", nil), discoverError.localizedDescription]];
 				}
 			}];
 		}
 		else {
-			[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error connecting to peripheral: %@", connectError.localizedDescription]];
+			[self abortConnectionWithErrorMessage:[NSString stringWithFormat:NSLocalizedString(@"Error connecting to peripheral: %@", nil), connectError.localizedDescription]];
+		}
+	}];
+}
+
+- (void)downloadBatteryDataFromService:(LGService*)service {
+	_hudDownloadData.labelText = NSLocalizedString(@"Connecting...", nil);
+	[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error) {
+		for (LGCharacteristic *characteristic in characteristics) {
+			if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_BATTERY]) {
+				[characteristic readValueWithBlock:^(NSData *data, NSError *error) {
+					if (data) {
+						//got the data, parse it
+						uint8_t value;
+						[data getBytes:&value length:1];
+						NSNumber *valueBattery = [NSNumber numberWithUnsignedShort:value];
+						//set battery level
+						[TDDefaultDevice sharedDevice].selectedDevice.battery = [NSDecimalNumber decimalNumberWithDecimal:valueBattery.decimalValue];
+						NSLog(@"Read battery data: %@, value: %@", data, valueBattery.stringValue);
+						
+						//finished downloading battery data. Continue.
+						if (_versionService) {
+							[self downloadVersionDataFromService:_versionService];
+						}
+						else {
+							[self abortConnectionWithErrorMessage:[NSString stringWithFormat:NSLocalizedString(@"Could not find battery service", nil), error]];
+						}
+					}
+					else {
+						[self abortConnectionWithErrorMessage:[NSString stringWithFormat:NSLocalizedString(@"Error reading battery data", nil), error]];
+					}
+					
+				}];
+				return;
+			}
+		}
+		[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find battery characteristic to read from", nil)];
+	}];
+}
+
+- (void)downloadVersionDataFromService:(LGService*)service {
+	_hudDownloadData.labelText = NSLocalizedString(@"Downloading version data...", nil);
+	[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error) {
+		for (LGCharacteristic *characteristic in characteristics) {
+			if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_VERSION]) {
+				[characteristic readValueWithBlock:^(NSData *data, NSError *error) {
+					if (data) {
+						//parse data
+						NSString *version = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+						NSLog(@"Read version data: %@", version);
+						[TDDefaultDevice sharedDevice].selectedDevice.version = version;
+						
+						//finished version download. Continue
+						if (_dataDownloadService) {
+							[self downloadDataFromService:_dataDownloadService];
+						}
+						else {
+							[self abortConnectionWithErrorMessage:[NSString stringWithFormat:NSLocalizedString(@"Could not find version service", nil), error]];
+						}
+					}
+					else {
+						[self abortConnectionWithErrorMessage:[NSString stringWithFormat:NSLocalizedString(@"Error reading version data", nil), error]];
+					}
+					
+				}];
+				return;
+			}
+		}
+		[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find version characteristic to read from", nil)];
+	}];
+}
+
+- (void)downloadDataFromService:(LGService*)service {
+	_hudDownloadData.labelText = NSLocalizedString(@"Discovering data service...", nil);
+	[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *discoverCharacteristicsError) {
+		if (!discoverCharacteristicsError) {
+			_temperatureTimeSync = nil;
+			_temperatureControl = nil;
+			_temperatureWindow = nil;
+			_humidityControl = nil;
+			_humidityTimeSync = nil;
+			_humidityWindow = nil;
+			for (LGCharacteristic *characteristic in characteristics) {
+				//get time characteristics
+				if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_TEMP]) {
+					_temperatureTimeSync = characteristic;
+				}
+				else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_TEMP]) {
+					_temperatureControl = characteristic;
+				}
+				else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_TEMP]) {
+					_temperatureWindow = characteristic;
+				}
+				else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_TS_HUMIDITY]) {
+					_humidityTimeSync = characteristic;
+				}
+				else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_WC_HUMIDITY]) {
+					_humidityControl = characteristic;
+				}
+				else if ([[characteristic.UUIDString uppercaseString] isEqualToString:TEMPO_DATA_HUMIDITY]) {
+					_humidityWindow = characteristic;
+				}
+			}
+			if (_temperatureWindow && _temperatureControl && _temperatureControl) {
+				/**
+				 *	All required services have been found
+				 *	Start downloading data
+				 **/
+				[self startDataDownloadWithTimeSyncCharacteristic:_temperatureTimeSync windowCharacteristic:_temperatureControl dataCharacteristic:_temperatureWindow type:TempoReadingTypeTemperature];
+			}
+			else {
+				[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find all characteristics for data download", nil)];
+			}
+		}
+		else {
+			[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Error discovering charachteristics for service: %@", discoverCharacteristicsError.localizedDescription]];
 		}
 	}];
 }
@@ -234,6 +332,7 @@
 	[time readValueWithBlock:^(NSData *readData, NSError *error) {
 		char *data = (char *)[readData bytes];
 		if (data != nil) {
+			//ignoring timesync for now. Assume 1h.
 			/*int count = [self getIntLsb:data[0] msb:data[1]];
 			int countRoll = [self getIntLsb:data[2] msb:data[3]];*/
 			int totalSamples = [self getIntLsb:data[4] msb:data[5]];
@@ -280,6 +379,7 @@
 		unsigned char value[2];
 		value[0] = page & 0xFF;
 		value[1] = (page >> 8) &0xFF;
+		//write next window and read data
 		[windowControl writeValue:[NSData dataWithBytes:&value length:sizeof(value)] completion:^(NSError *error) {
 			[window readValueWithBlock:^(NSData *readData, NSError *error) {
 				if (type == TempoReadingTypeTemperature) {
@@ -289,12 +389,15 @@
 					newTotal = [self parseHumidityValue:newTotal characeristic:window.cbCharacteristic collection:collection];
 				}
 				else {
+					//unsupported data type
 					newTotal = 0;
 				}
 				if (newTotal > 0) {
+					//continue reading
 					[self readDataFromCharacteristic:window withControl:windowControl totalSamples:newTotal windowNumber:page+3 collection:collection type:type];
 				}
 				else {
+					//storage count hit or invalid value found. Abort reading.
 					[self finishedDataReadForDataType:type collection:collection];
 				}
 			}];
@@ -328,6 +431,7 @@
 			break;
 			
   default:
+			//finished with humidity read, no more data. Finish sync.
 			if (collection.count > 0) {
 				[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 				[self fillData];
@@ -338,6 +442,10 @@
 	
 }
 
+/**
+ *	Main method for stoping device sync
+ *	@param message Message to display after download stop.
+ */
 - (void)abortConnectionWithErrorMessage:(NSString*)message  {
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
@@ -354,9 +462,11 @@
 	_hudDownloadData.labelText = NSLocalizedString(@"Searching for device...", nil);
 	LGPeripheral *peripheral = [TDDefaultDevice sharedDevice].selectedDevice.peripheral;
 	if (peripheral) {
+		//peripheral is in range
 		[self downloadDataFromPeripheral:peripheral];
 	}
 	else {
+		//peripheral is not in range search for it before download
 		[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
 			LGPeripheral *targetPeripheral;
 			for (LGPeripheral *peripheral in peripherals) {
