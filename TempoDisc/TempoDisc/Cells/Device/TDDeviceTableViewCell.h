@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceVersion;
 @property (strong, nonatomic) IBOutlet UILabel *labelTemperatureValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelHumidityValue;
+@property (strong, nonatomic) IBOutlet UILabel *labelRSSIValue;
 
 
 @end
