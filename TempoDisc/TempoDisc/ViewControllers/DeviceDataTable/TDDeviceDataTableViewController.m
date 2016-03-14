@@ -105,7 +105,7 @@
 	
 	if (reading.minValue || reading.maxValue) {
 		if (_currentReadingType == TempoReadingTypeTemperature) {
-			NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit ? @"F" : @"C"];
+			NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 			TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
 			cell.textLabel.text = [NSString stringWithFormat:@"avg: %@%@, min: %@%@, max: %@%@", [TDHelper temperature:reading.avgValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.minValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.maxValue forDevice:selectedDevice].stringValue, unitSymbol];
 		}

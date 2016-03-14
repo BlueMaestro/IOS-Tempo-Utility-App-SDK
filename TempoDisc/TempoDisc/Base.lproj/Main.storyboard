@@ -409,30 +409,52 @@
                                             <action selector="switchTemperatureUnitValueChanged:" destination="tuN-LB-SFY" eventType="valueChanged" id="249-q9-WJU"/>
                                         </connections>
                                     </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="C" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvg-fR-RWM">
-                                        <rect key="frame" x="260" y="51" width="12" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="F" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJ2-JE-6Ck">
                                         <rect key="frame" x="329" y="51" width="10" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="C" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvg-fR-RWM">
+                                        <rect key="frame" x="260" y="51" width="12" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="F88-ty-e54">
+                                        <rect key="frame" x="0.0" y="85" width="600" height="216"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="479679880.28965098">
+                                            <!--2016-03-14 20:24:40 +0000-->
+                                        </date>
+                                        <connections>
+                                            <action selector="datePickerFrequencyValueChanged:" destination="tuN-LB-SFY" eventType="valueChanged" id="XGX-2s-zMu"/>
+                                        </connections>
+                                    </datePicker>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUc-iy-kJi">
+                                        <rect key="frame" x="245" y="309" width="110" height="30"/>
+                                        <state key="normal" title="Write frequency"/>
+                                        <connections>
+                                            <action selector="buttonWriteFrequencyClicked:" destination="tuN-LB-SFY" eventType="touchUpInside" id="FGy-l4-6WI"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="t3T-tG-81u" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="top" constant="8" id="5nO-6x-wUf"/>
+                                    <constraint firstItem="DDK-t8-Wo6" firstAttribute="centerX" secondItem="F88-ty-e54" secondAttribute="centerX" id="6Iy-SB-beL"/>
+                                    <constraint firstItem="F88-ty-e54" firstAttribute="leading" secondItem="8PC-o5-NH1" secondAttribute="leading" id="6bw-43-nbb"/>
                                     <constraint firstAttribute="bottom" secondItem="t3T-tG-81u" secondAttribute="bottom" id="6eU-WL-6Hh"/>
                                     <constraint firstItem="DDK-t8-Wo6" firstAttribute="centerX" secondItem="t3T-tG-81u" secondAttribute="centerX" id="7pA-hF-sPt"/>
+                                    <constraint firstItem="F88-ty-e54" firstAttribute="top" secondItem="DDK-t8-Wo6" secondAttribute="bottom" constant="8" id="IFC-yH-xjn"/>
                                     <constraint firstItem="DDK-t8-Wo6" firstAttribute="top" secondItem="t3T-tG-81u" secondAttribute="bottom" constant="8" id="J2K-xB-P5c"/>
+                                    <constraint firstItem="NUc-iy-kJi" firstAttribute="centerX" secondItem="F88-ty-e54" secondAttribute="centerX" id="Jc5-wW-6DQ"/>
                                     <constraint firstItem="faP-oL-E3U" firstAttribute="width" secondItem="8PC-o5-NH1" secondAttribute="width" id="UnE-6F-a1V"/>
                                     <constraint firstItem="DDK-t8-Wo6" firstAttribute="leading" secondItem="Cvg-fR-RWM" secondAttribute="trailing" constant="4" id="XtR-C7-Sz6"/>
                                     <constraint firstAttribute="trailing" secondItem="faP-oL-E3U" secondAttribute="trailing" id="cWj-r8-HUT"/>
                                     <constraint firstItem="DDK-t8-Wo6" firstAttribute="centerY" secondItem="Cvg-fR-RWM" secondAttribute="centerY" id="hlT-4M-SRf"/>
                                     <constraint firstItem="eJ2-JE-6Ck" firstAttribute="centerY" secondItem="Cvg-fR-RWM" secondAttribute="centerY" id="ihJ-U0-u8h"/>
                                     <constraint firstItem="eJ2-JE-6Ck" firstAttribute="leading" secondItem="DDK-t8-Wo6" secondAttribute="trailing" constant="4" id="rkw-BC-Aw9"/>
+                                    <constraint firstItem="NUc-iy-kJi" firstAttribute="top" secondItem="F88-ty-e54" secondAttribute="bottom" constant="8" id="sNL-RR-Zou"/>
+                                    <constraint firstAttribute="trailing" secondItem="F88-ty-e54" secondAttribute="trailing" id="vpe-d2-1bI"/>
                                     <constraint firstItem="faP-oL-E3U" firstAttribute="leading" secondItem="8PC-o5-NH1" secondAttribute="leading" id="xQW-P0-Eji"/>
                                     <constraint firstItem="faP-oL-E3U" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="top" id="xyM-IT-9R3"/>
                                     <constraint firstItem="t3T-tG-81u" firstAttribute="centerX" secondItem="8PC-o5-NH1" secondAttribute="centerX" id="yTB-N2-qLG"/>
@@ -450,6 +472,8 @@
                     <tabBarItem key="tabBarItem" title="Settings" id="WRs-fz-dbD"/>
                     <connections>
                         <outlet property="buttonBuzz" destination="t3T-tG-81u" id="SHG-8b-61W"/>
+                        <outlet property="buttonWriteFrequency" destination="NUc-iy-kJi" id="voc-mU-KGw"/>
+                        <outlet property="datePickerFrequency" destination="F88-ty-e54" id="LZh-LY-QEZ"/>
                         <outlet property="switchTemperatureUnit" destination="DDK-t8-Wo6" id="Bmf-Df-Crs"/>
                     </connections>
                 </viewController>

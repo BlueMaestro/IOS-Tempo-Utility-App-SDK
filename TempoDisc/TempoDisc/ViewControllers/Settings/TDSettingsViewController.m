@@ -12,6 +12,8 @@
 
 @interface TDSettingsViewController ()
 
+@property (nonatomic, strong) NSDate *todayAtMidnight;
+
 @end
 
 @implementation TDSettingsViewController
@@ -41,6 +43,14 @@
 
 - (void)setupView {
 	[_switchTemperatureUnit setOn:[TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue];
+	
+	//set date to 00
+	NSDateComponents *nowComponents = [[NSCalendar currentCalendar] components:(NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:[NSDate date]];
+	[nowComponents setHour:0];
+	[nowComponents setMinute:0];
+	[nowComponents setSecond:0];
+	_todayAtMidnight = [[NSCalendar currentCalendar] dateFromComponents:nowComponents];
+	[_datePickerFrequency setDate:[_todayAtMidnight dateByAddingTimeInterval:60*15]];
 }
 
 #pragma mark - Actions
@@ -78,5 +88,29 @@
 	if (saveError) {
 		NSLog(@"Error saving temperature unit: %@", saveError);
 	}
+}
+
+- (IBAction)datePickerFrequencyValueChanged:(UIDatePicker *)sender {
+}
+
+- (IBAction)buttonWriteFrequencyClicked:(UIButton *)sender {
+	unsigned char data[2];
+	NSNumber *newRate = @(-[_todayAtMidnight timeIntervalSinceDate:_datePickerFrequency.date]);
+	data[0] = newRate.intValue&0xFF;
+	data[1] = (newRate.intValue>> 8) &0xFF;
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	[LGUtils writeData:[NSData dataWithBytes:&data length:sizeof(data)] charactUUID:@"20653010-02F3-4F75-848F-323AC2A6AF8A" serviceUUID:@"20652000-02F3-4F75-848F-323AC2A6AF8A" peripheral:[TDDefaultDevice sharedDevice].selectedDevice.peripheral completion:^(NSError *error) {
+		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+		if (!error) {
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:NSLocalizedString(@"Wrote to time sync me characteristic", nil) preferredStyle:UIAlertControllerStyleAlert];
+			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+			[self presentViewController:alert animated:YES completion:nil];
+		}
+		else {
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Error writing to time sync characteristic: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
+			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+			[self presentViewController:alert animated:YES completion:nil];
+		}
+	}];
 }
 @end
