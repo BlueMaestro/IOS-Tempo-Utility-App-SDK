@@ -154,7 +154,7 @@
 
 - (void)fillData {
 	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
-	_labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", [TDDefaultDevice sharedDevice].selectedDevice.currentTemperature.floatValue];
+	_labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:[TDDefaultDevice sharedDevice].selectedDevice.currentTemperature forDevice:[TDDefaultDevice sharedDevice].selectedDevice].floatValue, [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 	_labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)[TDDefaultDevice sharedDevice].selectedDevice.currentHumidity.integerValue];
 	if ([TDDefaultDevice sharedDevice].selectedDevice.lastDownload) {
 		_labelLastDownloadTimestamp.text = [_formatterLastDownload stringFromDate:[TDDefaultDevice sharedDevice].selectedDevice.lastDownload];

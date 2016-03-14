@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TempoDevice.h"
 
 typedef enum : NSInteger {
 	TempoReadingTypeTemperature,
@@ -15,5 +16,7 @@ typedef enum : NSInteger {
 } TempoReadingType;
 
 @interface TDHelper : NSObject
+
++ (NSNumber*)temperature:(NSNumber *)temp forDevice:(TempoDevice *)device;
 
 @end

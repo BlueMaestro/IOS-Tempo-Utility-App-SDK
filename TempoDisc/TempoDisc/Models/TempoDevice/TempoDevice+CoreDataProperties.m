@@ -27,5 +27,6 @@
 @dynamic lastDownload;
 @dynamic readingTypes;
 @dynamic isTempoDiscDevice;
+@dynamic isFahrenheit;
 
 @end

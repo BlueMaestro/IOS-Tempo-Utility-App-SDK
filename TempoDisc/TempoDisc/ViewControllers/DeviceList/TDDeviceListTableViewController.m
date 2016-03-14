@@ -160,7 +160,7 @@
 
 - (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TempoDevice*)device {
 	cell.labelDeviceName.text = device.name;
-	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f", device.currentTemperature.floatValue];
+	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"F" : @"C"];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	if (device.battery.integerValue > 0) {
 		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@", nil), device.battery.stringValue];

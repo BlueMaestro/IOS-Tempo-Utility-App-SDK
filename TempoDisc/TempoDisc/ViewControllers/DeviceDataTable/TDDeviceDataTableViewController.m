@@ -104,7 +104,14 @@
 	Reading *reading = _dataSourceReadings[indexPath.row];
 	
 	if (reading.minValue || reading.maxValue) {
-		cell.textLabel.text = [NSString stringWithFormat:@"avg: %@, min: %@, max: %@", reading.avgValue.stringValue, reading.minValue.stringValue, reading.maxValue.stringValue];
+		if (_currentReadingType == TempoReadingTypeTemperature) {
+			NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit ? @"F" : @"C"];
+			TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
+			cell.textLabel.text = [NSString stringWithFormat:@"avg: %@%@, min: %@%@, max: %@%@", [TDHelper temperature:reading.avgValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.minValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.maxValue forDevice:selectedDevice].stringValue, unitSymbol];
+		}
+		else {
+			cell.textLabel.text = [NSString stringWithFormat:@"avg: %@, min: %@, max: %@", reading.avgValue.stringValue, reading.minValue.stringValue, reading.maxValue.stringValue];
+		}
 	}
 	else {
 		cell.textLabel.text = [NSString stringWithFormat:@"avg: %@", reading.avgValue.stringValue];

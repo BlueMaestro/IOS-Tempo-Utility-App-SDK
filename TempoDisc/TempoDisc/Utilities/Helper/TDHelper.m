@@ -12,6 +12,12 @@
 @implementation TDHelper
 
 
++ (NSNumber *)temperature:(NSNumber *)temp forDevice:(TempoDevice *)device
+{
+	return device.isFahrenheit.boolValue ? [NSNumber numberWithDouble:temp.doubleValue*1.8+32] : temp;
+}
+
+
 /**
  *	Provided code for TempoDisc
  **/
