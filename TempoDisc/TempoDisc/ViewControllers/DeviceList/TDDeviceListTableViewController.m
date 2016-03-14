@@ -61,11 +61,7 @@
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-											  initWithTitle:NSLocalizedString(@"Scan", nil)
-											  style:UIBarButtonItemStyleDone
-											  target:self
-											  action:@selector(buttonScanClicked:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStyleDone target:self action:@selector(buttonScanClicked:)];
 }
 
 - (void)scanForDevices {

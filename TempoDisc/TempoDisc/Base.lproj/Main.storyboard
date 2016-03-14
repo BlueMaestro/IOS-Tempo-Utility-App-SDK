@@ -196,7 +196,7 @@
                             <constraint firstAttribute="trailing" secondItem="Zba-qg-7bC" secondAttribute="trailing" constant="20" id="apk-YL-H1y"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Graph" id="pYQ-gk-v3r"/>
+                    <tabBarItem key="tabBarItem" title="Graph" image="tab-graph" selectedImage="tab-graph-selected" id="pYQ-gk-v3r"/>
                     <connections>
                         <outlet property="viewGraphHumidity" destination="JFD-EF-IsQ" id="jrT-SO-C8p"/>
                         <outlet property="viewGraphTemperature" destination="Zba-qg-7bC" id="Q3i-gu-DfN"/>
@@ -296,7 +296,7 @@
                             <constraint firstItem="B2N-yG-1pu" firstAttribute="centerX" secondItem="fJJ-CF-bx7" secondAttribute="centerX" id="vEG-YA-cGB"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Current" id="rQE-sU-vem"/>
+                    <tabBarItem key="tabBarItem" title="Current" image="scan" selectedImage="scan-selected" id="rQE-sU-vem"/>
                     <connections>
                         <outlet property="buttonDownload" destination="2EM-at-QMi" id="1CR-7E-YNr"/>
                         <outlet property="labelDeviceName" destination="Wsn-cH-GO9" id="gi9-J8-1CT"/>
@@ -368,7 +368,7 @@
                             <outlet property="delegate" destination="h74-9A-Tqz" id="OT1-RB-Hz7"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Table" id="1ts-yA-chD"/>
+                    <tabBarItem key="tabBarItem" title="Table" image="tab-list" selectedImage="tab-list-selected" id="1ts-yA-chD"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jP9-Bp-Is7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -406,4 +406,12 @@
             <point key="canvasLocation" x="1914" y="1292"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="scan" width="26" height="26"/>
+        <image name="scan-selected" width="26" height="26"/>
+        <image name="tab-graph" width="26" height="26"/>
+        <image name="tab-graph-selected" width="26" height="26"/>
+        <image name="tab-list" width="26" height="26"/>
+        <image name="tab-list-selected" width="26" height="26"/>
+    </resources>
 </document>
