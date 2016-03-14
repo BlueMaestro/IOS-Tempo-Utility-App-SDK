@@ -377,7 +377,7 @@
         <!--Settings-->
         <scene sceneID="tZZ-mL-km1">
             <objects>
-                <viewController title="Settings" id="tuN-LB-SFY" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="viewControllerSettings" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tuN-LB-SFY" customClass="TDSettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ZUi-HB-CgG"/>
                         <viewControllerLayoutGuide type="bottom" id="TMf-hD-5Bv"/>
@@ -386,20 +386,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYP-k9-R3V">
-                                <rect key="frame" x="268" y="290" width="64" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8PC-o5-NH1">
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t3T-tG-81u">
+                                        <rect key="frame" x="271" y="8" width="58" height="30"/>
+                                        <state key="normal" title="Buzzzzz"/>
+                                        <connections>
+                                            <action selector="buttonBuzzClicked:" destination="tuN-LB-SFY" eventType="touchUpInside" id="aX1-8F-nkk"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="faP-oL-E3U">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="6SJ-Cx-80x"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="t3T-tG-81u" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="top" constant="8" id="5nO-6x-wUf"/>
+                                    <constraint firstAttribute="bottom" secondItem="t3T-tG-81u" secondAttribute="bottom" id="6eU-WL-6Hh"/>
+                                    <constraint firstItem="faP-oL-E3U" firstAttribute="width" secondItem="8PC-o5-NH1" secondAttribute="width" id="UnE-6F-a1V"/>
+                                    <constraint firstAttribute="trailing" secondItem="faP-oL-E3U" secondAttribute="trailing" id="cWj-r8-HUT"/>
+                                    <constraint firstItem="faP-oL-E3U" firstAttribute="leading" secondItem="8PC-o5-NH1" secondAttribute="leading" id="xQW-P0-Eji"/>
+                                    <constraint firstItem="faP-oL-E3U" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="top" id="xyM-IT-9R3"/>
+                                    <constraint firstItem="t3T-tG-81u" firstAttribute="centerX" secondItem="8PC-o5-NH1" secondAttribute="centerX" id="yTB-N2-qLG"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="LYP-k9-R3V" firstAttribute="centerX" secondItem="vlC-fl-1ei" secondAttribute="centerX" id="kcM-wG-c1s"/>
-                            <constraint firstItem="LYP-k9-R3V" firstAttribute="centerY" secondItem="vlC-fl-1ei" secondAttribute="centerY" id="okO-Gl-vuB"/>
+                            <constraint firstItem="TMf-hD-5Bv" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="bottom" id="Qdn-Ir-1R0"/>
+                            <constraint firstItem="8PC-o5-NH1" firstAttribute="leading" secondItem="vlC-fl-1ei" secondAttribute="leading" id="Qir-eP-sMC"/>
+                            <constraint firstAttribute="trailing" secondItem="8PC-o5-NH1" secondAttribute="trailing" id="U4T-cT-uDV"/>
+                            <constraint firstItem="8PC-o5-NH1" firstAttribute="top" secondItem="ZUi-HB-CgG" secondAttribute="bottom" id="hVU-gD-2Np"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" id="WRs-fz-dbD"/>
+                    <connections>
+                        <outlet property="buttonBuzz" destination="t3T-tG-81u" id="SHG-8b-61W"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TlT-KU-z7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
