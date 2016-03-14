@@ -36,39 +36,23 @@
 */
 
 - (IBAction)buttonBuzzClicked:(UIButton *)sender {
-	/**
-	 *	TDT-10 - just pput placeholder for now
-	 **/
-	return;
 	if (sender.selected) {
 		return;
 	}
 	else {
 		sender.selected = YES;
-		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithCompletion:^(NSError *error) {
+		unsigned char value = 1;
+		[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+		[LGUtils writeData:[NSData dataWithBytes:&value length:sizeof(value)] charactUUID:@"20652011-02F3-4F75-848F-323AC2A6AF8A" serviceUUID:@"20652000-02F3-4F75-848F-323AC2A6AF8A" peripheral:[TDDefaultDevice sharedDevice].selectedDevice.peripheral completion:^(NSError *error) {
+			[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+			sender.selected = NO;
 			if (!error) {
-				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error) {
-					if (!error) {
-						if (services.count > 0) {
-							for (LGService *service in services) {
-								
-							}
-						}
-						else {
-							UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"No services found for find action", nil) preferredStyle:UIAlertControllerStyleAlert];
-							[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
-							[self presentViewController:alert animated:YES completion:nil];
-						}
-					}
-					else {
-						UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Error discovering services for find action", nil) preferredStyle:UIAlertControllerStyleAlert];
-						[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
-						[self presentViewController:alert animated:YES completion:nil];
-					}
-				}];
+				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:NSLocalizedString(@"Wrote to find me characteristic", nil) preferredStyle:UIAlertControllerStyleAlert];
+				[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+				[self presentViewController:alert animated:YES completion:nil];
 			}
 			else {
-				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Error connecting to device for find action", nil) preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Error writing to find me characteristic: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
 				[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 				[self presentViewController:alert animated:YES completion:nil];
 			}
