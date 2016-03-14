@@ -163,7 +163,7 @@
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"F" : @"C"];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	if (device.battery.integerValue > 0) {
-		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@", nil), device.battery.stringValue];
+		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@%%", nil), device.battery.stringValue];
 	}
 	else {
 		cell.labelDeviceBattery.text = NSLocalizedString(@"No Battery info", nil);
