@@ -11,7 +11,9 @@
 @interface TDSettingsViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonBuzz;
+@property (strong, nonatomic) IBOutlet UISwitch *switchTemperatureUnit;
 
 - (IBAction)buttonBuzzClicked:(UIButton *)sender;
+- (IBAction)switchTemperatureUnitValueChanged:(UISwitch *)sender;
 
 @end

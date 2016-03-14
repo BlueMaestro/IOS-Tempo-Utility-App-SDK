@@ -8,6 +8,7 @@
 
 #import "TDSettingsViewController.h"
 #import <LGBluetooth/LGBluetooth.h>
+#import "AppDelegate.h"
 
 @interface TDSettingsViewController ()
 
@@ -18,6 +19,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+	[self setupView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,6 +36,14 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - Private methods
+
+- (void)setupView {
+	[_switchTemperatureUnit setOn:[TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue];
+}
+
+#pragma mark - Actions
 
 - (IBAction)buttonBuzzClicked:(UIButton *)sender {
 	if (sender.selected) {
@@ -57,6 +67,16 @@
 				[self presentViewController:alert animated:YES completion:nil];
 			}
 		}];
+	}
+}
+
+- (IBAction)switchTemperatureUnitValueChanged:(UISwitch *)sender {
+	[TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit = @(sender.isOn);
+	NSManagedObjectContext *context = [(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	NSError *saveError;
+	[context save:&saveError];
+	if (saveError) {
+		NSLog(@"Error saving temperature unit: %@", saveError);
 	}
 }
 @end

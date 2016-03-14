@@ -403,12 +403,36 @@
                                             <constraint firstAttribute="height" constant="1" id="6SJ-Cx-80x"/>
                                         </constraints>
                                     </view>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DDK-t8-Wo6">
+                                        <rect key="frame" x="276" y="46" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="switchTemperatureUnitValueChanged:" destination="tuN-LB-SFY" eventType="valueChanged" id="249-q9-WJU"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="C" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cvg-fR-RWM">
+                                        <rect key="frame" x="260" y="51" width="12" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="F" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJ2-JE-6Ck">
+                                        <rect key="frame" x="329" y="51" width="10" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="t3T-tG-81u" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="top" constant="8" id="5nO-6x-wUf"/>
                                     <constraint firstAttribute="bottom" secondItem="t3T-tG-81u" secondAttribute="bottom" id="6eU-WL-6Hh"/>
+                                    <constraint firstItem="DDK-t8-Wo6" firstAttribute="centerX" secondItem="t3T-tG-81u" secondAttribute="centerX" id="7pA-hF-sPt"/>
+                                    <constraint firstItem="DDK-t8-Wo6" firstAttribute="top" secondItem="t3T-tG-81u" secondAttribute="bottom" constant="8" id="J2K-xB-P5c"/>
                                     <constraint firstItem="faP-oL-E3U" firstAttribute="width" secondItem="8PC-o5-NH1" secondAttribute="width" id="UnE-6F-a1V"/>
+                                    <constraint firstItem="DDK-t8-Wo6" firstAttribute="leading" secondItem="Cvg-fR-RWM" secondAttribute="trailing" constant="4" id="XtR-C7-Sz6"/>
                                     <constraint firstAttribute="trailing" secondItem="faP-oL-E3U" secondAttribute="trailing" id="cWj-r8-HUT"/>
+                                    <constraint firstItem="DDK-t8-Wo6" firstAttribute="centerY" secondItem="Cvg-fR-RWM" secondAttribute="centerY" id="hlT-4M-SRf"/>
+                                    <constraint firstItem="eJ2-JE-6Ck" firstAttribute="centerY" secondItem="Cvg-fR-RWM" secondAttribute="centerY" id="ihJ-U0-u8h"/>
+                                    <constraint firstItem="eJ2-JE-6Ck" firstAttribute="leading" secondItem="DDK-t8-Wo6" secondAttribute="trailing" constant="4" id="rkw-BC-Aw9"/>
                                     <constraint firstItem="faP-oL-E3U" firstAttribute="leading" secondItem="8PC-o5-NH1" secondAttribute="leading" id="xQW-P0-Eji"/>
                                     <constraint firstItem="faP-oL-E3U" firstAttribute="top" secondItem="8PC-o5-NH1" secondAttribute="top" id="xyM-IT-9R3"/>
                                     <constraint firstItem="t3T-tG-81u" firstAttribute="centerX" secondItem="8PC-o5-NH1" secondAttribute="centerX" id="yTB-N2-qLG"/>
@@ -426,6 +450,7 @@
                     <tabBarItem key="tabBarItem" title="Settings" id="WRs-fz-dbD"/>
                     <connections>
                         <outlet property="buttonBuzz" destination="t3T-tG-81u" id="SHG-8b-61W"/>
+                        <outlet property="switchTemperatureUnit" destination="DDK-t8-Wo6" id="Bmf-Df-Crs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TlT-KU-z7O" userLabel="First Responder" sceneMemberID="firstResponder"/>
