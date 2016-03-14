@@ -178,6 +178,7 @@
 	else {
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
 	}
+	cell.labelRSSIValue.text = [NSString stringWithFormat:NSLocalizedString(@"RSSI: %ld", nil), device.peripheral.RSSI];
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
