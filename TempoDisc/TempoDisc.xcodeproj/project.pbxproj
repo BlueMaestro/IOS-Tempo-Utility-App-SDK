@@ -71,6 +71,7 @@
 		CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceInfoViewController.m; sourceTree = "<group>"; };
 		CB242C281C974A0800757AEC /* TDSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSettingsViewController.h; sourceTree = "<group>"; };
 		CB242C291C974A0800757AEC /* TDSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSettingsViewController.m; sourceTree = "<group>"; };
+		CB242C2B1C97637600757AEC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		CB6895611C83355700EB1A65 /* TDDeviceDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceDataTableViewController.h; sourceTree = "<group>"; };
 		CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceDataTableViewController.m; sourceTree = "<group>"; };
 		CB9421E81C91E6D5000724B5 /* TDOtherDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDOtherDeviceTableViewCell.h; sourceTree = "<group>"; };
@@ -159,6 +160,7 @@
 		CB16BA501C82E70C00C99C41 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				CB242C2B1C97637600757AEC /* Constants.h */,
 				CB16BA7C1C83125600C99C41 /* DefaultDevice */,
 				CB16BA781C83123A00C99C41 /* Helper */,
 			);

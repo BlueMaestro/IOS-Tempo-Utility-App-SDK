@@ -17,10 +17,14 @@
 
 #define kDeviceScanInterval 5.0
 
+#define kDeviceListUpdateInterval 1.0
+
 @interface TDDeviceListTableViewController()
 
-@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, assign) BOOL scanning;
+
+@property (nonatomic, strong) NSTimer *timerUpdateList;
 
 @end
 
@@ -34,11 +38,24 @@
 	 **/
 	[[LGCentralManager sharedInstance]
 	 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleGoToBackgroundNotifications:) name:UIApplicationWillResignActiveNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleReturnToForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	[self startScan];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[self stopScan];
 }
 
 #pragma mark - KVO
@@ -48,7 +65,8 @@
 		if ([LGCentralManager sharedInstance].isCentralReady) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				//Bluetooth is ready. Start scan.
-				[self scanForDevices];
+//				[self scanForDevices];
+				[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
 				
 				//we dont need to listen to changes anymore since everything is set up
 				[[LGCentralManager sharedInstance] removeObserver:self forKeyPath:@"centralReady"];
@@ -62,6 +80,51 @@
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStyleDone target:self action:@selector(buttonScanClicked:)];
+}
+
+- (void)startScan {
+	if (![LGCentralManager sharedInstance].scanning) {
+		[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+	}
+	if (_timerUpdateList) {
+		[_timerUpdateList invalidate];
+		_timerUpdateList = nil;
+	}
+	_timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(updateDeviceList) userInfo:nil repeats:YES];
+	[[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
+}
+
+- (void)stopScan {
+	[[LGCentralManager sharedInstance] stopScanForPeripherals];
+	if (_timerUpdateList) {
+		[_timerUpdateList invalidate];
+		_timerUpdateList = nil;
+	}
+}
+
+- (void)updateDeviceList {
+	NSMutableArray *devicesInRange = [NSMutableArray array];
+	NSMutableArray *devicesOutOfRange = [NSMutableArray array];
+	if (!_dataSource) {
+		_dataSource = [NSMutableArray array];
+	}
+	for (LGPeripheral *peripheral in [LGCentralManager sharedInstance].peripherals) {
+		TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
+		if (device) {
+			device.peripheral = peripheral;
+			[devicesInRange addObject:device];
+			if (![_dataSource containsObject:device]) {
+				[_dataSource addObject:device];
+			}
+		}
+	}
+	for (TempoDevice *device in _dataSource) {
+		if (![devicesInRange containsObject:device]) {
+			[devicesOutOfRange addObject:device];
+		}
+	}
+	[_dataSource removeObjectsInArray:devicesOutOfRange];
+	[self.tableView reloadData];
 }
 
 - (void)scanForDevices {
@@ -148,6 +211,14 @@
 	}
 	
 	return device;
+}
+
+- (void)handleGoToBackgroundNotifications:(NSNotification*)note {
+	[self stopScan];
+}
+
+- (void)handleReturnToForeground:(NSNotification*)note {
+	[self startScan];
 }
 
 #pragma mark - Actions
