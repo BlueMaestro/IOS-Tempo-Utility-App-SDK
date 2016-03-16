@@ -113,13 +113,13 @@
 		if (device) {
 			device.peripheral = peripheral;
 			[devicesInRange addObject:device];
-			if (![_dataSource containsObject:device]) {
+			if (![[_dataSource valueForKey:@"uuid"] containsObject:device.uuid]) {
 				[_dataSource addObject:device];
 			}
 		}
 	}
 	for (TempoDevice *device in _dataSource) {
-		if (![devicesInRange containsObject:device]) {
+		if (![[devicesInRange valueForKey:@"uuid"] containsObject:device.uuid]) {
 			[devicesOutOfRange addObject:device];
 		}
 	}
@@ -147,7 +147,7 @@
 		 //handle scan result
 		 
 		 //create list of devices
-		 NSMutableArray *devices = [NSMutableArray array];
+		 /*NSMutableArray *devices = [NSMutableArray array];
 		 for (LGPeripheral *peripheral in peripherals) {
 			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
 			 if (device) {
@@ -157,7 +157,8 @@
 		 }
 		 
 		 _dataSource = devices;
-		 [self.tableView reloadData];
+		 [self.tableView reloadData];*/
+		 [self updateDeviceList];
 		 
 		 //cleanup
 		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
@@ -186,6 +187,7 @@
 		}
 		else {
 			device.name = peripheral.name;
+			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
 		}
 		device.isTempoDiscDevice = @(isTempoDiscDevice);
 	}
@@ -197,6 +199,7 @@
 		else {
 			device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
 			device.name = peripheral.name;
+			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
 		}
 		device.isTempoDiscDevice = @(isTempoDiscDevice);
 	}
