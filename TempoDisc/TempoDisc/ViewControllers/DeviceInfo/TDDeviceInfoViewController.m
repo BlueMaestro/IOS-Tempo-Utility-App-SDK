@@ -150,6 +150,11 @@
 	_buttonDownload.layer.borderWidth = 1.0;
 	_buttonDownload.layer.cornerRadius = 12;
 	_buttonDownload.clipsToBounds = YES;
+	
+	_buttonUART.layer.borderColor = [UIColor blackColor].CGColor;
+	_buttonUART.layer.borderWidth = 1.0;
+	_buttonUART.layer.cornerRadius = 12;
+	_buttonUART.clipsToBounds = YES;
 }
 
 - (void)fillData {

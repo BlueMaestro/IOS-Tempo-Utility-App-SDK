@@ -259,16 +259,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *selectedDevice = _dataSource[indexPath.row];
-	if (selectedDevice.isTempoDiscDevice.boolValue) {
+//	if (selectedDevice.isTempoDiscDevice.boolValue) {
 		//Selected device is tempo disc. Set global singleton reference and go to details
 		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
 		NSLog(@"Selected device: %@", selectedDevice.name);
 		[self performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
-	}
+	/*}
 	else {
 		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
-	}
+	}*/
 }
 
 #pragma mark - UITableViewDataSource
