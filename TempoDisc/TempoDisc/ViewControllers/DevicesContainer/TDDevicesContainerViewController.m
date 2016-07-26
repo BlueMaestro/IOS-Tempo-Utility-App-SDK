@@ -49,6 +49,9 @@
 	_buttonStartScan.clipsToBounds = YES;
 	_buttonStartScan.layer.borderWidth = 2.0;
 	_buttonStartScan.layer.borderColor = [_buttonStartScan titleColorForState:UIControlStateNormal].CGColor;
+	
+	_viewBottomContainer.layer.borderWidth = 1;
+	_viewBottomContainer.layer.borderColor = [UIColor botomBarSeparatorGrey].CGColor;
 }
 
 #pragma mark - Actions

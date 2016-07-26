@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
+@property (strong, nonatomic) IBOutlet UIView *viewBottomContainer;
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender;
 

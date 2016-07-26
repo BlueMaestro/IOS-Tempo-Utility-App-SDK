@@ -266,6 +266,7 @@
                     <connections>
                         <outlet property="buttonStartScan" destination="pNN-n3-Yu7" id="AH0-RJ-NU0"/>
                         <outlet property="labelScanStatus" destination="Q6y-W0-TX6" id="5eY-zz-jaB"/>
+                        <outlet property="viewBottomContainer" destination="pza-Du-lsz" id="cKC-Nm-0Go"/>
                         <segue destination="tMM-iH-sIM" kind="show" identifier="segueDeviceInfo" id="8oI-Em-fqf"/>
                     </connections>
                 </viewController>
@@ -613,6 +614,7 @@ Download</string>
                         <outlet property="labelTemperatureValue" destination="jTZ-mb-mUy" id="aCl-oX-VKA"/>
                         <outlet property="labelUUID" destination="FtO-sy-MCK" id="g7b-hl-PtC"/>
                         <outlet property="labelVersion" destination="Lcs-4F-8QJ" id="UHL-ET-2Ci"/>
+                        <outlet property="viewBottomContainer" destination="w8g-DF-QaA" id="7pj-BJ-rSS"/>
                         <outletCollection property="buttonOptions" destination="Pcj-e4-qwg" id="WK2-Q3-22E"/>
                         <outletCollection property="buttonOptions" destination="7MX-hi-IA3" id="HnS-AI-csM"/>
                         <outletCollection property="buttonOptions" destination="cp9-rh-oic" id="xI6-h2-otT"/>

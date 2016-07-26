@@ -171,6 +171,9 @@
 		button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
 		button.titleLabel.textAlignment = NSTextAlignmentCenter;
 	}
+	
+	_viewBottomContainer.layer.borderColor = [UIColor botomBarSeparatorGrey].CGColor;
+	_viewBottomContainer.layer.borderWidth = 1;
 }
 
 - (void)fillData {
