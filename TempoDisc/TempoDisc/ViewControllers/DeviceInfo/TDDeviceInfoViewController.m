@@ -122,7 +122,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	[self setupView];
-	[self fillData];
+//	[self fillData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -155,6 +155,22 @@
 	_buttonUART.layer.borderWidth = 1.0;
 	_buttonUART.layer.cornerRadius = 12;
 	_buttonUART.clipsToBounds = YES;
+	
+	for (UIButton *button in _buttonOptions) {
+		button.layer.cornerRadius = 8.0;
+		button.clipsToBounds = YES;
+		button.layer.borderWidth = 2;
+		button.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
+		[button setBackgroundImage:[[SCHelper imageWithColor:button.backgroundColor] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateNormal];
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateHighlighted];
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateSelected];
+		[button setTitleColor:[UIColor blueMaestroBlue] forState:UIControlStateNormal];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+		button.titleLabel.numberOfLines = 2;
+		button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+		button.titleLabel.textAlignment = NSTextAlignmentCenter;
+	}
 }
 
 - (void)fillData {

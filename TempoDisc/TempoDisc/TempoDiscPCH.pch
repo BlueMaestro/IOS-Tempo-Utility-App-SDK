@@ -17,5 +17,6 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "Constants.h"
 #import "SCHelper.h"
+#import "UIColor+Tempo.h"
 
 #endif /* TempoDiscPCH_pch */

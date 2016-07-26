@@ -20,4 +20,5 @@
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender;
 
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonOptions;
 @end

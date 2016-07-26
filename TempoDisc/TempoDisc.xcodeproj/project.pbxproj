@@ -32,6 +32,7 @@
 		CB9421EE1C9200C5000724B5 /* TDGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421ED1C9200C5000724B5 /* TDGraphViewController.m */; };
 		CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C401D47CA2200EEBECD /* TDDevicesContainerViewController.m */; };
 		CBAB5C451D47CC9000EEBECD /* SCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C441D47CC9000EEBECD /* SCHelper.m */; };
+		CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C481D47E72A00EEBECD /* UIColor+Tempo.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +86,8 @@
 		CBAB5C401D47CA2200EEBECD /* TDDevicesContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicesContainerViewController.m; sourceTree = "<group>"; };
 		CBAB5C431D47CC9000EEBECD /* SCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCHelper.h; sourceTree = "<group>"; };
 		CBAB5C441D47CC9000EEBECD /* SCHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCHelper.m; sourceTree = "<group>"; };
+		CBAB5C471D47E72A00EEBECD /* UIColor+Tempo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Tempo.h"; sourceTree = "<group>"; };
+		CBAB5C481D47E72A00EEBECD /* UIColor+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Tempo.m"; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
 		CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -173,6 +176,7 @@
 				CB16BA7C1C83125600C99C41 /* DefaultDevice */,
 				CB16BA781C83123A00C99C41 /* Helper */,
 				CBAB5C421D47CC9000EEBECD /* SCHelper */,
+				CBAB5C461D47E72900EEBECD /* UIColor+Tempo */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -349,6 +353,15 @@
 			path = SCHelper;
 			sourceTree = "<group>";
 		};
+		CBAB5C461D47E72900EEBECD /* UIColor+Tempo */ = {
+			isa = PBXGroup;
+			children = (
+				CBAB5C471D47E72A00EEBECD /* UIColor+Tempo.h */,
+				CBAB5C481D47E72A00EEBECD /* UIColor+Tempo.m */,
+			);
+			path = "UIColor+Tempo";
+			sourceTree = "<group>";
+		};
 		CBD84AE41D2ED579004B0191 /* UART */ = {
 			isa = PBXGroup;
 			children = (
@@ -501,6 +514,7 @@
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
+				CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */,
 				CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,
 				CB16BA731C83007B00C99C41 /* Reading.m in Sources */,

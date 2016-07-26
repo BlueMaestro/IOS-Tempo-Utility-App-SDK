@@ -17,7 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
-	[[UINavigationBar appearance] setBackgroundImage:[SCHelper imageWithColor:[UIColor colorWithRed:21/255.0 green:100/255.0 blue:144/255.0 alpha:1.0] size:CGSizeMake([UIScreen mainScreen].bounds.size.width, 64.0)] forBarMetrics:UIBarMetricsDefault];
+	[[UINavigationBar appearance] setBackgroundImage:[SCHelper imageWithColor:[UIColor blueMaestroBlue] size:CGSizeMake([UIScreen mainScreen].bounds.size.width, 64.0)] forBarMetrics:UIBarMetricsDefault];
 	[[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
 	[[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:17.0]}];
 	[[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:17.0]} forState:UIControlStateNormal];
