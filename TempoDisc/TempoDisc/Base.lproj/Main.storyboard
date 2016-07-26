@@ -703,7 +703,7 @@ Download</string>
                                                     <constraint firstAttribute="height" constant="50" id="hMQ-MC-559"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                <state key="normal" title="Disconnect">
+                                                <state key="normal" title="Connect">
                                                     <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
                                                 <connections>

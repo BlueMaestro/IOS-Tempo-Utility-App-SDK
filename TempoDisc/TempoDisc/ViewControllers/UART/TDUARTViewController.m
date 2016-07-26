@@ -82,6 +82,10 @@
 	_textFieldMessage.layer.borderWidth = 2;
 	_textFieldMessage.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
 	_textFieldMessage.textColor = [UIColor blueMaestroBlue];
+	_textFieldMessage.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, _textFieldMessage.frame.size.height)];
+	_textFieldMessage.leftViewMode = UITextFieldViewModeAlways;
+	_textFieldMessage.rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, _textFieldMessage.frame.size.height)];
+	_textFieldMessage.rightViewMode = UITextFieldViewModeAlways;
 	
 	_buttonConnect.layer.cornerRadius = 8.0;
 	_buttonConnect.clipsToBounds = YES;
