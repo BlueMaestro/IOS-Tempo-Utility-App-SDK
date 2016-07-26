@@ -43,11 +43,15 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardHideNotification:) name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardShowNotification:) name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 }
 
@@ -98,6 +102,21 @@
 - (void)handleDisconnectNotification:(NSNotification*)note {
 	[self addLogMessage:[NSString stringWithFormat:@"Device disconnected: %@", note.userInfo]];
 	_writeCharacteristic = nil;
+}
+
+- (void)handleKeyboardShowNotification:(NSNotification*)note {
+	NSDictionary *userInfo = [note userInfo];
+	CGSize size = [[userInfo objectForKey: UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+	_constraintScrollViewBottom.constant = size.height;
+	__weak typeof(self) weakself = self;
+	[UIView animateWithDuration:0.3 animations:^{
+		[weakself.view layoutIfNeeded];
+	}];
+	[_scrollViewMain scrollRectToVisible:CGRectMake(_scrollViewMain.contentSize.width - 1,_scrollViewMain.contentSize.height - 1, 1, 1) animated:YES];
+}
+
+- (void)handleKeyboardHideNotification:(NSNotification*)note {
+	_constraintScrollViewBottom.constant = 0;
 }
 
 - (void)addLogMessage:(NSString*)message {

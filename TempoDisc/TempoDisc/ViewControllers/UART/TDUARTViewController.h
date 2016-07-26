@@ -17,6 +17,8 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableViewLog;
 @property (strong, nonatomic) IBOutlet UIView *viewBottomContainer;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollViewMain;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *constraintScrollViewBottom;
 
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender;
 - (IBAction)buttonConnectClicked:(UIButton *)sender;
