@@ -22,7 +22,6 @@
 @interface TDDeviceListTableViewController()
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
-@property (nonatomic, assign) BOOL scanning;
 
 @property (nonatomic, strong) NSTimer *timerUpdateList;
 
@@ -129,15 +128,16 @@
 
 - (void)scanForDevices {
 	//prevent double scan
-	if (_scanning) {
+	if (self.scanning) {
 		return;
 	}
-	_scanning = YES;
+	self.scanning = YES;
 	
 	//show progress indicator
 	MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
 	hud.labelText = NSLocalizedString(@"Scanning...", nil);
 	
+	__weak typeof(self) weakself = self;
 	//start scan
 	[[LGCentralManager sharedInstance]
 	 scanForPeripheralsByInterval:kDeviceScanInterval
@@ -162,7 +162,7 @@
 		 
 		 //cleanup
 		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
-		 _scanning = NO;
+		 weakself.scanning = NO;
 	 }];
 }
 

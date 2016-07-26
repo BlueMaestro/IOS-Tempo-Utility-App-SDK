@@ -10,4 +10,8 @@
 
 @interface TDDeviceListTableViewController : UITableViewController
 
+@property (nonatomic, assign) BOOL scanning;
+
+- (void)scanForDevices;
+
 @end
