@@ -252,7 +252,7 @@
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
-	cell.labelDeviceName.text = device.name;
+	cell.labelDeviceName.text = @"TEMPO V3";//device.name;
 }
 
 #pragma mark - UITableViewDelegate
@@ -273,7 +273,7 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+/*- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return _dataSource.count;
 }
 
@@ -298,10 +298,10 @@
 	}
 	
 	return cell;
-}
+}*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 94;
+	return 97;
 }
 
 
