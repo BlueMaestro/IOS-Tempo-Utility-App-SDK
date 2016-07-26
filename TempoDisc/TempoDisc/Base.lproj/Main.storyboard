@@ -15,7 +15,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="tMM-iH-sIM" kind="relationship" relationship="rootViewController" id="HLm-kW-4Yb"/>
+                        <segue destination="bmI-bG-93D" kind="relationship" relationship="rootViewController" id="eGG-wB-d8G"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sON-IG-mn3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -329,20 +329,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wsn-cH-GO9">
-                                <rect key="frame" x="248" y="27" width="104" height="25"/>
+                                <rect key="frame" x="248" y="71" width="104" height="25"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="21"/>
                                 <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I3X-do-EbH">
-                                <rect key="frame" x="0.0" y="62" width="600" height="1"/>
+                                <rect key="frame" x="0.0" y="106" width="600" height="1"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1" id="zs0-q4-F8e"/>
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pVu-Jg-43O">
-                                <rect key="frame" x="0.0" y="63" width="600" height="306"/>
+                                <rect key="frame" x="0.0" y="107" width="600" height="262"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M2d-N9-VpT">
                                         <rect key="frame" x="0.0" y="187" width="600" height="1"/>
@@ -411,7 +411,7 @@
                                         <color key="textColor" red="0.098039215686274508" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="UUID :" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thh-cG-aJo">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" text="UUID :" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thh-cG-aJo">
                                         <rect key="frame" x="18" y="7" width="60" height="24"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                                         <color key="textColor" red="0.098039215686274508" green="0.11764705882352941" blue="0.11764705882352941" alpha="1" colorSpace="calibratedRGB"/>
@@ -447,6 +447,7 @@
                                     <constraint firstItem="EDT-0q-f8e" firstAttribute="top" secondItem="RBh-cS-d8c" secondAttribute="bottom" constant="8" id="fWv-Oy-STd"/>
                                     <constraint firstItem="PTC-4B-ECm" firstAttribute="top" secondItem="zIT-p4-8Dn" secondAttribute="bottom" constant="4" id="fe2-i7-n4t"/>
                                     <constraint firstAttribute="bottom" secondItem="EDT-0q-f8e" secondAttribute="bottom" constant="4" id="hbO-u7-9ry"/>
+                                    <constraint firstItem="FtO-sy-MCK" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="thh-cG-aJo" secondAttribute="trailing" constant="4" id="ija-n7-Wtk"/>
                                     <constraint firstItem="DhS-7O-zbW" firstAttribute="leading" secondItem="thh-cG-aJo" secondAttribute="leading" id="joG-jT-ij3"/>
                                     <constraint firstItem="01q-I0-Z3q" firstAttribute="centerY" secondItem="DhS-7O-zbW" secondAttribute="centerY" id="kEg-FB-X7z"/>
                                     <constraint firstItem="jTZ-mb-mUy" firstAttribute="centerY" secondItem="RBh-cS-d8c" secondAttribute="centerY" id="soo-XB-T3I"/>
@@ -605,9 +606,13 @@ Download</string>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="667"/>
                     <connections>
+                        <outlet property="labelAlerts" destination="01q-I0-Z3q" id="0D7-RI-dNg"/>
                         <outlet property="labelDeviceName" destination="Wsn-cH-GO9" id="gi9-J8-1CT"/>
                         <outlet property="labelHumidityValue" destination="B2N-yG-1pu" id="OKf-71-nxi"/>
+                        <outlet property="labelRSSI" destination="zri-X6-6wI" id="Qqq-qO-Uju"/>
                         <outlet property="labelTemperatureValue" destination="jTZ-mb-mUy" id="aCl-oX-VKA"/>
+                        <outlet property="labelUUID" destination="FtO-sy-MCK" id="g7b-hl-PtC"/>
+                        <outlet property="labelVersion" destination="Lcs-4F-8QJ" id="UHL-ET-2Ci"/>
                         <outletCollection property="buttonOptions" destination="Pcj-e4-qwg" id="WK2-Q3-22E"/>
                         <outletCollection property="buttonOptions" destination="7MX-hi-IA3" id="HnS-AI-csM"/>
                         <outletCollection property="buttonOptions" destination="cp9-rh-oic" id="xI6-h2-otT"/>
@@ -731,7 +736,7 @@ Download</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDataTable" textLabel="5T3-nR-0UU" detailTextLabel="WI4-Vs-veT" style="IBUITableViewCellStyleSubtitle" id="Xdk-gP-6Fx">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xdk-gP-6Fx" id="qlD-Qy-O2j">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -880,7 +885,4 @@ Download</string>
         <image name="tab-list" width="26" height="26"/>
         <image name="tab-list-selected" width="26" height="26"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="8oI-Em-fqf"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -15,6 +15,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelHumidityValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelLastDownloadTimestamp;
 @property (strong, nonatomic) IBOutlet UIButton *buttonUART;
+@property (strong, nonatomic) IBOutlet UILabel *labelUUID;
+@property (strong, nonatomic) IBOutlet UILabel *labelVersion;
+@property (strong, nonatomic) IBOutlet UILabel *labelRSSI;
+@property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
 

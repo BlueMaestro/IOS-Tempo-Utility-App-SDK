@@ -122,7 +122,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	[self setupView];
-//	[self fillData];
+	[self fillData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -183,6 +183,9 @@
 	else {
 		_labelLastDownloadTimestamp.text = NSLocalizedString(@"Not yet downloaded", nil);
 	}
+	_labelRSSI.text = [NSString stringWithFormat:@"%lddbm", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
+	_labelUUID.text = [TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString;
+	_labelVersion.text = [TDDefaultDevice sharedDevice].selectedDevice.version;
 }
 
 #pragma mark - Sync
