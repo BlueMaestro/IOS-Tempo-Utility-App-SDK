@@ -170,7 +170,7 @@
 	/**
 	 *	TDT-2 Non Tempo Disc devices should still be visible, with limited data
 	 **/
-	BOOL isTempoDiscDevice = YES;//[TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
+	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
