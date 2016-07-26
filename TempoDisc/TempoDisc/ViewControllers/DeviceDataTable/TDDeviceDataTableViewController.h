@@ -10,4 +10,8 @@
 
 @interface TDDeviceDataTableViewController : UITableViewController
 
+@property (nonatomic, assign) TempoReadingType currentReadingType;
+
+- (void)changeReadingType;
+
 @end

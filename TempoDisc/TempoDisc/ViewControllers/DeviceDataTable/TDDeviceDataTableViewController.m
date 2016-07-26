@@ -15,8 +15,6 @@
 
 @property (nonatomic, strong) NSDateFormatter *formatterTimestamp;
 
-@property (nonatomic, assign) TempoReadingType currentReadingType;
-
 @end
 
 @implementation TDDeviceDataTableViewController
@@ -36,7 +34,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self loadDataForType:_currentReadingType];
-	self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Temperature" style:UIBarButtonItemStyleDone target:self action:@selector(buttonChangeReadingTypeClicked:)];
+//	self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Temperature" style:UIBarButtonItemStyleDone target:self action:@selector(buttonChangeReadingTypeClicked:)];
 	[self.tableView reloadData];
 }
 
@@ -78,11 +76,17 @@
 	[self.tableView reloadData];
 }
 
+#pragma mark - Public methods
+
+- (void)changeReadingType {
+	_currentReadingType = _currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature;
+	[self loadDataForType:_currentReadingType];
+}
+
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
-	_currentReadingType = _currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature;
-	[self loadDataForType:_currentReadingType];
+	[self changeReadingType];
 	[sender setTitle:(_currentReadingType == TempoReadingTypeTemperature) ? @"Temperature" : @"Humidity"];
 }
 
