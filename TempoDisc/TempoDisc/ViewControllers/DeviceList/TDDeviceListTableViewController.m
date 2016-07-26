@@ -170,7 +170,7 @@
 	/**
 	 *	TDT-2 Non Tempo Disc devices should still be visible, with limited data
 	 **/
-	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
+	BOOL isTempoDiscDevice = YES;//[TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
@@ -237,10 +237,12 @@
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"F" : @"C"];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	if (device.battery.integerValue > 0) {
-		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@%%", nil), device.battery.stringValue];
+//		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@%%", nil), device.battery.stringValue];
+		[cell setupBatteryStatus:TempoBatteryStatusGood];
 	}
 	else {
-		cell.labelDeviceBattery.text = NSLocalizedString(@"No Battery info", nil);
+//		cell.labelDeviceBattery.text = NSLocalizedString(@"No Battery info", nil);
+		[cell setupBatteryStatus:TempoBatteryStatusNone];
 	}
 	if (device.version) {
 		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version: %@", nil), device.version];
@@ -249,6 +251,8 @@
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
 	}
 	cell.labelRSSIValue.text = [NSString stringWithFormat:NSLocalizedString(@"RSSI: %ld", nil), device.peripheral.RSSI];
+	
+	cell.labelDeviceUUID.text = [NSString stringWithFormat:NSLocalizedString(@"UUID: %@", nil), device.peripheral.UUIDString];
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
@@ -273,7 +277,7 @@
 
 #pragma mark - UITableViewDataSource
 
-/*- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 	return _dataSource.count;
 }
 
@@ -298,11 +302,12 @@
 	}
 	
 	return cell;
-}*/
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return 97;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	TempoDevice *device = _dataSource[indexPath.row];
+	
+	return device.isTempoDiscDevice.boolValue ? 104 : 97;
+}
 
 @end

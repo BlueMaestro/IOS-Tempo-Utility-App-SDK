@@ -10,4 +10,29 @@
 
 @implementation TDDeviceTableViewCell
 
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	_labelDeviceBattery.layer.cornerRadius = 4;
+	_labelDeviceBattery.layer.borderColor = [UIColor colorWithRed:148/255.0 green:150/255.0 blue:153/255.0 alpha:1.0].CGColor;
+	_labelDeviceBattery.layer.borderWidth = 1.0;
+}
+
+#pragma mark - Public methods
+
+- (void)setupBatteryStatus:(TempoBatteryStatus)status {
+	UIColor *backgroundColor = [UIColor clearColor];
+	NSString *labelTitle = NSLocalizedString(@"None", nil);
+	switch (status) {
+	case TempoBatteryStatusGood:
+			backgroundColor = [UIColor colorWithRed:27/255.0 green:237/255.0 blue:52/255.0 alpha:1.0];
+			labelTitle = NSLocalizedString(@"Good", nil);
+			break;
+		default:
+			break;
+	}
+	
+	_labelDeviceBattery.backgroundColor = backgroundColor;
+	_labelDeviceBattery.text = labelTitle;
+}
+
 @end
