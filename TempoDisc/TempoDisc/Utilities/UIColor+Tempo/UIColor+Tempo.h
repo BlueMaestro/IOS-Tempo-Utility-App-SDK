@@ -11,5 +11,5 @@
 @interface UIColor (Tempo)
 
 +(UIColor *)blueMaestroBlue;
-
++(UIColor *)botomBarSeparatorGrey;
 @end

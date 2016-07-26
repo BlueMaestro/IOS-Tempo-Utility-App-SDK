@@ -14,4 +14,7 @@
 	return ([UIColor colorWithRed:14/255.0f green:110/255.0f blue:158/255.0f alpha:1]);
 }
 
++ (UIColor *)botomBarSeparatorGrey {
+	return ([UIColor colorWithRed:153/255.0f green:155/255.0f blue:157/255.0f alpha:1]);
+}
 @end

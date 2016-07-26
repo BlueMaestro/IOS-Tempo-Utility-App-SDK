@@ -13,8 +13,10 @@
 @property (strong, nonatomic) IBOutlet UITextField *textFieldMessage;
 @property (strong, nonatomic) IBOutlet UIButton *buttonSendMessage;
 @property (strong, nonatomic) IBOutlet UIButton *buttonConnect;
+@property (strong, nonatomic) IBOutlet UILabel *labelDeviceName;
 
 @property (strong, nonatomic) IBOutlet UITableView *tableViewLog;
+@property (strong, nonatomic) IBOutlet UIView *viewBottomContainer;
 
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender;
 - (IBAction)buttonConnectClicked:(UIButton *)sender;
