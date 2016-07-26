@@ -224,29 +224,32 @@
                                             <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="KmP-0T-nrd"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="br5-bR-Soa">
-                                        <rect key="frame" x="225" y="105" width="150" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="150" id="6QA-k0-Um7"/>
-                                            <constraint firstAttribute="height" constant="30" id="jhT-l9-j6f"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Not scanning" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q6y-W0-TX6">
-                                        <rect key="frame" x="263" y="7" width="75" height="15"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not scanning" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q6y-W0-TX6">
+                                        <rect key="frame" x="264" y="8" width="72" height="14"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="diC-RP-ruf">
+                                        <rect key="frame" x="225" y="105" width="150" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="IZ6-aO-Ous"/>
+                                            <constraint firstAttribute="width" constant="150" id="qDI-we-xcf"/>
+                                        </constraints>
+                                        <state key="normal" title="BLUE MAESTRO">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.91764705882352937" green="0.90980392156862744" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="leading" secondItem="pza-Du-lsz" secondAttribute="leading" constant="45" id="1YA-h6-lAg"/>
+                                    <constraint firstItem="diC-RP-ruf" firstAttribute="centerX" secondItem="pNN-n3-Yu7" secondAttribute="centerX" id="7mD-tV-GDF"/>
                                     <constraint firstAttribute="height" constant="147" id="9rT-kG-sBk"/>
+                                    <constraint firstAttribute="bottom" secondItem="diC-RP-ruf" secondAttribute="bottom" constant="12" id="Jfu-ik-vIb"/>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="top" secondItem="Q6y-W0-TX6" secondAttribute="bottom" constant="6" id="JgF-NJ-jmw"/>
-                                    <constraint firstAttribute="bottom" secondItem="br5-bR-Soa" secondAttribute="bottom" constant="12" id="QrJ-vw-aia"/>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="top" secondItem="pza-Du-lsz" secondAttribute="top" constant="28" id="Rr6-tD-DDm"/>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="centerX" secondItem="Q6y-W0-TX6" secondAttribute="centerX" id="VgJ-M2-0dD"/>
-                                    <constraint firstItem="br5-bR-Soa" firstAttribute="centerX" secondItem="pNN-n3-Yu7" secondAttribute="centerX" id="mqs-ee-qpZ"/>
                                     <constraint firstAttribute="trailing" secondItem="pNN-n3-Yu7" secondAttribute="trailing" constant="45" id="nDu-Cb-dh2"/>
                                 </constraints>
                             </view>
@@ -538,6 +541,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="3rG-iW-Sd4">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TT4-V3-l0R" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="viewControllerDeviceInfoTab" id="jfZ-zq-Xr3" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="l18-is-pBP">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
@@ -551,7 +555,6 @@
                         <segue destination="tuN-LB-SFY" kind="relationship" relationship="viewControllers" id="21C-DJ-qj4"/>
                     </connections>
                 </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TT4-V3-l0R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1058" y="408"/>
         </scene>
