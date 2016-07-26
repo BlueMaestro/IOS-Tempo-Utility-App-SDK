@@ -44,8 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	[self initPlot];
-	[self adjustPlotsRange];
+	[self setupView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,6 +61,64 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - Private methods
+
+- (void)setupView {
+	[self initPlot];
+	[self adjustPlotsRange];
+	for (UIButton *button in _buttonsMenu) {
+		button.layer.cornerRadius = 8.0;
+		button.clipsToBounds = YES;
+		button.layer.borderWidth = 2;
+		button.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
+		[button setBackgroundImage:[[SCHelper imageWithColor:button.backgroundColor] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateNormal];
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateHighlighted];
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateSelected];
+		[button setTitleColor:[UIColor blueMaestroBlue] forState:UIControlStateNormal];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+		button.titleLabel.numberOfLines = 2;
+		button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+		button.titleLabel.textAlignment = NSTextAlignmentCenter;
+	}
+	
+	_viewBottomMenuContainer.layer.borderColor = [UIColor botomBarSeparatorGrey].CGColor;
+	_viewBottomMenuContainer.layer.borderWidth = 1;
+}
+
+#pragma mark - Actions
+
+- (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
+	if (!_viewGraphTemperature) {
+		_viewGraphTemperature = _viewGraphHumidity;
+		_viewGraphHumidity = nil;
+		[sender setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateNormal];
+		[sender setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateSelected];
+		[sender setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateHighlighted];
+	}
+	else {
+		_viewGraphHumidity = _viewGraphTemperature;
+		_viewGraphTemperature = nil;
+		[sender setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateNormal];
+		[sender setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateSelected];
+		[sender setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateHighlighted];
+	}
+	[self initPlot];
+	[self adjustPlotsRange];
+}
+
+- (IBAction)buttonDayClicked:(UIButton *)sender {
+}
+
+- (IBAction)buttonWeekClicked:(UIButton *)sender {
+}
+
+- (IBAction)buttonMonthClicked:(UIButton *)sender {
+}
+
+- (IBAction)buttonAllClicked:(UIButton *)sender {
+}
 
 #pragma mark - Graph setup
 
@@ -314,5 +371,4 @@
 }
 
 #pragma mark - CPTPlotSpaceDelegate
-
 @end

@@ -46,6 +46,8 @@
 		button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
 		button.titleLabel.textAlignment = NSTextAlignmentCenter;
 	}
+	_viewBottomMenuContainer.layer.borderColor = [UIColor botomBarSeparatorGrey].CGColor;
+	_viewBottomMenuContainer.layer.borderWidth = 1;
 }
 
 #pragma mark - Actions
@@ -60,5 +62,6 @@
 	[_controllerDeviceTable changeReadingType];
 	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateNormal];
 	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateSelected];
+	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateHighlighted];
 }
 @end

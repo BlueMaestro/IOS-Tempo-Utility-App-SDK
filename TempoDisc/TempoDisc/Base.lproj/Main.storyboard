@@ -286,31 +286,132 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zba-qg-7bC">
-                                <rect key="frame" x="20" y="74" width="560" height="229"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zba-qg-7bC">
+                                <rect key="frame" x="20" y="74" width="560" height="384"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JFD-EF-IsQ">
-                                <rect key="frame" x="20" y="313" width="560" height="228"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J6N-rz-4fq">
+                                <rect key="frame" x="0.0" y="478" width="600" height="189"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xqn-5U-jkS">
+                                        <rect key="frame" x="158" y="18" width="137" height="50"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="7 Days">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonWeekClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="XT3-rg-BBw"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Q3-N2-LHA">
+                                        <rect key="frame" x="225" y="147" width="150" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="B4f-nV-TVt"/>
+                                            <constraint firstAttribute="width" constant="150" id="ik6-VT-x9V"/>
+                                        </constraints>
+                                        <state key="normal" title="BLUE MAESTRO">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJc-B7-O1Y">
+                                        <rect key="frame" x="37" y="85" width="526" height="50"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Wce-Ab-zki"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="Temperature Graph">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonChangeReadingTypeClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="V4e-vC-KaR"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ngv-sb-ZpR">
+                                        <rect key="frame" x="10" y="18" width="138" height="50"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="1 Day">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonDayClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="6JS-pw-UdX"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oA-gA-xVZ">
+                                        <rect key="frame" x="453" y="18" width="137" height="50"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="All">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonAllClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="qGz-pG-FUw"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yG1-Mt-R9F">
+                                        <rect key="frame" x="305" y="18" width="138" height="50"/>
+                                        <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="30 Days">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonMonthClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="ZZz-HD-REh"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.91764705879999997" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="189" id="6vf-DZ-pHS"/>
+                                    <constraint firstItem="yG1-Mt-R9F" firstAttribute="leading" secondItem="xqn-5U-jkS" secondAttribute="trailing" constant="10" id="IVp-6g-qW9"/>
+                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="leading" secondItem="J6N-rz-4fq" secondAttribute="leading" constant="37" id="Jt9-AD-WSj"/>
+                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="centerX" secondItem="J6N-rz-4fq" secondAttribute="centerX" id="P5X-nM-B8G"/>
+                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="top" secondItem="ngv-sb-ZpR" secondAttribute="bottom" constant="17" id="RoI-ri-BhX"/>
+                                    <constraint firstAttribute="trailing" secondItem="4oA-gA-xVZ" secondAttribute="trailing" constant="10" id="SRJ-4V-kNm"/>
+                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="centerY" secondItem="yG1-Mt-R9F" secondAttribute="centerY" id="UQw-UD-cSh"/>
+                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="leading" secondItem="yG1-Mt-R9F" secondAttribute="trailing" constant="10" id="ZY9-XA-QWJ"/>
+                                    <constraint firstItem="7Q3-N2-LHA" firstAttribute="centerX" secondItem="J6N-rz-4fq" secondAttribute="centerX" id="b0T-mN-VJj"/>
+                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="height" secondItem="ngv-sb-ZpR" secondAttribute="height" id="cdy-Et-pmx"/>
+                                    <constraint firstItem="yG1-Mt-R9F" firstAttribute="height" secondItem="ngv-sb-ZpR" secondAttribute="height" id="d5Y-ft-PVM"/>
+                                    <constraint firstAttribute="trailing" secondItem="hJc-B7-O1Y" secondAttribute="trailing" constant="37" id="dcA-yx-oJQ"/>
+                                    <constraint firstItem="xqn-5U-jkS" firstAttribute="width" secondItem="ngv-sb-ZpR" secondAttribute="width" id="dm5-zQ-sHy"/>
+                                    <constraint firstItem="ngv-sb-ZpR" firstAttribute="leading" secondItem="J6N-rz-4fq" secondAttribute="leading" constant="10" id="iaw-TA-IJX"/>
+                                    <constraint firstItem="xqn-5U-jkS" firstAttribute="height" secondItem="ngv-sb-ZpR" secondAttribute="height" id="jLQ-xg-0KY"/>
+                                    <constraint firstItem="yG1-Mt-R9F" firstAttribute="width" secondItem="ngv-sb-ZpR" secondAttribute="width" id="jo4-Sl-q6c"/>
+                                    <constraint firstItem="xqn-5U-jkS" firstAttribute="leading" secondItem="ngv-sb-ZpR" secondAttribute="trailing" constant="10" id="o2p-CI-acI"/>
+                                    <constraint firstItem="yG1-Mt-R9F" firstAttribute="centerY" secondItem="xqn-5U-jkS" secondAttribute="centerY" id="oop-Ol-iFK"/>
+                                    <constraint firstAttribute="bottom" secondItem="hJc-B7-O1Y" secondAttribute="bottom" constant="54" id="qxO-Lr-w0z"/>
+                                    <constraint firstItem="xqn-5U-jkS" firstAttribute="centerY" secondItem="ngv-sb-ZpR" secondAttribute="centerY" id="scJ-OJ-X2Q"/>
+                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="width" secondItem="yG1-Mt-R9F" secondAttribute="width" id="skH-nF-CU9"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="12" id="uhl-pD-TSF"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="12" id="xKR-Zz-sco"/>
+                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="height" secondItem="yG1-Mt-R9F" secondAttribute="height" id="xmK-3k-tQ4"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="JFD-EF-IsQ" firstAttribute="top" secondItem="Zba-qg-7bC" secondAttribute="bottom" constant="10" id="91T-GV-nDt"/>
-                            <constraint firstItem="Ghr-Nz-4Ce" firstAttribute="top" secondItem="JFD-EF-IsQ" secondAttribute="bottom" constant="10" id="9Im-Hp-199"/>
-                            <constraint firstItem="JFD-EF-IsQ" firstAttribute="height" secondItem="Zba-qg-7bC" secondAttribute="height" id="BGR-ai-bmx"/>
+                            <constraint firstItem="Ghr-Nz-4Ce" firstAttribute="top" secondItem="J6N-rz-4fq" secondAttribute="bottom" id="DCA-jo-U5q"/>
                             <constraint firstItem="Zba-qg-7bC" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="Dsa-j8-ewM"/>
-                            <constraint firstAttribute="trailing" secondItem="JFD-EF-IsQ" secondAttribute="trailing" constant="20" id="V3B-38-htQ"/>
+                            <constraint firstAttribute="trailing" secondItem="J6N-rz-4fq" secondAttribute="trailing" id="X5f-o8-xNn"/>
                             <constraint firstItem="Zba-qg-7bC" firstAttribute="top" secondItem="sun-aC-tAM" secondAttribute="bottom" constant="10" id="ZW2-xl-wGD"/>
-                            <constraint firstItem="JFD-EF-IsQ" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="agF-BF-49c"/>
                             <constraint firstAttribute="trailing" secondItem="Zba-qg-7bC" secondAttribute="trailing" constant="20" id="apk-YL-H1y"/>
+                            <constraint firstItem="J6N-rz-4fq" firstAttribute="top" secondItem="Zba-qg-7bC" secondAttribute="bottom" constant="20" id="c1L-eu-vEz"/>
+                            <constraint firstItem="J6N-rz-4fq" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" id="scd-du-doi"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" image="tab-graph" selectedImage="tab-graph-selected" id="pYQ-gk-v3r"/>
                     <connections>
-                        <outlet property="viewGraphHumidity" destination="JFD-EF-IsQ" id="jrT-SO-C8p"/>
+                        <outlet property="buttonReadingType" destination="hJc-B7-O1Y" id="3Fd-W3-mhI"/>
+                        <outlet property="viewBottomMenuContainer" destination="J6N-rz-4fq" id="rhJ-BY-GzC"/>
                         <outlet property="viewGraphTemperature" destination="Zba-qg-7bC" id="Q3i-gu-DfN"/>
+                        <outletCollection property="buttonsMenu" destination="ngv-sb-ZpR" id="sQ6-oT-KXr"/>
+                        <outletCollection property="buttonsMenu" destination="xqn-5U-jkS" id="LTG-UI-E4C"/>
+                        <outletCollection property="buttonsMenu" destination="yG1-Mt-R9F" id="ltf-zo-0sE"/>
+                        <outletCollection property="buttonsMenu" destination="4oA-gA-xVZ" id="twP-EH-tdp"/>
+                        <outletCollection property="buttonsMenu" destination="hJc-B7-O1Y" id="uTO-ew-cyO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tLd-KV-4zV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -438,6 +539,7 @@
                     <navigationItem key="navigationItem" title="Data Table" id="tMx-sC-dhS"/>
                     <connections>
                         <outlet property="buttonReadingType" destination="dam-Eo-vQ0" id="ycF-Ki-Ebo"/>
+                        <outlet property="viewBottomMenuContainer" destination="pVn-DD-1SP" id="Usl-dn-Agf"/>
                         <outletCollection property="buttonsBottomMenu" destination="HOE-hs-pVe" id="jOh-vQ-Nbs"/>
                         <outletCollection property="buttonsBottomMenu" destination="3at-pJ-7kV" id="HAD-Hb-4xb"/>
                         <outletCollection property="buttonsBottomMenu" destination="dam-Eo-vQ0" id="I74-ww-a1a"/>

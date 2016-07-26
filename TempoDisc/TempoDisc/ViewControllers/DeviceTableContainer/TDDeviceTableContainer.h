@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonsBottomMenu;
 @property (strong, nonatomic) IBOutlet UIButton *buttonReadingType;
+@property (strong, nonatomic) IBOutlet UIView *viewBottomMenuContainer;
 
 - (IBAction)buttonExportPdfClicked:(UIButton *)sender;
 - (IBAction)buttonExportCSVClicked:(UIButton *)sender;
