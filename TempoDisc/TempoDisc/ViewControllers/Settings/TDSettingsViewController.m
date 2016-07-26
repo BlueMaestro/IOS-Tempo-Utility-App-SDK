@@ -42,6 +42,7 @@
 #pragma mark - Private methods
 
 - (void)setupView {
+	[super setupView];
 	[_switchTemperatureUnit setOn:[TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue];
 	
 	//set date to 00

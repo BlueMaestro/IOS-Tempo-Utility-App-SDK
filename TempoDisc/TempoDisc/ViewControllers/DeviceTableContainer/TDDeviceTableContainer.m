@@ -31,6 +31,7 @@
 #pragma mark - Private methods
 
 - (void)setupView {
+	[super setupView];
 	for (UIButton *button in _buttonsBottomMenu) {
 		button.layer.cornerRadius = 8.0;
 		button.clipsToBounds = YES;

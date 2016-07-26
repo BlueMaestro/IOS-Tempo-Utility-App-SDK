@@ -287,7 +287,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zba-qg-7bC">
-                                <rect key="frame" x="20" y="74" width="560" height="384"/>
+                                <rect key="frame" x="20" y="115" width="560" height="343"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J6N-rz-4fq">
@@ -390,28 +390,47 @@
                                     <constraint firstItem="4oA-gA-xVZ" firstAttribute="height" secondItem="yG1-Mt-R9F" secondAttribute="height" id="xmK-3k-tQ4"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yfG-wv-LZf">
+                                <rect key="frame" x="0.0" y="106" width="600" height="1"/>
+                                <color key="backgroundColor" red="0.76470588240000004" green="0.7725490196" blue="0.77647058820000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="ttU-2H-BiM"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3R-0G-Jvk">
+                                <rect key="frame" x="248" y="71" width="104" height="25"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="21"/>
+                                <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="yfG-wv-LZf" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" id="2Qp-LH-BbG"/>
                             <constraint firstItem="Ghr-Nz-4Ce" firstAttribute="top" secondItem="J6N-rz-4fq" secondAttribute="bottom" id="DCA-jo-U5q"/>
                             <constraint firstItem="Zba-qg-7bC" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="Dsa-j8-ewM"/>
+                            <constraint firstItem="Zba-qg-7bC" firstAttribute="top" secondItem="yfG-wv-LZf" secondAttribute="bottom" constant="8" id="LmU-fP-sxt"/>
                             <constraint firstAttribute="trailing" secondItem="J6N-rz-4fq" secondAttribute="trailing" id="X5f-o8-xNn"/>
-                            <constraint firstItem="Zba-qg-7bC" firstAttribute="top" secondItem="sun-aC-tAM" secondAttribute="bottom" constant="10" id="ZW2-xl-wGD"/>
                             <constraint firstAttribute="trailing" secondItem="Zba-qg-7bC" secondAttribute="trailing" constant="20" id="apk-YL-H1y"/>
                             <constraint firstItem="J6N-rz-4fq" firstAttribute="top" secondItem="Zba-qg-7bC" secondAttribute="bottom" constant="20" id="c1L-eu-vEz"/>
+                            <constraint firstAttribute="trailing" secondItem="yfG-wv-LZf" secondAttribute="trailing" id="dE9-OD-mOb"/>
+                            <constraint firstItem="m3R-0G-Jvk" firstAttribute="centerX" secondItem="xnb-Gi-QGJ" secondAttribute="centerX" id="gBA-Bx-is5"/>
+                            <constraint firstItem="m3R-0G-Jvk" firstAttribute="top" secondItem="sun-aC-tAM" secondAttribute="bottom" constant="7" id="hz2-MA-dxa"/>
+                            <constraint firstItem="yfG-wv-LZf" firstAttribute="top" secondItem="m3R-0G-Jvk" secondAttribute="bottom" constant="10" id="pVz-4y-J1T"/>
                             <constraint firstItem="J6N-rz-4fq" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" id="scd-du-doi"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" image="tab-graph" selectedImage="tab-graph-selected" id="pYQ-gk-v3r"/>
                     <connections>
                         <outlet property="buttonReadingType" destination="hJc-B7-O1Y" id="3Fd-W3-mhI"/>
-                        <outlet property="viewBottomMenuContainer" destination="J6N-rz-4fq" id="rhJ-BY-GzC"/>
+                        <outlet property="labelDeviceName" destination="m3R-0G-Jvk" id="QdE-SB-UGM"/>
+                        <outlet property="viewBottomContainer" destination="J6N-rz-4fq" id="feW-49-oDA"/>
                         <outlet property="viewGraphTemperature" destination="Zba-qg-7bC" id="Q3i-gu-DfN"/>
-                        <outletCollection property="buttonsMenu" destination="ngv-sb-ZpR" id="sQ6-oT-KXr"/>
-                        <outletCollection property="buttonsMenu" destination="xqn-5U-jkS" id="LTG-UI-E4C"/>
-                        <outletCollection property="buttonsMenu" destination="yG1-Mt-R9F" id="ltf-zo-0sE"/>
-                        <outletCollection property="buttonsMenu" destination="4oA-gA-xVZ" id="twP-EH-tdp"/>
-                        <outletCollection property="buttonsMenu" destination="hJc-B7-O1Y" id="uTO-ew-cyO"/>
+                        <outletCollection property="buttonOptions" destination="ngv-sb-ZpR" id="vAI-Yn-y7T"/>
+                        <outletCollection property="buttonOptions" destination="xqn-5U-jkS" id="Zlw-xH-G6F"/>
+                        <outletCollection property="buttonOptions" destination="yG1-Mt-R9F" id="kWl-6B-cqA"/>
+                        <outletCollection property="buttonOptions" destination="4oA-gA-xVZ" id="0VW-72-K7N"/>
+                        <outletCollection property="buttonOptions" destination="hJc-B7-O1Y" id="Saa-iK-2Bb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tLd-KV-4zV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -539,10 +558,12 @@
                     <navigationItem key="navigationItem" title="Data Table" id="tMx-sC-dhS"/>
                     <connections>
                         <outlet property="buttonReadingType" destination="dam-Eo-vQ0" id="ycF-Ki-Ebo"/>
-                        <outlet property="viewBottomMenuContainer" destination="pVn-DD-1SP" id="Usl-dn-Agf"/>
-                        <outletCollection property="buttonsBottomMenu" destination="HOE-hs-pVe" id="jOh-vQ-Nbs"/>
-                        <outletCollection property="buttonsBottomMenu" destination="3at-pJ-7kV" id="HAD-Hb-4xb"/>
+                        <outlet property="labelDeviceName" destination="5mj-LG-67r" id="lGu-cQ-MMl"/>
+                        <outlet property="viewBottomContainer" destination="pVn-DD-1SP" id="epN-2T-ZVN"/>
                         <outletCollection property="buttonsBottomMenu" destination="dam-Eo-vQ0" id="I74-ww-a1a"/>
+                        <outletCollection property="buttonOptions" destination="dam-Eo-vQ0" id="N3F-Os-k6E"/>
+                        <outletCollection property="buttonOptions" destination="HOE-hs-pVe" id="0Ou-a9-VTB"/>
+                        <outletCollection property="buttonOptions" destination="3at-pJ-7kV" id="aGb-4P-bwT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CAN-Ed-EYb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -840,19 +861,19 @@ Download</string>
                     <size key="freeformSize" width="600" height="667"/>
                     <connections>
                         <outlet property="labelAlerts" destination="01q-I0-Z3q" id="0D7-RI-dNg"/>
-                        <outlet property="labelDeviceName" destination="Wsn-cH-GO9" id="gi9-J8-1CT"/>
+                        <outlet property="labelDeviceName" destination="Wsn-cH-GO9" id="Oo6-Kw-qlU"/>
                         <outlet property="labelHumidityValue" destination="B2N-yG-1pu" id="OKf-71-nxi"/>
                         <outlet property="labelRSSI" destination="zri-X6-6wI" id="Qqq-qO-Uju"/>
                         <outlet property="labelTemperatureValue" destination="jTZ-mb-mUy" id="aCl-oX-VKA"/>
                         <outlet property="labelUUID" destination="FtO-sy-MCK" id="g7b-hl-PtC"/>
                         <outlet property="labelVersion" destination="Lcs-4F-8QJ" id="UHL-ET-2Ci"/>
-                        <outlet property="viewBottomContainer" destination="w8g-DF-QaA" id="7pj-BJ-rSS"/>
-                        <outletCollection property="buttonOptions" destination="Pcj-e4-qwg" id="WK2-Q3-22E"/>
-                        <outletCollection property="buttonOptions" destination="7MX-hi-IA3" id="HnS-AI-csM"/>
-                        <outletCollection property="buttonOptions" destination="cp9-rh-oic" id="xI6-h2-otT"/>
-                        <outletCollection property="buttonOptions" destination="YMl-zx-g2V" id="Xei-7g-6XE"/>
-                        <outletCollection property="buttonOptions" destination="cvP-P8-hzL" id="Uzo-f7-8C2"/>
-                        <outletCollection property="buttonOptions" destination="9Xw-N5-jrx" id="U5h-I0-JMo"/>
+                        <outlet property="viewBottomContainer" destination="w8g-DF-QaA" id="rkp-oK-v5l"/>
+                        <outletCollection property="buttonOptions" destination="Pcj-e4-qwg" id="FqP-rA-ADn"/>
+                        <outletCollection property="buttonOptions" destination="7MX-hi-IA3" id="46F-52-8z1"/>
+                        <outletCollection property="buttonOptions" destination="YMl-zx-g2V" id="qHZ-i3-qHy"/>
+                        <outletCollection property="buttonOptions" destination="cp9-rh-oic" id="jCM-gg-JBk"/>
+                        <outletCollection property="buttonOptions" destination="cvP-P8-hzL" id="V7t-mW-qDL"/>
+                        <outletCollection property="buttonOptions" destination="9Xw-N5-jrx" id="YbC-eD-S0K"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ruS-qd-Jbs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1038,7 +1059,9 @@ Download</string>
                         <outlet property="scrollViewMain" destination="SrZ-4N-sKN" id="9Ew-HD-UJU"/>
                         <outlet property="tableViewLog" destination="ZEK-8s-WIx" id="Hwc-7a-au1"/>
                         <outlet property="textFieldMessage" destination="tXl-dR-j8V" id="7xm-CT-Fuh"/>
-                        <outlet property="viewBottomContainer" destination="TdT-Hv-bCu" id="Bx9-dn-dVq"/>
+                        <outlet property="viewBottomContainer" destination="TdT-Hv-bCu" id="SLt-aE-e9U"/>
+                        <outletCollection property="buttonOptions" destination="gTC-iA-K6c" id="KIn-CI-YfB"/>
+                        <outletCollection property="buttonOptions" destination="z4A-3F-GEI" id="q0n-dB-KcB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MPC-fW-gyK" userLabel="First Responder" sceneMemberID="firstResponder"/>

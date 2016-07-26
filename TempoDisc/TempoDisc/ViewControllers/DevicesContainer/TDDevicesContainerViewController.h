@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TDBaseDeviceViewController.h"
 
-@interface TDDevicesContainerViewController : UIViewController
+@interface TDDevicesContainerViewController : TDBaseDeviceViewController
 @property (strong, nonatomic) IBOutlet UILabel *labelScanStatus;
 @property (strong, nonatomic) IBOutlet UIButton *buttonStartScan;
 
-@property (strong, nonatomic) IBOutlet UIView *viewBottomContainer;
 - (IBAction)buttonStartScanClicked:(UIButton *)sender;
 @end

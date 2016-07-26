@@ -143,6 +143,7 @@
 #pragma mark - Private methods
 
 - (void)setupView {
+	[super setupView];
 	_formatterLastDownload = [[NSDateFormatter alloc] init];
 	_formatterLastDownload.dateFormat = @"HH:mm EEEE d";
 	
@@ -155,29 +156,10 @@
 	_buttonUART.layer.borderWidth = 1.0;
 	_buttonUART.layer.cornerRadius = 12;
 	_buttonUART.clipsToBounds = YES;
-	
-	for (UIButton *button in _buttonOptions) {
-		button.layer.cornerRadius = 8.0;
-		button.clipsToBounds = YES;
-		button.layer.borderWidth = 2;
-		button.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
-		[button setBackgroundImage:[[SCHelper imageWithColor:button.backgroundColor] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateNormal];
-		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateHighlighted];
-		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateSelected];
-		[button setTitleColor:[UIColor blueMaestroBlue] forState:UIControlStateNormal];
-		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-		button.titleLabel.numberOfLines = 2;
-		button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-		button.titleLabel.textAlignment = NSTextAlignmentCenter;
-	}
-	
-	_viewBottomContainer.layer.borderColor = [UIColor botomBarSeparatorGrey].CGColor;
-	_viewBottomContainer.layer.borderWidth = 1;
+
 }
 
 - (void)fillData {
-	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
 	_labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:[TDDefaultDevice sharedDevice].selectedDevice.currentTemperature forDevice:[TDDefaultDevice sharedDevice].selectedDevice].floatValue, [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 	_labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)[TDDefaultDevice sharedDevice].selectedDevice.currentHumidity.integerValue];
 	if ([TDDefaultDevice sharedDevice].selectedDevice.lastDownload) {

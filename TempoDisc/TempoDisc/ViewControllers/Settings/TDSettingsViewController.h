@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface TDSettingsViewController : UIViewController
+#import "TDBaseDeviceViewController.h"
+@interface TDSettingsViewController : TDBaseDeviceViewController
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonBuzz;
 @property (strong, nonatomic) IBOutlet UISwitch *switchTemperatureUnit;

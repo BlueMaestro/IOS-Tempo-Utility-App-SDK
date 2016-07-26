@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface TDDeviceTableContainer : UIViewController
+#import "TDBaseDeviceViewController.h"
+@interface TDDeviceTableContainer : TDBaseDeviceViewController
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonsBottomMenu;
 @property (strong, nonatomic) IBOutlet UIButton *buttonReadingType;

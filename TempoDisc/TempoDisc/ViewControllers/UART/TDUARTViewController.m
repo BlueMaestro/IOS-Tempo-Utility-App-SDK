@@ -73,6 +73,7 @@
 #pragma mark - Private methods
 
 - (void)setupView {
+	[super setupView];
 	_tableViewLog.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	_tableViewLog.rowHeight = UITableViewAutomaticDimension;
 	_tableViewLog.estimatedRowHeight = 44.0;
@@ -86,21 +87,6 @@
 	_textFieldMessage.leftViewMode = UITextFieldViewModeAlways;
 	_textFieldMessage.rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, _textFieldMessage.frame.size.height)];
 	_textFieldMessage.rightViewMode = UITextFieldViewModeAlways;
-	
-	_buttonConnect.layer.cornerRadius = 8.0;
-	_buttonConnect.clipsToBounds = YES;
-	_buttonConnect.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
-	_buttonConnect.layer.borderWidth = 2;
-
-	_buttonSendMessage.layer.cornerRadius = 8.0;
-	_buttonSendMessage.clipsToBounds = YES;
-	_buttonSendMessage.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
-	_buttonSendMessage.layer.borderWidth = 2;
-	
-	_viewBottomContainer.layer.borderWidth = 1;
-	_viewBottomContainer.layer.borderColor = [UIColor botomBarSeparatorGrey].CGColor;
-	
-//	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
 }
 
 - (void)handleDisconnectNotification:(NSNotification*)note {

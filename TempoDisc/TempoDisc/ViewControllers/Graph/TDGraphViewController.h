@@ -7,15 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface TDGraphViewController : UIViewController
+#import "TDBaseDeviceViewController.h"
+@interface TDGraphViewController : TDBaseDeviceViewController
 
 @property (strong, nonatomic) IBOutlet UIView *viewGraphTemperature;
 @property (strong, nonatomic) IBOutlet UIView *viewGraphHumidity;
 @property (strong, nonatomic) IBOutlet UIButton *buttonReadingType;
-
-@property (strong, nonatomic) IBOutlet UIView *viewBottomMenuContainer;
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonsMenu;
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender;
 - (IBAction)buttonDayClicked:(UIButton *)sender;

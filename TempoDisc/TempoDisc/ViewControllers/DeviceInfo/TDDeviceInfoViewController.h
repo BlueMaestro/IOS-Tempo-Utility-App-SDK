@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TDBaseDeviceViewController.h"
+@interface TDDeviceInfoViewController : TDBaseDeviceViewController
 
-@interface TDDeviceInfoViewController : UIViewController
-
-@property (strong, nonatomic) IBOutlet UILabel *labelDeviceName;
 @property (strong, nonatomic) IBOutlet UILabel *labelTemperatureValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelHumidityValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelLastDownloadTimestamp;
@@ -21,9 +20,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
-@property (strong, nonatomic) IBOutlet UIView *viewBottomContainer;
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender;
 
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonOptions;
+
 @end

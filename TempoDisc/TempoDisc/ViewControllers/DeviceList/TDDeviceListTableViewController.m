@@ -256,7 +256,7 @@
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
-	cell.labelDeviceName.text = @"TEMPO V3";//device.name;
+	cell.labelDeviceName.text = device.name;
 }
 
 #pragma mark - UITableViewDelegate

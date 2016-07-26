@@ -7,16 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TDBaseDeviceViewController.h"
 
-@interface TDUARTViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface TDUARTViewController : TDBaseDeviceViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UITextField *textFieldMessage;
 @property (strong, nonatomic) IBOutlet UIButton *buttonSendMessage;
 @property (strong, nonatomic) IBOutlet UIButton *buttonConnect;
-@property (strong, nonatomic) IBOutlet UILabel *labelDeviceName;
 
 @property (strong, nonatomic) IBOutlet UITableView *tableViewLog;
-@property (strong, nonatomic) IBOutlet UIView *viewBottomContainer;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollViewMain;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *constraintScrollViewBottom;
 

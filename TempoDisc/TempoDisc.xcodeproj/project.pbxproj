@@ -34,6 +34,7 @@
 		CBAB5C451D47CC9000EEBECD /* SCHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C441D47CC9000EEBECD /* SCHelper.m */; };
 		CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C481D47E72A00EEBECD /* UIColor+Tempo.m */; };
 		CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */; };
+		CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +92,8 @@
 		CBAB5C481D47E72A00EEBECD /* UIColor+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Tempo.m"; sourceTree = "<group>"; };
 		CBAB5C4B1D47F82300EEBECD /* TDDeviceTableContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceTableContainer.h; sourceTree = "<group>"; };
 		CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceTableContainer.m; sourceTree = "<group>"; };
+		CBAB5C4F1D47FF0500EEBECD /* TDBaseDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseDeviceViewController.h; sourceTree = "<group>"; };
+		CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseDeviceViewController.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
 		CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,6 +190,7 @@
 		CB16BA511C82E70C00C99C41 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */,
 				CB6895601C83353F00EB1A65 /* DeviceDataTable */,
 				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
 				CB16BA521C82E74200C99C41 /* DeviceList */,
@@ -375,6 +379,15 @@
 			path = DeviceTableContainer;
 			sourceTree = "<group>";
 		};
+		CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CBAB5C4F1D47FF0500EEBECD /* TDBaseDeviceViewController.h */,
+				CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */,
+			);
+			path = BaseDevice;
+			sourceTree = "<group>";
+		};
 		CBD84AE41D2ED579004B0191 /* UART */ = {
 			isa = PBXGroup;
 			children = (
@@ -515,6 +528,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB9421EE1C9200C5000724B5 /* TDGraphViewController.m in Sources */,
+				CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */,
 				CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */,
 				CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */,
 				CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */,
