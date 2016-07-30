@@ -53,8 +53,8 @@
                                             <color key="textColor" red="0.20392156859999999" green="0.2156862745" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="None" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cLF-PW-bGX">
-                                            <rect key="frame" x="20" y="85" width="49" height="16"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="None" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cLF-PW-bGX">
+                                            <rect key="frame" x="20" y="80" width="49" height="16"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="16" id="AbJ-gM-V89"/>
                                                 <constraint firstAttribute="width" constant="49" id="Fq1-HL-bT6"/>
@@ -65,7 +65,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Version :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Iy-V2-xLN">
                                             <rect key="frame" x="20" y="46" width="106" height="16"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
-                                            <color key="textColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Humidity" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aHV-cK-Tv0">
@@ -89,7 +89,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="RSSI :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RVx-js-Znh">
                                             <rect key="frame" x="20" y="63" width="106" height="16"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
-                                            <color key="textColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Temp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URc-ra-2Bw">
@@ -115,7 +115,7 @@
                                         <constraint firstItem="RVx-js-Znh" firstAttribute="trailing" secondItem="2Iy-V2-xLN" secondAttribute="trailing" id="FKY-tH-0SI"/>
                                         <constraint firstItem="eeW-hA-cqb" firstAttribute="leading" secondItem="k6i-zM-wbe" secondAttribute="trailing" constant="32" id="FWm-Fr-olP"/>
                                         <constraint firstItem="2Iy-V2-xLN" firstAttribute="leading" secondItem="RVx-js-Znh" secondAttribute="leading" id="GnO-Mz-H9b"/>
-                                        <constraint firstItem="cLF-PW-bGX" firstAttribute="top" secondItem="RVx-js-Znh" secondAttribute="bottom" constant="6" id="HF9-BS-1bk"/>
+                                        <constraint firstItem="cLF-PW-bGX" firstAttribute="top" secondItem="RVx-js-Znh" secondAttribute="bottom" constant="1" id="HF9-BS-1bk"/>
                                         <constraint firstItem="cLF-PW-bGX" firstAttribute="leading" secondItem="2Iy-V2-xLN" secondAttribute="leading" id="HNU-JF-gJz"/>
                                         <constraint firstItem="2Iy-V2-xLN" firstAttribute="trailing" secondItem="NlK-Ay-nTK" secondAttribute="trailing" id="J9K-fM-TJM"/>
                                         <constraint firstAttribute="bottom" secondItem="k6i-zM-wbe" secondAttribute="bottom" constant="10" id="NXs-zF-CoZ"/>
