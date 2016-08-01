@@ -40,7 +40,9 @@ int getInt(char lsb,char msb)
 		
 		//Is this one of ours?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_DISC) {
+			if (d[2] == BM_MODEL_DISC ||
+				d[2] == BM_MODEL_THP ||
+				d[2] == BM_MODEL_T30) {
 				return YES;
 			}
 		}
