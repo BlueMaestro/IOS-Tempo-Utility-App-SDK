@@ -51,6 +51,12 @@
 	_viewBottomMenuContainer.layer.borderWidth = 1;
 }
 
+- (void)adjustedButtonTitles {
+	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateNormal];
+	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateSelected];
+	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateHighlighted];
+}
+
 #pragma mark - Actions
 
 - (IBAction)buttonExportPdfClicked:(UIButton *)sender {
@@ -60,9 +66,17 @@
 }
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
-	[_controllerDeviceTable changeReadingType];
-	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateNormal];
-	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateSelected];
-	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateHighlighted];
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"READING TYPE", nil) message:NSLocalizedString(@"Choose reading type", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+	__weak typeof(self) weakself = self;
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Temperature", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself.controllerDeviceTable changeReadingType:TempoReadingTypeTemperature];
+		[weakself adjustedButtonTitles];
+	}]];
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Humidity", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself.controllerDeviceTable changeReadingType:TempoReadingTypeHumidity];
+		[weakself adjustedButtonTitles];
+	}]];
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+	[self presentViewController:alert animated:YES completion:nil];
 }
 @end

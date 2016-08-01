@@ -70,25 +70,51 @@
 	[self adjustPlotsRange];
 }
 
-#pragma mark - Actions
-
-- (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
-	if (!_viewGraphTemperature) {
-		_viewGraphTemperature = _viewGraphHumidity;
-		_viewGraphHumidity = nil;
-		[sender setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateNormal];
-		[sender setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateSelected];
-		[sender setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateHighlighted];
-	}
-	else {
-		_viewGraphHumidity = _viewGraphTemperature;
-		_viewGraphTemperature = nil;
-		[sender setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateNormal];
-		[sender setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateSelected];
-		[sender setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateHighlighted];
+- (void)changeReadingType:(TempoReadingType)type {
+	switch (type) {
+  case TempoReadingTypeTemperature: {
+			  if (!_viewGraphTemperature) {
+				  _viewGraphTemperature = _viewGraphHumidity;
+				  _viewGraphHumidity = nil;
+				  [_buttonReadingType setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateNormal];
+				  [_buttonReadingType setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateSelected];
+				  [_buttonReadingType setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateHighlighted];
+			  }
+		
+		}
+			break;
+			
+		case TempoReadingTypeHumidity: {
+			if (!_viewGraphHumidity) {
+				_viewGraphHumidity = _viewGraphTemperature;
+				_viewGraphTemperature = nil;
+				[_buttonReadingType setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateNormal];
+				[_buttonReadingType setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateSelected];
+				[_buttonReadingType setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateHighlighted];
+			}
+			break;
+		}
+			
+  default:
+			break;
 	}
 	[self initPlot];
 	[self adjustPlotsRange];
+}
+
+#pragma mark - Actions
+
+- (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"READING TYPE", nil) message:NSLocalizedString(@"Choose reading type", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+	__weak typeof(self) weakself = self;
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Temperature", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself changeReadingType:TempoReadingTypeTemperature];
+	}]];
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Humidity", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself changeReadingType:TempoReadingTypeHumidity];
+	}]];
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+	[self presentViewController:alert animated:YES completion:nil];
 }
 
 - (IBAction)buttonDayClicked:(UIButton *)sender {

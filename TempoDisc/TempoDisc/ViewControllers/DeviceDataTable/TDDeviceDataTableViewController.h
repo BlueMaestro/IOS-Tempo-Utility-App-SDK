@@ -12,6 +12,6 @@
 
 @property (nonatomic, assign) TempoReadingType currentReadingType;
 
-- (void)changeReadingType;
+- (void)changeReadingType:(TempoReadingType)type;
 
 @end

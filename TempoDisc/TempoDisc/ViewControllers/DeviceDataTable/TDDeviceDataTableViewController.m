@@ -78,15 +78,15 @@
 
 #pragma mark - Public methods
 
-- (void)changeReadingType {
-	_currentReadingType = _currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature;
+- (void)changeReadingType:(TempoReadingType)type {
+	_currentReadingType = type;
 	[self loadDataForType:_currentReadingType];
 }
 
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
-	[self changeReadingType];
+	[self changeReadingType:_currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature];
 	[sender setTitle:(_currentReadingType == TempoReadingTypeTemperature) ? @"Temperature" : @"Humidity"];
 }
 
