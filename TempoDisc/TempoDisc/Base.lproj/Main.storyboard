@@ -227,13 +227,13 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="diC-RP-ruf">
-                                        <rect key="frame" x="225" y="105" width="150" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="diC-RP-ruf">
+                                        <rect key="frame" x="200" y="101" width="200" height="38"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="IZ6-aO-Ous"/>
-                                            <constraint firstAttribute="width" constant="150" id="qDI-we-xcf"/>
+                                            <constraint firstAttribute="height" constant="38" id="IZ6-aO-Ous"/>
+                                            <constraint firstAttribute="width" constant="200" id="qDI-we-xcf"/>
                                         </constraints>
-                                        <state key="normal" title="BLUE MAESTRO">
+                                        <state key="normal" image="logo">
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
@@ -243,7 +243,7 @@
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="leading" secondItem="pza-Du-lsz" secondAttribute="leading" constant="45" id="1YA-h6-lAg"/>
                                     <constraint firstItem="diC-RP-ruf" firstAttribute="centerX" secondItem="pNN-n3-Yu7" secondAttribute="centerX" id="7mD-tV-GDF"/>
                                     <constraint firstAttribute="height" constant="147" id="9rT-kG-sBk"/>
-                                    <constraint firstAttribute="bottom" secondItem="diC-RP-ruf" secondAttribute="bottom" constant="12" id="Jfu-ik-vIb"/>
+                                    <constraint firstAttribute="bottom" secondItem="diC-RP-ruf" secondAttribute="bottom" constant="8" id="Jfu-ik-vIb"/>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="top" secondItem="Q6y-W0-TX6" secondAttribute="bottom" constant="6" id="JgF-NJ-jmw"/>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="top" secondItem="pza-Du-lsz" secondAttribute="top" constant="28" id="Rr6-tD-DDm"/>
                                     <constraint firstItem="pNN-n3-Yu7" firstAttribute="centerX" secondItem="Q6y-W0-TX6" secondAttribute="centerX" id="VgJ-M2-0dD"/>
@@ -304,13 +304,13 @@
                                             <action selector="buttonWeekClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="XT3-rg-BBw"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Q3-N2-LHA">
-                                        <rect key="frame" x="225" y="147" width="150" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Q3-N2-LHA">
+                                        <rect key="frame" x="200" y="143" width="200" height="38"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="B4f-nV-TVt"/>
-                                            <constraint firstAttribute="width" constant="150" id="ik6-VT-x9V"/>
+                                            <constraint firstAttribute="height" constant="38" id="B4f-nV-TVt"/>
+                                            <constraint firstAttribute="width" constant="200" id="ik6-VT-x9V"/>
                                         </constraints>
-                                        <state key="normal" title="BLUE MAESTRO">
+                                        <state key="normal" image="logo">
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
@@ -385,8 +385,8 @@
                                     <constraint firstAttribute="bottom" secondItem="hJc-B7-O1Y" secondAttribute="bottom" constant="54" id="qxO-Lr-w0z"/>
                                     <constraint firstItem="xqn-5U-jkS" firstAttribute="centerY" secondItem="ngv-sb-ZpR" secondAttribute="centerY" id="scJ-OJ-X2Q"/>
                                     <constraint firstItem="4oA-gA-xVZ" firstAttribute="width" secondItem="yG1-Mt-R9F" secondAttribute="width" id="skH-nF-CU9"/>
-                                    <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="12" id="uhl-pD-TSF"/>
-                                    <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="12" id="xKR-Zz-sco"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="8" id="uhl-pD-TSF"/>
+                                    <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="8" id="xKR-Zz-sco"/>
                                     <constraint firstItem="4oA-gA-xVZ" firstAttribute="height" secondItem="yG1-Mt-R9F" secondAttribute="height" id="xmK-3k-tQ4"/>
                                 </constraints>
                             </view>
@@ -463,13 +463,13 @@
                                             <action selector="buttonExportCSVClicked:" destination="2Dh-4Q-lVF" eventType="touchUpInside" id="2V0-8e-oke"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tGA-S9-7hH">
-                                        <rect key="frame" x="225" y="147" width="150" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tGA-S9-7hH">
+                                        <rect key="frame" x="200" y="143" width="200" height="38"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="U6p-uy-akb"/>
-                                            <constraint firstAttribute="width" constant="150" id="XnI-FI-ja2"/>
+                                            <constraint firstAttribute="height" constant="38" id="U6p-uy-akb"/>
+                                            <constraint firstAttribute="width" constant="200" id="XnI-FI-ja2"/>
                                         </constraints>
-                                        <state key="normal" title="BLUE MAESTRO">
+                                        <state key="normal" image="logo">
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
@@ -511,10 +511,10 @@
                                     <constraint firstItem="dam-Eo-vQ0" firstAttribute="top" secondItem="HOE-hs-pVe" secondAttribute="bottom" constant="17" id="cix-c9-Kyc"/>
                                     <constraint firstAttribute="height" constant="189" id="emg-j2-43i"/>
                                     <constraint firstItem="dam-Eo-vQ0" firstAttribute="height" secondItem="HOE-hs-pVe" secondAttribute="height" id="ggQ-S6-gdU"/>
-                                    <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="12" id="hw5-p3-hYq"/>
+                                    <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="8" id="hw5-p3-hYq"/>
                                     <constraint firstAttribute="bottom" secondItem="dam-Eo-vQ0" secondAttribute="bottom" constant="54" id="qaE-08-igO"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="height" secondItem="HOE-hs-pVe" secondAttribute="height" id="r0t-ia-82u"/>
-                                    <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="12" id="w6z-Ip-ZWH"/>
+                                    <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="8" id="w6z-Ip-ZWH"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="width" secondItem="HOE-hs-pVe" secondAttribute="width" id="yNN-dz-JfI"/>
                                     <constraint firstAttribute="trailing" secondItem="dam-Eo-vQ0" secondAttribute="trailing" constant="37" id="ykJ-q0-WL5"/>
                                 </constraints>
@@ -714,13 +714,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w8g-DF-QaA">
                                 <rect key="frame" x="0.0" y="369" width="600" height="298"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RnG-KH-fMr">
-                                        <rect key="frame" x="225" y="256" width="150" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RnG-KH-fMr">
+                                        <rect key="frame" x="200" y="252" width="200" height="38"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="0Cu-v6-FxS"/>
-                                            <constraint firstAttribute="width" constant="150" id="cq3-nf-IWt"/>
+                                            <constraint firstAttribute="height" constant="38" id="0Cu-v6-FxS"/>
+                                            <constraint firstAttribute="width" constant="200" id="cq3-nf-IWt"/>
                                         </constraints>
-                                        <state key="normal" title="BLUE MAESTRO">
+                                        <state key="normal" image="logo">
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
@@ -831,7 +831,7 @@ Download</string>
                                     <constraint firstItem="cvP-P8-hzL" firstAttribute="height" secondItem="Pcj-e4-qwg" secondAttribute="height" id="bzL-qQ-UOf"/>
                                     <constraint firstItem="YMl-zx-g2V" firstAttribute="height" secondItem="Pcj-e4-qwg" secondAttribute="height" id="jKL-1R-2xt"/>
                                     <constraint firstItem="cp9-rh-oic" firstAttribute="width" secondItem="Pcj-e4-qwg" secondAttribute="width" id="lga-44-agy"/>
-                                    <constraint firstAttribute="bottom" secondItem="RnG-KH-fMr" secondAttribute="bottom" constant="12" id="ohD-AB-pmb"/>
+                                    <constraint firstAttribute="bottom" secondItem="RnG-KH-fMr" secondAttribute="bottom" constant="8" id="ohD-AB-pmb"/>
                                     <constraint firstItem="cvP-P8-hzL" firstAttribute="width" secondItem="Pcj-e4-qwg" secondAttribute="width" id="rBR-hE-LU3"/>
                                     <constraint firstItem="RnG-KH-fMr" firstAttribute="centerX" secondItem="w8g-DF-QaA" secondAttribute="centerX" id="rfL-jC-xYA"/>
                                     <constraint firstItem="7MX-hi-IA3" firstAttribute="leading" secondItem="Pcj-e4-qwg" secondAttribute="trailing" constant="25" id="s0t-Mn-1wt"/>
@@ -992,13 +992,13 @@ Download</string>
                                                     <action selector="buttonSendMessageClicked:" destination="CxN-Gb-rgC" eventType="touchUpInside" id="bcV-0V-6YR"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OOJ-Ly-diL">
-                                                <rect key="frame" x="225" y="147" width="150" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OOJ-Ly-diL">
+                                                <rect key="frame" x="200" y="143" width="200" height="38"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="mSv-DF-IeR"/>
-                                                    <constraint firstAttribute="width" constant="150" id="qer-cE-A4c"/>
+                                                    <constraint firstAttribute="height" constant="38" id="mSv-DF-IeR"/>
+                                                    <constraint firstAttribute="width" constant="200" id="qer-cE-A4c"/>
                                                 </constraints>
-                                                <state key="normal" title="BLUE MAESTRO">
+                                                <state key="normal" image="logo">
                                                     <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
                                             </button>
@@ -1006,7 +1006,7 @@ Download</string>
                                         <color key="backgroundColor" red="0.91764705879999997" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="gTC-iA-K6c" firstAttribute="centerY" secondItem="tXl-dR-j8V" secondAttribute="centerY" id="89R-tS-fhS"/>
-                                            <constraint firstAttribute="bottom" secondItem="OOJ-Ly-diL" secondAttribute="bottom" constant="12" id="FoB-Ni-dXM"/>
+                                            <constraint firstAttribute="bottom" secondItem="OOJ-Ly-diL" secondAttribute="bottom" constant="8" id="FoB-Ni-dXM"/>
                                             <constraint firstAttribute="height" constant="189" id="Gxo-bh-IPI"/>
                                             <constraint firstItem="z4A-3F-GEI" firstAttribute="centerX" secondItem="TdT-Hv-bCu" secondAttribute="centerX" id="Hah-Ud-gAJ"/>
                                             <constraint firstAttribute="trailing" secondItem="gTC-iA-K6c" secondAttribute="trailing" constant="14" id="KYI-2i-3rB"/>
@@ -1016,7 +1016,6 @@ Download</string>
                                             <constraint firstItem="OOJ-Ly-diL" firstAttribute="centerX" secondItem="TdT-Hv-bCu" secondAttribute="centerX" id="bVG-Ja-ua1"/>
                                             <constraint firstItem="gTC-iA-K6c" firstAttribute="leading" secondItem="tXl-dR-j8V" secondAttribute="trailing" constant="9" id="r1P-6o-QDb"/>
                                             <constraint firstItem="gTC-iA-K6c" firstAttribute="height" secondItem="tXl-dR-j8V" secondAttribute="height" id="xnc-s2-1kq"/>
-                                            <constraint firstAttribute="bottom" secondItem="OOJ-Ly-diL" secondAttribute="bottom" constant="12" id="zts-gx-a8c"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -1222,6 +1221,7 @@ Download</string>
         </scene>
     </scenes>
     <resources>
+        <image name="logo" width="200" height="38"/>
         <image name="tab-graph" width="26" height="26"/>
         <image name="tab-graph-selected" width="26" height="26"/>
         <image name="tab-list" width="26" height="26"/>
