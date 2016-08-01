@@ -207,7 +207,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pza-Du-lsz">
                                 <rect key="frame" x="0.0" y="453" width="600" height="147"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pNN-n3-Yu7">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pNN-n3-Yu7">
                                         <rect key="frame" x="45" y="28" width="510" height="68"/>
                                         <color key="backgroundColor" red="0.94117647058823528" green="0.94901960784313721" blue="0.96470588235294119" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -267,6 +267,7 @@
                         <outlet property="buttonStartScan" destination="pNN-n3-Yu7" id="AH0-RJ-NU0"/>
                         <outlet property="labelScanStatus" destination="Q6y-W0-TX6" id="5eY-zz-jaB"/>
                         <outlet property="viewBottomContainer" destination="pza-Du-lsz" id="cKC-Nm-0Go"/>
+                        <outletCollection property="buttonOptions" destination="pNN-n3-Yu7" id="2CD-wU-1sq"/>
                         <segue destination="tMM-iH-sIM" kind="show" identifier="segueDeviceInfo" id="8oI-Em-fqf"/>
                     </connections>
                 </viewController>
@@ -732,7 +733,6 @@
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="aUp-0Z-rCR"/>
                                             <segue destination="1ae-lz-4lE" kind="show" id="BMJ-no-2yD"/>
                                         </connections>
                                     </button>
@@ -746,7 +746,6 @@ Command Line</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="mX8-uq-h7g"/>
                                             <segue destination="CxN-Gb-rgC" kind="show" id="ksw-HN-G1m"/>
                                         </connections>
                                     </button>
@@ -760,7 +759,6 @@ Settings</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="mkW-0C-Mmc"/>
                                             <segue destination="tuN-LB-SFY" kind="show" id="IQh-JI-PVe"/>
                                         </connections>
                                     </button>
@@ -772,7 +770,6 @@ Settings</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="jAZ-fu-hGy"/>
                                             <segue destination="2Dh-4Q-lVF" kind="show" id="pIV-eF-WFd"/>
                                         </connections>
                                     </button>
@@ -785,9 +782,6 @@ Settings</string>
 Support</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
-                                        <connections>
-                                            <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="Qks-mu-nuu"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pcj-e4-qwg">
                                         <rect key="frame" x="23" y="15" width="265" height="68"/>
@@ -800,7 +794,6 @@ Download</string>
                                         </state>
                                         <connections>
                                             <action selector="buttonDownloadClicked:" destination="tMM-iH-sIM" eventType="touchUpInside" id="s9n-6o-ln3"/>
-                                            <action selector="buttonStartScanClicked:" destination="bmI-bG-93D" eventType="touchUpInside" id="fng-ob-JiH"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -978,7 +971,7 @@ Download</string>
                                                     <outlet property="delegate" destination="CxN-Gb-rgC" id="QoV-5R-gGv"/>
                                                 </connections>
                                             </textField>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gTC-iA-K6c">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gTC-iA-K6c">
                                                 <rect key="frame" x="499" y="24" width="87" height="48"/>
                                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94901960780000005" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
