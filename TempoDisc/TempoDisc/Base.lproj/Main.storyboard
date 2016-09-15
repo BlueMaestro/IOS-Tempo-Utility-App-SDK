@@ -276,19 +276,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zba-qg-7bC">
-                                <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J6N-rz-4fq">
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xqn-5U-jkS">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="7 Days">
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
+                                        <state key="normal">
+                                            <string key="title">ALL
+DATA</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
-                                        <connections>
-                                            <action selector="buttonWeekClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="XT3-rg-BBw"/>
-                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Q3-N2-LHA">
                                         <constraints>
@@ -299,82 +298,49 @@
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJc-B7-O1Y">
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="Wce-Ab-zki"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="Temperature Graph">
-                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="buttonChangeReadingTypeClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="V4e-vC-KaR"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ngv-sb-ZpR">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="1 Day">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Dh2-Aj-GpT"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
+                                        <state key="normal">
+                                            <string key="title">SELECT
+GRAPH</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonDayClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="6JS-pw-UdX"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oA-gA-xVZ">
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="All">
-                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="buttonAllClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="qGz-pG-FUw"/>
+                                            <action selector="buttonChangeReadingTypeClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="H4C-OE-LR3"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yG1-Mt-R9F">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="30 Days">
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
+                                        <state key="normal" title="TABLE">
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="buttonMonthClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="ZZz-HD-REh"/>
+                                            <segue destination="2Dh-4Q-lVF" kind="show" id="dn0-WT-quU"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.91764705879999997" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="189" id="6vf-DZ-pHS"/>
+                                    <constraint firstAttribute="trailing" secondItem="yG1-Mt-R9F" secondAttribute="trailing" constant="10" id="0ww-nk-QQb"/>
+                                    <constraint firstAttribute="height" constant="120" id="6vf-DZ-pHS"/>
                                     <constraint firstItem="yG1-Mt-R9F" firstAttribute="leading" secondItem="xqn-5U-jkS" secondAttribute="trailing" constant="10" id="IVp-6g-qW9"/>
-                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="leading" secondItem="J6N-rz-4fq" secondAttribute="leading" constant="37" id="Jt9-AD-WSj"/>
-                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="centerX" secondItem="J6N-rz-4fq" secondAttribute="centerX" id="P5X-nM-B8G"/>
-                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="top" secondItem="ngv-sb-ZpR" secondAttribute="bottom" constant="17" id="RoI-ri-BhX"/>
-                                    <constraint firstAttribute="trailing" secondItem="4oA-gA-xVZ" secondAttribute="trailing" constant="10" id="SRJ-4V-kNm"/>
-                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="centerY" secondItem="yG1-Mt-R9F" secondAttribute="centerY" id="UQw-UD-cSh"/>
-                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="leading" secondItem="yG1-Mt-R9F" secondAttribute="trailing" constant="10" id="ZY9-XA-QWJ"/>
+                                    <constraint firstItem="ngv-sb-ZpR" firstAttribute="top" secondItem="J6N-rz-4fq" secondAttribute="top" constant="18" id="YTs-Sf-mr9"/>
                                     <constraint firstItem="7Q3-N2-LHA" firstAttribute="centerX" secondItem="J6N-rz-4fq" secondAttribute="centerX" id="b0T-mN-VJj"/>
-                                    <constraint firstItem="hJc-B7-O1Y" firstAttribute="height" secondItem="ngv-sb-ZpR" secondAttribute="height" id="cdy-Et-pmx"/>
                                     <constraint firstItem="yG1-Mt-R9F" firstAttribute="height" secondItem="ngv-sb-ZpR" secondAttribute="height" id="d5Y-ft-PVM"/>
-                                    <constraint firstAttribute="trailing" secondItem="hJc-B7-O1Y" secondAttribute="trailing" constant="37" id="dcA-yx-oJQ"/>
                                     <constraint firstItem="xqn-5U-jkS" firstAttribute="width" secondItem="ngv-sb-ZpR" secondAttribute="width" id="dm5-zQ-sHy"/>
                                     <constraint firstItem="ngv-sb-ZpR" firstAttribute="leading" secondItem="J6N-rz-4fq" secondAttribute="leading" constant="10" id="iaw-TA-IJX"/>
                                     <constraint firstItem="xqn-5U-jkS" firstAttribute="height" secondItem="ngv-sb-ZpR" secondAttribute="height" id="jLQ-xg-0KY"/>
                                     <constraint firstItem="yG1-Mt-R9F" firstAttribute="width" secondItem="ngv-sb-ZpR" secondAttribute="width" id="jo4-Sl-q6c"/>
                                     <constraint firstItem="xqn-5U-jkS" firstAttribute="leading" secondItem="ngv-sb-ZpR" secondAttribute="trailing" constant="10" id="o2p-CI-acI"/>
                                     <constraint firstItem="yG1-Mt-R9F" firstAttribute="centerY" secondItem="xqn-5U-jkS" secondAttribute="centerY" id="oop-Ol-iFK"/>
-                                    <constraint firstAttribute="bottom" secondItem="hJc-B7-O1Y" secondAttribute="bottom" constant="54" id="qxO-Lr-w0z"/>
                                     <constraint firstItem="xqn-5U-jkS" firstAttribute="centerY" secondItem="ngv-sb-ZpR" secondAttribute="centerY" id="scJ-OJ-X2Q"/>
-                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="width" secondItem="yG1-Mt-R9F" secondAttribute="width" id="skH-nF-CU9"/>
                                     <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="8" id="uhl-pD-TSF"/>
                                     <constraint firstAttribute="bottom" secondItem="7Q3-N2-LHA" secondAttribute="bottom" constant="8" id="xKR-Zz-sco"/>
-                                    <constraint firstItem="4oA-gA-xVZ" firstAttribute="height" secondItem="yG1-Mt-R9F" secondAttribute="height" id="xmK-3k-tQ4"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yfG-wv-LZf">
-                                <color key="backgroundColor" red="0.76470588240000004" green="0.7725490196" blue="0.77647058820000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="ttU-2H-BiM"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m3R-0G-Jvk">
@@ -382,34 +348,36 @@
                                 <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TEMPERATURE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1gY-T5-Vou">
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="yfG-wv-LZf" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" id="2Qp-LH-BbG"/>
+                            <constraint firstItem="1gY-T5-Vou" firstAttribute="centerX" secondItem="xnb-Gi-QGJ" secondAttribute="centerX" id="0fb-pB-gaK"/>
                             <constraint firstItem="Ghr-Nz-4Ce" firstAttribute="top" secondItem="J6N-rz-4fq" secondAttribute="bottom" id="DCA-jo-U5q"/>
                             <constraint firstItem="Zba-qg-7bC" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="Dsa-j8-ewM"/>
-                            <constraint firstItem="Zba-qg-7bC" firstAttribute="top" secondItem="yfG-wv-LZf" secondAttribute="bottom" constant="8" id="LmU-fP-sxt"/>
                             <constraint firstAttribute="trailing" secondItem="J6N-rz-4fq" secondAttribute="trailing" id="X5f-o8-xNn"/>
                             <constraint firstAttribute="trailing" secondItem="Zba-qg-7bC" secondAttribute="trailing" constant="20" id="apk-YL-H1y"/>
                             <constraint firstItem="J6N-rz-4fq" firstAttribute="top" secondItem="Zba-qg-7bC" secondAttribute="bottom" constant="20" id="c1L-eu-vEz"/>
-                            <constraint firstAttribute="trailing" secondItem="yfG-wv-LZf" secondAttribute="trailing" id="dE9-OD-mOb"/>
-                            <constraint firstItem="m3R-0G-Jvk" firstAttribute="centerX" secondItem="xnb-Gi-QGJ" secondAttribute="centerX" id="gBA-Bx-is5"/>
                             <constraint firstItem="m3R-0G-Jvk" firstAttribute="top" secondItem="sun-aC-tAM" secondAttribute="bottom" constant="7" id="hz2-MA-dxa"/>
-                            <constraint firstItem="yfG-wv-LZf" firstAttribute="top" secondItem="m3R-0G-Jvk" secondAttribute="bottom" constant="10" id="pVz-4y-J1T"/>
                             <constraint firstItem="J6N-rz-4fq" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" id="scd-du-doi"/>
+                            <constraint firstItem="1gY-T5-Vou" firstAttribute="top" secondItem="m3R-0G-Jvk" secondAttribute="bottom" constant="10" id="u85-yD-b9w"/>
+                            <constraint firstItem="m3R-0G-Jvk" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="15" id="yZ3-dY-pPV"/>
+                            <constraint firstItem="Zba-qg-7bC" firstAttribute="top" secondItem="1gY-T5-Vou" secondAttribute="bottom" constant="10" id="zWH-nh-b9i"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" image="tab-graph" selectedImage="tab-graph-selected" id="pYQ-gk-v3r"/>
                     <connections>
-                        <outlet property="buttonReadingType" destination="hJc-B7-O1Y" id="3Fd-W3-mhI"/>
                         <outlet property="labelDeviceName" destination="m3R-0G-Jvk" id="QdE-SB-UGM"/>
+                        <outlet property="labelReadingType" destination="1gY-T5-Vou" id="2h2-xe-mO5"/>
                         <outlet property="viewBottomContainer" destination="J6N-rz-4fq" id="feW-49-oDA"/>
                         <outlet property="viewGraphTemperature" destination="Zba-qg-7bC" id="Q3i-gu-DfN"/>
                         <outletCollection property="buttonOptions" destination="ngv-sb-ZpR" id="vAI-Yn-y7T"/>
                         <outletCollection property="buttonOptions" destination="xqn-5U-jkS" id="Zlw-xH-G6F"/>
                         <outletCollection property="buttonOptions" destination="yG1-Mt-R9F" id="kWl-6B-cqA"/>
-                        <outletCollection property="buttonOptions" destination="4oA-gA-xVZ" id="0VW-72-K7N"/>
-                        <outletCollection property="buttonOptions" destination="hJc-B7-O1Y" id="Saa-iK-2Bb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tLd-KV-4zV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -425,7 +393,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Sbg-Ce-TdX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="M86-Nl-Gmr">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pVn-DD-1SP">
@@ -539,7 +507,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CAN-Ed-EYb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2352" y="765"/>
+            <point key="canvasLocation" x="3534" y="44"/>
         </scene>
         <!--Device Info-->
         <scene sceneID="UIT-ad-UoF">
@@ -926,15 +894,15 @@ LOG</string>
             <objects>
                 <tableViewController title="Table Data" id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="418"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="374"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDataTable" textLabel="5T3-nR-0UU" detailTextLabel="WI4-Vs-veT" style="IBUITableViewCellStyleSubtitle" id="Xdk-gP-6Fx">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xdk-gP-6Fx" id="qlD-Qy-O2j">
-                                    <frame key="frameInset" width="375" height="43"/>
+                                    <frame key="frameInset" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5T3-nR-0UU">
@@ -964,7 +932,7 @@ LOG</string>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jP9-Bp-Is7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4315" y="647"/>
+            <point key="canvasLocation" x="4682" y="43"/>
         </scene>
         <!--Settings-->
         <scene sceneID="tZZ-mL-km1">

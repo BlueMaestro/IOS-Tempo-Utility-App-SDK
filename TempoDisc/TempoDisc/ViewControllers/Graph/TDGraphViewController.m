@@ -68,6 +68,8 @@
 	[super setupView];
 	[self initPlot];
 	[self adjustPlotsRange];
+	_viewGraphTemperature.layer.borderWidth = 1.0;
+	_viewGraphTemperature.layer.borderColor = [UIColor buttonDarkGrey].CGColor;
 }
 
 - (void)changeReadingType:(TempoReadingType)type {
@@ -76,9 +78,7 @@
 			  if (!_viewGraphTemperature) {
 				  _viewGraphTemperature = _viewGraphHumidity;
 				  _viewGraphHumidity = nil;
-				  [_buttonReadingType setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateNormal];
-				  [_buttonReadingType setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateSelected];
-				  [_buttonReadingType setTitle:NSLocalizedString(@"Temperature Graph", nil) forState:UIControlStateHighlighted];
+				  [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
 			  }
 		
 		}
@@ -88,9 +88,7 @@
 			if (!_viewGraphHumidity) {
 				_viewGraphHumidity = _viewGraphTemperature;
 				_viewGraphTemperature = nil;
-				[_buttonReadingType setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateNormal];
-				[_buttonReadingType setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateSelected];
-				[_buttonReadingType setTitle:NSLocalizedString(@"Humidity Graph", nil) forState:UIControlStateHighlighted];
+				[_labelReadingType setText:NSLocalizedString(@"Humidity", nil)];
 			}
 			break;
 		}
@@ -161,8 +159,8 @@
 	_hostViewTemperature = [self configureHost:_viewGraphTemperature forGraph:_hostViewTemperature];
 	_hostViewHumidity = [self configureHost:_viewGraphHumidity forGraph:_hostViewHumidity];
 	
-	_graphTemperature = [self configureGraph:_graphTemperature hostView:_hostViewTemperature graphView:_viewGraphTemperature title:NSLocalizedString(@"Temperature", nil)];
-	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewGraphHumidity title:NSLocalizedString(@"Humidity", nil)];
+	_graphTemperature = [self configureGraph:_graphTemperature hostView:_hostViewTemperature graphView:_viewGraphTemperature title:nil];
+	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewGraphHumidity title:nil];
 	
 	_plotTemperature = [self configurePlot:_plotTemperature forGraph:_graphTemperature identifier:@"Temperature"];
 	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graphHumidity identifier:@"Humidity"];
@@ -173,7 +171,7 @@
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host
 {
-	host = [(CPTGraphHostingView *)[CPTGraphHostingView alloc] initWithFrame:graphView.bounds];
+	host = [(CPTGraphHostingView *)[CPTGraphHostingView alloc] initWithFrame:CGRectInset(graphView.bounds, 10, 12)];
 	host.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[graphView addSubview:host];
 	return host;
@@ -182,7 +180,7 @@
 - (CPTGraph*)configureGraph:(CPTGraph*)graph hostView:(CPTGraphHostingView*)hostView graphView:(UIView*)viewGraph title:(NSString*)title
 {
 	// 1 - Create the graph
-	graph = [[CPTXYGraph alloc] initWithFrame:viewGraph.bounds];
+	graph = [[CPTXYGraph alloc] initWithFrame:CGRectInset(viewGraph.bounds, 10, 10)];
 	graph.title = title;
 	graph.titleDisplacement = CGPointMake(0, 15.0);
 	hostView.hostedGraph = graph;
