@@ -17,7 +17,7 @@
 
 - (void)setupView {
 	for (UIButton *button in _buttonOptions) {
-		button.layer.cornerRadius = 8.0;
+		button.layer.cornerRadius = 4.0;
 		button.clipsToBounds = YES;
 		button.layer.borderWidth = 1;
 		button.layer.borderColor = [UIColor buttonSeparator].CGColor;
