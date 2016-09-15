@@ -78,15 +78,19 @@
 	_tableViewLog.rowHeight = UITableViewAutomaticDimension;
 	_tableViewLog.estimatedRowHeight = 44.0;
 	
-	_textFieldMessage.layer.cornerRadius = 8.0;
+	_textFieldMessage.layer.cornerRadius = 4.0;
 	_textFieldMessage.clipsToBounds = YES;
-	_textFieldMessage.layer.borderWidth = 2;
-	_textFieldMessage.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
-	_textFieldMessage.textColor = [UIColor blueMaestroBlue];
+	_textFieldMessage.layer.borderWidth = 1;
+	_textFieldMessage.layer.borderColor = [UIColor buttonSeparator].CGColor;
+	_textFieldMessage.textColor = [UIColor blackColor];
 	_textFieldMessage.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, _textFieldMessage.frame.size.height)];
 	_textFieldMessage.leftViewMode = UITextFieldViewModeAlways;
 	_textFieldMessage.rightView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, _textFieldMessage.frame.size.height)];
 	_textFieldMessage.rightViewMode = UITextFieldViewModeAlways;
+	
+	_tableViewLog.layer.cornerRadius = 8;
+	_tableViewLog.layer.borderWidth = 1;
+	_tableViewLog.layer.borderColor = [UIColor buttonSeparator].CGColor;
 }
 
 - (void)handleDisconnectNotification:(NSNotification*)note {

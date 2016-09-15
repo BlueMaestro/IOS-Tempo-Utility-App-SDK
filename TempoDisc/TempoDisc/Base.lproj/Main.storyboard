@@ -858,23 +858,23 @@ Download</string>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SrZ-4N-sKN">
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3jT-zs-u0G">
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="1" id="5vX-rG-hjs"/>
                                         </constraints>
                                     </view>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZEK-8s-WIx">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ZEK-8s-WIx">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="cellLog" id="PGS-s5-FV9">
-                                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="570" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PGS-s5-FV9" id="7Kh-FR-Atq">
-                                                    <frame key="frameInset" width="600" height="43"/>
+                                                    <frame key="frameInset" width="570" height="44"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" tag="545" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DTU-3Q-63d">
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -893,54 +893,32 @@ Download</string>
                                             <outlet property="delegate" destination="CxN-Gb-rgC" id="PWl-Fa-fxi"/>
                                         </connections>
                                     </tableView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tEH-ka-R6o">
-                                        <color key="backgroundColor" red="0.76470588235294112" green="0.77254901960784317" blue="0.77647058823529413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1" id="kjq-qd-3nG"/>
-                                        </constraints>
-                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WGn-V0-PaV">
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                         <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TdT-Hv-bCu">
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4A-3F-GEI">
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="250" id="G8Q-kO-TWF"/>
-                                                    <constraint firstAttribute="height" constant="50" id="hMQ-MC-559"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                <state key="normal" title="Connect">
-                                                    <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="buttonConnectClicked:" destination="CxN-Gb-rgC" eventType="touchUpInside" id="eEQ-9p-vwV"/>
-                                                </connections>
-                                            </button>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tXl-dR-j8V">
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="48" id="Uo1-sJ-miF"/>
                                                 </constraints>
                                                 <color key="textColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                                 <connections>
                                                     <outlet property="delegate" destination="CxN-Gb-rgC" id="QoV-5R-gGv"/>
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gTC-iA-K6c">
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <color key="backgroundColor" red="0.23137254901960785" green="0.23137254901960785" blue="0.23137254901960785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="87" id="MgN-uZ-wli"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                <state key="normal" title="Send">
-                                                    <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
+                                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                                <state key="normal" title="SEND"/>
                                                 <connections>
                                                     <action selector="buttonSendMessageClicked:" destination="CxN-Gb-rgC" eventType="touchUpInside" id="bcV-0V-6YR"/>
                                                 </connections>
@@ -955,41 +933,36 @@ Download</string>
                                                 </state>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" red="0.91764705879999997" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="gTC-iA-K6c" firstAttribute="centerY" secondItem="tXl-dR-j8V" secondAttribute="centerY" id="89R-tS-fhS"/>
                                             <constraint firstAttribute="bottom" secondItem="OOJ-Ly-diL" secondAttribute="bottom" constant="8" id="FoB-Ni-dXM"/>
-                                            <constraint firstAttribute="height" constant="189" id="Gxo-bh-IPI"/>
-                                            <constraint firstItem="z4A-3F-GEI" firstAttribute="centerX" secondItem="TdT-Hv-bCu" secondAttribute="centerX" id="Hah-Ud-gAJ"/>
+                                            <constraint firstAttribute="height" constant="115" id="Gxo-bh-IPI"/>
                                             <constraint firstAttribute="trailing" secondItem="gTC-iA-K6c" secondAttribute="trailing" constant="14" id="KYI-2i-3rB"/>
                                             <constraint firstItem="tXl-dR-j8V" firstAttribute="leading" secondItem="TdT-Hv-bCu" secondAttribute="leading" constant="14" id="MQs-8a-J3D"/>
-                                            <constraint firstAttribute="bottom" secondItem="z4A-3F-GEI" secondAttribute="bottom" constant="50" id="OEa-73-b4O"/>
-                                            <constraint firstItem="tXl-dR-j8V" firstAttribute="top" secondItem="TdT-Hv-bCu" secondAttribute="top" constant="24" id="UrQ-Dt-ukx"/>
+                                            <constraint firstItem="tXl-dR-j8V" firstAttribute="top" secondItem="TdT-Hv-bCu" secondAttribute="top" constant="15" id="UrQ-Dt-ukx"/>
                                             <constraint firstItem="OOJ-Ly-diL" firstAttribute="centerX" secondItem="TdT-Hv-bCu" secondAttribute="centerX" id="bVG-Ja-ua1"/>
                                             <constraint firstItem="gTC-iA-K6c" firstAttribute="leading" secondItem="tXl-dR-j8V" secondAttribute="trailing" constant="9" id="r1P-6o-QDb"/>
                                             <constraint firstItem="gTC-iA-K6c" firstAttribute="height" secondItem="tXl-dR-j8V" secondAttribute="height" id="xnc-s2-1kq"/>
                                         </constraints>
                                     </view>
                                 </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="ZEK-8s-WIx" firstAttribute="top" secondItem="tEH-ka-R6o" secondAttribute="bottom" id="7fe-S4-oOy"/>
-                                    <constraint firstItem="tEH-ka-R6o" firstAttribute="top" secondItem="WGn-V0-PaV" secondAttribute="bottom" constant="10" id="9oM-Dd-jko"/>
-                                    <constraint firstAttribute="trailing" secondItem="tEH-ka-R6o" secondAttribute="trailing" id="FPy-7l-JMA"/>
+                                    <constraint firstItem="WGn-V0-PaV" firstAttribute="leading" secondItem="SrZ-4N-sKN" secondAttribute="leading" constant="16" id="LPh-hk-wTA"/>
                                     <constraint firstAttribute="bottom" secondItem="TdT-Hv-bCu" secondAttribute="bottom" id="O44-hC-IXf"/>
-                                    <constraint firstItem="tEH-ka-R6o" firstAttribute="leading" secondItem="SrZ-4N-sKN" secondAttribute="leading" id="UM9-Wm-IfP"/>
-                                    <constraint firstItem="ZEK-8s-WIx" firstAttribute="leading" secondItem="SrZ-4N-sKN" secondAttribute="leading" id="WDr-aW-9fy"/>
+                                    <constraint firstItem="ZEK-8s-WIx" firstAttribute="leading" secondItem="SrZ-4N-sKN" secondAttribute="leading" constant="15" id="WDr-aW-9fy"/>
                                     <constraint firstAttribute="trailing" secondItem="3jT-zs-u0G" secondAttribute="trailing" id="Y29-7g-ale"/>
                                     <constraint firstAttribute="bottom" secondItem="3jT-zs-u0G" secondAttribute="bottom" id="bSi-bk-TAt"/>
                                     <constraint firstItem="TdT-Hv-bCu" firstAttribute="width" secondItem="SrZ-4N-sKN" secondAttribute="width" id="c5E-LU-9a1"/>
                                     <constraint firstItem="TdT-Hv-bCu" firstAttribute="leading" secondItem="SrZ-4N-sKN" secondAttribute="leading" id="cC7-sL-7a1"/>
+                                    <constraint firstItem="ZEK-8s-WIx" firstAttribute="top" secondItem="WGn-V0-PaV" secondAttribute="bottom" constant="11" id="dnK-K2-tIu"/>
                                     <constraint firstAttribute="trailing" secondItem="TdT-Hv-bCu" secondAttribute="trailing" id="g3P-gz-usa"/>
                                     <constraint firstItem="TdT-Hv-bCu" firstAttribute="top" secondItem="ZEK-8s-WIx" secondAttribute="bottom" id="kkN-FG-86h"/>
-                                    <constraint firstItem="WGn-V0-PaV" firstAttribute="centerX" secondItem="SrZ-4N-sKN" secondAttribute="centerX" id="nuD-9Y-yRc"/>
                                     <constraint firstItem="WGn-V0-PaV" firstAttribute="top" secondItem="SrZ-4N-sKN" secondAttribute="top" constant="8" id="pro-pi-FL8"/>
-                                    <constraint firstAttribute="trailing" secondItem="ZEK-8s-WIx" secondAttribute="trailing" id="sLl-4S-c3m"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZEK-8s-WIx" secondAttribute="trailing" constant="15" id="sLl-4S-c3m"/>
                                     <constraint firstItem="3jT-zs-u0G" firstAttribute="height" secondItem="SrZ-4N-sKN" secondAttribute="height" id="tIU-cb-t4y"/>
                                     <constraint firstItem="3jT-zs-u0G" firstAttribute="top" secondItem="SrZ-4N-sKN" secondAttribute="top" id="tXj-Zb-OTE"/>
-                                    <constraint firstItem="ZEK-8s-WIx" firstAttribute="top" secondItem="tEH-ka-R6o" secondAttribute="bottom" id="zxh-oL-DeU"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -1003,7 +976,6 @@ Download</string>
                     </view>
                     <navigationItem key="navigationItem" title="Command Line" id="rzA-9N-mag"/>
                     <connections>
-                        <outlet property="buttonConnect" destination="z4A-3F-GEI" id="iVx-wk-uff"/>
                         <outlet property="buttonSendMessage" destination="gTC-iA-K6c" id="Ep9-mo-AyJ"/>
                         <outlet property="constraintScrollViewBottom" destination="Yzt-Ey-XY4" id="VMh-JC-tfG"/>
                         <outlet property="labelDeviceName" destination="WGn-V0-PaV" id="1c9-EJ-IbB"/>
@@ -1012,7 +984,6 @@ Download</string>
                         <outlet property="textFieldMessage" destination="tXl-dR-j8V" id="7xm-CT-Fuh"/>
                         <outlet property="viewBottomContainer" destination="TdT-Hv-bCu" id="SLt-aE-e9U"/>
                         <outletCollection property="buttonOptions" destination="gTC-iA-K6c" id="KIn-CI-YfB"/>
-                        <outletCollection property="buttonOptions" destination="z4A-3F-GEI" id="q0n-dB-KcB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MPC-fW-gyK" userLabel="First Responder" sceneMemberID="firstResponder"/>

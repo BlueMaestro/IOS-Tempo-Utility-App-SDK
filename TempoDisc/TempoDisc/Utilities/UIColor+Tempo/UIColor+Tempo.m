@@ -17,4 +17,12 @@
 + (UIColor *)botomBarSeparatorGrey {
 	return ([UIColor colorWithRed:153/255.0f green:155/255.0f blue:157/255.0f alpha:1]);
 }
+
++(UIColor *)buttonDarkGrey {
+	return ([UIColor colorWithRed:59/255.0f green:59/255.0f blue:59/255.0f alpha:1]);
+}
+
++ (UIColor *)buttonSeparator {
+	return ([UIColor colorWithRed:144/255.0f green:148/255.0f blue:150/255.0f alpha:1]);
+}
 @end

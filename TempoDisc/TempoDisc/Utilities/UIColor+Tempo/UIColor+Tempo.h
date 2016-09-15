@@ -12,4 +12,6 @@
 
 +(UIColor *)blueMaestroBlue;
 +(UIColor *)botomBarSeparatorGrey;
++(UIColor *)buttonDarkGrey;
++(UIColor *)buttonSeparator;
 @end

@@ -19,12 +19,12 @@
 	for (UIButton *button in _buttonOptions) {
 		button.layer.cornerRadius = 8.0;
 		button.clipsToBounds = YES;
-		button.layer.borderWidth = 2;
-		button.layer.borderColor = [UIColor blueMaestroBlue].CGColor;
-		[button setBackgroundImage:[[SCHelper imageWithColor:button.backgroundColor] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateNormal];
-		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateHighlighted];
-		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor blueMaestroBlue]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateSelected];
-		[button setTitleColor:[UIColor blueMaestroBlue] forState:UIControlStateNormal];
+		button.layer.borderWidth = 1;
+		button.layer.borderColor = [UIColor buttonSeparator].CGColor;
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor buttonDarkGrey]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateNormal];
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor lightGrayColor]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateHighlighted];
+		[button setBackgroundImage:[[SCHelper imageWithColor:[UIColor lightGrayColor]] resizableImageWithCapInsets:UIEdgeInsetsZero]  forState:UIControlStateSelected];
+		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
 		[button setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 		button.titleLabel.numberOfLines = 2;
