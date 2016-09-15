@@ -46,10 +46,8 @@
 
 - (void)setupView {
 	[super setupView];
-	_buttonStartScan.layer.cornerRadius = 8.0;
-	_buttonStartScan.clipsToBounds = YES;
-	_buttonStartScan.layer.borderWidth = 2.0;
-	_buttonStartScan.layer.borderColor = [_buttonStartScan titleColorForState:UIControlStateNormal].CGColor;
+	UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Scan", nil) style:UIBarButtonItemStyleDone target:self action:@selector(buttonStartScanClicked:)];
+	self.navigationItem.rightBarButtonItem = item;
 }
 
 #pragma mark - Actions

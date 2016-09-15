@@ -27,6 +27,9 @@
 		CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7E1C83126600C99C41 /* TDDefaultDevice.m */; };
 		CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */; };
 		CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB242C291C974A0800757AEC /* TDSettingsViewController.m */; };
+		CB2B639E1D8B308B00B705CB /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */; };
+		CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */; };
+		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
 		CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */; };
 		CB9421EE1C9200C5000724B5 /* TDGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421ED1C9200C5000724B5 /* TDGraphViewController.m */; };
@@ -78,6 +81,8 @@
 		CB242C281C974A0800757AEC /* TDSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSettingsViewController.h; sourceTree = "<group>"; };
 		CB242C291C974A0800757AEC /* TDSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSettingsViewController.m; sourceTree = "<group>"; };
 		CB242C2B1C97637600757AEC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		CB2B63A11D8B31B300B705CB /* UIFont+Tempo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Tempo.h"; sourceTree = "<group>"; };
+		CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Tempo.m"; sourceTree = "<group>"; };
 		CB6895611C83355700EB1A65 /* TDDeviceDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceDataTableViewController.h; sourceTree = "<group>"; };
 		CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceDataTableViewController.m; sourceTree = "<group>"; };
 		CB9421E81C91E6D5000724B5 /* TDOtherDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDOtherDeviceTableViewCell.h; sourceTree = "<group>"; };
@@ -96,6 +101,8 @@
 		CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseDeviceViewController.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
 		CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTViewController.m; sourceTree = "<group>"; };
+		CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +169,8 @@
 		CB16BA351C82E67E00C99C41 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */,
+				CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */,
 				CB16BA361C82E67E00C99C41 /* main.m */,
 				CB16BA611C82FB4E00C99C41 /* TempoDiscPCH.pch */,
 			);
@@ -183,6 +192,7 @@
 				CB16BA781C83123A00C99C41 /* Helper */,
 				CBAB5C421D47CC9000EEBECD /* SCHelper */,
 				CBAB5C461D47E72900EEBECD /* UIColor+Tempo */,
+				CB2B63A01D8B316E00B705CB /* UIFont+Tempo */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -316,6 +326,15 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		CB2B63A01D8B316E00B705CB /* UIFont+Tempo */ = {
+			isa = PBXGroup;
+			children = (
+				CB2B63A11D8B31B300B705CB /* UIFont+Tempo.h */,
+				CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */,
+			);
+			path = "UIFont+Tempo";
+			sourceTree = "<group>";
+		};
 		CB6895601C83353F00EB1A65 /* DeviceDataTable */ = {
 			isa = PBXGroup;
 			children = (
@@ -435,11 +454,13 @@
 		CB16BA2A1C82E67E00C99C41 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = BlueMaestro;
 				TargetAttributes = {
 					CB16BA311C82E67E00C99C41 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = EL3G87RG88;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -466,8 +487,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB2B639E1D8B308B00B705CB /* Montserrat-Bold.ttf in Resources */,
 				CB16BA481C82E67E00C99C41 /* LaunchScreen.storyboard in Resources */,
 				CB16BA451C82E67E00C99C41 /* Assets.xcassets in Resources */,
+				CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */,
 				CB16BA401C82E67E00C99C41 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -550,6 +573,7 @@
 				CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */,
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,
+				CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */,
 				CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -589,8 +613,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -633,8 +659,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -663,11 +691,14 @@
 			baseConfigurationReference = 2013146B1AC6BFF856356C17 /* Pods-TempoDisc.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EL3G87RG88;
 				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "895abbac-9000-4e31-a9cd-41079737e057";
+				PROVISIONING_PROFILE_SPECIFIER = WildcardHTEC;
 			};
 			name = Debug;
 		};
@@ -676,6 +707,7 @@
 			baseConfigurationReference = AACEF50CE43906B2DAB7D75A /* Pods-TempoDisc.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

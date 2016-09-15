@@ -10,13 +10,6 @@
 
 @implementation TDDeviceTableViewCell
 
-- (void)awakeFromNib {
-	[super awakeFromNib];
-	_labelDeviceBattery.layer.cornerRadius = 4;
-	_labelDeviceBattery.layer.borderColor = [UIColor colorWithRed:148/255.0 green:150/255.0 blue:153/255.0 alpha:1.0].CGColor;
-	_labelDeviceBattery.layer.borderWidth = 1.0;
-}
-
 #pragma mark - Public methods
 
 - (void)setupBatteryStatus:(TempoBatteryStatus)status {

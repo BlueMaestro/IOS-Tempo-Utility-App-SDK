@@ -18,5 +18,6 @@
 #import "Constants.h"
 #import "SCHelper.h"
 #import "UIColor+Tempo.h"
+#import "UIFont+Tempo.h"
 
 #endif /* TempoDiscPCH_pch */

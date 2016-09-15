@@ -234,25 +234,22 @@
 
 - (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TempoDevice*)device {
 	cell.labelDeviceName.text = device.name;
-	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"F" : @"C"];
-	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
-	if (device.battery.integerValue > 0) {
-//		cell.labelDeviceBattery.text = [NSString stringWithFormat:NSLocalizedString(@"Battery: %@%%", nil), device.battery.stringValue];
-		[cell setupBatteryStatus:TempoBatteryStatusGood];
-	}
-	else {
-//		cell.labelDeviceBattery.text = NSLocalizedString(@"No Battery info", nil);
-		[cell setupBatteryStatus:TempoBatteryStatusNone];
-	}
+	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚ %@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius"];
+	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%% RH", (long)device.currentHumidity.integerValue];
+	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
+	
 	if (device.version) {
-		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version: %@", nil), device.version];
+		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version:", nil)];
+		cell.labelDeviceVersionValue.hidden = NO;
+		cell.labelDeviceVersionValue.text = device.version;
 	}
 	else {
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
+		cell.labelDeviceVersionValue.hidden = YES;
 	}
-	cell.labelRSSIValue.text = [NSString stringWithFormat:NSLocalizedString(@"RSSI: %ld", nil), device.peripheral.RSSI];
+	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%ld dBm", device.peripheral.RSSI];
 	
-	cell.labelDeviceUUID.text = [NSString stringWithFormat:NSLocalizedString(@"UUID: %@", nil), device.peripheral.UUIDString];
+	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
@@ -307,7 +304,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *device = _dataSource[indexPath.row];
 	
-	return device.isTempoDiscDevice.boolValue ? 104 : 97;
+	return device.isTempoDiscDevice.boolValue ? 160 : 97;
 }
 
 @end
