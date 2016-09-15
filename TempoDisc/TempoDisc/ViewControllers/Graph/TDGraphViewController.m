@@ -14,7 +14,7 @@
 #define kGraphSymboldTouchArea 10.0
 #define kColorGraphAverage [CPTColor colorWithComponentRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1]
 #define kColorGraphAxis [CPTColor colorWithComponentRed:17.0f/255.0f green:90.0f/255.0f blue:140.0f/255.0f alpha:1]
-#define kFontGraphAxis @"HelveticaNeue-Light"
+#define kFontGraphAxis @"Montserrat-Regular"
 #define kGraphLineWidth 1
 #define kGraphiPhoneFontSize 10
 #define kGraphiPadFontSize 15
@@ -201,7 +201,7 @@
 	
 	CPTMutableTextStyle *whiteText = [CPTMutableTextStyle textStyle];
 	whiteText.color = [CPTColor colorWithComponentRed:62.0f/255.0f green:62.0f/255.0f blue:62.0f/255.0f alpha:1];
-	whiteText.fontName=@"HelveticaNeue-Regular";
+	whiteText.fontName=@"Montserrat-Regular";
 	
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
 	{
