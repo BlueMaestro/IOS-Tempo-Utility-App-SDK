@@ -11,7 +11,7 @@
 #define MANUF_ID_BLUE_MAESTRO 0x0133
 #define BM_MODEL_T30 0
 #define BM_MODEL_THP 1
-#define BM_MODEL_DISC 16
+#define BM_MODEL_DISC '\x16'
 
 int getInt(char lsb,char msb)
 {
@@ -40,9 +40,9 @@ int getInt(char lsb,char msb)
 		
 		//Is this one of ours?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_DISC ||
+			if (d[2] == BM_MODEL_DISC/* ||
 				d[2] == BM_MODEL_THP ||
-				d[2] == BM_MODEL_T30) {
+				d[2] == BM_MODEL_T30*/) {
 				return YES;
 			}
 		}
@@ -96,24 +96,65 @@ int getInt(char lsb,char msb)
 			 *	Status bits
 			 *	Not sure about data read
 			 **/
-			float temperatureStatus = (data[3] & 0x80) >> 7;
-			float humidityStatus = (data[3] & 0x40) >> 6;
-			float pressureStatus = ((data[3] & 0x20) >> 5);
-			float accelerometerStatus = ((data[3] & 0x10) >> 4);
-			float irStatus = (data[3] & 0x8) >> 3;
+			float version = data[2];
+			float battery = data[3];
+			float timerInterval = getInt(data[5], data[4]);
+			float intervalCounter = getInt(data[7], data[6]);
+			float temperature = getInt(data[9], data[8]);
+			float humidity = getInt(data[11], data[10]);
+			float dewPoint = getInt(data[13], data[12]);
+			float mode = data[14];
+			float numBreach = data[15];
+			float timeAtLastBreach = getInt(data[17], data[16]);
+			float nameLength = data[18];
 			
-			float min = getInt(data[11],data[12]) / 10.0f;
-			float avg = getInt(data[13],data[14]) / 10.0f;
-			float max = getInt(data[15],data[16]) / 10.0f;
+			float highestTemp = getInt(data[21], data[20]);
+			float highestHumidity = getInt(data[23], data[24]);
+			float lowestTemperature = getInt(data[26], data[25]);
+			float lowestHumidity = getInt(data[28], data[27]);
+			float highDayTemp = getInt(data[30], data[29]);
+			float highDayHumidity = getInt(data[32], data[31]);
+			float highDayDew = getInt(data[34], data[33]);
+			float lowDayTemp = getInt(data[36], data[35]);
+			float lowDayHumidity = getInt(data[38], data[37]);
+			float lowDayDew = getInt(data[40], data[39]);
+			float avgDayTemperature = getInt(data[42], data[41]);
+			float avgDayHumidity = getInt(data[44], data[43]);
+			float avgDayDew = getInt(data[46], data[45]);
 			
-			float humidity = data[17];
-			float pressure = getInt(data[18], data[19]);
-			
-			self.currentMinTemperature = [NSNumber numberWithFloat:min];
+			/*self.currentMinTemperature = [NSNumber numberWithFloat:min];
 			self.currentMaxTemperature = [NSNumber numberWithFloat:max];
 			self.currentTemperature = [NSNumber numberWithFloat:avg];
+			self.currentPressure = [NSNumber numberWithInt:pressure];*/
 			self.currentHumidity = @(humidity);
-			self.currentPressure = [NSNumber numberWithInt:pressure];
+			NSLog(@"---------------------------------------------------------------");
+			NSLog(@"PARSING TEMPO DISC DEVICE DATA:");
+			NSLog(@"Raw data: %@", custom);
+			NSLog(@"Version: %f", version);
+			NSLog(@"Battery: %f", battery);
+			NSLog(@"Timer interval: %f", timerInterval);
+			NSLog(@"Interval Counter: %f", intervalCounter);
+			NSLog(@"Temperature: %f", temperature);
+			NSLog(@"Humidity: %f", humidity);
+			NSLog(@"Dew Point: %f", dewPoint);
+			NSLog(@"Mode: %f", mode);
+			NSLog(@"Number of breaches: %f", numBreach);
+			NSLog(@"Time at last breach: %f", timeAtLastBreach);
+			NSLog(@"Name length: %f", nameLength);
+			NSLog(@"Highest Temperature: %f", highestTemp);
+			NSLog(@"Highest Humidity: %f", highestHumidity);
+			NSLog(@"Lowest Temperature: %f", lowestTemperature);
+			NSLog(@"Lowest Humidity: %f", lowestHumidity);
+			NSLog(@"Highest 24h Temperature: %f", highDayTemp);
+			NSLog(@"Highest 24h Humidity: %f", highDayHumidity);
+			NSLog(@"Highest 24h Dew: %f", highDayDew);
+			NSLog(@"Lowest 24h Temperature: %f", lowDayTemp);
+			NSLog(@"Lowest 24h Humidity: %f", lowDayHumidity);
+			NSLog(@"Lowest 24h Dew: %f", lowDayDew);
+			NSLog(@"Average 24h Temperature: %f", avgDayTemperature);
+			NSLog(@"Average 24h Humidity: %f", avgDayHumidity);
+			NSLog(@"Average 24h Dew: %f", avgDayDew);
+			NSLog(@"---------------------------------------------------------------");
 		}
 		else {
 			float min = getInt(data[3],data[4]) / 10.0f;

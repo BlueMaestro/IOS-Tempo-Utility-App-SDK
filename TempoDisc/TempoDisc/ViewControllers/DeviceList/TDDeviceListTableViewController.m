@@ -141,7 +141,7 @@
 	//start scan
 	[[LGCentralManager sharedInstance]
 	 scanForPeripheralsByInterval:kDeviceScanInterval
-	 services:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]
+	 services:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
 		 //handle scan result
