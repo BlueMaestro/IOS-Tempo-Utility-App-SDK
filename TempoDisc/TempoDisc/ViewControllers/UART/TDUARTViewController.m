@@ -94,7 +94,7 @@
 }
 
 - (void)handleDisconnectNotification:(NSNotification*)note {
-	[self addLogMessage:[NSString stringWithFormat:@"Device disconnected: %@", note.userInfo]];
+	[self addLogMessage:[NSString stringWithFormat:NSLocalizedString(@"Device disconnected from us", nil)]];
 	_writeCharacteristic = nil;
 }
 
