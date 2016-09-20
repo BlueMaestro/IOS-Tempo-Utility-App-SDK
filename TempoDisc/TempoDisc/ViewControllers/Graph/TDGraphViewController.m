@@ -8,6 +8,7 @@
 
 #import "TDGraphViewController.h"
 #import <CorePlot/ios/CorePlot.h>
+#import "IBActionSheet.h"
 
 #define kGraphSymbolSize CGSizeMake(4,4)
 #define kGraphSymbolSelectedSize 15
@@ -22,7 +23,7 @@
 #define GRAPH_LINE_TYPE CPTScatterPlotInterpolationCurved
 //#define GRAPH_LINE_TYPE CPTScatterPlotInterpolationLinear
 
-@interface TDGraphViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate>
+@interface TDGraphViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate, IBActionSheetDelegate>
 
 @property (nonatomic, strong) CPTGraphHostingView *hostViewTemperature;
 @property (nonatomic, strong) CPTGraphHostingView *hostViewHumidity;
@@ -101,7 +102,16 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"READING TYPE", nil) message:NSLocalizedString(@"Choose reading type", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+	IBActionSheet *sheet = [[IBActionSheet alloc] initWithTitle:NSLocalizedString(@"Choose reading type", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Temperature", nil), NSLocalizedString(@"Humidity", nil), nil];
+	[sheet setTitleTextColor:[UIColor blueMaestroBlue]];
+	
+	[sheet setButtonTextColor:[UIColor blueMaestroBlue]];
+	
+	[sheet setFont:[UIFont regularFontWithSize:15.0]];
+	[sheet setTitleFont:[UIFont regularFontWithSize:12.0]];
+	
+	[sheet showInView:self.parentViewController.view];
+	/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"READING TYPE", nil) message:NSLocalizedString(@"Choose reading type", nil) preferredStyle:UIAlertControllerStyleActionSheet];
 	__weak typeof(self) weakself = self;
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Temperature", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		[weakself changeReadingType:TempoReadingTypeTemperature];
@@ -110,7 +120,7 @@
 		[weakself changeReadingType:TempoReadingTypeHumidity];
 	}]];
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
-	[self presentViewController:alert animated:YES completion:nil];
+	[self presentViewController:alert animated:YES completion:nil];*/
 }
 
 - (IBAction)buttonDayClicked:(UIButton *)sender {
@@ -376,4 +386,18 @@
 }
 
 #pragma mark - CPTPlotSpaceDelegate
+
+#pragma mark - IBActionSheetDelegate
+
+- (void)actionSheet:(IBActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex != actionSheet.cancelButtonIndex) {
+		if (buttonIndex == 0) {
+			[self changeReadingType:TempoReadingTypeTemperature];
+		}
+		else if (buttonIndex == 1) {
+			[self changeReadingType:TempoReadingTypeHumidity];
+		}
+	}
+}
+
 @end
