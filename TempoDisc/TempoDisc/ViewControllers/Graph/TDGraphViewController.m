@@ -355,10 +355,10 @@
 	NSArray *dataSource = @[];
 	Reading *reading;
 	if (plot == _plotTemperature) {
-		dataSource = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"];
+		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
 	}
 	else if (plot == _plotHumidity) {
-		dataSource = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"];
+		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
 	}
 	reading = [dataSource objectAtIndex:index];
 	
