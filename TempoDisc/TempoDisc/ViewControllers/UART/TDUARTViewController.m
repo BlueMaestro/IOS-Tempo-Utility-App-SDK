@@ -9,6 +9,7 @@
 #import "TDUARTViewController.h"
 #import <LGBluetooth/LGBluetooth.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "LogMessage.h"
 
 //for testing on tempo device
 /*#define uartServiceUUIDString			@"20652000-02F3-4F75-848F-323AC2A6AF8A"//TEMPO_CUSTOM
@@ -94,7 +95,7 @@
 }
 
 - (void)handleDisconnectNotification:(NSNotification*)note {
-	[self addLogMessage:[NSString stringWithFormat:NSLocalizedString(@"Device disconnected from us", nil)]];
+	[self addLogMessage:[NSString stringWithFormat:NSLocalizedString(@"Device disconnected from us", nil)] type:LogMessageTypeInbound];
 	_writeCharacteristic = nil;
 }
 
@@ -113,67 +114,71 @@
 	_constraintScrollViewBottom.constant = 0;
 }
 
-- (void)addLogMessage:(NSString*)message {
-	[_dataSourceLogMessages addObject:message];
+/*- (void)addLogMessage:(NSString*)message {
+	[self addLogMessage:message type:LogMessageTypeInbound];
+}*/
+
+- (void)addLogMessage:(NSString*)message type:(LogMessageType)type {
+	[_dataSourceLogMessages addObject:[[LogMessage alloc] initWithMessage:message type:type]];
 	NSIndexPath *targetIndexPath = [NSIndexPath indexPathForRow:_dataSourceLogMessages.count-1 inSection:0];
 	[_tableViewLog insertRowsAtIndexPaths:@[targetIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
 	[_tableViewLog scrollToRowAtIndexPath:targetIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)setupDevice {
-	[self addLogMessage:@"Connecting to device..."];
+	[self addLogMessage:@"Connecting to device..." type:LogMessageTypeOutbound];
 	__weak typeof(self) weakself = self;
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
 		if (!error) {
-			[weakself addLogMessage:@"Connected to device"];
-			[weakself addLogMessage:@"Discovering device services..."];
+			[weakself addLogMessage:@"Connected to device" type:LogMessageTypeInbound];
+			[weakself addLogMessage:@"Discovering device services..." type:LogMessageTypeOutbound];
 			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
 				if (!error2) {
-					[weakself addLogMessage:@"Discovered services"];
+					[weakself addLogMessage:@"Discovered services" type:LogMessageTypeInbound];
 					LGService *uartService;
 					for (LGService* service in services) {
 						if ([[service.UUIDString uppercaseString] isEqualToString:uartServiceUUIDString]) {
 							uartService = service;
-							[weakself addLogMessage:[NSString stringWithFormat:@"Found UART service: %@", service.UUIDString]];
-							[weakself addLogMessage:@"Discovering characteristics..."];
+							[weakself addLogMessage:[NSString stringWithFormat:@"Found UART service: %@", service.UUIDString] type:LogMessageTypeInbound];
+							[weakself addLogMessage:@"Discovering characteristics..." type:LogMessageTypeOutbound];
 							[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error3) {
 								if (!error3) {
-									[weakself addLogMessage:@"Discovered characteristics"];
+									[weakself addLogMessage:@"Discovered characteristics" type:LogMessageTypeOutbound];
 									LGCharacteristic *readCharacteristic;
 									for (LGCharacteristic *characteristic in characteristics) {
 										if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
-											[weakself addLogMessage:[NSString stringWithFormat:@"Found TX characteristic %@", characteristic.UUIDString]];
+											[weakself addLogMessage:[NSString stringWithFormat:@"Found TX characteristic %@", characteristic.UUIDString] type:LogMessageTypeInbound];
 											readCharacteristic = characteristic;
 											/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
 																														  value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
 											LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/
-											[weakself addLogMessage:@"Subscribing for TX characteristic notifications"];
+											[weakself addLogMessage:@"Subscribing for TX characteristic notifications" type:LogMessageTypeOutbound];
 											[characteristic setNotifyValue:YES completion:^(NSError *error4) {
 												if (!error4) {
-													[weakself addLogMessage:@"Subscribed for TX characteristic notifications"];
+													[weakself addLogMessage:@"Subscribed for TX characteristic notifications" type:LogMessageTypeInbound];
 												}
 												else {
-													[weakself addLogMessage:[NSString stringWithFormat:@"Error subscribing for TX characteristic: %@", error4]];
+													[weakself addLogMessage:[NSString stringWithFormat:@"Error subscribing for TX characteristic: %@", error4] type:LogMessageTypeInbound];
 												}
 											} onUpdate:^(NSData *data, NSError *error5) {
 												if (!error5) {
-													[weakself addLogMessage:[NSString stringWithFormat:@"New data from TX characteristic: %@", data]];
+													[weakself addLogMessage:[NSString stringWithFormat:@"New data from TX characteristic: %@", data] type:LogMessageTypeInbound];
 												}
 												else {
-													[weakself addLogMessage:[NSString stringWithFormat:@"Error on updating TX data: %@", error5]];
+													[weakself addLogMessage:[NSString stringWithFormat:@"Error on updating TX data: %@", error5] type:LogMessageTypeInbound];
 												}
 											}];
 										}
 										else if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartRXCharacteristicUUIDString]) {
-											[weakself addLogMessage:[NSString stringWithFormat:@"Found RX characteristic %@", characteristic.UUIDString]];
+											[weakself addLogMessage:[NSString stringWithFormat:@"Found RX characteristic %@", characteristic.UUIDString] type:LogMessageTypeInbound];
 											weakself.writeCharacteristic = characteristic;
 										}
 									}
 									if (!readCharacteristic) {
-										[weakself addLogMessage:@"Could not find TX characteristic"];
+										[weakself addLogMessage:@"Could not find TX characteristic" type:LogMessageTypeInbound];
 									}
 									if (!weakself.writeCharacteristic) {
-										[weakself addLogMessage:@"Could not find RX characteristic"];
+										[weakself addLogMessage:@"Could not find RX characteristic" type:LogMessageTypeInbound];
 									}
 									if (weakself.writeCharacteristic && weakself.dataToSend) {
 										[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
@@ -181,36 +186,36 @@
 									}
 								}
 								else {
-									[weakself addLogMessage:[NSString stringWithFormat:@"Error discovering device characteristics: %@", error3]];
+									[weakself addLogMessage:[NSString stringWithFormat:@"Error discovering device characteristics: %@", error3] type:LogMessageTypeInbound];
 								}
 							}];
 							break;
 						}
 					}
 					if (!uartService) {
-						[weakself addLogMessage:@"Failed to found UART service"];
+						[weakself addLogMessage:@"Failed to found UART service" type:LogMessageTypeInbound];
 					}
 				}
 				else {
-					[weakself addLogMessage:[NSString stringWithFormat:@"Error discovering device services: %@", error2]];
+					[weakself addLogMessage:[NSString stringWithFormat:@"Error discovering device services: %@", error2] type:LogMessageTypeInbound];
 				}
 			}];
 		}
 		else {
-			[weakself addLogMessage:[NSString stringWithFormat:@"Error connecting to device: %@", error]];
+			[weakself addLogMessage:[NSString stringWithFormat:@"Error connecting to device: %@", error] type:LogMessageTypeInbound];
 		}
 	}];
 }
 
 - (void)writeData:(NSString*)data toCharacteristic:(LGCharacteristic*)characteristic {
-	[self addLogMessage:[NSString stringWithFormat:@"Writing data: %@ to characteristic: %@", data, characteristic.UUIDString]];
+	[self addLogMessage:[NSString stringWithFormat:@"Writing data: %@ to characteristic: %@", data, characteristic.UUIDString] type:LogMessageTypeOutbound];
 	__weak typeof(self) weakself = self;
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
-			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic"];
+			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
 		else {
-			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error]];
+			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error] type:LogMessageTypeInbound];
 		}
 	}];
 }
@@ -225,7 +230,7 @@
 		[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
 	}
 	else {
-		[self addLogMessage:@"Write characteristic not found. Recconnecting..."];
+		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];
 		_dataToSend = _textFieldMessage.text;
 		[self setupDevice];
 	}
@@ -243,7 +248,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellLog" forIndexPath:indexPath];
-	[(UILabel*)[cell viewWithTag:545] setText:_dataSourceLogMessages[indexPath.row]];
+	
+	LogMessage *message = _dataSourceLogMessages[indexPath.row];
+	
+	UILabel *labelMessage = (UILabel*)[cell viewWithTag:545];
+	
+	labelMessage.text = message.text;
+	labelMessage.textColor = message.type == LogMessageTypeOutbound ? [UIColor greenColor] : [UIColor blackColor];
 	
 	return cell;
 }
