@@ -68,8 +68,6 @@
 	[super setupView];
 	[self initPlot];
 	[self adjustPlotsRange];
-	_viewGraphTemperature.layer.borderWidth = 1.0;
-	_viewGraphTemperature.layer.borderColor = [UIColor buttonDarkGrey].CGColor;
 }
 
 - (void)changeReadingType:(TempoReadingType)type {
