@@ -33,6 +33,8 @@
 	}
 	
 	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
+	
+	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:nil action:nil];
 }
 
 @end
