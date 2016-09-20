@@ -18,7 +18,7 @@
         <scene sceneID="Jkm-OP-FMy">
             <objects>
                 <navigationController id="odE-mI-OPm" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="E16-QP-yoc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="E16-QP-yoc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -34,24 +34,19 @@
         <scene sceneID="Wk1-pm-4he">
             <objects>
                 <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="eKS-MG-oTa" customClass="TDDeviceListTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="97" sectionHeaderHeight="28" sectionFooterHeight="28" id="EXn-9D-NdM">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="97" sectionHeaderHeight="28" sectionFooterHeight="28" id="EXn-9D-NdM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDeviceTempoDisc" rowHeight="160" id="N2B-hu-upH" userLabel="cellDeviceTempoDisc" customClass="TDDeviceTableViewCell">
                                 <rect key="frame" x="0.0" y="28" width="375" height="160"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N2B-hu-upH" id="9DL-JK-ka7">
-                                    <frame key="frameInset" width="375" height="160"/>
+                                    <frame key="frameInset" width="375" height="159"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f0k-KZ-uIt">
-                                            <color key="backgroundColor" red="0.82754027488222381" green="0.84030778172469256" blue="0.85045194179116024" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="2" id="TO0-S1-Kqv"/>
-                                            </constraints>
-                                        </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NlK-Ay-nTK">
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                             <color key="textColor" red="0.20392156859999999" green="0.2156862745" blue="0.2156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -120,8 +115,6 @@
                                         <constraint firstItem="IeR-YA-4vo" firstAttribute="leading" secondItem="RVx-js-Znh" secondAttribute="trailing" constant="4" id="6Ne-gn-XEd"/>
                                         <constraint firstItem="6zX-gP-r3K" firstAttribute="centerY" secondItem="cLF-PW-bGX" secondAttribute="centerY" id="6sI-J7-28Y"/>
                                         <constraint firstItem="6zX-gP-r3K" firstAttribute="leading" secondItem="cLF-PW-bGX" secondAttribute="trailing" constant="4" id="8oN-WZ-f6Z"/>
-                                        <constraint firstAttribute="bottom" secondItem="f0k-KZ-uIt" secondAttribute="bottom" id="CTe-ya-QXe"/>
-                                        <constraint firstAttribute="trailing" secondItem="f0k-KZ-uIt" secondAttribute="trailing" id="EQU-Ga-1HR"/>
                                         <constraint firstItem="k6i-zM-wbe" firstAttribute="leading" secondItem="URc-ra-2Bw" secondAttribute="trailing" constant="4" id="FEh-LW-Bd2"/>
                                         <constraint firstItem="2Iy-V2-xLN" firstAttribute="leading" secondItem="RVx-js-Znh" secondAttribute="leading" id="GnO-Mz-H9b"/>
                                         <constraint firstItem="cLF-PW-bGX" firstAttribute="top" secondItem="RVx-js-Znh" secondAttribute="bottom" constant="4" id="HF9-BS-1bk"/>
@@ -134,7 +127,6 @@
                                         <constraint firstItem="2Iy-V2-xLN" firstAttribute="top" secondItem="92Y-le-mOR" secondAttribute="bottom" constant="4" id="RIu-UO-BaN"/>
                                         <constraint firstItem="eeW-hA-cqb" firstAttribute="centerY" secondItem="aHV-cK-Tv0" secondAttribute="centerY" id="S6k-Fl-XxT"/>
                                         <constraint firstItem="RVx-js-Znh" firstAttribute="top" secondItem="2Iy-V2-xLN" secondAttribute="bottom" constant="4" id="XJL-s7-s3C"/>
-                                        <constraint firstItem="f0k-KZ-uIt" firstAttribute="leading" secondItem="9DL-JK-ka7" secondAttribute="leading" id="dhB-uB-wEY"/>
                                         <constraint firstItem="NlK-Ay-nTK" firstAttribute="leading" secondItem="9DL-JK-ka7" secondAttribute="leading" constant="20" id="hdU-bY-ZuZ"/>
                                         <constraint firstItem="aHV-cK-Tv0" firstAttribute="top" secondItem="URc-ra-2Bw" secondAttribute="bottom" constant="4" id="lED-HQ-2Xq"/>
                                         <constraint firstItem="IeR-YA-4vo" firstAttribute="centerY" secondItem="RVx-js-Znh" secondAttribute="centerY" id="lMf-kW-IXm"/>
@@ -165,15 +157,9 @@
                                 <rect key="frame" x="0.0" y="188" width="375" height="97"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4hT-ST-Ilr" id="C2D-Um-vLJ">
-                                    <frame key="frameInset" width="375" height="97"/>
+                                    <frame key="frameInset" width="375" height="96"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rv6-Dw-0TJ">
-                                            <color key="backgroundColor" red="0.76470588235294112" green="0.77254901960784317" blue="0.77647058823529413" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="2" id="q3g-a1-Ihh"/>
-                                            </constraints>
-                                        </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRO-NE-vKr">
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -181,11 +167,8 @@
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="Rv6-Dw-0TJ" firstAttribute="leading" secondItem="C2D-Um-vLJ" secondAttribute="leading" id="IgA-p1-OnR"/>
                                         <constraint firstItem="HRO-NE-vKr" firstAttribute="top" secondItem="C2D-Um-vLJ" secondAttribute="top" constant="6" id="JrX-WR-iat"/>
-                                        <constraint firstAttribute="trailing" secondItem="Rv6-Dw-0TJ" secondAttribute="trailing" id="ent-V0-Wan"/>
                                         <constraint firstItem="HRO-NE-vKr" firstAttribute="leading" secondItem="C2D-Um-vLJ" secondAttribute="leading" constant="20" id="eoE-Qu-4uJ"/>
-                                        <constraint firstAttribute="bottom" secondItem="Rv6-Dw-0TJ" secondAttribute="bottom" id="uqD-TW-n0N"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -469,7 +452,7 @@ GRAPH</string>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wv7-gU-BQJ">
                                 <color key="backgroundColor" red="0.76470588240000004" green="0.7725490196" blue="0.77647058820000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="YL4-li-Wg6"/>
+                                    <constraint firstAttribute="height" constant="0.5" id="YL4-li-Wg6"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5mj-LG-67r">
@@ -893,16 +876,17 @@ LOG</string>
         <scene sceneID="aFV-dB-Pch">
             <objects>
                 <tableViewController title="Table Data" id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="374"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDataTable" textLabel="5T3-nR-0UU" detailTextLabel="WI4-Vs-veT" style="IBUITableViewCellStyleSubtitle" id="Xdk-gP-6Fx">
                                 <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xdk-gP-6Fx" id="qlD-Qy-O2j">
-                                    <frame key="frameInset" width="600" height="44"/>
+                                    <frame key="frameInset" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5T3-nR-0UU">
@@ -913,7 +897,7 @@ LOG</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WI4-Vs-veT">
-                                            <frame key="frameInset" minX="15" minY="25" width="43.5" height="13.5"/>
+                                            <frame key="frameInset" minX="15" minY="25" width="44" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
