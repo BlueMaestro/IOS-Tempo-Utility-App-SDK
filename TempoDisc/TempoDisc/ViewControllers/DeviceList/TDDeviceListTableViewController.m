@@ -264,7 +264,12 @@
 		//Selected device is tempo disc. Set global singleton reference and go to details
 		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
 		NSLog(@"Selected device: %@", selectedDevice.name);
+	if ([selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:selectedDevice];
+	}
+	else {
 		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
+	}
 	/*}
 	else {
 		//dont show detail for non tempo disc devices

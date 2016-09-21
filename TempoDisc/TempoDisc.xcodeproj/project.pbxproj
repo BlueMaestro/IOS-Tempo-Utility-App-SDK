@@ -10,6 +10,7 @@
 		368E870AE3B76835E2481750 /* libPods-TempoDisc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82FB1A59C65FBE25B230ABA8 /* libPods-TempoDisc.a */; };
 		CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */; };
 		CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */; };
+		CB14AD231D93211D0090AAA2 /* DeviceInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD221D93211D0090AAA2 /* DeviceInfoTableViewController.m */; };
 		CB16BA371C82E67E00C99C41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA361C82E67E00C99C41 /* main.m */; };
 		CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA391C82E67E00C99C41 /* AppDelegate.m */; };
 		CB16BA401C82E67E00C99C41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB16BA3E1C82E67E00C99C41 /* Main.storyboard */; };
@@ -53,6 +54,8 @@
 		CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscDevice+CoreDataClass.m"; sourceTree = "<group>"; };
 		CB14AD1C1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TempoDiscDevice+CoreDataProperties.h"; sourceTree = "<group>"; };
 		CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscDevice+CoreDataProperties.m"; sourceTree = "<group>"; };
+		CB14AD211D93211D0090AAA2 /* DeviceInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfoTableViewController.h; sourceTree = "<group>"; };
+		CB14AD221D93211D0090AAA2 /* DeviceInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoTableViewController.m; sourceTree = "<group>"; };
 		CB16BA321C82E67E00C99C41 /* TempoDisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TempoDisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB16BA361C82E67E00C99C41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CB16BA381C82E67E00C99C41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -150,6 +153,15 @@
 			path = TempoDiscDevice;
 			sourceTree = "<group>";
 		};
+		CB14AD201D9321080090AAA2 /* DeviceInfoTable */ = {
+			isa = PBXGroup;
+			children = (
+				CB14AD211D93211D0090AAA2 /* DeviceInfoTableViewController.h */,
+				CB14AD221D93211D0090AAA2 /* DeviceInfoTableViewController.m */,
+			);
+			path = DeviceInfoTable;
+			sourceTree = "<group>";
+		};
 		CB16BA291C82E67E00C99C41 = {
 			isa = PBXGroup;
 			children = (
@@ -224,6 +236,7 @@
 		CB16BA511C82E70C00C99C41 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				CB14AD201D9321080090AAA2 /* DeviceInfoTable */,
 				CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */,
 				CB6895601C83353F00EB1A65 /* DeviceDataTable */,
 				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
@@ -611,6 +624,7 @@
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
+				CB14AD231D93211D0090AAA2 /* DeviceInfoTableViewController.m in Sources */,
 				CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */,
 				CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,
