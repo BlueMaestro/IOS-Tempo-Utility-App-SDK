@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		368E870AE3B76835E2481750 /* libPods-TempoDisc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 82FB1A59C65FBE25B230ABA8 /* libPods-TempoDisc.a */; };
+		CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */; };
+		CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */; };
 		CB16BA371C82E67E00C99C41 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA361C82E67E00C99C41 /* main.m */; };
 		CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA391C82E67E00C99C41 /* AppDelegate.m */; };
 		CB16BA401C82E67E00C99C41 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB16BA3E1C82E67E00C99C41 /* Main.storyboard */; };
@@ -47,6 +49,10 @@
 		2013146B1AC6BFF856356C17 /* Pods-TempoDisc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TempoDisc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc.debug.xcconfig"; sourceTree = "<group>"; };
 		82FB1A59C65FBE25B230ABA8 /* libPods-TempoDisc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TempoDisc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AACEF50CE43906B2DAB7D75A /* Pods-TempoDisc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TempoDisc.release.xcconfig"; path = "Pods/Target Support Files/Pods-TempoDisc/Pods-TempoDisc.release.xcconfig"; sourceTree = "<group>"; };
+		CB14AD1A1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TempoDiscDevice+CoreDataClass.h"; sourceTree = "<group>"; };
+		CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscDevice+CoreDataClass.m"; sourceTree = "<group>"; };
+		CB14AD1C1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TempoDiscDevice+CoreDataProperties.h"; sourceTree = "<group>"; };
+		CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscDevice+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CB16BA321C82E67E00C99C41 /* TempoDisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TempoDisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB16BA361C82E67E00C99C41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CB16BA381C82E67E00C99C41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -131,6 +137,17 @@
 				AACEF50CE43906B2DAB7D75A /* Pods-TempoDisc.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		CB14AD191D9316CA0090AAA2 /* TempoDiscDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CB14AD1A1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.h */,
+				CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */,
+				CB14AD1C1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.h */,
+				CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */,
+			);
+			path = TempoDiscDevice;
 			sourceTree = "<group>";
 		};
 		CB16BA291C82E67E00C99C41 = {
@@ -259,6 +276,7 @@
 			children = (
 				CB4954F51D91BD9B00C4AAAF /* LogMessage */,
 				CB16BA6D1C83007B00C99C41 /* TempoDevice */,
+				CB14AD191D9316CA0090AAA2 /* TempoDiscDevice */,
 				CB16BA681C83007B00C99C41 /* ReadingType */,
 				CB16BA631C83007B00C99C41 /* Reading */,
 			);
@@ -580,6 +598,7 @@
 				CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */,
 				CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */,
 				CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */,
+				CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */,
 				CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */,
 				CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
@@ -602,6 +621,7 @@
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,
 				CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */,
+				CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */,
 				CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

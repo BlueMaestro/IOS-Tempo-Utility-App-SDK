@@ -12,7 +12,7 @@
 #import "TDDeviceTableViewCell.h"
 #import "TDOtherDeviceTableViewCell.h"
 #import <MBProgressHUD/MBProgressHUD.h>
-#import "TempoDevice.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
 #import "AppDelegate.h"
 
 #define kDeviceScanInterval 5.0
@@ -194,7 +194,7 @@
 	else if (!fetchError) {
 		//detected new device
 		if (isTempoDiscDevice) {
-			device = [TempoDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+			device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
 		}
 		else {
 			device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
