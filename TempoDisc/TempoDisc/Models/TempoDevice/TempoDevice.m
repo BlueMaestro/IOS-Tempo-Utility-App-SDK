@@ -40,11 +40,28 @@ int getInt(char lsb,char msb)
 		
 		//Is this one of ours?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_DISC/* ||
+			if (d[2] == BM_MODEL_DISC /*||
 				d[2] == BM_MODEL_THP ||
 				d[2] == BM_MODEL_T30*/) {
 				return YES;
 			}
+		}
+	}
+	return NO;
+}
+
+
++ (BOOL)isBlueMaestroDeviceWithAdvertisementData:(NSDictionary*)data {
+	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+	//BlueMaestro device
+	if (custom != nil)
+	{
+		unsigned char * d = (unsigned char*)[custom bytes];
+		unsigned int manuf = d[1] << 8 | d[0];
+		
+		//Is this one of ours?
+		if (manuf == MANUF_ID_BLUE_MAESTRO) {
+			return YES;
 		}
 	}
 	return NO;

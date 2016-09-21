@@ -171,7 +171,7 @@
 	 *	TDT-2 Non Tempo Disc devices should still be visible, with limited data
 	 **/
 	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
-	
+	BOOL isBlueMaestroDevice = [TempoDevice isBlueMaestroDeviceWithAdvertisementData:peripheral.advertisingData];
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
 	NSError *fetchError;
@@ -182,14 +182,14 @@
 	if (!fetchError && result.count > 0) {
 		//found existing device
 		device = [result firstObject];
-		if (isTempoDiscDevice) {
+		if (isBlueMaestroDevice) {
 			[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
 		}
 		else {
 			device.name = peripheral.name;
 			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
 		}
-		device.isTempoDiscDevice = @(isTempoDiscDevice);
+		device.isBlueMaestroDevice = @(isBlueMaestroDevice);
 	}
 	else if (!fetchError) {
 		//detected new device
@@ -201,7 +201,7 @@
 			device.name = peripheral.name;
 			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
 		}
-		device.isTempoDiscDevice = @(isTempoDiscDevice);
+		device.isBlueMaestroDevice = @(isBlueMaestroDevice);
 	}
 	else {
 		NSLog(@"Error fetching devices: %@", fetchError.localizedDescription);
@@ -282,7 +282,7 @@
 	TempoDevice *device = _dataSource[indexPath.row];
 	
 	NSString *reuse = @"";
-	if (device.isTempoDiscDevice.boolValue) {
+	if (device.isBlueMaestroDevice.boolValue) {
 		reuse = @"cellDeviceTempoDisc";
 	}
 	else {
@@ -304,7 +304,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *device = _dataSource[indexPath.row];
 	
-	return device.isTempoDiscDevice.boolValue ? 160 : 97;
+	return device.isBlueMaestroDevice.boolValue ? 160 : 97;
 }
 
 @end

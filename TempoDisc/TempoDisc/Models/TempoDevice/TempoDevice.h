@@ -27,6 +27,8 @@ typedef enum : NSInteger {
 @property (nullable ,nonatomic, strong) LGPeripheral *peripheral;
 
 + (BOOL)isTempoDiscDeviceWithAdvertisementData:(NSDictionary*)custom;
++ (BOOL)isBlueMaestroDeviceWithAdvertisementData:(NSDictionary*)data;
+
 + (TempoDevice*)deviceWithName:(NSString*)name data:(NSDictionary*)data uuid:(NSString*)uuid context:(NSManagedObjectContext*)context;
 - (void)fillWithData:(NSDictionary*)data name:(NSString*)name uuid:(NSString*)uuid;
 

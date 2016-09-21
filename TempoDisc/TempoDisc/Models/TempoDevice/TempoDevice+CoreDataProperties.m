@@ -26,7 +26,7 @@
 @dynamic currentPressureDelta;
 @dynamic lastDownload;
 @dynamic readingTypes;
-@dynamic isTempoDiscDevice;
+@dynamic isBlueMaestroDevice;
 @dynamic isFahrenheit;
 
 @end
