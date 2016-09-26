@@ -67,6 +67,15 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
++ (BOOL)hasManufacturerData:(NSDictionary*)data {
+	if (data[@"kCBAdvDataManufacturerData"]) {
+		return YES;
+	}
+	else {
+		return NO;
+	}
+}
+
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid {
 	
 	self.uuid = uuid;

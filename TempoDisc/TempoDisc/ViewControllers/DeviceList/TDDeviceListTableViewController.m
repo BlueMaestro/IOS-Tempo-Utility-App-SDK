@@ -168,6 +168,11 @@
 
 - (TempoDevice*)findOrCreateDeviceForPeripheral:(LGPeripheral*)peripheral {
 	/**
+	 *	If there is no manufacturer data see if the device is already inserted and return that device.
+	 **/
+	BOOL hasManufacturerData = [TempoDevice hasManufacturerData:peripheral.advertisingData];
+	
+	/**
 	 *	TDT-2 Non Tempo Disc devices should still be visible, with limited data
 	 **/
 	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
@@ -182,16 +187,18 @@
 	if (!fetchError && result.count > 0) {
 		//found existing device
 		device = [result firstObject];
-		if (isBlueMaestroDevice) {
+		if (isBlueMaestroDevice && hasManufacturerData) {
 			[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
 		}
 		else {
 			device.name = peripheral.name;
 			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
 		}
-		device.isBlueMaestroDevice = @(isBlueMaestroDevice);
+		if (hasManufacturerData) {
+			device.isBlueMaestroDevice = @(isBlueMaestroDevice);
+		}
 	}
-	else if (!fetchError) {
+	else if (!fetchError && hasManufacturerData) {
 		//detected new device
 		if (isTempoDiscDevice) {
 			device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
