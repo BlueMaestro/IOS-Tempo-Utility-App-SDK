@@ -162,7 +162,7 @@
 												}
 											} onUpdate:^(NSData *data, NSError *error5) {
 												if (!error5) {
-													[weakself addLogMessage:[NSString stringWithFormat:@"New data from TX characteristic: %@", data] type:LogMessageTypeInbound];
+													[weakself addLogMessage:[NSString stringWithFormat:@"New data from TX characteristic: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
 												}
 												else {
 													[weakself addLogMessage:[NSString stringWithFormat:@"Error on updating TX data: %@", error5] type:LogMessageTypeInbound];
