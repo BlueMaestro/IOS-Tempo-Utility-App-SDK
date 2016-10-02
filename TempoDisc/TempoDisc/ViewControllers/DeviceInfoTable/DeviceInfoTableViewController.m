@@ -197,13 +197,13 @@ typedef enum : NSInteger {
 			return device.version;
 			break;
 		case DevicePropertyRSSI:
-			return [NSString stringWithFormat:@"-%ld dBm", (long)device.peripheral.RSSI];
+			return [NSString stringWithFormat:@"%ld dBm", (long)device.peripheral.RSSI];
 			break;
 		case DevicePropertyBattery:
-			return device.battery.stringValue;
+			return [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
 			break;
 		case DevicePropertyLoggingInterval:
-			return [NSString stringWithFormat:@"%@ seconds", device.intervalCounter];
+			return [NSString stringWithFormat:@"%@ seconds", device.timerInterval];
 			break;
 		case DevicePropertyNumberOfRecords:
 			return @([device readingsForType:@"Temperature"].count + [device readingsForType:@"Humidity"].count).stringValue;

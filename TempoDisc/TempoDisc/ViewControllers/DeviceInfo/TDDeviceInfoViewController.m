@@ -10,6 +10,7 @@
 #import <LGBluetooth/LGBluetooth.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "AppDelegate.h"
+#import "DeviceInfoTableViewController.h"
 
 #define kDeviceConnectTimeout 10.0
 
@@ -59,6 +60,8 @@
 @property (nonatomic, strong) LGCharacteristic* humidityWindow;
 @property (nonatomic, strong) LGCharacteristic *humidityControl;
 @property (nonatomic, strong) LGCharacteristic *humidityTimeSync;
+
+@property (nonatomic, strong) DeviceInfoTableViewController *controllerTable;
 
 @end
 
@@ -130,15 +133,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+	if ([segue.destinationViewController isKindOfClass:[DeviceInfoTableViewController class]]) {
+		_controllerTable = segue.destinationViewController;
+	}
 }
-*/
+
 
 #pragma mark - Private methods
 
@@ -431,6 +437,7 @@
 }
 
 - (void)finishedDataReadForDataType:(TempoReadingType)type collection:(NSMutableArray*)collection {
+	[_controllerTable.tableView reloadData];
 	if (collection.count > 0) {
 		[self insertData:collection forReadingType:type];
 	}
