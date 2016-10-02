@@ -257,6 +257,14 @@
 	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%ld dBm", device.peripheral.RSSI];
 	
 	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
+	
+	if ([device isKindOfClass:[TempoDiscDevice class]]) {
+		TempoDiscDevice* disc = (TempoDiscDevice*)device;
+		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1f˚ %@", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius"];
+	}
+	else {
+		cell.labelCurrentDewPointValue.text = @"0";
+	}
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
@@ -316,7 +324,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *device = _dataSource[indexPath.row];
 	
-	return device.isBlueMaestroDevice.boolValue ? 160 : 97;
+	return device.isBlueMaestroDevice.boolValue ? 180 : 97;
 }
 
 @end
