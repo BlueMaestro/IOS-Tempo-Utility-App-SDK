@@ -21,6 +21,8 @@
 #define uartRXCharacteristicUUIDString	@"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define uartTXCharacteristicUUIDString	@"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
+#define kDeviceReconnectTimeout			2.0
+
 #define kDeviceConnectTimeout			10.0
 
 @interface TDUARTViewController ()
@@ -29,6 +31,8 @@
 @property (nonatomic, strong) LGCharacteristic *writeCharacteristic;
 
 @property (nonatomic, strong) NSString *dataToSend;
+
+@property (nonatomic, assign) BOOL didDisconnect;
 
 @end
 
@@ -97,6 +101,7 @@
 - (void)handleDisconnectNotification:(NSNotification*)note {
 	[self addLogMessage:[NSString stringWithFormat:NSLocalizedString(@"Device disconnected from us", nil)] type:LogMessageTypeInbound];
 	_writeCharacteristic = nil;
+	_didDisconnect = YES;
 }
 
 - (void)handleKeyboardShowNotification:(NSNotification*)note {
@@ -129,6 +134,7 @@
 	[self addLogMessage:@"Connecting to device..." type:LogMessageTypeOutbound];
 	__weak typeof(self) weakself = self;
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+		weakself.didDisconnect = NO;
 		if (!error) {
 			[weakself addLogMessage:@"Connected to device" type:LogMessageTypeInbound];
 			[weakself addLogMessage:@"Discovering device services..." type:LogMessageTypeOutbound];
@@ -232,7 +238,25 @@
 	else {
 		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];
 		_dataToSend = _textFieldMessage.text;
-		[self setupDevice];
+		
+		/**
+		 *	 If there was a disconnect the device will need ot be scanned for again.
+		 **/
+		if (_didDisconnect) {
+			[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReconnectTimeout completion:^(NSArray *peripherals) {
+				for (LGPeripheral *peripheral in peripherals) {
+					if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+						[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
+						[self setupDevice];
+						break;
+					}
+				}
+			}];
+		}
+		else {
+			[self setupDevice];
+		}
+		
 	}
 }
 
