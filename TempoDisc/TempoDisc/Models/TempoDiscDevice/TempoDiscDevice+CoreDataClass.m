@@ -34,8 +34,8 @@ int intValue(char lsb,char msb)
 	self.timerInterval = @(intValue(data[5], data[4]));
 	self.intervalCounter = @(intValue(data[7], data[6]));
 	self.currentTemperature = @(intValue(data[9], data[8]) / 10.f);
-	self.currentHumidity = @(intValue(data[11], data[10]));
-	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12])).decimalValue];
+	self.currentHumidity = @(intValue(data[11], data[10]) / 10.f);
+	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
 	self.mode = @(data[14]);
 	self.numBreach = @(data[15]);
 	
@@ -44,18 +44,18 @@ int intValue(char lsb,char msb)
 	float nameLength = data[18];
 	
 	self.highestTemperature = @(intValue(data[custom.length-25], data[custom.length-26]) / 10.f);
-	self.highestHumidity = @(intValue(data[custom.length-23], data[custom.length-24]));
+	self.highestHumidity = @(intValue(data[custom.length-23], data[custom.length-24]) / 10.f);
 	self.lowestTemperature = @(intValue(data[custom.length-21], data[custom.length-22]) / 10.f);
 	self.lowestHumidity = @(intValue(data[custom.length-19], data[custom.length-20]) / 10.f);
 	self.highestDayTemperature = @(intValue(data[custom.length-17], data[custom.length-18]) / 10.f);
-	self.highestDayHumidity = @(intValue(data[custom.length-15], data[custom.length-16]));
-	self.highestDayDew = @(intValue(data[custom.length-13], data[custom.length-14]));
+	self.highestDayHumidity = @(intValue(data[custom.length-15], data[custom.length-16]) / 10.f);
+	self.highestDayDew = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
 	self.lowestDayTemperature = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
-	self.lowestDayHumidity = @(intValue(data[custom.length-9], data[custom.length-10]));
-	self.lowestDayDew = @(intValue(data[custom.length-7], data[custom.length-8]));
+	self.lowestDayHumidity = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
+	self.lowestDayDew = @(intValue(data[custom.length-7], data[custom.length-8]) / 10.f);
 	self.averageDayTemperature = @(intValue(data[custom.length-5], data[custom.length-6]) / 10.f);
-	self.averageDayHumidity = @(intValue(data[custom.length-3], data[custom.length-4]));
-	self.averageDayDew = @(intValue(data[custom.length-1], data[custom.length-2]));
+	self.averageDayHumidity = @(intValue(data[custom.length-3], data[custom.length-4]) / 10.f);
+	self.averageDayDew = @(intValue(data[custom.length-1], data[custom.length-2]) / 10.f);
 	
 	/*NSLog(@"---------------------------------------------------------------");
 	 NSLog(@"PARSING TEMPO DISC DEVICE DATA:");
