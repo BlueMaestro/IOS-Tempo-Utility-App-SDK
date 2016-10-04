@@ -161,14 +161,14 @@
 											[weakself addLogMessage:@"Subscribing for TX characteristic notifications" type:LogMessageTypeOutbound];
 											[characteristic setNotifyValue:YES completion:^(NSError *error4) {
 												if (!error4) {
-													[weakself addLogMessage:@"Subscribed for TX characteristic notifications" type:LogMessageTypeInbound];
+//													[weakself addLogMessage:@"Subscribed for TX characteristic notifications" type:LogMessageTypeInbound];
 												}
 												else {
 													[weakself addLogMessage:[NSString stringWithFormat:@"Error subscribing for TX characteristic: %@", error4] type:LogMessageTypeInbound];
 												}
 											} onUpdate:^(NSData *data, NSError *error5) {
 												if (!error5) {
-													[weakself addLogMessage:[NSString stringWithFormat:@"New data from TX characteristic: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
+													[weakself addLogMessage:[NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
 												}
 												else {
 													[weakself addLogMessage:[NSString stringWithFormat:@"Error on updating TX data: %@", error5] type:LogMessageTypeInbound];
@@ -218,7 +218,7 @@
 	__weak typeof(self) weakself = self;
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
-			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
+//			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
 		else {
 			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error] type:LogMessageTypeInbound];
