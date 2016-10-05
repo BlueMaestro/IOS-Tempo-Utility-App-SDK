@@ -52,9 +52,24 @@
 }
 
 - (void)adjustedButtonTitles {
-	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateNormal];
-	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateSelected];
-	[_buttonReadingType setTitle:(_controllerDeviceTable.currentReadingType == TempoReadingTypeTemperature) ? @"Temperature data" : @"Humidity data" forState:UIControlStateHighlighted];
+	NSString *title = @"";
+	switch (_controllerDeviceTable.currentReadingType) {
+		case TempoReadingTypeTemperature:
+			title = @"Temperature data";
+			break;
+		case TempoReadingTypeHumidity:
+			title = @"Humidity data";
+			break;
+		case TempoReadingTypeDewPoint:
+			title = @"Dew point data";
+			break;
+			
+  default:
+			break;
+	}
+	[_buttonReadingType setTitle:title forState:UIControlStateNormal];
+	[_buttonReadingType setTitle:title forState:UIControlStateSelected];
+	[_buttonReadingType setTitle:title forState:UIControlStateHighlighted];
 }
 
 #pragma mark - Actions
@@ -74,6 +89,10 @@
 	}]];
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Humidity", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		[weakself.controllerDeviceTable changeReadingType:TempoReadingTypeHumidity];
+		[weakself adjustedButtonTitles];
+	}]];
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dew Point", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself.controllerDeviceTable changeReadingType:TempoReadingTypeDewPoint];
 		[weakself adjustedButtonTitles];
 	}]];
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];

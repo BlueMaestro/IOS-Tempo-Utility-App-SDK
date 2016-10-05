@@ -12,7 +12,8 @@
 typedef enum : NSInteger {
 	TempoReadingTypeTemperature,
 	TempoReadingTypeHumidity,
-	TempoReadingTypePressure
+	TempoReadingTypePressure,
+	TempoReadingTypeDewPoint
 } TempoReadingType;
 
 @interface TDHelper : NSObject

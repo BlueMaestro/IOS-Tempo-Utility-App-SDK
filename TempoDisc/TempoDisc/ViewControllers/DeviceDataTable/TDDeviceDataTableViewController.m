@@ -63,6 +63,8 @@
 			break;
 		case TempoReadingTypeHumidity:
 			readingType = @"Humidity";
+		case TempoReadingTypeDewPoint:
+			readingType = @"DewPoint";
 			
   default:
 			break;
