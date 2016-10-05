@@ -31,6 +31,7 @@ typedef enum : NSInteger {
 + (BOOL)hasManufacturerData:(NSDictionary*)data;
 
 + (TempoDevice*)deviceWithName:(NSString*)name data:(NSDictionary*)data uuid:(NSString*)uuid context:(NSManagedObjectContext*)context;
+- (void)addData:(NSArray *)data forReadingType:(NSString *)type startTimestamp:(NSDate*)timestamp interval:(NSInteger)interval context:(NSManagedObjectContext *)context;
 - (void)fillWithData:(NSDictionary*)data name:(NSString*)name uuid:(NSString*)uuid;
 
 - (TempoDeviceType)deviceType;

@@ -160,8 +160,7 @@ int getInt(char lsb,char msb)
 	}
 }
 
-
-- (void)addData:(NSArray *)data forReadingType:(NSString *)type context:(NSManagedObjectContext *)context {
+- (void)addData:(NSArray *)data forReadingType:(NSString *)type startTimestamp:(NSDate*)timestamp interval:(NSInteger)interval context:(NSManagedObjectContext *)context {
 	ReadingType *targetReadingType;
 	for (ReadingType *readingType in self.readingTypes) {
 		if ([readingType.type isEqualToString:type]) {
@@ -177,7 +176,6 @@ int getInt(char lsb,char msb)
 	[self addReadingTypesObject:targetReadingType];
 	targetReadingType.type = type;
 	
-	NSDate *currentDate = [NSDate date];
 	NSInteger index = 0;
 	for (NSArray *sample in data) {
 		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
@@ -190,7 +188,7 @@ int getInt(char lsb,char msb)
 		else {
 			reading.avgValue = [sample firstObject];
 		}
-		reading.timestamp = [currentDate dateByAddingTimeInterval:-3600*index];
+		reading.timestamp = [timestamp dateByAddingTimeInterval:interval*index];
 		index++;
 	}
 	NSError *saveError;
@@ -198,6 +196,10 @@ int getInt(char lsb,char msb)
 	if (saveError) {
 		NSLog(@"Error saving data import: %@", saveError);
 	}
+}
+
+- (void)addData:(NSArray *)data forReadingType:(NSString *)type context:(NSManagedObjectContext *)context {
+	[self addData:data forReadingType:type startTimestamp:[NSDate date] interval:-3600 context:context];
 }
 
 - (NSArray *)readingsForType:(NSString *)typeOfReading {

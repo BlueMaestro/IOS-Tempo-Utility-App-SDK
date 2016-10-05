@@ -44,6 +44,7 @@
 		CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */; };
 		CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
+		CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF066511DA571D200210428 /* TDUARTDownloader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,6 +117,8 @@
 		CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseDeviceViewController.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
 		CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTViewController.m; sourceTree = "<group>"; };
+		CBF066501DA571D200210428 /* TDUARTDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTDownloader.h; sourceTree = "<group>"; };
+		CBF066511DA571D200210428 /* TDUARTDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTDownloader.m; sourceTree = "<group>"; };
 		CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -224,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				CB242C2B1C97637600757AEC /* Constants.h */,
+				CBF0664F1DA571C000210428 /* UARTDownloader */,
 				CB16BA7C1C83125600C99C41 /* DefaultDevice */,
 				CB16BA781C83123A00C99C41 /* Helper */,
 				CBAB5C421D47CC9000EEBECD /* SCHelper */,
@@ -473,6 +477,15 @@
 			path = UART;
 			sourceTree = "<group>";
 		};
+		CBF0664F1DA571C000210428 /* UARTDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				CBF066501DA571D200210428 /* TDUARTDownloader.h */,
+				CBF066511DA571D200210428 /* TDUARTDownloader.m */,
+			);
+			path = UARTDownloader;
+			sourceTree = "<group>";
+		};
 		D1C4DF213B5628AD5B36CA9E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -631,6 +644,7 @@
 				CB16BA731C83007B00C99C41 /* Reading.m in Sources */,
 				CB16BA741C83007B00C99C41 /* ReadingType+CoreDataProperties.m in Sources */,
 				CB16BA761C83007B00C99C41 /* TempoDevice+CoreDataProperties.m in Sources */,
+				CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */,
 				CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */,
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,

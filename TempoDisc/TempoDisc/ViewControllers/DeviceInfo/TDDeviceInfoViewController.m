@@ -11,6 +11,8 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "AppDelegate.h"
 #import "DeviceInfoTableViewController.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
+#import "TDUARTDownloader.h"
 
 #define kDeviceConnectTimeout 10.0
 
@@ -62,6 +64,8 @@
 @property (nonatomic, strong) LGCharacteristic *humidityTimeSync;
 
 @property (nonatomic, strong) DeviceInfoTableViewController *controllerTable;
+
+@property (nonatomic, strong) TDUARTDownloader *uartDownloader;
 
 @end
 
@@ -474,31 +478,40 @@
 #pragma mark - Actions
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
-	_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-	_hudDownloadData.labelText = NSLocalizedString(@"Searching for device...", nil);
-	LGPeripheral *peripheral = [TDDefaultDevice sharedDevice].selectedDevice.peripheral;
-	if (peripheral) {
-		//peripheral is in range
-		[self downloadDataFromPeripheral:peripheral];
+	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		if (!_uartDownloader) {
+			_uartDownloader = [[TDUARTDownloader alloc] init];
+		}
+		[_uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice];
 	}
 	else {
-		//peripheral is not in range search for it before download
-		[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
-			LGPeripheral *targetPeripheral;
-			for (LGPeripheral *peripheral in peripherals) {
-				if ([peripheral.cbPeripheral.identifier.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.uuid]) {
-					targetPeripheral = peripheral;
-					break;
+		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+		_hudDownloadData.labelText = NSLocalizedString(@"Searching for device...", nil);
+		LGPeripheral *peripheral = [TDDefaultDevice sharedDevice].selectedDevice.peripheral;
+		if (peripheral) {
+			//peripheral is in range
+			[self downloadDataFromPeripheral:peripheral];
+		}
+		else {
+			//peripheral is not in range search for it before download
+			[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
+				LGPeripheral *targetPeripheral;
+				for (LGPeripheral *peripheral in peripherals) {
+					if ([peripheral.cbPeripheral.identifier.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.uuid]) {
+						targetPeripheral = peripheral;
+						break;
+					}
 				}
-			}
-			if (targetPeripheral) {
-				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = targetPeripheral;
-				[self downloadDataFromPeripheral:targetPeripheral];
-			}
-			else {
-				[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find device peripheral", nil)];
-			}
-		}];
+				if (targetPeripheral) {
+					[TDDefaultDevice sharedDevice].selectedDevice.peripheral = targetPeripheral;
+					[self downloadDataFromPeripheral:targetPeripheral];
+				}
+				else {
+					[self abortConnectionWithErrorMessage:NSLocalizedString(@"Could not find device peripheral", nil)];
+				}
+			}];
+		}
 	}
 }
+
 @end
