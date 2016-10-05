@@ -482,7 +482,12 @@
 		if (!_uartDownloader) {
 			_uartDownloader = [[TDUARTDownloader alloc] init];
 		}
-		[_uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice];
+		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+		_hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
+		__weak typeof(self) weakself = self;
+		[_uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^{
+			[weakself.hudDownloadData hide:YES];
+		}];
 	}
 	else {
 		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];

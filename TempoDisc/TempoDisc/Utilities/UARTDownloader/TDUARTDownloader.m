@@ -46,6 +46,8 @@ typedef enum : NSInteger {
 
 @property (nonatomic, assign) NSInteger dataDownloadInterval;
 
+@property (nonatomic, copy) DataDownloadCompletion completion;
+
 @end
 
 @implementation TDUARTDownloader
@@ -111,6 +113,10 @@ typedef enum : NSInteger {
 			break;
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeDewPoint;
+			if (_completion) {
+				_completion();
+				_completion = nil;
+			}
 			break;
 	}
 	
@@ -152,9 +158,10 @@ typedef enum : NSInteger {
 	return singleton;
 }
 
-- (void)downloadDataForDevice:(TempoDiscDevice *)device {
+- (void)downloadDataForDevice:(TempoDiscDevice *)device withCompletion:(void (^)(void))completion {
 	_currentDataSamples = [NSMutableArray array];
 	_downloadStartTimestamp = [NSDate date];
+	_completion = completion;
 	NSLog(@"Connecting to device...");
 	__weak typeof(self) weakself = self;
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {

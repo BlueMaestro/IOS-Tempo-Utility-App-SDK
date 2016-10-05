@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "TempoDiscDevice+CoreDataProperties.h"
 
+typedef void(^DataDownloadCompletion)(void);
+
 @interface TDUARTDownloader : NSObject
 
 + (TDUARTDownloader*)shared;
 
-- (void)downloadDataForDevice:(TempoDiscDevice*)device;
+- (void)downloadDataForDevice:(TempoDiscDevice*)device withCompletion:(DataDownloadCompletion)completion;
 
 @end
