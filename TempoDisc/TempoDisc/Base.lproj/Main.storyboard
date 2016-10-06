@@ -401,7 +401,9 @@ GRAPH</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3at-pJ-7kV">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="Export as CSV">
+                                        <state key="normal">
+                                            <string key="title">Export
+as CSV</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -417,23 +419,15 @@ GRAPH</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dam-Eo-vQ0">
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="ZxN-4u-WZL"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="Temperature Data">
-                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="buttonChangeReadingTypeClicked:" destination="2Dh-4Q-lVF" eventType="touchUpInside" id="HTC-M4-kIj"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HOE-hs-pVe">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="RVm-W2-8ig"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
-                                        <state key="normal" title="Export as PDF">
+                                        <state key="normal">
+                                            <string key="title">Export
+as PDF</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -443,22 +437,17 @@ GRAPH</string>
                                 </subviews>
                                 <color key="backgroundColor" red="0.91764705879999997" green="0.90980392160000001" blue="0.90980392160000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="HOE-hs-pVe" firstAttribute="top" secondItem="pVn-DD-1SP" secondAttribute="top" constant="18" id="83p-Mo-mow"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="leading" secondItem="HOE-hs-pVe" secondAttribute="trailing" constant="20" id="8n7-kJ-nui"/>
                                     <constraint firstItem="tGA-S9-7hH" firstAttribute="centerX" secondItem="pVn-DD-1SP" secondAttribute="centerX" id="CUF-7M-pES"/>
-                                    <constraint firstItem="dam-Eo-vQ0" firstAttribute="leading" secondItem="pVn-DD-1SP" secondAttribute="leading" constant="37" id="FaT-hb-E7T"/>
                                     <constraint firstAttribute="trailing" secondItem="3at-pJ-7kV" secondAttribute="trailing" constant="28" id="HGi-NL-wNF"/>
                                     <constraint firstItem="HOE-hs-pVe" firstAttribute="leading" secondItem="pVn-DD-1SP" secondAttribute="leading" constant="28" id="LGw-I2-AM7"/>
-                                    <constraint firstItem="dam-Eo-vQ0" firstAttribute="centerX" secondItem="pVn-DD-1SP" secondAttribute="centerX" id="RgY-o8-bnz"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="centerY" secondItem="HOE-hs-pVe" secondAttribute="centerY" id="XJr-nD-Ig6"/>
-                                    <constraint firstItem="dam-Eo-vQ0" firstAttribute="top" secondItem="HOE-hs-pVe" secondAttribute="bottom" constant="17" id="cix-c9-Kyc"/>
-                                    <constraint firstAttribute="height" constant="189" id="emg-j2-43i"/>
-                                    <constraint firstItem="dam-Eo-vQ0" firstAttribute="height" secondItem="HOE-hs-pVe" secondAttribute="height" id="ggQ-S6-gdU"/>
+                                    <constraint firstAttribute="height" constant="120" id="emg-j2-43i"/>
                                     <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="8" id="hw5-p3-hYq"/>
-                                    <constraint firstAttribute="bottom" secondItem="dam-Eo-vQ0" secondAttribute="bottom" constant="54" id="qaE-08-igO"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="height" secondItem="HOE-hs-pVe" secondAttribute="height" id="r0t-ia-82u"/>
                                     <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="8" id="w6z-Ip-ZWH"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="width" secondItem="HOE-hs-pVe" secondAttribute="width" id="yNN-dz-JfI"/>
-                                    <constraint firstAttribute="trailing" secondItem="dam-Eo-vQ0" secondAttribute="trailing" constant="37" id="ykJ-q0-WL5"/>
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ibg-YC-I9Z">
@@ -496,11 +485,8 @@ GRAPH</string>
                     </view>
                     <navigationItem key="navigationItem" title="Data Table" id="tMx-sC-dhS"/>
                     <connections>
-                        <outlet property="buttonReadingType" destination="dam-Eo-vQ0" id="ycF-Ki-Ebo"/>
                         <outlet property="labelDeviceName" destination="5mj-LG-67r" id="lGu-cQ-MMl"/>
                         <outlet property="viewBottomContainer" destination="pVn-DD-1SP" id="epN-2T-ZVN"/>
-                        <outletCollection property="buttonsBottomMenu" destination="dam-Eo-vQ0" id="I74-ww-a1a"/>
-                        <outletCollection property="buttonOptions" destination="dam-Eo-vQ0" id="N3F-Os-k6E"/>
                         <outletCollection property="buttonOptions" destination="HOE-hs-pVe" id="0Ou-a9-VTB"/>
                         <outletCollection property="buttonOptions" destination="3at-pJ-7kV" id="aGb-4P-bwT"/>
                     </connections>
@@ -894,7 +880,7 @@ LOG</string>
             <objects>
                 <tableViewController title="Table Data" id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="374.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="443"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
