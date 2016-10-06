@@ -168,7 +168,7 @@ int getInt(char lsb,char msb)
 		}
 	}
 	//delete all data and insert again
-	if (targetReadingType) {
+	if (targetReadingType && [self isMemberOfClass:[TempoDevice class]]) {
 		[context deleteObject:targetReadingType];
 	}
 	

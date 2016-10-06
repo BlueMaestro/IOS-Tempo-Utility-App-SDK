@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *averageDayTemperature;
 @property (nullable, nonatomic, copy) NSNumber *averageDayHumidity;
 @property (nullable, nonatomic, copy) NSNumber *averageDayDew;
+@property (nullable, nonatomic, copy) NSNumber *logCount;
 
 @end
 

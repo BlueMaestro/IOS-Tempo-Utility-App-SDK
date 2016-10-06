@@ -76,7 +76,9 @@ typedef enum : NSInteger {
 	if (data.length == 15 ) {
 		char * d = (char *)data.bytes;
 		if (d[14] == kDataTerminationHeaderValue) {
-			//header data, skip this for now
+			//header data, parse next point and dont impor
+			NSInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
+			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:@(nextCounter)];
 			return;
 		}
 	}
@@ -105,11 +107,11 @@ typedef enum : NSInteger {
 	switch (type) {
 		case DataDownloadTypeTemperature:
 			downloadType = DataDownloadTypeHumidity;
-			stringToWrite = kDataStringHumidity;
+			stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringHumidity, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case  DataDownloadTypeHumidity:
 			downloadType = DataDownloadTypeDewPoint;
-			stringToWrite = kDataStringDewPoint;
+			stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringDewPoint, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeDewPoint;
@@ -142,7 +144,12 @@ typedef enum : NSInteger {
 			break;
 	}
 	if (readingType) {
-		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:_downloadStartTimestamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+		NSDate *timestamp = _downloadStartTimestamp;
+		Reading *lastReading = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType] lastObject];
+		if (lastReading) {
+			timestamp = lastReading.timestamp;
+		}
+		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
 	}
 	
 }
@@ -220,7 +227,7 @@ typedef enum : NSInteger {
 										NSLog(@"Could not find RX characteristic");
 									}
 									if (weakself.writeCharacteristic) {
-										[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, @0] toCharacteristic:weakself.writeCharacteristic];
+										[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];
 										weakself.dataToSend = nil;
 									}
 								}
