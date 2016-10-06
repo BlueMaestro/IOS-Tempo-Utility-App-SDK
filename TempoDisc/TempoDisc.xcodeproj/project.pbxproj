@@ -36,6 +36,7 @@
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
 		CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
+		CB73F9351DA6B9D50012C4D0 /* TDHistoryContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB73F9341DA6B9D50012C4D0 /* TDHistoryContainerViewController.m */; };
 		CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */; };
 		CB9421EE1C9200C5000724B5 /* TDGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421ED1C9200C5000724B5 /* TDGraphViewController.m */; };
 		CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C401D47CA2200EEBECD /* TDDevicesContainerViewController.m */; };
@@ -101,6 +102,8 @@
 		CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBActionSheet.m; sourceTree = "<group>"; };
 		CB6895611C83355700EB1A65 /* TDDeviceDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceDataTableViewController.h; sourceTree = "<group>"; };
 		CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceDataTableViewController.m; sourceTree = "<group>"; };
+		CB73F9331DA6B9D50012C4D0 /* TDHistoryContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHistoryContainerViewController.h; sourceTree = "<group>"; };
+		CB73F9341DA6B9D50012C4D0 /* TDHistoryContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHistoryContainerViewController.m; sourceTree = "<group>"; };
 		CB9421E81C91E6D5000724B5 /* TDOtherDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDOtherDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDOtherDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CB9421EC1C9200C5000724B5 /* TDGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDGraphViewController.h; sourceTree = "<group>"; };
@@ -240,6 +243,7 @@
 		CB16BA511C82E70C00C99C41 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				CB73F9321DA6B9C30012C4D0 /* HistoryContainer */,
 				CB14AD201D9321080090AAA2 /* DeviceInfoTable */,
 				CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */,
 				CB6895601C83353F00EB1A65 /* DeviceDataTable */,
@@ -403,6 +407,15 @@
 				CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */,
 			);
 			path = DeviceDataTable;
+			sourceTree = "<group>";
+		};
+		CB73F9321DA6B9C30012C4D0 /* HistoryContainer */ = {
+			isa = PBXGroup;
+			children = (
+				CB73F9331DA6B9D50012C4D0 /* TDHistoryContainerViewController.h */,
+				CB73F9341DA6B9D50012C4D0 /* TDHistoryContainerViewController.m */,
+			);
+			path = HistoryContainer;
 			sourceTree = "<group>";
 		};
 		CB9421E71C91E6C1000724B5 /* OtherDevice */ = {
@@ -633,6 +646,7 @@
 				CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */,
 				CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */,
 				CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */,
+				CB73F9351DA6B9D50012C4D0 /* TDHistoryContainerViewController.m in Sources */,
 				CBAB5C451D47CC9000EEBECD /* SCHelper.m in Sources */,
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,

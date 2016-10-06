@@ -21,6 +21,7 @@
         <attribute name="currentPressure" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="currentPressureDelta" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="currentTemperature" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="inRange" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isBlueMaestroDevice" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isFahrenheit" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastDownload" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -55,7 +56,7 @@
     <elements>
         <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
-        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="285"/>
+        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="300"/>
         <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="330"/>
     </elements>
 </model>

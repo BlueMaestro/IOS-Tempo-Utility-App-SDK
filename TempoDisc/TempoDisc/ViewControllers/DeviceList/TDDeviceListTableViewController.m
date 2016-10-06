@@ -35,8 +35,10 @@
 	/**
 	 *	Wait until ready to perform scan
 	 **/
-	[[LGCentralManager sharedInstance]
-	 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
+	if (!_ignoreScan) {
+		[[LGCentralManager sharedInstance]
+		 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
+	}
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleGoToBackgroundNotifications:) name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleReturnToForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -49,12 +51,16 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	[self startScan];
+	if (!_ignoreScan) {
+		[self startScan];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[self stopScan];
+	if (!_ignoreScan) {
+		[self stopScan];
+	}
 }
 
 #pragma mark - KVO
@@ -102,6 +108,12 @@
 }
 
 - (void)updateDeviceList {
+	NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
+	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
+	for (TempoDevice *device in result) {
+		device.inRange = @(NO);
+	}
+	
 	NSMutableArray *devicesInRange = [NSMutableArray array];
 	NSMutableArray *devicesOutOfRange = [NSMutableArray array];
 	if (!_dataSource) {
@@ -111,6 +123,7 @@
 		TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
 		if (device) {
 			device.peripheral = peripheral;
+			device.inRange = @(YES);
 			[devicesInRange addObject:device];
 			if (![[_dataSource valueForKey:@"uuid"] containsObject:device.uuid]) {
 				[_dataSource addObject:device];
@@ -224,11 +237,22 @@
 }
 
 - (void)handleGoToBackgroundNotifications:(NSNotification*)note {
-	[self stopScan];
+	if (!_ignoreScan) {
+		[self stopScan];
+	}
 }
 
 - (void)handleReturnToForeground:(NSNotification*)note {
-	[self startScan];
+	if (!_ignoreScan) {
+		[self startScan];
+	}
+}
+
+#pragma mark - Public methods
+
+- (void)loadDevices:(NSArray*)devices {
+	_dataSource = [devices mutableCopy];
+	[self.tableView reloadData];
 }
 
 #pragma mark - Actions
@@ -279,7 +303,10 @@
 		//Selected device is tempo disc. Set global singleton reference and go to details
 		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
 		NSLog(@"Selected device: %@", selectedDevice.name);
-	if ([selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+	if (!selectedDevice.inRange.boolValue) {
+		[self.parentViewController.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"viewControllerGraph"] animated:YES];
+	}
+	else if ([selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:selectedDevice];
 	}
 	else {

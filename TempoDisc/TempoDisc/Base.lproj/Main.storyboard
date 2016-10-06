@@ -18,7 +18,7 @@
         <scene sceneID="Jkm-OP-FMy">
             <objects>
                 <navigationController id="odE-mI-OPm" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="E16-QP-yoc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="E16-QP-yoc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -44,7 +44,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="180"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N2B-hu-upH" id="9DL-JK-ka7">
-                                    <frame key="frameInset" width="375" height="180"/>
+                                    <frame key="frameInset" width="375" height="179"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NlK-Ay-nTK">
@@ -172,7 +172,7 @@
                                 <rect key="frame" x="0.0" y="208" width="375" height="97"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4hT-ST-Ilr" id="C2D-Um-vLJ">
-                                    <frame key="frameInset" width="375" height="97"/>
+                                    <frame key="frameInset" width="375" height="96"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRO-NE-vKr">
@@ -256,6 +256,7 @@
                         <outlet property="viewBottomContainer" destination="pza-Du-lsz" id="cKC-Nm-0Go"/>
                         <segue destination="tMM-iH-sIM" kind="show" identifier="segueDeviceInfo" id="8oI-Em-fqf"/>
                         <segue destination="Ld5-H0-NvG" kind="show" identifier="segueTempoDiscDeviceInfo" id="BiN-NN-xLc"/>
+                        <segue destination="Lm4-ON-Onj" kind="show" identifier="segueHistory" id="bhg-9s-6cz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Ca-Jx-mEu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -265,7 +266,7 @@
         <!--Graph-->
         <scene sceneID="cD1-Ya-ggw">
             <objects>
-                <viewController title="Graph" id="1ae-lz-4lE" customClass="TDGraphViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="viewControllerGraph" title="Graph" id="1ae-lz-4lE" customClass="TDGraphViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sun-aC-tAM"/>
                         <viewControllerLayoutGuide type="bottom" id="Ghr-Nz-4Ce"/>
@@ -902,7 +903,7 @@ LOG</string>
                                 <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xdk-gP-6Fx" id="qlD-Qy-O2j">
-                                    <frame key="frameInset" width="600" height="44"/>
+                                    <frame key="frameInset" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5T3-nR-0UU">
@@ -913,7 +914,7 @@ LOG</string>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WI4-Vs-veT">
-                                            <frame key="frameInset" minX="15" minY="25" width="43.5" height="13.5"/>
+                                            <frame key="frameInset" minX="15" minY="25" width="44" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1188,6 +1189,63 @@ LOG</string>
             </objects>
             <point key="canvasLocation" x="1747" y="-797"/>
         </scene>
+        <!--History List-->
+        <scene sceneID="dM7-Py-msE">
+            <objects>
+                <viewController storyboardIdentifier="viewControllerHistoryContainer" title="History List" automaticallyAdjustsScrollViewInsets="NO" id="Lm4-ON-Onj" customClass="TDHistoryContainerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ihb-jn-PcC"/>
+                        <viewControllerLayoutGuide type="bottom" id="QkJ-Ft-Vaq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tkO-ih-rwd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Li-oB-Ag7">
+                                <connections>
+                                    <segue destination="eKS-MG-oTa" kind="embed" id="v8U-gz-ykZ"/>
+                                </connections>
+                            </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NpJ-7c-rqv">
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRM-UH-t6s">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="38" id="73D-RP-wkz"/>
+                                            <constraint firstAttribute="width" constant="200" id="klu-h3-DTA"/>
+                                        </constraints>
+                                        <state key="normal" image="logo">
+                                            <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="HRM-UH-t6s" firstAttribute="centerX" secondItem="NpJ-7c-rqv" secondAttribute="centerX" id="3Zy-uI-QnX"/>
+                                    <constraint firstAttribute="bottom" secondItem="HRM-UH-t6s" secondAttribute="bottom" constant="8" id="V7i-JZ-RnN"/>
+                                    <constraint firstAttribute="height" constant="54" id="aMg-Cd-HVa"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="1Li-oB-Ag7" firstAttribute="top" secondItem="ihb-jn-PcC" secondAttribute="bottom" id="32I-SR-IhZ"/>
+                            <constraint firstItem="NpJ-7c-rqv" firstAttribute="top" secondItem="1Li-oB-Ag7" secondAttribute="bottom" id="3T7-p1-3Pi"/>
+                            <constraint firstItem="QkJ-Ft-Vaq" firstAttribute="top" secondItem="NpJ-7c-rqv" secondAttribute="bottom" id="AKh-wX-Ieg"/>
+                            <constraint firstItem="NpJ-7c-rqv" firstAttribute="leading" secondItem="tkO-ih-rwd" secondAttribute="leading" id="Eo2-Mv-lb7"/>
+                            <constraint firstAttribute="trailing" secondItem="NpJ-7c-rqv" secondAttribute="trailing" id="h0R-2e-jIF"/>
+                            <constraint firstAttribute="trailing" secondItem="1Li-oB-Ag7" secondAttribute="trailing" id="k7z-Yp-IEp"/>
+                            <constraint firstItem="1Li-oB-Ag7" firstAttribute="leading" secondItem="tkO-ih-rwd" secondAttribute="leading" id="vhl-Vs-0hL"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="History List" id="1rp-k9-bQQ"/>
+                    <connections>
+                        <outlet property="viewBottomContainer" destination="NpJ-7c-rqv" id="FCc-7X-zgO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XEi-KQ-uXe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="678" y="1233"/>
+        </scene>
     </scenes>
     <resources>
         <image name="logo" width="200" height="38"/>
@@ -1197,7 +1255,8 @@ LOG</string>
         <image name="tab-list-selected" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Dvq-Dd-i5u"/>
-        <segue reference="PY2-Sg-4iY"/>
+        <segue reference="ksw-HN-G1m"/>
+        <segue reference="v8U-gz-ykZ"/>
+        <segue reference="BMJ-no-2yD"/>
     </inferredMetricsTieBreakers>
 </document>

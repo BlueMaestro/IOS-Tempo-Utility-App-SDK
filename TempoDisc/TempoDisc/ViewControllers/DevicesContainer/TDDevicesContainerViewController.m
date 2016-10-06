@@ -7,11 +7,8 @@
 //
 
 #import "TDDevicesContainerViewController.h"
-#import "TDDeviceListTableViewController.h"
 
 @interface TDDevicesContainerViewController()
-
-@property (nonatomic, strong) TDDeviceListTableViewController *controllerDeviceList;
 
 @end
 
@@ -46,13 +43,20 @@
 
 - (void)setupView {
 	[super setupView];
-	UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Scan", nil) style:UIBarButtonItemStyleDone target:self action:@selector(buttonStartScanClicked:)];
-	self.navigationItem.rightBarButtonItem = item;
+	UIBarButtonItem *itemScan = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Scan", nil) style:UIBarButtonItemStyleDone target:self action:@selector(buttonStartScanClicked:)];
+	self.navigationItem.rightBarButtonItem = itemScan;
+	
+	UIBarButtonItem *itemHistory = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"History", nil) style:UIBarButtonItemStyleDone target:self action:@selector(buttonHistoryClicked:)];
+	self.navigationItem.leftBarButtonItem = itemHistory;
 }
 
 #pragma mark - Actions
 
 - (IBAction)buttonStartScanClicked:(UIButton *)sender {
 	[_controllerDeviceList scanForDevices];
+}
+
+- (IBAction)buttonHistoryClicked:(UIButton *)sender {
+	[self performSegueWithIdentifier:@"segueHistory" sender:nil];
 }
 @end

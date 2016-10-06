@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "TDBaseDeviceViewController.h"
+#import "TDDeviceListTableViewController.h"
 
 @interface TDDevicesContainerViewController : TDBaseDeviceViewController
 @property (strong, nonatomic) IBOutlet UILabel *labelScanStatus;
 @property (strong, nonatomic) IBOutlet UIButton *buttonStartScan;
+@property (nonatomic, strong) TDDeviceListTableViewController *controllerDeviceList;
 
 - (IBAction)buttonStartScanClicked:(UIButton *)sender;
+- (void)setupView;
 @end

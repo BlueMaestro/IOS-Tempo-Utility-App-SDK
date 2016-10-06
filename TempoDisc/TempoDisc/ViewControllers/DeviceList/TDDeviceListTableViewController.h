@@ -11,7 +11,9 @@
 @interface TDDeviceListTableViewController : UITableViewController
 
 @property (nonatomic, assign) BOOL scanning;
+@property (nonatomic, assign) BOOL ignoreScan;
 
 - (void)scanForDevices;
+- (void)loadDevices:(NSArray*)devices;
 
 @end
