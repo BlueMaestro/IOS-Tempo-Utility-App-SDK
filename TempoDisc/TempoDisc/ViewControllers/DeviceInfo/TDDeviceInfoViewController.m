@@ -485,8 +485,13 @@
 		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 		_hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
 		__weak typeof(self) weakself = self;
-		[_uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^{
+		[_uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
 			[weakself.hudDownloadData hide:YES];
+			if (!succcess) {
+				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
+				[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
+				[weakself presentViewController:alert animated:YES completion:nil];
+			}
 		}];
 	}
 	else {

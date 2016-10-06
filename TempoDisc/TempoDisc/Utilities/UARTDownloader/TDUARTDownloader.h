@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TempoDiscDevice+CoreDataProperties.h"
 
-typedef void(^DataDownloadCompletion)(void);
+typedef void(^DataDownloadCompletion)(BOOL);
 
 @interface TDUARTDownloader : NSObject
 

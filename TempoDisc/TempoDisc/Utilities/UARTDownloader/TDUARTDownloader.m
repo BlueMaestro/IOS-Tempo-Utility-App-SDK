@@ -118,7 +118,7 @@ typedef enum : NSInteger {
 			downloadType = DataDownloadTypeFinish;
 			stringToWrite = kDataStringTransmitEnd;
 			if (_completion) {
-				_completion();
+				_completion(YES);
 				_completion = nil;
 			}
 			break;
@@ -170,7 +170,7 @@ typedef enum : NSInteger {
 	return singleton;
 }
 
-- (void)downloadDataForDevice:(TempoDiscDevice *)device withCompletion:(void (^)(void))completion {
+- (void)downloadDataForDevice:(TempoDiscDevice *)device withCompletion:(void (^)(BOOL))completion {
 	_currentDataSamples = [NSMutableArray array];
 	_downloadStartTimestamp = [NSDate date];
 	_completion = completion;
@@ -238,6 +238,7 @@ typedef enum : NSInteger {
 								}
 								else {
 									NSLog(@"Error discovering device characteristics: %@", error3);
+									completion(NO);
 								}
 							}];
 							break;
@@ -245,15 +246,18 @@ typedef enum : NSInteger {
 					}
 					if (!uartService) {
 						NSLog(@"Failed to found UART service");
+						completion(NO);
 					}
 				}
 				else {
 					NSLog(@"Error discovering device services: %@", error2);
+					completion(NO);
 				}
 			}];
 		}
 		else {
 			NSLog(@"Error connecting to device: %@", error);
+			completion(NO);
 		}
 	}];
 }
