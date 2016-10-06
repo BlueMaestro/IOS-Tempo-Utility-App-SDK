@@ -29,7 +29,8 @@
 typedef enum : NSInteger {
 	DataDownloadTypeTemperature,
 	DataDownloadTypeHumidity,
-	DataDownloadTypeDewPoint
+	DataDownloadTypeDewPoint,
+	DataDownloadTypeFinish
 } DataDownloadType;
 
 @interface TDUARTDownloader()
@@ -114,11 +115,15 @@ typedef enum : NSInteger {
 			stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringDewPoint, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case DataDownloadTypeDewPoint:
-			downloadType = DataDownloadTypeDewPoint;
+			downloadType = DataDownloadTypeFinish;
+			stringToWrite = kDataStringTransmitEnd;
 			if (_completion) {
 				_completion();
 				_completion = nil;
 			}
+			break;
+		case DataDownloadTypeFinish:
+			downloadType = DataDownloadTypeFinish;
 			break;
 	}
 	
