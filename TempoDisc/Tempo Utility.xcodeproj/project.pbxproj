@@ -58,7 +58,7 @@
 		CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscDevice+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CB14AD211D93211D0090AAA2 /* DeviceInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceInfoTableViewController.h; sourceTree = "<group>"; };
 		CB14AD221D93211D0090AAA2 /* DeviceInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceInfoTableViewController.m; sourceTree = "<group>"; };
-		CB16BA321C82E67E00C99C41 /* TempoDisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TempoDisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB16BA321C82E67E00C99C41 /* Tempo Utility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tempo Utility.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB16BA361C82E67E00C99C41 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CB16BA381C82E67E00C99C41 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CB16BA391C82E67E00C99C41 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 		CB16BA591C82ECFE00C99C41 /* TDDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB16BA5A1C82ECFE00C99C41 /* TDDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CB16BA5C1C82EFA800C99C41 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		CB16BA611C82FB4E00C99C41 /* TempoDiscPCH.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempoDiscPCH.pch; sourceTree = "<group>"; };
+		CB16BA611C82FB4E00C99C41 /* Tempo UtilityPCH.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Tempo UtilityPCH.pch"; sourceTree = "<group>"; };
 		CB16BA641C83007B00C99C41 /* Reading+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Reading+CoreDataProperties.h"; sourceTree = "<group>"; };
 		CB16BA651C83007B00C99C41 /* Reading+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Reading+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CB16BA661C83007B00C99C41 /* Reading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reading.h; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 		CB16BA331C82E67E00C99C41 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CB16BA321C82E67E00C99C41 /* TempoDisc.app */,
+				CB16BA321C82E67E00C99C41 /* Tempo Utility.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -213,7 +213,7 @@
 				CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */,
 				CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */,
 				CB16BA361C82E67E00C99C41 /* main.m */,
-				CB16BA611C82FB4E00C99C41 /* TempoDiscPCH.pch */,
+				CB16BA611C82FB4E00C99C41 /* Tempo UtilityPCH.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -511,9 +511,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CB16BA311C82E67E00C99C41 /* TempoDisc */ = {
+		CB16BA311C82E67E00C99C41 /* Tempo Utility */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CB16BA4C1C82E67E00C99C41 /* Build configuration list for PBXNativeTarget "TempoDisc" */;
+			buildConfigurationList = CB16BA4C1C82E67E00C99C41 /* Build configuration list for PBXNativeTarget "Tempo Utility" */;
 			buildPhases = (
 				C4F3E125765D4FCB3E31C94E /* Check Pods Manifest.lock */,
 				CB16BA2E1C82E67E00C99C41 /* Sources */,
@@ -526,9 +526,9 @@
 			);
 			dependencies = (
 			);
-			name = TempoDisc;
+			name = "Tempo Utility";
 			productName = TempoDisc;
-			productReference = CB16BA321C82E67E00C99C41 /* TempoDisc.app */;
+			productReference = CB16BA321C82E67E00C99C41 /* Tempo Utility.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -547,7 +547,7 @@
 					};
 				};
 			};
-			buildConfigurationList = CB16BA2D1C82E67E00C99C41 /* Build configuration list for PBXProject "TempoDisc" */;
+			buildConfigurationList = CB16BA2D1C82E67E00C99C41 /* Build configuration list for PBXProject "Tempo Utility" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -560,7 +560,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CB16BA311C82E67E00C99C41 /* TempoDisc */,
+				CB16BA311C82E67E00C99C41 /* Tempo Utility */,
 			);
 		};
 /* End PBXProject section */
@@ -782,7 +782,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = EL3G87RG88;
-				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
+				GCC_PREFIX_HEADER = "TempoDisc/Tempo UtilityPCH.pch";
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
@@ -798,7 +798,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = "";
-				GCC_PREFIX_HEADER = TempoDisc/TempoDiscPCH.pch;
+				GCC_PREFIX_HEADER = "TempoDisc/Tempo UtilityPCH.pch";
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
@@ -809,7 +809,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CB16BA2D1C82E67E00C99C41 /* Build configuration list for PBXProject "TempoDisc" */ = {
+		CB16BA2D1C82E67E00C99C41 /* Build configuration list for PBXProject "Tempo Utility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB16BA4A1C82E67E00C99C41 /* Debug */,
@@ -818,7 +818,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CB16BA4C1C82E67E00C99C41 /* Build configuration list for PBXNativeTarget "TempoDisc" */ = {
+		CB16BA4C1C82E67E00C99C41 /* Build configuration list for PBXNativeTarget "Tempo Utility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CB16BA4D1C82E67E00C99C41 /* Debug */,
