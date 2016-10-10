@@ -46,8 +46,8 @@
 - (void)setupView {
 	[super setupView];
 	self.navigationItem.rightBarButtonItem = nil;
-	UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
-	self.navigationItem.leftBarButtonItem = item;
+	self.navigationItem.leftBarButtonItem = nil;
+	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:nil action:nil];
 }
 
 #pragma mark - Private methods
