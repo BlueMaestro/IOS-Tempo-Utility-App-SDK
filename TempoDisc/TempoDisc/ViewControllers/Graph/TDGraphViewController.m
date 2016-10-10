@@ -23,6 +23,8 @@
 #define GRAPH_LINE_TYPE CPTScatterPlotInterpolationCurved
 //#define GRAPH_LINE_TYPE CPTScatterPlotInterpolationLinear
 
+#define kInitialDataLoadCount 10
+
 @interface TDGraphViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate, IBActionSheetDelegate>
 
 @property (nonatomic, strong) CPTGraphHostingView *hostViewTemperature;
@@ -34,6 +36,10 @@
 @property (nonatomic, strong) CPTScatterPlot *plotTemperature;
 @property (nonatomic, strong) CPTScatterPlot *plotHumidity;
 
+@property (nonatomic, assign) TempoReadingType currentReadingType;
+@property (strong, nonatomic) IBOutlet UIButton *buttonAll;
+@property (strong, nonatomic) IBOutlet UILabel *labelUnit;
+
 @end
 
 @implementation TDGraphViewController
@@ -41,6 +47,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+	[self changeReadingType:TempoReadingTypeTemperature];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,28 +80,37 @@
 
 - (void)changeReadingType:(TempoReadingType)type {
 	switch (type) {
-  case TempoReadingTypeTemperature: {
-			  if (!_viewGraphTemperature) {
-				  _viewGraphTemperature = _viewGraphHumidity;
-				  _viewGraphHumidity = nil;
-				  [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
-			  }
-		
-		}
+  case TempoReadingTypeTemperature:
+			if (!_viewGraphTemperature) {
+				_viewGraphTemperature = _viewGraphHumidity;
+				_viewGraphHumidity = nil;
+			}
+		  [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
+		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
 			break;
 			
 		case TempoReadingTypeHumidity: {
 			if (!_viewGraphHumidity) {
 				_viewGraphHumidity = _viewGraphTemperature;
 				_viewGraphTemperature = nil;
-				[_labelReadingType setText:NSLocalizedString(@"Humidity", nil)];
 			}
+			[_labelReadingType setText:NSLocalizedString(@"Humidity", nil)];
+			_labelUnit.text = @"% RELATIVE HUMIDITY";
 			break;
 		}
+		case TempoReadingTypeDewPoint:
+			if (!_viewGraphDewPoint) {
+				_viewGraphDewPoint = _viewGraphTemperature ? _viewGraphTemperature : _viewGraphHumidity;
+				_viewGraphTemperature = nil;
+				_viewGraphHumidity = nil;
+			}
+			[_labelReadingType setText:NSLocalizedString(@"Dew Point", nil)];
+			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
 			
   default:
 			break;
 	}
+	_currentReadingType = type;
 	[self initPlot];
 	[self adjustPlotsRange];
 }
@@ -133,6 +149,8 @@
 }
 
 - (IBAction)buttonAllClicked:(UIButton *)sender {
+	sender.selected = !sender.selected;
+	[self changeReadingType:_currentReadingType];
 }
 
 #pragma mark - Graph setup
@@ -340,10 +358,28 @@
 - (NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
 	if ([plot.identifier isEqual:@"Temperature"]) {
-		return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count;
+		if (!_buttonAll.selected) {
+			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count, kInitialDataLoadCount);
+		}
+		else {
+			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count;
+		}
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
-		return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count;
+		if (!_buttonAll.selected) {
+			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count, kInitialDataLoadCount);
+		}
+		else {
+			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count;
+		}
+	}
+	else if ([plot.identifier isEqual:@"DewPoint"]) {
+		if (!_buttonAll.selected) {
+			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
+		}
+		else {
+			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count;
+		}
 	}
 	else {
 		return 0;
@@ -354,11 +390,14 @@
 {
 	NSArray *dataSource = @[];
 	Reading *reading;
-	if (plot == _plotTemperature) {
-		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
+	if ([plot.identifier isEqual:@"Temperature"]) {
+		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
-	else if (plot == _plotHumidity) {
-		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
+	else if ([plot.identifier isEqual:@"Humidity"]) {
+		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	}
+	else if ([plot.identifier isEqual:@"DewPoint"]) {
+		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
 	reading = [dataSource objectAtIndex:index];
 	

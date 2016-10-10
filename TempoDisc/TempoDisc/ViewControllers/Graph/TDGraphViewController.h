@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) IBOutlet UIView *viewGraphTemperature;
 @property (strong, nonatomic) IBOutlet UIView *viewGraphHumidity;
+@property (strong, nonatomic) IBOutlet UIView *viewGraphDewPoint;
 @property (strong, nonatomic) IBOutlet UILabel *labelReadingType;
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender;

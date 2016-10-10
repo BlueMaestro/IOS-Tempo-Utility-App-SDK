@@ -288,6 +288,9 @@
 DATA</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="buttonAllClicked:" destination="1ae-lz-4lE" eventType="touchUpInside" id="iKS-el-YOM"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Q3-N2-LHA">
                                         <constraints>
@@ -353,12 +356,19 @@ GRAPH</string>
                                 <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Unit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaU-z5-eur">
+                                <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                <color key="textColor" red="0.098039215690000001" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="1gY-T5-Vou" firstAttribute="centerX" secondItem="xnb-Gi-QGJ" secondAttribute="centerX" id="0fb-pB-gaK"/>
+                            <constraint firstItem="JaU-z5-eur" firstAttribute="centerX" secondItem="1gY-T5-Vou" secondAttribute="centerX" id="9O0-jH-ch9"/>
                             <constraint firstItem="Ghr-Nz-4Ce" firstAttribute="top" secondItem="J6N-rz-4fq" secondAttribute="bottom" id="DCA-jo-U5q"/>
                             <constraint firstItem="Zba-qg-7bC" firstAttribute="leading" secondItem="xnb-Gi-QGJ" secondAttribute="leading" constant="20" id="Dsa-j8-ewM"/>
+                            <constraint firstItem="JaU-z5-eur" firstAttribute="top" secondItem="1gY-T5-Vou" secondAttribute="bottom" constant="4" id="Ox7-qT-NLP"/>
                             <constraint firstAttribute="trailing" secondItem="J6N-rz-4fq" secondAttribute="trailing" id="X5f-o8-xNn"/>
                             <constraint firstAttribute="trailing" secondItem="Zba-qg-7bC" secondAttribute="trailing" constant="20" id="apk-YL-H1y"/>
                             <constraint firstItem="J6N-rz-4fq" firstAttribute="top" secondItem="Zba-qg-7bC" secondAttribute="bottom" constant="20" id="c1L-eu-vEz"/>
@@ -371,8 +381,10 @@ GRAPH</string>
                     </view>
                     <tabBarItem key="tabBarItem" title="Graph" image="tab-graph" selectedImage="tab-graph-selected" id="pYQ-gk-v3r"/>
                     <connections>
+                        <outlet property="buttonAll" destination="xqn-5U-jkS" id="NHB-7a-dBv"/>
                         <outlet property="labelDeviceName" destination="m3R-0G-Jvk" id="QdE-SB-UGM"/>
                         <outlet property="labelReadingType" destination="1gY-T5-Vou" id="2h2-xe-mO5"/>
+                        <outlet property="labelUnit" destination="JaU-z5-eur" id="WyQ-DO-Ffy"/>
                         <outlet property="viewBottomContainer" destination="J6N-rz-4fq" id="feW-49-oDA"/>
                         <outlet property="viewGraphTemperature" destination="Zba-qg-7bC" id="Q3i-gu-DfN"/>
                         <outletCollection property="buttonOptions" destination="ngv-sb-ZpR" id="vAI-Yn-y7T"/>
@@ -1330,8 +1342,8 @@ LOG</string>
         <image name="tab-list-selected" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ksw-HN-G1m"/>
+        <segue reference="Dvq-Dd-i5u"/>
+        <segue reference="PY2-Sg-4iY"/>
         <segue reference="v8U-gz-ykZ"/>
-        <segue reference="BMJ-no-2yD"/>
     </inferredMetricsTieBreakers>
 </document>
