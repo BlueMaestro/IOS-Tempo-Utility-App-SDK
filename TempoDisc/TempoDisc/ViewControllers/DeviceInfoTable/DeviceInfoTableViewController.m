@@ -206,7 +206,7 @@ typedef enum : NSInteger {
 			return [NSString stringWithFormat:@"%@ seconds", device.timerInterval];
 			break;
 		case DevicePropertyNumberOfRecords:
-			return @([device readingsForType:@"Temperature"].count + [device readingsForType:@"Humidity"].count).stringValue;
+			return @(device.intervalCounter.integerValue).stringValue;
 			break;
 		case DevicePropertyMode:
 			return device.mode.stringValue;
