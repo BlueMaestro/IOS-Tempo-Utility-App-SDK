@@ -23,7 +23,7 @@
 #define GRAPH_LINE_TYPE CPTScatterPlotInterpolationCurved
 //#define GRAPH_LINE_TYPE CPTScatterPlotInterpolationLinear
 
-#define kInitialDataLoadCount 10
+#define kInitialDataLoadCount 140
 
 @interface TDGraphViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate, IBActionSheetDelegate>
 
