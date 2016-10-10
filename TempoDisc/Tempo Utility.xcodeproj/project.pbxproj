@@ -30,6 +30,7 @@
 		CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7E1C83126600C99C41 /* TDDefaultDevice.m */; };
 		CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */; };
 		CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB242C291C974A0800757AEC /* TDSettingsViewController.m */; };
+		CB256CF31DABFD8400293D81 /* TDDiscDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */; };
 		CB2B639E1D8B308B00B705CB /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */; };
 		CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */; };
 		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
@@ -94,6 +95,8 @@
 		CB242C281C974A0800757AEC /* TDSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSettingsViewController.h; sourceTree = "<group>"; };
 		CB242C291C974A0800757AEC /* TDSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSettingsViewController.m; sourceTree = "<group>"; };
 		CB242C2B1C97637600757AEC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		CB256CF11DABFD8400293D81 /* TDDiscDataTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDiscDataTableViewCell.h; sourceTree = "<group>"; };
+		CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDiscDataTableViewCell.m; sourceTree = "<group>"; };
 		CB2B63A11D8B31B300B705CB /* UIFont+Tempo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Tempo.h"; sourceTree = "<group>"; };
 		CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Tempo.m"; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
@@ -270,6 +273,7 @@
 		CB16BA561C82ECC600C99C41 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				CB256CF01DABFD1800293D81 /* DiscData */,
 				CB9421E71C91E6C1000724B5 /* OtherDevice */,
 				CB16BA581C82ECE700C99C41 /* Device */,
 			);
@@ -371,6 +375,15 @@
 				CB242C291C974A0800757AEC /* TDSettingsViewController.m */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		CB256CF01DABFD1800293D81 /* DiscData */ = {
+			isa = PBXGroup;
+			children = (
+				CB256CF11DABFD8400293D81 /* TDDiscDataTableViewCell.h */,
+				CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */,
+			);
+			path = DiscData;
 			sourceTree = "<group>";
 		};
 		CB2B63A01D8B316E00B705CB /* UIFont+Tempo */ = {
@@ -658,6 +671,7 @@
 				CB16BA731C83007B00C99C41 /* Reading.m in Sources */,
 				CB16BA741C83007B00C99C41 /* ReadingType+CoreDataProperties.m in Sources */,
 				CB16BA761C83007B00C99C41 /* TempoDevice+CoreDataProperties.m in Sources */,
+				CB256CF31DABFD8400293D81 /* TDDiscDataTableViewCell.m in Sources */,
 				CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */,
 				CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */,
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,

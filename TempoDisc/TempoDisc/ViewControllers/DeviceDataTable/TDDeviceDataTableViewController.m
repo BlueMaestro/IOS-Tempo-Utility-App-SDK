@@ -8,12 +8,18 @@
 
 #import "TDDeviceDataTableViewController.h"
 #import "Reading.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
+#import "TDDiscDataTableViewCell.h"
 
 @interface TDDeviceDataTableViewController ()
 
 @property (nonatomic, strong) NSArray *dataSourceReadings;
 
 @property (nonatomic, strong) NSDateFormatter *formatterTimestamp;
+
+@property (nonatomic, strong) NSArray *dataSourceTemperature;
+@property (nonatomic, strong) NSArray *dataSourceHumidity;
+@property (nonatomic, strong) NSArray *dataSourceDewPoint;
 
 @end
 
@@ -33,7 +39,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	[self loadDataForType:_currentReadingType];
+	[self loadData];
 //	self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Temperature" style:UIBarButtonItemStyleDone target:self action:@selector(buttonChangeReadingTypeClicked:)];
 	[self.tableView reloadData];
 }
@@ -52,10 +58,30 @@
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	_formatterTimestamp = [[NSDateFormatter alloc] init];
-	_formatterTimestamp.dateFormat = @"hh:mm:ssa dd-MM-yyyy";
+	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		_formatterTimestamp.dateFormat = @"yyyy MMMMM dd : hh.ssa";
+	}
+	else {
+		_formatterTimestamp.dateFormat = @"hh:mm:ssa dd-MM-yyyy";
+	}
 }
 
-- (void)loadDataForType:(TempoReadingType)type {
+- (void)loadData {
+	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		[self loadDiscData];
+	}
+	else {
+		[self loadDataForType:_currentReadingType];
+	}
+}
+
+- (void)loadDiscData {
+	_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
+	_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
+	_dataSourceDewPoint = [self dataForType:TempoReadingTypeDewPoint];
+}
+
+- (NSArray*)dataForType:(TempoReadingType)type {
 	NSString *readingType;
 	switch (type) {
   case TempoReadingTypeTemperature:
@@ -70,11 +96,15 @@
 			break;
 	}
 	if (readingType) {
-		_dataSourceReadings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		return [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
 	else {
-		_dataSourceReadings = @[];
+		return @[];
 	}
+}
+
+- (void)loadDataForType:(TempoReadingType)type {
+	_dataSourceReadings = [self dataForType:type];
 	[self.tableView reloadData];
 }
 
@@ -99,32 +129,83 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataSourceReadings.count;
+	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		return _dataSourceTemperature.count;
+	}
+	else {
+		return _dataSourceReadings.count;
+	}
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDataTable" forIndexPath:indexPath];
-    
-    // Configure the cell...
-	Reading *reading = _dataSourceReadings[indexPath.row];
-	
-	if (reading.minValue || reading.maxValue) {
-		if (_currentReadingType == TempoReadingTypeTemperature) {
-			NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
-			TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
-			cell.textLabel.text = [NSString stringWithFormat:@"avg: %@%@, min: %@%@, max: %@%@", [TDHelper temperature:reading.avgValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.minValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.maxValue forDevice:selectedDevice].stringValue, unitSymbol];
+	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDiscData" forIndexPath:indexPath];
+		
+		// Configure the cell...
+		Reading *readingTemperature = indexPath.row < _dataSourceTemperature.count ? _dataSourceTemperature[indexPath.row] : nil;
+		Reading *readingHumidity = indexPath.row < _dataSourceHumidity.count ? _dataSourceHumidity[indexPath.row] : nil;
+		Reading *readingDewPoint = indexPath.row < _dataSourceDewPoint.count ? _dataSourceDewPoint[indexPath.row] : nil;
+		
+		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
+		TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
+		
+		//should't really matter which object
+		if (readingTemperature) {
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingTemperature.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceTemperature.count - indexPath.row).stringValue;
+			
+			cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%@%@", [TDHelper temperature:readingTemperature.avgValue forDevice:selectedDevice].stringValue, unitSymbol];
+		}
+		
+		if (readingHumidity) {
+			cell.labelHumidityValue.text = [NSString stringWithFormat:@"%@%% RH", readingHumidity.avgValue];
 		}
 		else {
-			cell.textLabel.text = [NSString stringWithFormat:@"avg: %@, min: %@, max: %@", reading.avgValue.stringValue, reading.minValue.stringValue, reading.maxValue.stringValue];
+			cell.labelHumidityValue.text = @"";
 		}
+		if (readingDewPoint) {
+			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%@˚ %@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].stringValue, unitSymbol];
+		}
+		else {
+			cell.labelDewPointValue.text = @"";
+		}
+		
+		return cell;
 	}
 	else {
-		cell.textLabel.text = [NSString stringWithFormat:@"avg: %@", reading.avgValue.stringValue];
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDataTable" forIndexPath:indexPath];
+		
+		// Configure the cell...
+		Reading *reading = _dataSourceReadings[indexPath.row];
+		
+		if (reading.minValue || reading.maxValue) {
+			if (_currentReadingType == TempoReadingTypeTemperature) {
+				NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
+				TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
+				cell.textLabel.text = [NSString stringWithFormat:@"avg: %@%@, min: %@%@, max: %@%@", [TDHelper temperature:reading.avgValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.minValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.maxValue forDevice:selectedDevice].stringValue, unitSymbol];
+			}
+			else {
+				cell.textLabel.text = [NSString stringWithFormat:@"avg: %@, min: %@, max: %@", reading.avgValue.stringValue, reading.minValue.stringValue, reading.maxValue.stringValue];
+			}
+		}
+		else {
+			cell.textLabel.text = [NSString stringWithFormat:@"avg: %@", reading.avgValue.stringValue];
+		}
+		cell.detailTextLabel.text = [_formatterTimestamp stringFromDate:reading.timestamp];
+		
+		return cell;
 	}
-	cell.detailTextLabel.text = [_formatterTimestamp stringFromDate:reading.timestamp];
-    
-    return cell;
+	
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		return 104;
+	}
+	else {
+		return 44;
+	}
 }
 
 
