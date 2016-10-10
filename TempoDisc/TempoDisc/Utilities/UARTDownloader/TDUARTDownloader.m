@@ -49,6 +49,8 @@ typedef enum : NSInteger {
 
 @property (nonatomic, copy) DataDownloadCompletion completion;
 
+@property (nonatomic, strong) NSNumber *logCounter;
+
 @end
 
 @implementation TDUARTDownloader
@@ -79,7 +81,7 @@ typedef enum : NSInteger {
 		if (d[14] == kDataTerminationHeaderValue) {
 			//header data, parse next point and dont impor
 			NSInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
-			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:@(nextCounter)];
+			_logCounter = @(nextCounter);
 			return;
 		}
 	}
@@ -117,6 +119,7 @@ typedef enum : NSInteger {
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeFinish;
 			stringToWrite = kDataStringTransmitEnd;
+			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;

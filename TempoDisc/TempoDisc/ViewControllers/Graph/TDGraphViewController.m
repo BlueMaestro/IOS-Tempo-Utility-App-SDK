@@ -29,12 +29,15 @@
 
 @property (nonatomic, strong) CPTGraphHostingView *hostViewTemperature;
 @property (nonatomic, strong) CPTGraphHostingView *hostViewHumidity;
+@property (nonatomic, strong) CPTGraphHostingView *hostViewDewPoint;
 
 @property (nonatomic, strong) CPTGraph *graphTemperature;
 @property (nonatomic, strong) CPTGraph *graphHumidity;
+@property (nonatomic, strong) CPTGraph *graphDewPoint;
 
 @property (nonatomic, strong) CPTScatterPlot *plotTemperature;
 @property (nonatomic, strong) CPTScatterPlot *plotHumidity;
+@property (nonatomic, strong) CPTScatterPlot *plotDewPoint;
 
 @property (nonatomic, assign) TempoReadingType currentReadingType;
 @property (strong, nonatomic) IBOutlet UIButton *buttonAll;
@@ -82,7 +85,7 @@
 	switch (type) {
   case TempoReadingTypeTemperature:
 			if (!_viewGraphTemperature) {
-				_viewGraphTemperature = _viewGraphHumidity;
+				_viewGraphTemperature = _viewGraphHumidity ? _viewGraphHumidity : _viewGraphDewPoint;
 				_viewGraphHumidity = nil;
 			}
 		  [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
@@ -91,7 +94,7 @@
 			
 		case TempoReadingTypeHumidity: {
 			if (!_viewGraphHumidity) {
-				_viewGraphHumidity = _viewGraphTemperature;
+				_viewGraphHumidity = _viewGraphTemperature ? _viewGraphTemperature : _viewGraphDewPoint;
 				_viewGraphTemperature = nil;
 			}
 			[_labelReadingType setText:NSLocalizedString(@"Humidity", nil)];
@@ -118,7 +121,7 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
-	IBActionSheet *sheet = [[IBActionSheet alloc] initWithTitle:NSLocalizedString(@"Choose reading type", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Temperature", nil), NSLocalizedString(@"Humidity", nil), nil];
+	IBActionSheet *sheet = [[IBActionSheet alloc] initWithTitle:NSLocalizedString(@"Choose reading type", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Temperature", nil), NSLocalizedString(@"Humidity", nil), NSLocalizedString(@"Dew Point", nil), nil];
 	[sheet setTitleTextColor:[UIColor blueMaestroBlue]];
 	
 	[sheet setButtonTextColor:[UIColor blueMaestroBlue]];
@@ -160,18 +163,34 @@
 	 *	Adjust range for plot so that all points fit in the view with one hour before and after
 	 **/
 	CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
-	NSArray *readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
-	double firstReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
-	double lastReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+	NSArray *readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	if (!_buttonAll.selected) {
+		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+	}
+	double lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
+	double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 	plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
 	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(35.0)];
 	
 	CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphHumidity.defaultPlotSpace;
-	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
-	firstReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
-	lastReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	if (!_buttonAll.selected) {
+		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+	}
+	lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
+	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 	plotSpaceHumidity.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
 	plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
+	
+	CPTXYPlotSpace *plotSpaceDewPoint = (CPTXYPlotSpace *)_graphDewPoint.defaultPlotSpace;
+	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	if (!_buttonAll.selected) {
+		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+	}
+	lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
+	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+	plotSpaceDewPoint.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
+	plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(35.0)];
 }
 
 -(void)initPlot
@@ -182,17 +201,25 @@
 	if (_graphHumidity.superlayer) {
 		[_graphHumidity removeFromSuperlayer];
 	}
+	if (_graphDewPoint.superlayer) {
+		[_graphDewPoint removeFromSuperlayer];
+	}
+	
 	_hostViewTemperature = [self configureHost:_viewGraphTemperature forGraph:_hostViewTemperature];
 	_hostViewHumidity = [self configureHost:_viewGraphHumidity forGraph:_hostViewHumidity];
+	_hostViewDewPoint = [self configureHost:_viewGraphDewPoint forGraph:_hostViewDewPoint];
 	
 	_graphTemperature = [self configureGraph:_graphTemperature hostView:_hostViewTemperature graphView:_viewGraphTemperature title:nil];
 	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewGraphHumidity title:nil];
+	_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostViewDewPoint graphView:_viewGraphDewPoint title:nil];
 	
 	_plotTemperature = [self configurePlot:_plotTemperature forGraph:_graphTemperature identifier:@"Temperature"];
 	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graphHumidity identifier:@"Humidity"];
+	_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graphDewPoint identifier:@"DewPoint"];
 	
 	[self configureAxesForGraph:_graphTemperature plot:_plotTemperature];
 	[self configureAxesForGraph:_graphHumidity plot:_plotHumidity];
+	[self configureAxesForGraph:_graphDewPoint plot:_plotDewPoint];
 }
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host
@@ -435,6 +462,9 @@
 		}
 		else if (buttonIndex == 1) {
 			[self changeReadingType:TempoReadingTypeHumidity];
+		}
+		else if (buttonIndex == 2) {
+			[self changeReadingType:TempoReadingTypeDewPoint];
 		}
 	}
 }
