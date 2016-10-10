@@ -155,7 +155,7 @@
 			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingTemperature.timestamp];
 			cell.labelRecordNumberValue.text = @(_dataSourceTemperature.count - indexPath.row).stringValue;
 			
-			cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%@%@", [TDHelper temperature:readingTemperature.avgValue forDevice:selectedDevice].stringValue, unitSymbol];
+			cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f%@", [TDHelper temperature:readingTemperature.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
 		}
 		
 		if (readingHumidity) {

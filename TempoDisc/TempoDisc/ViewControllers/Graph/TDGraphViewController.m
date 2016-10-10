@@ -159,6 +159,7 @@
 #pragma mark - Graph setup
 
 - (void)adjustPlotsRange {
+	TempoDevice *device = [TDDefaultDevice sharedDevice].selectedDevice;
 	/**
 	 *	Adjust range for plot so that all points fit in the view with one hour before and after
 	 **/
@@ -170,7 +171,7 @@
 	double lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
 	double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 	plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(35.0)];
+	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
 	
 	CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphHumidity.defaultPlotSpace;
 	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -190,7 +191,7 @@
 	lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
 	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 	plotSpaceDewPoint.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(35.0)];
+	plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
 }
 
 -(void)initPlot
@@ -437,7 +438,13 @@
 			break;
 			
 		case CPTScatterPlotFieldY:
-			return reading.avgValue;
+			if ([plot.identifier isEqual:@"Humidity"]) {
+				return reading.avgValue;
+			}
+			else {
+				return [TDHelper temperature:reading.avgValue forDevice:[TDDefaultDevice sharedDevice].selectedDevice];
+			}
+			
 			break;
 	}
 	return [NSNumber numberWithFloat:0.0];

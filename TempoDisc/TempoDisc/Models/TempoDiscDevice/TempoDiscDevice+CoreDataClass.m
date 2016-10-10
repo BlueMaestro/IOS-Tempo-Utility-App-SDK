@@ -37,6 +37,12 @@ int intValue(char lsb,char msb)
 	self.currentHumidity = @(intValue(data[11], data[10]) / 10.f);
 	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
 	self.mode = @(data[14]);
+	if (self.mode.integerValue > 100) {
+		self.isFahrenheit = @(YES);
+	}
+	else {
+		self.isFahrenheit = @(NO);
+	}
 	self.numBreach = @(data[15]);
 	
 	//looks like there's no data for this in the broadcast
