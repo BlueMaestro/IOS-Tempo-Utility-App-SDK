@@ -88,7 +88,7 @@
 				_viewGraphTemperature = _viewGraphHumidity ? _viewGraphHumidity : _viewGraphDewPoint;
 				_viewGraphHumidity = nil;
 			}
-		  [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
+		  [_labelReadingType setText:NSLocalizedString(@"TEMPERATIRE", nil)];
 		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
 			break;
 			
@@ -97,7 +97,7 @@
 				_viewGraphHumidity = _viewGraphTemperature ? _viewGraphTemperature : _viewGraphDewPoint;
 				_viewGraphTemperature = nil;
 			}
-			[_labelReadingType setText:NSLocalizedString(@"Humidity", nil)];
+			[_labelReadingType setText:NSLocalizedString(@"HUMIDITY", nil)];
 			_labelUnit.text = @"% RELATIVE HUMIDITY";
 			break;
 		}
@@ -107,7 +107,7 @@
 				_viewGraphTemperature = nil;
 				_viewGraphHumidity = nil;
 			}
-			[_labelReadingType setText:NSLocalizedString(@"Dew Point", nil)];
+			[_labelReadingType setText:NSLocalizedString(@"DEW POINT", nil)];
 			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
 			
   default:
@@ -299,7 +299,7 @@
 	axisSet.xAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 	
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateFormat:@"dd.MM\nHH:mm"];
+	[formatter setDateFormat:@"dd MMM\nHH:mm"];
 	CPTTimeFormatter *timeFormatter = [[CPTTimeFormatter alloc] initWithDateFormatter:formatter];
 	timeFormatter.referenceDate = [NSDate dateWithTimeIntervalSince1970:0];
 	[(CPTXYAxisSet *)graph.axisSet xAxis].labelFormatter = timeFormatter;
