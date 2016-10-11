@@ -165,7 +165,7 @@
 			cell.labelHumidityValue.text = @"";
 		}
 		if (readingDewPoint) {
-			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%@˚ %@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].stringValue, unitSymbol];
+			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%.1f˚ %@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
 		}
 		else {
 			cell.labelDewPointValue.text = @"";
