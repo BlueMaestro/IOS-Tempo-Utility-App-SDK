@@ -23,6 +23,8 @@
 #define GRAPH_LINE_TYPE CPTScatterPlotInterpolationCurved
 //#define GRAPH_LINE_TYPE CPTScatterPlotInterpolationLinear
 
+#define kTresholdZoomAngle 30
+
 #define kInitialDataLoadCount 140
 
 @interface TDGraphViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate, IBActionSheetDelegate>
@@ -42,6 +44,15 @@
 @property (nonatomic, assign) TempoReadingType currentReadingType;
 @property (strong, nonatomic) IBOutlet UIButton *buttonAll;
 @property (strong, nonatomic) IBOutlet UILabel *labelUnit;
+
+@property (nonatomic, weak) CPTGraph *activeGraph;
+@property (nonatomic, weak) UIView *activeGraphView;
+
+/**
+ *	Properties used for graph zooming
+ **/
+@property (nonatomic, assign) double initialLengthX;
+@property (nonatomic, assign) double initialLengthY;
 
 @end
 
@@ -90,6 +101,8 @@
 			}
 		  [_labelReadingType setText:NSLocalizedString(@"TEMPERATIRE", nil)];
 		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
+			_activeGraph = _graphTemperature;
+			_activeGraphView = _viewGraphTemperature;
 			break;
 			
 		case TempoReadingTypeHumidity: {
@@ -99,6 +112,8 @@
 			}
 			[_labelReadingType setText:NSLocalizedString(@"HUMIDITY", nil)];
 			_labelUnit.text = @"% RELATIVE HUMIDITY";
+			_activeGraph = _graphHumidity;
+			_activeGraphView = _viewGraphHumidity;
 			break;
 		}
 		case TempoReadingTypeDewPoint:
@@ -109,6 +124,8 @@
 			}
 			[_labelReadingType setText:NSLocalizedString(@"DEW POINT", nil)];
 			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
+			_activeGraph = _graphDewPoint;
+			_activeGraphView = _viewGraphDewPoint;
 			
   default:
 			break;
@@ -116,6 +133,65 @@
 	_currentReadingType = type;
 	[self initPlot];
 	[self adjustPlotsRange];
+}
+
+- (void)handlePinch:(UIPinchGestureRecognizer*)sender
+{
+	if (sender.state == UIGestureRecognizerStateBegan){
+		
+		CGPoint translation = [sender locationInView:_activeGraphView];
+		NSLog(@"Start value %.2f %.2f", translation.x,translation.y );
+		
+		//remember start values which we will multiply
+		
+		CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*)_activeGraph.defaultPlotSpace;
+		_initialLengthX = plotSpace.xRange.lengthDouble;
+		_initialLengthY = plotSpace.yRange.lengthDouble;
+		return;
+	}
+	else if (sender.state == UIGestureRecognizerStateChanged){
+		NSLog(@"Scale: %.2f", sender.scale);
+		CGPoint pointFirst = [sender locationOfTouch:0 inView:_activeGraphView];
+		CGPoint pointMiddle = [sender locationInView:_activeGraphView];
+		NSLog(@"first: (%.2f,%.2f), second: (%.2f,%.2f)", pointFirst.x, pointFirst.y, pointMiddle.x, pointMiddle.y);
+		
+		/**
+		 *	calculate angle between the fingers vector and y-axis (limit to values  0-90)
+		 *	if the angle is below the vertical threshold only scale x axis.
+		 *	if the angle is above horizontal threshold only scale y axis.
+		 *	if the angle is between the treshold zoom both axis.
+		 **/
+		CGFloat deltaY = fabs(pointFirst.y - pointMiddle.y);
+		CGFloat deltaX = fabs(pointFirst.x - pointMiddle.x);
+		CGFloat angleInDegrees = fabs(fabs(atan2(deltaY, deltaX)*180/M_PI)-90);//-90 because Y-axis is at 90˚ to X-axis
+		
+		//limit to 1st quadrant
+		if (angleInDegrees > 90)
+		{
+			angleInDegrees -= 90;
+		}
+		NSLog(@"Angle in degrees: %.2f",angleInDegrees);
+		
+		CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*)_activeGraph.defaultPlotSpace;
+		if (angleInDegrees < kTresholdZoomAngle) {
+			//zoom y
+			NSLog(@"Zoom Y");
+			plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:plotSpace.yRange.location length:@(fabs(_initialLengthY*(2.0-sender.scale)))];
+		}
+		else if (angleInDegrees > 90-kTresholdZoomAngle)
+		{
+			//zoom x
+			NSLog(@"Zoom X");
+			plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:plotSpace.xRange.location length:@(fabs(_initialLengthX*(2.0-sender.scale)))];
+		}
+		else
+		{
+			//adjust both
+			NSLog(@"Zooming both");
+			plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:plotSpace.xRange.location length:@(fabs(_initialLengthX*(2.0-sender.scale)))];
+			plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:plotSpace.yRange.location length:@(fabs(_initialLengthY*(2.0-sender.scale)))];
+		}
+	}
 }
 
 #pragma mark - Actions
@@ -266,7 +342,7 @@
 	
 	graph.titleTextStyle = whiteText;
 	
-	hostView.allowPinchScaling = NO;
+	hostView.allowPinchScaling = YES;
 	
 	/*UIPinchGestureRecognizer *pGes = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
 	[viewGraph addGestureRecognizer:pGes];*/
