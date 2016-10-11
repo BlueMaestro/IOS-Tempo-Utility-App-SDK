@@ -126,6 +126,7 @@
 			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
 			_activeGraph = _graphDewPoint;
 			_activeGraphView = _viewGraphDewPoint;
+			break;
 			
   default:
 			break;
@@ -137,59 +138,80 @@
 
 - (void)handlePinch:(UIPinchGestureRecognizer*)sender
 {
-	if (sender.state == UIGestureRecognizerStateBegan){
-		
-		CGPoint translation = [sender locationInView:_activeGraphView];
-		NSLog(@"Start value %.2f %.2f", translation.x,translation.y );
-		
-		//remember start values which we will multiply
-		
-		CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*)_activeGraph.defaultPlotSpace;
-		_initialLengthX = plotSpace.xRange.lengthDouble;
-		_initialLengthY = plotSpace.yRange.lengthDouble;
-		return;
+	UIView *plotView;
+	CPTGraph *graph;
+	switch (_currentReadingType) {
+  case TempoReadingTypeTemperature:
+			plotView = _viewGraphTemperature;
+			graph = _graphTemperature;
+			break;
+		case TempoReadingTypeHumidity:
+			plotView = _viewGraphHumidity;
+			graph = _graphHumidity;
+			break;
+		case TempoReadingTypeDewPoint:
+			plotView = _viewGraphDewPoint;
+			graph = _graphDewPoint;
+			break;
+			
+  default:
+			break;
 	}
-	else if (sender.state == UIGestureRecognizerStateChanged){
-		NSLog(@"Scale: %.2f", sender.scale);
-		CGPoint pointFirst = [sender locationOfTouch:0 inView:_activeGraphView];
-		CGPoint pointMiddle = [sender locationInView:_activeGraphView];
-		NSLog(@"first: (%.2f,%.2f), second: (%.2f,%.2f)", pointFirst.x, pointFirst.y, pointMiddle.x, pointMiddle.y);
-		
-		/**
-		 *	calculate angle between the fingers vector and y-axis (limit to values  0-90)
-		 *	if the angle is below the vertical threshold only scale x axis.
-		 *	if the angle is above horizontal threshold only scale y axis.
-		 *	if the angle is between the treshold zoom both axis.
-		 **/
-		CGFloat deltaY = fabs(pointFirst.y - pointMiddle.y);
-		CGFloat deltaX = fabs(pointFirst.x - pointMiddle.x);
-		CGFloat angleInDegrees = fabs(fabs(atan2(deltaY, deltaX)*180/M_PI)-90);//-90 because Y-axis is at 90˚ to X-axis
-		
-		//limit to 1st quadrant
-		if (angleInDegrees > 90)
-		{
-			angleInDegrees -= 90;
+	if (plotView && graph) {
+		if (sender.state == UIGestureRecognizerStateBegan){
+			
+			CGPoint translation = [sender locationInView:plotView];
+			NSLog(@"Start value %.2f %.2f", translation.x,translation.y );
+			
+			//remember start values which we will multiply
+			
+			CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*)graph.defaultPlotSpace;
+			_initialLengthX = plotSpace.xRange.lengthDouble;
+			_initialLengthY = plotSpace.yRange.lengthDouble;
+			return;
 		}
-		NSLog(@"Angle in degrees: %.2f",angleInDegrees);
-		
-		CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*)_activeGraph.defaultPlotSpace;
-		if (angleInDegrees < kTresholdZoomAngle) {
-			//zoom y
-			NSLog(@"Zoom Y");
-			plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:plotSpace.yRange.location length:@(fabs(_initialLengthY*(2.0-sender.scale)))];
-		}
-		else if (angleInDegrees > 90-kTresholdZoomAngle)
-		{
-			//zoom x
-			NSLog(@"Zoom X");
-			plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:plotSpace.xRange.location length:@(fabs(_initialLengthX*(2.0-sender.scale)))];
-		}
-		else
-		{
-			//adjust both
-			NSLog(@"Zooming both");
-			plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:plotSpace.xRange.location length:@(fabs(_initialLengthX*(2.0-sender.scale)))];
-			plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:plotSpace.yRange.location length:@(fabs(_initialLengthY*(2.0-sender.scale)))];
+		else if (sender.state == UIGestureRecognizerStateChanged){
+			NSLog(@"Scale: %.2f", sender.scale);
+			CGPoint pointFirst = [sender locationOfTouch:0 inView:plotView];
+			CGPoint pointMiddle = [sender locationInView:plotView];
+			NSLog(@"first: (%.2f,%.2f), second: (%.2f,%.2f)", pointFirst.x, pointFirst.y, pointMiddle.x, pointMiddle.y);
+			
+			/**
+			 *	calculate angle between the fingers vector and y-axis (limit to values  0-90)
+			 *	if the angle is below the vertical threshold only scale x axis.
+			 *	if the angle is above horizontal threshold only scale y axis.
+			 *	if the angle is between the treshold zoom both axis.
+			 **/
+			CGFloat deltaY = fabs(pointFirst.y - pointMiddle.y);
+			CGFloat deltaX = fabs(pointFirst.x - pointMiddle.x);
+			CGFloat angleInDegrees = fabs(fabs(atan2(deltaY, deltaX)*180/M_PI)-90);//-90 because Y-axis is at 90˚ to X-axis
+			
+			//limit to 1st quadrant
+			if (angleInDegrees > 90)
+			{
+				angleInDegrees -= 90;
+			}
+			NSLog(@"Angle in degrees: %.2f",angleInDegrees);
+			
+			CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace*)graph.defaultPlotSpace;
+			/*if (angleInDegrees < kTresholdZoomAngle) {
+				 //zoom y
+				 NSLog(@"Zoom Y");
+				 plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:plotSpace.yRange.location length:@(fabs(_initialLengthY*(2.0-sender.scale)))];
+			 }
+			 else if (angleInDegrees > 90-kTresholdZoomAngle)
+			 {*/
+				//zoom x
+				NSLog(@"Zoom X");
+				plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:plotSpace.xRange.location length:@(fabs(_initialLengthX*(2.0-sender.scale)))];
+			/*}
+			 else
+			 {
+				 //adjust both
+				 NSLog(@"Zooming both");
+				 plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:plotSpace.xRange.location length:@(fabs(_initialLengthX*(2.0-sender.scale)))];
+				 plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:plotSpace.yRange.location length:@(fabs(_initialLengthY*(2.0-sender.scale)))];
+			 }*/
 		}
 	}
 }
@@ -301,6 +323,9 @@
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host
 {
+	for (UIView* subview in graphView.subviews) {
+		[subview removeFromSuperview];
+	}
 	host = [(CPTGraphHostingView *)[CPTGraphHostingView alloc] initWithFrame:CGRectInset(graphView.bounds, 10, 12)];
 	host.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[graphView addSubview:host];
@@ -342,10 +367,10 @@
 	
 	graph.titleTextStyle = whiteText;
 	
-	hostView.allowPinchScaling = YES;
+	hostView.allowPinchScaling = NO;
 	
-	/*UIPinchGestureRecognizer *pGes = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
-	[viewGraph addGestureRecognizer:pGes];*/
+	UIPinchGestureRecognizer *pGes = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
+	[viewGraph addGestureRecognizer:pGes];
 	
 	return graph;
 }
