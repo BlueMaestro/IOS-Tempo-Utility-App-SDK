@@ -7,7 +7,7 @@
 //
 
 #import "TDHistoryContainerViewController.h"
-#import "TempoDevice.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
 #import "AppDelegate.h"
 
 @interface TDHistoryContainerViewController ()
@@ -53,8 +53,8 @@
 #pragma mark - Private methods
 
 - (void)loadData {
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
-	request.predicate = [NSPredicate predicateWithFormat:@"inRange = NO"];
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDiscDevice class])];
+	request.predicate = [NSPredicate predicateWithFormat:@"readingTypes.@count > 0"];
 	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:request error:nil];
 	[self.controllerDeviceList loadDevices:result];
 }
