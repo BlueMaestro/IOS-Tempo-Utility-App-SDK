@@ -59,7 +59,7 @@
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	_formatterTimestamp = [[NSDateFormatter alloc] init];
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		_formatterTimestamp.dateFormat = @"yyyy MMMMM dd : hh.ssa";
+		_formatterTimestamp.dateFormat = @"yyyy MMMM dd : hh.ssa";
 	}
 	else {
 		_formatterTimestamp.dateFormat = @"hh:mm:ssa dd-MM-yyyy";
@@ -165,7 +165,7 @@
 			cell.labelHumidityValue.text = @"";
 		}
 		if (readingDewPoint) {
-			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%.1f˚ %@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
+			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%.1f%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
 		}
 		else {
 			cell.labelDewPointValue.text = @"";

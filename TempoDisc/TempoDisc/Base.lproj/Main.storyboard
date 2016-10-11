@@ -412,10 +412,10 @@ GRAPH</string>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3at-pJ-7kV">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
                                         <state key="normal">
-                                            <string key="title">Export
-as CSV</string>
+                                            <string key="title">EXPORT
+AS CSV</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -434,12 +434,12 @@ as CSV</string>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HOE-hs-pVe">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="45" id="RVm-W2-8ig"/>
+                                            <constraint firstAttribute="height" constant="50" id="RVm-W2-8ig"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="15"/>
                                         <state key="normal">
-                                            <string key="title">Export
-as PDF</string>
+                                            <string key="title">EXPORT
+AS PDF</string>
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -455,7 +455,7 @@ as PDF</string>
                                     <constraint firstAttribute="trailing" secondItem="3at-pJ-7kV" secondAttribute="trailing" constant="28" id="HGi-NL-wNF"/>
                                     <constraint firstItem="HOE-hs-pVe" firstAttribute="leading" secondItem="pVn-DD-1SP" secondAttribute="leading" constant="28" id="LGw-I2-AM7"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="centerY" secondItem="HOE-hs-pVe" secondAttribute="centerY" id="XJr-nD-Ig6"/>
-                                    <constraint firstAttribute="height" constant="120" id="emg-j2-43i"/>
+                                    <constraint firstAttribute="height" constant="125" id="emg-j2-43i"/>
                                     <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="8" id="hw5-p3-hYq"/>
                                     <constraint firstItem="3at-pJ-7kV" firstAttribute="height" secondItem="HOE-hs-pVe" secondAttribute="height" id="r0t-ia-82u"/>
                                     <constraint firstAttribute="bottom" secondItem="tGA-S9-7hH" secondAttribute="bottom" constant="8" id="w6z-Ip-ZWH"/>
@@ -486,8 +486,8 @@ as PDF</string>
                             <constraint firstItem="Sbg-Ce-TdX" firstAttribute="top" secondItem="pVn-DD-1SP" secondAttribute="bottom" id="BY3-0a-1I1"/>
                             <constraint firstAttribute="trailing" secondItem="wv7-gU-BQJ" secondAttribute="trailing" id="KbN-KC-uuk"/>
                             <constraint firstItem="pVn-DD-1SP" firstAttribute="leading" secondItem="M86-Nl-Gmr" secondAttribute="leading" id="Vk9-4F-jKQ"/>
-                            <constraint firstItem="5mj-LG-67r" firstAttribute="centerX" secondItem="M86-Nl-Gmr" secondAttribute="centerX" id="VuO-JR-Ro9"/>
                             <constraint firstItem="5mj-LG-67r" firstAttribute="top" secondItem="vqv-QN-MZO" secondAttribute="bottom" constant="7" id="Wfd-Rv-UD1"/>
+                            <constraint firstItem="5mj-LG-67r" firstAttribute="leading" secondItem="M86-Nl-Gmr" secondAttribute="leading" constant="15" id="kTR-PS-ldp"/>
                             <constraint firstItem="wv7-gU-BQJ" firstAttribute="leading" secondItem="M86-Nl-Gmr" secondAttribute="leading" id="nGv-NB-OQl"/>
                             <constraint firstItem="ibg-YC-I9Z" firstAttribute="leading" secondItem="M86-Nl-Gmr" secondAttribute="leading" id="npe-3x-qjj"/>
                             <constraint firstItem="ibg-YC-I9Z" firstAttribute="top" secondItem="wv7-gU-BQJ" secondAttribute="bottom" id="qeP-nq-uIP"/>
@@ -505,7 +505,7 @@ as PDF</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CAN-Ed-EYb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3779" y="615"/>
+            <point key="canvasLocation" x="3777.5999999999999" y="614.84257871064472"/>
         </scene>
         <!--Device Info-->
         <scene sceneID="UIT-ad-UoF">
@@ -892,7 +892,7 @@ LOG</string>
             <objects>
                 <tableViewController title="Table Data" id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="443.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="438"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
