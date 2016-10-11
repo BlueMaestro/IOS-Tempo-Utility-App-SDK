@@ -190,7 +190,7 @@ typedef enum : NSInteger {
 }
 
 - (NSString*)valueForField:(DevicePropertyField)item device:(TempoDiscDevice*)device {
-	NSString *unit = device.isFahrenheit.boolValue ? @"˚Celsius" : @"˚Fahrenheit";
+	NSString *unit = device.isFahrenheit.boolValue ? @"˚Fahrenheit" : @"˚Celsius";
 	switch (item) {
 		case DevicePropertyUUID:
 			return device.uuid;
