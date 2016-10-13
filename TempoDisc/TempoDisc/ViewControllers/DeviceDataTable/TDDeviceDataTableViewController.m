@@ -59,7 +59,7 @@
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	_formatterTimestamp = [[NSDateFormatter alloc] init];
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		_formatterTimestamp.dateFormat = @"yyyy MMMM dd : hh.ssa";
+		_formatterTimestamp.dateFormat = @"yyyy MMMM dd : hh.mma";
 	}
 	else {
 		_formatterTimestamp.dateFormat = @"hh:mm:ssa dd-MM-yyyy";
