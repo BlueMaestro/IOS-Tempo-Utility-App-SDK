@@ -12,7 +12,8 @@
 #import "AppDelegate.h"
 #import "DeviceInfoTableViewController.h"
 #import "TempoDiscDevice+CoreDataProperties.h"
-#import "TDUARTDownloader.h"
+//#import "TDUARTDownloader.h"
+#import "TDUARTAllDataDownloader.h"
 
 #define kDeviceConnectTimeout 10.0
 
@@ -66,6 +67,7 @@
 @property (nonatomic, strong) DeviceInfoTableViewController *controllerTable;
 
 @property (nonatomic, strong) TDUARTDownloader *uartDownloader;
+@property (nonatomic, strong) TDUARTAllDataDownloader *uartAllDataDownloader;
 
 @end
 
@@ -479,20 +481,46 @@
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		if (!_uartDownloader) {
-			_uartDownloader = [[TDUARTDownloader alloc] init];
-		}
-		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-		_hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"Choose download type:", nil) preferredStyle:UIAlertControllerStyleAlert];
+		
 		__weak typeof(self) weakself = self;
-		[_uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
-			[weakself.hudDownloadData hide:YES];
-			if (!succcess) {
-				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
-				[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
-				[weakself presentViewController:alert animated:YES completion:nil];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download All", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			if (!weakself.uartAllDataDownloader) {
+				weakself.uartAllDataDownloader = [[TDUARTAllDataDownloader alloc] init];
 			}
-		}];
+			
+			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
+			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
+			[weakself.uartAllDataDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
+				[weakself.hudDownloadData hide:YES];
+				if (!succcess) {
+					UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
+					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
+					[weakself presentViewController:alert animated:YES completion:nil];
+				}
+			}];
+		}]];
+		
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download New", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			if (!weakself.uartDownloader) {
+				weakself.uartDownloader = [[TDUARTDownloader alloc] init];
+			}
+			
+			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
+			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
+			[weakself.uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
+				[weakself.hudDownloadData hide:YES];
+				if (!succcess) {
+					UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
+					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
+					[weakself presentViewController:alert animated:YES completion:nil];
+				}
+			}];
+		}]];
+		
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+		
+		[self presentViewController:alert animated:YES completion:nil];
 	}
 	else {
 		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];

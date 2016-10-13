@@ -32,6 +32,7 @@
 		CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB242C291C974A0800757AEC /* TDSettingsViewController.m */; };
 		CB256CF31DABFD8400293D81 /* TDDiscDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */; };
 		CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */; };
+		CB290B121DB000230012EEEC /* TDUARTAllDataDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CB290B111DB000230012EEEC /* TDUARTAllDataDownloader.m */; };
 		CB2B639E1D8B308B00B705CB /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */; };
 		CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */; };
 		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
@@ -100,6 +101,8 @@
 		CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDiscDataTableViewCell.m; sourceTree = "<group>"; };
 		CB290B0C1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicesHistoryListTableViewController.h; sourceTree = "<group>"; };
 		CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicesHistoryListTableViewController.m; sourceTree = "<group>"; };
+		CB290B101DB000230012EEEC /* TDUARTAllDataDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTAllDataDownloader.h; sourceTree = "<group>"; };
+		CB290B111DB000230012EEEC /* TDUARTAllDataDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTAllDataDownloader.m; sourceTree = "<group>"; };
 		CB2B63A11D8B31B300B705CB /* UIFont+Tempo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Tempo.h"; sourceTree = "<group>"; };
 		CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Tempo.m"; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
@@ -236,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				CB242C2B1C97637600757AEC /* Constants.h */,
+				CB290B0F1DAFFFF80012EEEC /* UARTAllDataDownloader */,
 				CBF0664F1DA571C000210428 /* UARTDownloader */,
 				CB16BA7C1C83125600C99C41 /* DefaultDevice */,
 				CB16BA781C83123A00C99C41 /* Helper */,
@@ -397,6 +401,15 @@
 				CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */,
 			);
 			path = DevicesHistory;
+			sourceTree = "<group>";
+		};
+		CB290B0F1DAFFFF80012EEEC /* UARTAllDataDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				CB290B101DB000230012EEEC /* TDUARTAllDataDownloader.h */,
+				CB290B111DB000230012EEEC /* TDUARTAllDataDownloader.m */,
+			);
+			path = UARTAllDataDownloader;
 			sourceTree = "<group>";
 		};
 		CB2B63A01D8B316E00B705CB /* UIFont+Tempo */ = {
@@ -675,6 +688,7 @@
 				CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */,
 				CB73F9351DA6B9D50012C4D0 /* TDHistoryContainerViewController.m in Sources */,
 				CBAB5C451D47CC9000EEBECD /* SCHelper.m in Sources */,
+				CB290B121DB000230012EEEC /* TDUARTAllDataDownloader.m in Sources */,
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
