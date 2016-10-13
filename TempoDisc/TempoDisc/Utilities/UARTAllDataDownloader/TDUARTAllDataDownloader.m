@@ -16,8 +16,8 @@
 #define uartTXCharacteristicUUIDString	@"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 #define kDataTerminationHeaderValue 58
-//#define kDataTerminationValue 46
-#define kDataTerminationValue 44
+#define kDataTerminationValue 46
+#define kDataTerminationBetweenValue 44
 
 #define kDeviceReconnectTimeout			2.0
 
@@ -107,7 +107,8 @@ typedef enum : NSInteger {
 	NSInteger length = data.length;
 	char * d = (char*)[data bytes];
 	for (NSInteger i=0; i<length; i+=2) {
-		if (d[i] == kDataTerminationValue && d[i+1] == kDataTerminationValue) {
+		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
+			(_currentDownloadType == DataDownloadTypeDewPoint && d[1] == kDataTerminationValue)) {
 			//termination symbol found, abort data download and insert into database
 			NSLog(@"Termination symbol recognized.");
 			[self didFinishDownloadForType:_currentDownloadType];
