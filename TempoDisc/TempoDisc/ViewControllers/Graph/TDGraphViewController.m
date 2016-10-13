@@ -99,7 +99,7 @@
 				_viewGraphTemperature = _viewGraphHumidity ? _viewGraphHumidity : _viewGraphDewPoint;
 				_viewGraphHumidity = nil;
 			}
-		  [_labelReadingType setText:NSLocalizedString(@"TEMPERATIRE", nil)];
+		  [_labelReadingType setText:NSLocalizedString(@"TEMPERATURE", nil)];
 		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
 			_activeGraph = _graphTemperature;
 			_activeGraphView = _viewGraphTemperature;
