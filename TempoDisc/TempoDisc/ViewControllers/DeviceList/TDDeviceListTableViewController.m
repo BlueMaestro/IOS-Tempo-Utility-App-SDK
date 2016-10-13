@@ -21,8 +21,6 @@
 
 @interface TDDeviceListTableViewController()
 
-@property (nonatomic, strong) NSMutableArray *dataSource;
-
 @property (nonatomic, strong) NSTimer *timerUpdateList;
 
 @end

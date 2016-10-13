@@ -892,7 +892,7 @@ LOG</string>
             <objects>
                 <tableViewController title="Table Data" id="h74-9A-Tqz" customClass="TDDeviceDataTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="xIo-rA-uKn">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="438"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="438.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -1290,7 +1290,7 @@ LOG</string>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Li-oB-Ag7">
                                 <connections>
-                                    <segue destination="eKS-MG-oTa" kind="embed" id="v8U-gz-ykZ"/>
+                                    <segue destination="KLp-jM-ynE" kind="embed" id="4jc-hL-B9Q"/>
                                 </connections>
                             </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NpJ-7c-rqv">
@@ -1333,6 +1333,186 @@ LOG</string>
             </objects>
             <point key="canvasLocation" x="678" y="1233"/>
         </scene>
+        <!--Devices-->
+        <scene sceneID="2eF-Pe-Zmu">
+            <objects>
+                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="KLp-jM-ynE" customClass="TDDevicesHistoryListTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="97" sectionHeaderHeight="28" sectionFooterHeight="28" id="kTy-oG-fy3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="549"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDeviceTempoDisc" rowHeight="180" id="hnl-s9-1Kf" userLabel="cellDeviceTempoDisc" customClass="TDDeviceTableViewCell">
+                                <rect key="frame" x="0.0" y="28" width="375" height="180"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hnl-s9-1Kf" id="ncS-7W-1S0">
+                                    <frame key="frameInset" width="375" height="179"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dzc-KG-1fb">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
+                                            <color key="textColor" red="0.20392156859999999" green="0.2156862745" blue="0.2156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BATTERY:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uuf-x2-6vZ">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="16" id="bnb-YS-lZT"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="VERSION:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hF-qe-nOI">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CURRENT HUMIDITY:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bzd-TO-hFu">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CURRENT DEW POINT" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUA-7f-wb0">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="33.0% RH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qii-fQ-1rB">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="33.0% RH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nTu-ac-bRn">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="33.0˚Celsius" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bex-kS-bAO">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="88%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rO6-sv-vbS">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="-80dBm" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vI0-K5-paP">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="03" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8VP-2g-m7R">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RSSI :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b3E-j1-Gb5">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CURRENT TEMPERATURE:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fqm-UB-4mj">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UUID:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4YL-vU-Dk1">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="33.0˚C" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4fv-qo-T94">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
+                                            <color key="textColor" red="0.51764705879999995" green="0.52941176469999995" blue="0.53725490200000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="rO6-sv-vbS" firstAttribute="leading" secondItem="Uuf-x2-6vZ" secondAttribute="trailing" constant="4" id="5U4-cJ-ctd"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="rO6-sv-vbS" secondAttribute="trailing" constant="4" id="5ry-Z8-6kU"/>
+                                        <constraint firstItem="4fv-qo-T94" firstAttribute="leading" secondItem="4YL-vU-Dk1" secondAttribute="trailing" constant="4" id="7Sz-6B-YTe"/>
+                                        <constraint firstItem="Fqm-UB-4mj" firstAttribute="top" secondItem="Uuf-x2-6vZ" secondAttribute="bottom" constant="4" id="85J-hy-rvd"/>
+                                        <constraint firstItem="fUA-7f-wb0" firstAttribute="top" secondItem="Bzd-TO-hFu" secondAttribute="bottom" constant="4" id="E0m-bo-qTe"/>
+                                        <constraint firstItem="Bzd-TO-hFu" firstAttribute="top" secondItem="Fqm-UB-4mj" secondAttribute="bottom" constant="4" id="E5T-YR-UWF"/>
+                                        <constraint firstItem="Uuf-x2-6vZ" firstAttribute="leading" secondItem="3hF-qe-nOI" secondAttribute="leading" id="FJ4-td-7k2"/>
+                                        <constraint firstItem="dzc-KG-1fb" firstAttribute="top" secondItem="ncS-7W-1S0" secondAttribute="topMargin" id="GLh-zR-MQr"/>
+                                        <constraint firstItem="dzc-KG-1fb" firstAttribute="leading" secondItem="ncS-7W-1S0" secondAttribute="leading" constant="20" id="IN5-YR-zCI"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8VP-2g-m7R" secondAttribute="trailing" constant="4" id="JMe-vu-Xhs"/>
+                                        <constraint firstItem="qii-fQ-1rB" firstAttribute="leading" secondItem="fUA-7f-wb0" secondAttribute="trailing" constant="4" id="JTu-QY-PcK"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="qii-fQ-1rB" secondAttribute="trailing" constant="4" id="JaE-8M-xsH"/>
+                                        <constraint firstItem="Bzd-TO-hFu" firstAttribute="leading" secondItem="dzc-KG-1fb" secondAttribute="leading" id="OrN-Wx-4cg"/>
+                                        <constraint firstItem="Fqm-UB-4mj" firstAttribute="leading" secondItem="dzc-KG-1fb" secondAttribute="leading" id="PAX-HQ-MX3"/>
+                                        <constraint firstItem="8VP-2g-m7R" firstAttribute="centerY" secondItem="3hF-qe-nOI" secondAttribute="centerY" id="QlU-5g-Hwe"/>
+                                        <constraint firstItem="Uuf-x2-6vZ" firstAttribute="top" secondItem="b3E-j1-Gb5" secondAttribute="bottom" constant="4" id="RWU-ih-9AL"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Bex-kS-bAO" secondAttribute="trailing" constant="4" id="SSk-rl-sd9"/>
+                                        <constraint firstItem="Bex-kS-bAO" firstAttribute="centerY" secondItem="Fqm-UB-4mj" secondAttribute="centerY" id="SsF-GG-gBy"/>
+                                        <constraint firstItem="vI0-K5-paP" firstAttribute="leading" secondItem="b3E-j1-Gb5" secondAttribute="trailing" constant="4" id="VwJ-6k-KUs"/>
+                                        <constraint firstItem="qii-fQ-1rB" firstAttribute="centerY" secondItem="fUA-7f-wb0" secondAttribute="centerY" id="XWf-SH-0C2"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4fv-qo-T94" secondAttribute="trailing" constant="4" id="YAi-bz-XR5"/>
+                                        <constraint firstItem="4fv-qo-T94" firstAttribute="centerY" secondItem="4YL-vU-Dk1" secondAttribute="centerY" id="ZrT-UB-u8A"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nTu-ac-bRn" secondAttribute="trailing" constant="4" id="evl-Xu-Pfk"/>
+                                        <constraint firstItem="4YL-vU-Dk1" firstAttribute="top" secondItem="dzc-KG-1fb" secondAttribute="bottom" constant="8" id="fov-sF-f9E"/>
+                                        <constraint firstItem="b3E-j1-Gb5" firstAttribute="top" secondItem="3hF-qe-nOI" secondAttribute="bottom" constant="4" id="guI-3C-yaM"/>
+                                        <constraint firstItem="nTu-ac-bRn" firstAttribute="centerY" secondItem="Bzd-TO-hFu" secondAttribute="centerY" id="iOE-60-67f"/>
+                                        <constraint firstItem="fUA-7f-wb0" firstAttribute="leading" secondItem="dzc-KG-1fb" secondAttribute="leading" id="ij2-MC-hX0"/>
+                                        <constraint firstItem="3hF-qe-nOI" firstAttribute="leading" secondItem="b3E-j1-Gb5" secondAttribute="leading" id="jMM-hd-3KK"/>
+                                        <constraint firstItem="4YL-vU-Dk1" firstAttribute="leading" secondItem="dzc-KG-1fb" secondAttribute="leading" id="juL-1H-VYz"/>
+                                        <constraint firstItem="rO6-sv-vbS" firstAttribute="centerY" secondItem="Uuf-x2-6vZ" secondAttribute="centerY" id="lCh-BQ-pah"/>
+                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vI0-K5-paP" secondAttribute="trailing" constant="4" id="nf0-2g-B74"/>
+                                        <constraint firstItem="vI0-K5-paP" firstAttribute="centerY" secondItem="b3E-j1-Gb5" secondAttribute="centerY" id="pKn-Tj-Xcd"/>
+                                        <constraint firstItem="nTu-ac-bRn" firstAttribute="leading" secondItem="Bzd-TO-hFu" secondAttribute="trailing" constant="4" id="saf-ab-xDg"/>
+                                        <constraint firstItem="Bex-kS-bAO" firstAttribute="leading" secondItem="Fqm-UB-4mj" secondAttribute="trailing" constant="4" id="unq-Dz-f4r"/>
+                                        <constraint firstItem="3hF-qe-nOI" firstAttribute="top" secondItem="4YL-vU-Dk1" secondAttribute="bottom" constant="4" id="vq7-3i-D6p"/>
+                                        <constraint firstItem="8VP-2g-m7R" firstAttribute="leading" secondItem="3hF-qe-nOI" secondAttribute="trailing" constant="4" id="xkb-hs-2aK"/>
+                                        <constraint firstItem="dzc-KG-1fb" firstAttribute="leading" secondItem="Uuf-x2-6vZ" secondAttribute="leading" id="ys5-5r-k2W"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="labelCurrentDewPoint" destination="fUA-7f-wb0" id="S7e-R8-mGz"/>
+                                    <outlet property="labelCurrentDewPointValue" destination="qii-fQ-1rB" id="9jr-AI-eZd"/>
+                                    <outlet property="labelDeviceBattery" destination="Uuf-x2-6vZ" id="p1C-eW-09j"/>
+                                    <outlet property="labelDeviceBatteryValue" destination="rO6-sv-vbS" id="OIf-JW-FjM"/>
+                                    <outlet property="labelDeviceName" destination="dzc-KG-1fb" id="XEk-2O-VIm"/>
+                                    <outlet property="labelDeviceRSSIValue" destination="vI0-K5-paP" id="khU-Nf-Pkl"/>
+                                    <outlet property="labelDeviceUUID" destination="4YL-vU-Dk1" id="ebc-Ts-cU7"/>
+                                    <outlet property="labelDeviceUUIDValue" destination="4fv-qo-T94" id="BXp-mJ-Xf4"/>
+                                    <outlet property="labelDeviceVersion" destination="3hF-qe-nOI" id="ys2-X8-GyQ"/>
+                                    <outlet property="labelDeviceVersionValue" destination="8VP-2g-m7R" id="0vI-nr-UYF"/>
+                                    <outlet property="labelHumidityValue" destination="nTu-ac-bRn" id="HDA-VM-ode"/>
+                                    <outlet property="labelRSSIValue" destination="b3E-j1-Gb5" id="NhQ-8s-a4I"/>
+                                    <outlet property="labelTemperatureValue" destination="Bex-kS-bAO" id="yzD-5H-6n1"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellDeviceOther" rowHeight="97" id="XIb-hv-8he" userLabel="cellDeviceOther" customClass="TDOtherDeviceTableViewCell">
+                                <rect key="frame" x="0.0" y="208" width="375" height="97"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XIb-hv-8he" id="TCR-tP-Q62">
+                                    <frame key="frameInset" width="375" height="96"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pri-Vr-bXt">
+                                            <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="18"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Pri-Vr-bXt" firstAttribute="leading" secondItem="TCR-tP-Q62" secondAttribute="leading" constant="20" id="yVV-aN-XQi"/>
+                                        <constraint firstItem="Pri-Vr-bXt" firstAttribute="top" secondItem="TCR-tP-Q62" secondAttribute="top" constant="6" id="yW4-fx-2bf"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="labelDeviceName" destination="Pri-Vr-bXt" id="ABx-Qe-skK"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="KLp-jM-ynE" id="xbQ-UH-KfS"/>
+                            <outlet property="delegate" destination="KLp-jM-ynE" id="iVQ-86-gAV"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Devices" id="EFU-p6-34s"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AeA-gd-PaI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="678" y="1944"/>
+        </scene>
     </scenes>
     <resources>
         <image name="logo" width="200" height="38"/>
@@ -1344,6 +1524,5 @@ LOG</string>
     <inferredMetricsTieBreakers>
         <segue reference="Dvq-Dd-i5u"/>
         <segue reference="PY2-Sg-4iY"/>
-        <segue reference="v8U-gz-ykZ"/>
     </inferredMetricsTieBreakers>
 </document>

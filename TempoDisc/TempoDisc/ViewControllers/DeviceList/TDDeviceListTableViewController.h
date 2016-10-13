@@ -13,6 +13,8 @@
 @property (nonatomic, assign) BOOL scanning;
 @property (nonatomic, assign) BOOL ignoreScan;
 
+@property (nonatomic, strong) NSMutableArray *dataSource;
+
 - (void)scanForDevices;
 - (void)loadDevices:(NSArray*)devices;
 

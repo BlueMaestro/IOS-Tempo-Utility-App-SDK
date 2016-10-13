@@ -31,6 +31,7 @@
 		CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */; };
 		CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB242C291C974A0800757AEC /* TDSettingsViewController.m */; };
 		CB256CF31DABFD8400293D81 /* TDDiscDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */; };
+		CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */; };
 		CB2B639E1D8B308B00B705CB /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */; };
 		CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */; };
 		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
@@ -97,6 +98,8 @@
 		CB242C2B1C97637600757AEC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		CB256CF11DABFD8400293D81 /* TDDiscDataTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDiscDataTableViewCell.h; sourceTree = "<group>"; };
 		CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDiscDataTableViewCell.m; sourceTree = "<group>"; };
+		CB290B0C1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicesHistoryListTableViewController.h; sourceTree = "<group>"; };
+		CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicesHistoryListTableViewController.m; sourceTree = "<group>"; };
 		CB2B63A11D8B31B300B705CB /* UIFont+Tempo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Tempo.h"; sourceTree = "<group>"; };
 		CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Tempo.m"; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
@@ -246,6 +249,7 @@
 		CB16BA511C82E70C00C99C41 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				CB290B0B1DAFEE1A0012EEEC /* DevicesHistory */,
 				CB73F9321DA6B9C30012C4D0 /* HistoryContainer */,
 				CB14AD201D9321080090AAA2 /* DeviceInfoTable */,
 				CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */,
@@ -384,6 +388,15 @@
 				CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */,
 			);
 			path = DiscData;
+			sourceTree = "<group>";
+		};
+		CB290B0B1DAFEE1A0012EEEC /* DevicesHistory */ = {
+			isa = PBXGroup;
+			children = (
+				CB290B0C1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.h */,
+				CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */,
+			);
+			path = DevicesHistory;
 			sourceTree = "<group>";
 		};
 		CB2B63A01D8B316E00B705CB /* UIFont+Tempo */ = {
@@ -652,6 +665,7 @@
 				CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */,
 				CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */,
 				CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */,
+				CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */,
 				CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */,
