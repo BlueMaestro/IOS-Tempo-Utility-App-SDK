@@ -134,6 +134,12 @@
 	[self fillData];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	//refresh device
+	[self refreshCurrentDevice];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -498,6 +504,7 @@
 					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
 					[weakself presentViewController:alert animated:YES completion:nil];
 				}
+				[weakself refreshCurrentDevice];
 			}];
 		}]];
 		
@@ -515,6 +522,7 @@
 					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
 					[weakself presentViewController:alert animated:YES completion:nil];
 				}
+				[weakself refreshCurrentDevice];
 			}];
 		}]];
 		

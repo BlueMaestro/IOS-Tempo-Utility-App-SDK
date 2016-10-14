@@ -16,4 +16,5 @@
 
 - (void)setupView;
 
+- (void)refreshCurrentDevice;
 @end

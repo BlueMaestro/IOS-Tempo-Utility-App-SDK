@@ -9,4 +9,7 @@
 #ifndef Constants_h
 #define Constants_h
 
+#define kNotificationPeripheralUpdated @"kNotificationPeripheralUpdated"
+#define kKeyNotificationPeripheralUpdatedPeripheral @"kNotificationPeripheralUpdated"
+
 #endif /* Constants_h */

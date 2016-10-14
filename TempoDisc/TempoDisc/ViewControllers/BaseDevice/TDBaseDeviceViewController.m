@@ -7,6 +7,8 @@
 //
 
 #import "TDBaseDeviceViewController.h"
+#import <LGCentralManager.h>
+#import "TDDefaultDevice.h"
 
 @implementation TDBaseDeviceViewController
 
@@ -35,6 +37,19 @@
 	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
 	
 	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:nil action:nil];
+}
+
+- (void)refreshCurrentDevice {
+	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:1 completion:^(NSArray *peripherals) {
+		for (LGPeripheral *peripheral in peripherals) {
+			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				NSLog(@"Rescanned for device: %@", peripheral.UUIDString);
+				[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPeripheralUpdated object:nil userInfo:@{kKeyNotificationPeripheralUpdatedPeripheral : peripheral}];
+				break;
+			}
+		}
+	}];
 }
 
 @end

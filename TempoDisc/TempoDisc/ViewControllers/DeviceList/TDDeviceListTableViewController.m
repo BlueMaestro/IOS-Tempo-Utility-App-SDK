@@ -40,6 +40,9 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleGoToBackgroundNotifications:) name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleReturnToForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+	if ([self isMemberOfClass:[TDDeviceListTableViewController class]]) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePeripheralUpdateNotification:) name:kNotificationPeripheralUpdated object:nil];
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -68,8 +71,8 @@
 		if ([LGCentralManager sharedInstance].isCentralReady) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				//Bluetooth is ready. Start scan.
-//				[self scanForDevices];
-				[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+				[self scanForDevices];
+//				[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
 				
 				//we dont need to listen to changes anymore since everything is set up
 				[[LGCentralManager sharedInstance] removeObserver:self forKeyPath:@"centralReady"];
@@ -87,7 +90,7 @@
 
 - (void)startScan {
 	if (![LGCentralManager sharedInstance].scanning) {
-		[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+		[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/ options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
 	}
 	if (_timerUpdateList) {
 		[_timerUpdateList invalidate];
@@ -243,6 +246,23 @@
 - (void)handleReturnToForeground:(NSNotification*)note {
 	if (!_ignoreScan) {
 		[self startScan];
+	}
+}
+
+- (void)handlePeripheralUpdateNotification:(NSNotification*)note {
+	LGPeripheral *peripheral = note.userInfo[kKeyNotificationPeripheralUpdatedPeripheral];
+	if (peripheral) {
+		TempoDevice *deviceToChange = nil;
+		for (TempoDevice *device in self.dataSource) {
+			if ([peripheral.UUIDString isEqualToString:device.peripheral.UUIDString]) {
+				deviceToChange = device;
+				break;
+			}
+		}
+		if (deviceToChange) {
+			deviceToChange.peripheral = peripheral;
+			[self.tableView reloadData];
+		}
 	}
 }
 

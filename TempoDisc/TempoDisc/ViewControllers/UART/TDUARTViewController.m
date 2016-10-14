@@ -102,6 +102,7 @@
 	[self addLogMessage:[NSString stringWithFormat:NSLocalizedString(@"Device disconnected from us", nil)] type:LogMessageTypeInbound];
 	_writeCharacteristic = nil;
 	_didDisconnect = YES;
+	[self refreshCurrentDevice];
 }
 
 - (void)handleKeyboardShowNotification:(NSNotification*)note {
