@@ -303,22 +303,24 @@
 	if (_graphDewPoint.superlayer) {
 		[_graphDewPoint removeFromSuperlayer];
 	}
-	
-	_hostViewTemperature = [self configureHost:_viewGraphTemperature forGraph:_hostViewTemperature];
-	_hostViewHumidity = [self configureHost:_viewGraphHumidity forGraph:_hostViewHumidity];
-	_hostViewDewPoint = [self configureHost:_viewGraphDewPoint forGraph:_hostViewDewPoint];
-	
-	_graphTemperature = [self configureGraph:_graphTemperature hostView:_hostViewTemperature graphView:_viewGraphTemperature title:nil];
-	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewGraphHumidity title:nil];
-	_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostViewDewPoint graphView:_viewGraphDewPoint title:nil];
-	
-	_plotTemperature = [self configurePlot:_plotTemperature forGraph:_graphTemperature identifier:@"Temperature"];
-	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graphHumidity identifier:@"Humidity"];
-	_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graphDewPoint identifier:@"DewPoint"];
-	
-	[self configureAxesForGraph:_graphTemperature plot:_plotTemperature];
-	[self configureAxesForGraph:_graphHumidity plot:_plotHumidity];
-	[self configureAxesForGraph:_graphDewPoint plot:_plotDewPoint];
+	if (_currentReadingType == TempoReadingTypeTemperature) {
+		_hostViewTemperature = [self configureHost:_viewGraphTemperature forGraph:_hostViewTemperature];
+		_graphTemperature = [self configureGraph:_graphTemperature hostView:_hostViewTemperature graphView:_viewGraphTemperature title:nil];
+		_plotTemperature = [self configurePlot:_plotTemperature forGraph:_graphTemperature identifier:@"Temperature"];
+		[self configureAxesForGraph:_graphTemperature plot:_plotTemperature];
+	}
+	else if (_currentReadingType == TempoReadingTypeHumidity) {
+		_hostViewHumidity = [self configureHost:_viewGraphHumidity forGraph:_hostViewHumidity];
+		_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewGraphHumidity title:nil];
+		_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graphHumidity identifier:@"Humidity"];
+		[self configureAxesForGraph:_graphHumidity plot:_plotHumidity];
+	}
+	else if (_currentReadingType == TempoReadingTypeDewPoint) {
+		_hostViewDewPoint = [self configureHost:_viewGraphDewPoint forGraph:_hostViewDewPoint];
+		_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostViewDewPoint graphView:_viewGraphDewPoint title:nil];
+		_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graphDewPoint identifier:@"DewPoint"];
+		[self configureAxesForGraph:_graphDewPoint plot:_plotDewPoint];
+	}
 }
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host
