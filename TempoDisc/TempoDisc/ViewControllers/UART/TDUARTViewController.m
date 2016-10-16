@@ -125,10 +125,16 @@
 }*/
 
 - (void)addLogMessage:(NSString*)message type:(LogMessageType)type {
-	[_dataSourceLogMessages addObject:[[LogMessage alloc] initWithMessage:message type:type]];
-	NSIndexPath *targetIndexPath = [NSIndexPath indexPathForRow:_dataSourceLogMessages.count-1 inSection:0];
-	[_tableViewLog insertRowsAtIndexPaths:@[targetIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
-	[_tableViewLog scrollToRowAtIndexPath:targetIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	LogMessage *logMessage = [[LogMessage alloc] initWithMessage:message type:type];
+	if (message) {
+		[_dataSourceLogMessages addObject:logMessage];
+		NSIndexPath *targetIndexPath = [NSIndexPath indexPathForRow:_dataSourceLogMessages.count-1 inSection:0];
+		[_tableViewLog insertRowsAtIndexPaths:@[targetIndexPath] withRowAnimation:UITableViewRowAnimationBottom];
+		[_tableViewLog scrollToRowAtIndexPath:targetIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+	}
+	else {
+		NSLog(@"Error. Nil log message");
+	}
 }
 
 - (void)setupDevice {
