@@ -83,7 +83,7 @@ typedef enum : NSInteger {
 		if (d[14] == kDataTerminationHeaderValue) {
 			NSInteger sendLogPointer = [self getIntLsb:d[1] msb:d[0]];
 			NSInteger sendRecordsNeeded = [self getIntLsb:d[3] msb:d[2]];
-			NSInteger sendGlobalLogCount = [self getIntLsb:d[5] msb:d[4]];
+			NSUInteger sendGlobalLogCount = [self getIntLsb:d[5] msb:d[4]];
 			NSInteger sendRecordSize = [self getIntLsb:d[7] msb:d[6]];
 			NSInteger mode = d[8];
 			NSInteger alarmFlag = d[9];
@@ -93,14 +93,14 @@ typedef enum : NSInteger {
 			NSLog(@"Header data parsed");
 			NSLog(@"send_log_pointer : %ld", (long)sendLogPointer);
 			NSLog(@"send_records_needed: %ld", (long)sendRecordsNeeded);
-			NSLog(@"send_global_log_count: %ld", (long)sendGlobalLogCount);
+			NSLog(@"send_global_log_count: %lu", (unsigned long)sendGlobalLogCount);
 			NSLog(@"send_record_size: %ld", (long)sendRecordSize);
 			NSLog(@"mode: %ld", (long)mode);
 			NSLog(@"alarm_flag_for_header: %ld", (long)alarmFlag);
 			NSLog(@"alarm_1_value: %ld", (long)alarm1Value);
 			NSLog(@"alarm_2_value: %ld", (long)alarm2Value);
 			//header data, parse next point and dont impor
-			NSInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
+			NSUInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
 			_logCounter = @(nextCounter);
 			return;
 		}
@@ -115,7 +115,21 @@ typedef enum : NSInteger {
 			break;
 		}
 		else {
-			NSLog(@"sample raw value: %@", [data subdataWithRange:NSMakeRange(i, 2)]);
+			NSString *type = @"UNKNOWN";
+			switch (_currentDownloadType) {
+				case DataDownloadTypeTemperature:
+					type = @"T";
+					break;
+				case DataDownloadTypeHumidity:
+					type = @"T";
+					break;
+				case DataDownloadTypeDewPoint:
+					type = @"D";
+					break;
+				default:
+					break;
+			}
+			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
 			NSInteger value = [self getIntLsb:d[i+1] msb:d[i]];
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];

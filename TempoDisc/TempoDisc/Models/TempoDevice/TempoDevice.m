@@ -176,7 +176,7 @@ int getInt(char lsb,char msb)
 	[self addReadingTypesObject:targetReadingType];
 	targetReadingType.type = type;
 	
-	NSLog(@"Start timestamp: %@", timestamp);
+//	NSLog(@"Start timestamp: %@", timestamp);
 	NSInteger index = 0;
 	for (NSArray *sample in data) {
 		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
@@ -190,7 +190,7 @@ int getInt(char lsb,char msb)
 			reading.avgValue = [sample firstObject];
 		}
 		reading.timestamp = [timestamp dateByAddingTimeInterval:-interval*((NSInteger)data.count-1-index)];
-		NSLog(@"Timetamp: %@", reading.timestamp);
+//		NSLog(@"Timetamp: %@", reading.timestamp);
 		index++;
 	}
 	NSError *saveError;
