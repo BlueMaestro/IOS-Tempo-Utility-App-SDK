@@ -133,7 +133,7 @@
 		[_tableViewLog scrollToRowAtIndexPath:targetIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 	}
 	else {
-		NSLog(@"Error. Nil log message");
+		NSLog(@"Error. Nil log message: %@", message);
 	}
 }
 
