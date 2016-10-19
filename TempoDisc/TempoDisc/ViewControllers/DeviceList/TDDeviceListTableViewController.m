@@ -17,7 +17,7 @@
 
 #define kDeviceScanInterval 5.0
 
-#define kDeviceListUpdateInterval 10.0
+#define kDeviceListUpdateInterval 1.0
 
 @interface TDDeviceListTableViewController()
 
