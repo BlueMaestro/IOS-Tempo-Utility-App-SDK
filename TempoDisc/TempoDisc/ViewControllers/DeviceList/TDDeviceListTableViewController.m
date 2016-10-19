@@ -17,7 +17,7 @@
 
 #define kDeviceScanInterval 5.0
 
-#define kDeviceListUpdateInterval 1.0
+#define kDeviceListUpdateInterval 10.0
 
 @interface TDDeviceListTableViewController()
 
@@ -89,15 +89,18 @@
 }
 
 - (void)startScan {
-	if (![LGCentralManager sharedInstance].scanning) {
-		[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/ options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+	if ([self isMemberOfClass:[TDDeviceListTableViewController class]]) {
+		if (![LGCentralManager sharedInstance].scanning) {
+			[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/ options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+		}
+		if (_timerUpdateList) {
+			[_timerUpdateList invalidate];
+			_timerUpdateList = nil;
+		}
+		_timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(updateDeviceList) userInfo:nil repeats:YES];
+		[[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
 	}
-	if (_timerUpdateList) {
-		[_timerUpdateList invalidate];
-		_timerUpdateList = nil;
-	}
-	_timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(updateDeviceList) userInfo:nil repeats:YES];
-	[[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
+	
 }
 
 - (void)stopScan {
@@ -224,7 +227,7 @@
 		}
 		device.isBlueMaestroDevice = @(isBlueMaestroDevice);
 	}
-	else {
+	else if (hasManufacturerData || fetchError) {
 		NSLog(@"Error fetching devices: %@", fetchError.localizedDescription);
 	}
 	
