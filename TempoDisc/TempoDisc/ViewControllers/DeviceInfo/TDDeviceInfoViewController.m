@@ -500,7 +500,7 @@
 			[weakself.uartAllDataDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
 				[weakself.hudDownloadData hide:YES];
 				if (!succcess) {
-					UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
+					UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Cannot download at this time. Try scanning for the device again in the Device List screen", nil) preferredStyle:UIAlertControllerStyleAlert];
 					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
 					[weakself presentViewController:alert animated:YES completion:nil];
 				}

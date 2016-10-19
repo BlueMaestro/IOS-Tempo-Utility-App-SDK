@@ -199,6 +199,13 @@ typedef enum : NSInteger {
 	
 }
 
+- (void)handleTimeout:(NSTimer*)timer {
+	NSLog(@"Connect timeout reached");
+	if (_completion) {
+		_completion(NO);
+	}
+}
+
 #pragma mark - Public methods
 
 + (TDUARTDownloader *)shared {
@@ -215,8 +222,12 @@ typedef enum : NSInteger {
 	_downloadStartTimestamp = [NSDate date];
 	_completion = completion;
 	NSLog(@"Connecting to device...");
+	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 	__weak typeof(self) weakself = self;
 	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+		[timer invalidate];
+		timer = nil;
 		weakself.didDisconnect = NO;
 		if (!error) {
 			NSLog(@"Connected to device");
