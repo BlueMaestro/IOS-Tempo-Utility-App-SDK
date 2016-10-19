@@ -8,8 +8,11 @@
 
 #import "TDDeviceTableContainer.h"
 #import "TDDeviceDataTableViewController.h"
+#import <MessageUI/MFMailComposeViewController.h>
+#import "CHCSVParser.h"
+#import <MBProgressHUD.h>
 
-@interface TDDeviceTableContainer()
+@interface TDDeviceTableContainer() <MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) TDDeviceDataTableViewController *controllerDeviceTable;
 
@@ -72,12 +75,96 @@
 	[_buttonReadingType setTitle:title forState:UIControlStateHighlighted];
 }
 
+-(void)createCSVFile:(NSString*)fileName{
+	NSOutputStream *output = [NSOutputStream outputStreamToMemory];
+	CHCSVWriter *writer = [[CHCSVWriter alloc] initWithOutputStream:output encoding:NSUTF8StringEncoding delimiter:','];
+	//wrting header name for csv file
+	[writer writeField:@"Record number"];
+	[writer writeField:@"Timestamp"];
+	[writer writeField:@"Temperature"];
+	[writer writeField:@"Humidity"];
+	[writer writeField:@"Dew point"];
+	[writer finishLine];
+	
+	
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	[formatter setDateFormat:@"HH:mm\tdd/MM/yyyy"];
+	//[formatter setDateFormat:@"dd/MM/yyyy\tHH:mm"];
+	NSArray *temperature = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"];
+	NSArray *humidity = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"];
+	NSArray *dewPoint = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"];
+	for (NSInteger index = 0; index < temperature.count; index++) {
+		Reading *readingTemperature = index < temperature.count ? temperature[index] : nil;
+		Reading *readingHumidity = index < humidity.count ? humidity[index] : nil;
+		Reading *readingDewPoint = index < dewPoint.count ? dewPoint[index] : nil;
+		
+		[writer writeField:[NSString stringWithFormat:@"%lu", (unsigned long)index+1]];
+		[writer writeField:[NSString stringWithFormat:@"%@", [formatter stringFromDate:readingTemperature.timestamp]]];
+		[writer writeField:[NSString stringWithFormat:@"%@", readingTemperature.avgValue]];
+		[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
+		[writer writeField:[NSString stringWithFormat:@"%@", readingDewPoint.avgValue]];
+		[writer finishLine];
+	}
+	
+	[writer closeStream];
+	
+	NSData *buffer = [output propertyForKey:NSStreamDataWrittenToMemoryStreamKey];
+	[[NSFileManager defaultManager] createFileAtPath:fileName
+											contents:buffer
+										  attributes:nil];
+}
+
+-(NSString*)createFileNameWithAttachmentType:(NSString *)type withPath:(BOOL)includePath
+{
+	NSString* fileName;
+	
+	fileName = @"exportData";
+	
+	if (includePath) {
+		NSArray *arrayPaths =
+		NSSearchPathForDirectoriesInDomains(
+											NSDocumentDirectory,
+											NSUserDomainMask,
+											YES);
+		NSString *path = [arrayPaths objectAtIndex:0];
+		NSString* pdfFileName = [path stringByAppendingPathComponent:fileName];
+		
+		return pdfFileName;
+	}
+	
+	return fileName;
+	
+}
+
 #pragma mark - Actions
 
 - (IBAction)buttonExportPdfClicked:(UIButton *)sender {
 }
 
 - (IBAction)buttonExportCSVClicked:(UIButton *)sender {
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+	mailComposeVC.mailComposeDelegate = self;
+	mailComposeVC.modalPresentationStyle = UIModalPresentationPageSheet;
+	/*[mailComposeVC.navigationBar setTintColor:[UIColor blueMaestroBlue]];
+	[mailComposeVC.navigationBar setTitleTextAttributes:
+	 [NSDictionary dictionaryWithObjectsAndKeys:
+	  [UIColor whiteColor],
+	  NSForegroundColorAttributeName,
+	  nil]];
+	[mailComposeVC setNeedsStatusBarAppearanceUpdate];*/
+	[mailComposeVC setSubject:@"Device data export"];
+	
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	[formatter setDateFormat:@"dd-MM-yyyy"];
+	
+	NSString *fileName = [self createFileNameWithAttachmentType:@"CSV" withPath:YES];
+	[self createCSVFile:fileName];
+	NSData * csvData=[NSData dataWithContentsOfFile:fileName];
+	[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDDefaultDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
+	
+	[MBProgressHUD hideHUDForView:self.view animated:NO];
+	[self presentViewController:mailComposeVC animated:YES completion:nil];
 }
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
@@ -98,4 +185,11 @@
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
 	[self presentViewController:alert animated:YES completion:nil];
 }
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+	[controller dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
