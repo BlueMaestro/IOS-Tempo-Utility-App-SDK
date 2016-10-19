@@ -17,9 +17,8 @@
 #define kDataTerminationHeaderValue 58
 #define kDataTerminationValue 46
 
-#define kDeviceReconnectTimeout			2.0
-
 #define kDeviceConnectTimeout			10.0
+#define kDeviceReConnectTimeout			1.0
 
 #define kDataStringTemperature			@"*logntemp"
 #define kDataStringHumidity				@"*lognhumi"
@@ -56,6 +55,10 @@ typedef enum : NSInteger {
 @implementation TDUARTDownloader
 
 #pragma mark - Private methods
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
+}
 
 - (int)getIntLsb:(char)lsb msb:(char)msb {
 	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
@@ -121,7 +124,7 @@ typedef enum : NSInteger {
 					type = @"T";
 					break;
 				case DataDownloadTypeHumidity:
-					type = @"T";
+					type = @"H";
 					break;
 				case DataDownloadTypeDewPoint:
 					type = @"D";
@@ -203,6 +206,15 @@ typedef enum : NSInteger {
 	NSLog(@"Connect timeout reached");
 	if (_completion) {
 		_completion(NO);
+		_completion = nil;
+	}
+}
+
+- (void)handleDisconnectNotification:(NSNotification*)note {
+	NSLog(@"Device disconnected");
+	if (_completion) {
+		_completion(NO);
+		_completion = nil;
 	}
 }
 
@@ -224,91 +236,100 @@ typedef enum : NSInteger {
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 	__weak typeof(self) weakself = self;
-	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
-		[timer invalidate];
-		timer = nil;
-		weakself.didDisconnect = NO;
-		if (!error) {
-			NSLog(@"Connected to device");
-			NSLog(@"Discovering device services...");
-			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
-				if (!error2) {
-					NSLog(@"Discovered services");
-					LGService *uartService;
-					for (LGService* service in services) {
-						if ([[service.UUIDString uppercaseString] isEqualToString:uartServiceUUIDString]) {
-							uartService = service;
-							NSLog(@"Found UART service: %@", service.UUIDString);
-							NSLog(@"Discovering characteristics...");
-							[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error3) {
-								if (!error3) {
-									NSLog(@"Discovered characteristics");
-									LGCharacteristic *readCharacteristic;
-									for (LGCharacteristic *characteristic in characteristics) {
-										if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
-											NSLog(@"Found TX characteristic %@", characteristic.UUIDString);
-											readCharacteristic = characteristic;
-											/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
-											 value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
-											 LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/
-											NSLog(@"Subscribing for TX characteristic notifications");
-											[characteristic setNotifyValue:YES completion:^(NSError *error4) {
-												if (!error4) {
-													NSLog(@"Subscribed for TX characteristic notifications");
+	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
+		for (LGPeripheral *peripheral in peripherals) {
+			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+					[timer invalidate];
+					timer = nil;
+					weakself.didDisconnect = NO;
+					if (!error) {
+						NSLog(@"Connected to device");
+						NSLog(@"Discovering device services...");
+						[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+							if (!error2) {
+								NSLog(@"Discovered services");
+								LGService *uartService;
+								for (LGService* service in services) {
+									if ([[service.UUIDString uppercaseString] isEqualToString:uartServiceUUIDString]) {
+										uartService = service;
+										NSLog(@"Found UART service: %@", service.UUIDString);
+										NSLog(@"Discovering characteristics...");
+										[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error3) {
+											if (!error3) {
+												NSLog(@"Discovered characteristics");
+												LGCharacteristic *readCharacteristic;
+												for (LGCharacteristic *characteristic in characteristics) {
+													if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
+														NSLog(@"Found TX characteristic %@", characteristic.UUIDString);
+														readCharacteristic = characteristic;
+														/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
+														 value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
+														 LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/
+														NSLog(@"Subscribing for TX characteristic notifications");
+														[characteristic setNotifyValue:YES completion:^(NSError *error4) {
+															if (!error4) {
+																NSLog(@"Subscribed for TX characteristic notifications");
+															}
+															else {
+																NSLog(@"Error subscribing for TX characteristic: %@", error4);
+															}
+														} onUpdate:^(NSData *data, NSError *error5) {
+															if (!error5) {
+																//													[weakself addLogMessage:[NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
+																//TODO: Parse data
+																[weakself parseData:data];
+															}
+															else {
+																NSLog(@"Error on updating TX data: %@", error5);
+															}
+														}];
+													}
+													else if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartRXCharacteristicUUIDString]) {
+														NSLog(@"Found RX characteristic %@", characteristic.UUIDString);
+														weakself.writeCharacteristic = characteristic;
+													}
 												}
-												else {
-													NSLog(@"Error subscribing for TX characteristic: %@", error4);
+												if (!readCharacteristic) {
+													NSLog(@"Could not find TX characteristic");
 												}
-											} onUpdate:^(NSData *data, NSError *error5) {
-												if (!error5) {
-													//													[weakself addLogMessage:[NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
-													//TODO: Parse data
-													[weakself parseData:data];
+												if (!weakself.writeCharacteristic) {
+													NSLog(@"Could not find RX characteristic");
 												}
-												else {
-													NSLog(@"Error on updating TX data: %@", error5);
+												if (weakself.writeCharacteristic) {
+													[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];
+													weakself.dataToSend = nil;
 												}
-											}];
-										}
-										else if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartRXCharacteristicUUIDString]) {
-											NSLog(@"Found RX characteristic %@", characteristic.UUIDString);
-											weakself.writeCharacteristic = characteristic;
-										}
-									}
-									if (!readCharacteristic) {
-										NSLog(@"Could not find TX characteristic");
-									}
-									if (!weakself.writeCharacteristic) {
-										NSLog(@"Could not find RX characteristic");
-									}
-									if (weakself.writeCharacteristic) {
-										[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];
-										weakself.dataToSend = nil;
+											}
+											else {
+												NSLog(@"Error discovering device characteristics: %@", error3);
+												completion(NO);
+											}
+										}];
+										break;
 									}
 								}
-								else {
-									NSLog(@"Error discovering device characteristics: %@", error3);
+								if (!uartService) {
+									NSLog(@"Failed to found UART service");
 									completion(NO);
 								}
-							}];
-							break;
-						}
+							}
+							else {
+								NSLog(@"Error discovering device services: %@", error2);
+								completion(NO);
+							}
+						}];
 					}
-					if (!uartService) {
-						NSLog(@"Failed to found UART service");
+					else {
+						NSLog(@"Error connecting to device: %@", error);
 						completion(NO);
 					}
-				}
-				else {
-					NSLog(@"Error discovering device services: %@", error2);
-					completion(NO);
-				}
-			}];
-		}
-		else {
-			NSLog(@"Error connecting to device: %@", error);
-			completion(NO);
+				}];
+				break;
+			}
 		}
 	}];
 }
