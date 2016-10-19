@@ -88,6 +88,7 @@
 
 - (void)setupView {
 	[super setupView];
+	[_buttonAll setBackgroundImage:[[_buttonAll backgroundImageForState:UIControlStateNormal] copy] forState:UIControlStateSelected];
 	[self initPlot];
 	[self adjustPlotsRange];
 }
