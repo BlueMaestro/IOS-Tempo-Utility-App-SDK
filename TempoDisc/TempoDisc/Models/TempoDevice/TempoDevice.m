@@ -167,9 +167,11 @@ int getInt(char lsb,char msb)
 			targetReadingType = readingType;
 		}
 	}
-	//delete all data and insert again
+
+	//if there is data reading should be added at the end
+	BOOL addToExistingData = NO;
 	if (targetReadingType && [self isMemberOfClass:[TempoDevice class]]) {
-		[context deleteObject:targetReadingType];
+		addToExistingData = YES;
 	}
 	
 	targetReadingType = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context];
@@ -189,7 +191,13 @@ int getInt(char lsb,char msb)
 		else {
 			reading.avgValue = [sample firstObject];
 		}
-		reading.timestamp = [timestamp dateByAddingTimeInterval:-interval*((NSInteger)data.count-1-index)];
+		
+		if (addToExistingData) {
+			reading.timestamp = [timestamp dateByAddingTimeInterval:interval*index];
+		}
+		else {
+			reading.timestamp = [timestamp dateByAddingTimeInterval:-interval*((NSInteger)data.count-1-index)];
+		}
 //		NSLog(@"Timetamp: %@", reading.timestamp);
 		index++;
 	}
