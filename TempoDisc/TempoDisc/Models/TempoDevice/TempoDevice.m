@@ -170,7 +170,7 @@ int getInt(char lsb,char msb)
 
 	//if there is data reading should be added at the end
 	BOOL addToExistingData = NO;
-	if (targetReadingType && [self isMemberOfClass:[TempoDevice class]]) {
+	if (targetReadingType) {
 		addToExistingData = YES;
 	}
 	
