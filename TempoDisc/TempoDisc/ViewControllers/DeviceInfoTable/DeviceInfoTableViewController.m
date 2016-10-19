@@ -71,7 +71,7 @@ typedef enum : NSInteger {
   @[@(DevicePropertyCurrentTemperature), @(DevicePropertyCurrentHumidity), @(DevicePropertyCurrentDew)]},
 					@{kKeySection : @(DevicePropertySectionHighestAndLowest),
 					  kKeySectionItems :
-  @[@(DevicePropertyHighestTemperature), @(DevicePropertyCurrentHumidity), @(DevicePropertyCurrentDew)]},
+  @[@(DevicePropertyHighestTemperature), @(DevicePropertyHighestHumidity), @(DevicePropertyLowestTemperature), @(DevicePropertyLowestHumidity)]},
 					  @{kKeySection : @(DevicePropertySectionLastDay),
 						kKeySectionItems :
   @[@(DevicePropertyHighestDayTemperature), @(DevicePropertyLowestDayTemperature), @(DevicePropertyAverageDayTemperature), @(DevicePropertyHighestDayHumidity), @(DevicePropertyLowestDayHumidity), @(DevicePropertyAverageDayHumidity), @(DevicePropertyHighestDayDew), @(DevicePropertyLowestDayDew), @(DevicePropertyAverageDayDew)]},
