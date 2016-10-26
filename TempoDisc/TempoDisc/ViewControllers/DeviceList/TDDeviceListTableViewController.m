@@ -17,7 +17,8 @@
 
 #define kDeviceScanInterval 5.0
 
-#define kDeviceListUpdateInterval 1.0
+#define kDeviceListUpdateInterval 3.0
+#define kDeviceListUpdateScanInterval 2.0
 
 @interface TDDeviceListTableViewController()
 
@@ -97,10 +98,17 @@
 			[_timerUpdateList invalidate];
 			_timerUpdateList = nil;
 		}
-		_timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(updateDeviceList) userInfo:nil repeats:YES];
+		_timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(handleUpdateTimer:) userInfo:nil repeats:YES];
 		[[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
 	}
 	
+}
+
+- (void)handleUpdateTimer:(NSTimer*)timer {
+	__weak typeof(self) weakself = self;
+	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceListUpdateScanInterval services:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES} completion:^(NSArray *peripherals) {
+		[weakself updateDeviceList];
+	}];
 }
 
 - (void)stopScan {
@@ -153,6 +161,7 @@
 		return;
 	}
 	self.scanning = YES;
+	[self stopScan];
 	
 	//show progress indicator
 	MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
@@ -184,6 +193,7 @@
 		 //cleanup
 		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
 		 weakself.scanning = NO;
+		 [self startScan];
 	 }];
 }
 
