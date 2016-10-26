@@ -79,7 +79,7 @@ int getInt(char lsb,char msb)
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid {
 	
 	self.uuid = uuid;
-	self.name = name;
+	self.name = advertisedData[@"kCBAdvDataLocalName"];
 	
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	

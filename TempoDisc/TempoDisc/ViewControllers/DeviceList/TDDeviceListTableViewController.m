@@ -129,7 +129,11 @@
 			device.peripheral = peripheral;
 			device.inRange = @(YES);
 			[devicesInRange addObject:device];
-			if (![[_dataSource valueForKey:@"uuid"] containsObject:device.uuid]) {
+			NSInteger index = [[_dataSource valueForKey:@"uuid"] indexOfObject:device.uuid];
+			if (index < _dataSource.count) {
+				[_dataSource replaceObjectAtIndex:index withObject:device];
+			}
+			else {
 				[_dataSource addObject:device];
 			}
 		}
