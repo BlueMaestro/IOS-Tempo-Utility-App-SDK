@@ -353,7 +353,7 @@
 	[(CPTXYAxisSet *)graph.axisSet xAxis].labelFormatter = timeFormatter;
 	
 	axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
-	//    axisSet.yAxis.preferredNumberOfMajorTicks = 6;
+	    axisSet.yAxis.preferredNumberOfMajorTicks = 6;
 	CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];
 	majorGridLineStyle.lineColor = [CPTColor colorWithGenericGray:0.7];
 	majorGridLineStyle.lineWidth = 0.5;
@@ -369,7 +369,6 @@
 	axisSet.yAxis.minorTickLineStyle = tickLineStyle;
 	axisSet.yAxis.majorGridLineStyle = majorGridLineStyle;
 	axisSet.yAxis.minorGridLineStyle = minorGridLineStyle;
-	axisSet.yAxis.preferredNumberOfMajorTicks = 5;
 	axisSet.yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 	
 	NSNumberFormatter *formatterY = [[NSNumberFormatter alloc] init];
