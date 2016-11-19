@@ -3,3 +3,6 @@ TempoDisc/Pods
 *.xcuserstate
 xcschememanagement.plist
 *.xcbkptlist
+TempoDisc/Tempo Utility.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+TempoDisc/Tempo Utility.xcodeproj/xcuserdata/nikolamisic.xcuserdatad/xcschemes/Tempo Utility.xcscheme
+TempoDisc/Tempo Utility.xcodeproj/xcuserdata/nikolamisic.xcuserdatad/xcschemes/TempoDisc.xcscheme
