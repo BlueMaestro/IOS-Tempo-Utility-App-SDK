@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TDBaseDeviceViewController.h"
 
-@interface TDLivePlotViewController : UIViewController
+@interface TDLivePlotViewController : TDBaseDeviceViewController
 
 @end

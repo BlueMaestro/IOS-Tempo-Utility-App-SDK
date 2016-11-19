@@ -15,7 +15,7 @@
 #pragma mark - Graph constants
 
 #define kLivePlotInitiateString @"*bur"
-#define kLivePlotPaddingInSeconds	10.
+#define kLivePlotPaddingInSeconds	15.
 #define kLivePlotWindowInSeconds	20.
 #define kLivePlotMinXAxisValue		0.
 #define kLivePlotMaxXAxisValue		120.

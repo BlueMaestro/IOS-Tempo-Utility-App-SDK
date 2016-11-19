@@ -9,6 +9,16 @@
 #import "TDLivePlotViewController.h"
 #import <CorePlot/ios/CorePlot.h>
 #import "TDLivePlotData.h"
+#import <LGBluetooth/LGBluetooth.h>
+#import "TDDefaultDevice.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
+
+#define kDeviceConnectTimeout			10.0
+#define kDeviceReConnectTimeout			1.0
+
+#define uartServiceUUIDString			@"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define uartRXCharacteristicUUIDString	@"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define uartTXCharacteristicUUIDString	@"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
 @interface TDLivePlotViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate>
 
@@ -22,7 +32,9 @@
 @property (nonatomic, strong) CPTScatterPlot *plotHumidity;
 @property (nonatomic, strong) CPTScatterPlot *plotDewPoint;
 
-@property (nonatomic, strong) NSArray* dataSource;
+@property (nonatomic, strong) LGCharacteristic *writeCharacteristic;
+
+@property (nonatomic, strong) NSMutableArray* dataSource;
 
 @end
 
@@ -31,20 +43,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-	NSDate *rightNow = [NSDate date];
-	NSMutableArray *mockedData = [@[] mutableCopy];
-	for (NSInteger i=0; i<30; i++) {
-		TDLivePlotData *data = [[TDLivePlotData alloc] initWithString:@"T25.4H56.7D16.8" timestamp:[rightNow dateByAddingTimeInterval:i]];
-		[mockedData addObject:data];
+	_dataSource = [NSMutableArray array];
+	//initial data point
+	TDLivePlotData *initialData = [[TDLivePlotData alloc] init];
+	TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
+	if ([device isKindOfClass:[TempoDiscDevice class]]) {
+		initialData.temperature = device.currentTemperature;
+		initialData.humidity = device.currentHumidity;
+		initialData.dewPoint = device.dewPoint;
+		initialData.timestamp = [NSDate date];
+		[_dataSource addObject:initialData];
 	}
-	
-	_dataSource = mockedData;
 	[self initPlot];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self adjustPlotsRange];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	[self setupDataDownload];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,6 +88,146 @@
 }
 */
 
+#pragma mark - Private methods
+
+- (void)parseData:(NSData*)data {
+	NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	if ([TDLivePlotData isValidData:dataString]) {
+		TDLivePlotData *dataPoint = [[TDLivePlotData alloc] initWithString:dataString timestamp:[NSDate date]];
+		[_dataSource addObject:dataPoint];
+		[self adjustPlotsRange];
+		
+		[_plotTemperature insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		[_plotTemperature reloadData];
+		
+		[_plotHumidity insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		[_plotHumidity reloadData];
+		
+		[_plotDewPoint insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		[_plotDewPoint reloadData];
+	}
+}
+
+- (void)handleTimeout:(NSTimer*)timer {
+	NSLog(@"Connect timeout reached");
+}
+
+- (void)handleDisconnectNotification:(NSNotification*)note {
+	NSLog(@"Device disconnected");
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)setupDataDownload {
+	NSLog(@"Connecting to device...");
+	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
+	
+	__weak typeof(self) weakself = self;
+	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
+		for (LGPeripheral *peripheral in peripherals) {
+			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+					[timer invalidate];
+					timer = nil;
+//					weakself.didDisconnect = NO;
+					if (!error) {
+						NSLog(@"Connected to device");
+						NSLog(@"Discovering device services...");
+						[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+							if (!error2) {
+								NSLog(@"Discovered services");
+								LGService *uartService;
+								for (LGService* service in services) {
+									if ([[service.UUIDString uppercaseString] isEqualToString:uartServiceUUIDString]) {
+										uartService = service;
+										NSLog(@"Found UART service: %@", service.UUIDString);
+										NSLog(@"Discovering characteristics...");
+										[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error3) {
+											if (!error3) {
+												NSLog(@"Discovered characteristics");
+												LGCharacteristic *readCharacteristic;
+												for (LGCharacteristic *characteristic in characteristics) {
+													if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
+														NSLog(@"Found TX characteristic %@", characteristic.UUIDString);
+														readCharacteristic = characteristic;
+														/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
+														 value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
+														 LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/
+														NSLog(@"Subscribing for TX characteristic notifications");
+														[characteristic setNotifyValue:YES completion:^(NSError *error4) {
+															if (!error4) {
+																NSLog(@"Subscribed for TX characteristic notifications");
+															}
+															else {
+																NSLog(@"Error subscribing for TX characteristic: %@", error4);
+															}
+														} onUpdate:^(NSData *data, NSError *error5) {
+															if (!error5) {
+																//													[weakself addLogMessage:[NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
+																//TODO: Parse data
+																[weakself parseData:data];
+															}
+															else {
+																NSLog(@"Error on updating TX data: %@", error5);
+															}
+														}];
+													}
+													else if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartRXCharacteristicUUIDString]) {
+														NSLog(@"Found RX characteristic %@", characteristic.UUIDString);
+														weakself.writeCharacteristic = characteristic;
+													}
+												}
+												if (!readCharacteristic) {
+													NSLog(@"Could not find TX characteristic");
+												}
+												if (!weakself.writeCharacteristic) {
+													NSLog(@"Could not find RX characteristic");
+												}
+												if (weakself.writeCharacteristic) {
+													[weakself writeData:kLivePlotInitiateString toCharacteristic:weakself.writeCharacteristic];
+												}
+											}
+											else {
+												NSLog(@"Error discovering device characteristics: %@", error3);
+											}
+										}];
+										break;
+									}
+								}
+								if (!uartService) {
+									NSLog(@"Failed to found UART service");
+								}
+							}
+							else {
+								NSLog(@"Error discovering device services: %@", error2);
+							}
+						}];
+					}
+					else {
+						NSLog(@"Error connecting to device: %@", error);
+					}
+				}];
+				break;
+			}
+		}
+	}];
+}
+
+- (void)writeData:(NSString*)data toCharacteristic:(LGCharacteristic*)characteristic {
+	NSLog(@"Writing data: %@ to characteristic: %@", data, characteristic.UUIDString);
+	//	__weak typeof(self) weakself = self;
+	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
+		if (!error) {
+			NSLog(@"Sucessefully wrote \"%@\" data to write characteristic", data);
+		}
+		else {
+			NSLog(@"Error writing data to characteristic: %@", error);
+		}
+	}];
+}
+
 #pragma mark - Graph setup
 
 - (void)adjustPlotsRange {
@@ -72,7 +238,12 @@
 	CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)_graph.defaultPlotSpace;
 	TDLivePlotData *lastData = [_dataSource lastObject];
 	
-	plotSpace.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(lastData.timestamp.timeIntervalSince1970-kLivePlotPaddingInSeconds) lengthDecimal:CPTDecimalFromFloat(kLivePlotWindowInSeconds)];
+	double startPoint = lastData.timestamp.timeIntervalSince1970-(double)kLivePlotPaddingInSeconds;
+	CPTPlotRange *newRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromDouble(startPoint) lengthDecimal:CPTDecimalFromFloat(kLivePlotWindowInSeconds)];
+	//	plotSpace.xRange = newRange;
+	[CPTAnimation animate:plotSpace property:@"xRange" fromPlotRange:plotSpace.xRange toPlotRange:newRange duration:0.3 animationCurve:CPTAnimationCurveLinear delegate:nil];
+	
+	plotSpace.xRange = newRange;
 	plotSpace.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(kLivePlotMinXAxisValue) lengthDecimal:CPTDecimalFromFloat(kLivePlotMaxXAxisValue)];
 }
 

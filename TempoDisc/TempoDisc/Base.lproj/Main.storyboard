@@ -937,10 +937,10 @@ LOG</string>
             </objects>
             <point key="canvasLocation" x="2598" y="-174"/>
         </scene>
-        <!--Live Plot View Controller-->
+        <!--Live Plot-->
         <scene sceneID="LRu-lF-R3N">
             <objects>
-                <viewController id="AsC-XE-hTJ" customClass="TDLivePlotViewController" sceneMemberID="viewController">
+                <viewController title="Live Plot" id="AsC-XE-hTJ" customClass="TDLivePlotViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jMN-Ks-LAT"/>
                         <viewControllerLayoutGuide type="bottom" id="qfH-qU-ff3"/>

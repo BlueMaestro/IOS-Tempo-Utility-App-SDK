@@ -18,4 +18,6 @@
 - (id)initWithString:(NSString*)dataString;
 
 - (id)initWithString:(NSString *)dataString timestamp:(NSDate*)pointDate;
+
++ (BOOL)isValidData:(NSString*)dataString;
 @end

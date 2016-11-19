@@ -43,4 +43,11 @@
 	return self;
 }
 
++ (BOOL)isValidData:(NSString*)dataString {
+	NSRange temperatureRange = [dataString rangeOfString:@"T"];
+	NSRange humidityRange = [dataString rangeOfString:@"H"];
+	NSRange dewpointRange = [dataString rangeOfString:@"D"];
+	return (temperatureRange.location != NSNotFound && humidityRange.location != NSNotFound && dewpointRange.location != NSNotFound);
+}
+
 @end
