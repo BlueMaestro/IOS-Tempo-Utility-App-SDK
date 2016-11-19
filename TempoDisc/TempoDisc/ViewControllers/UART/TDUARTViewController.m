@@ -194,13 +194,8 @@
 										[weakself addLogMessage:@"Could not find RX characteristic" type:LogMessageTypeInbound];
 									}
 									if (weakself.writeCharacteristic && weakself.dataToSend) {
-										if ([weakself.dataToSend isEqualToString:kLivePlotInitiateString]) {
-											[weakself initiateLivePlotting];
-										}
-										else {
-											[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
-											weakself.dataToSend = nil;
-										}
+										[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
+										weakself.dataToSend = nil;
 									}
 								}
 								else {
@@ -247,28 +242,15 @@
 	}]];
 	
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-		[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
-		weakself.dataToSend = nil;
+		[weakself connectAndWrite:weakself.dataToSend];
 	}]];
 	
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark - Public methods
-
-#pragma mark - Actions
-
-- (IBAction)buttonSendMessageClicked:(UIButton *)sender {
-	[_textFieldMessage resignFirstResponder];
+- (void)connectAndWrite:(NSString*)data {
 	if (_writeCharacteristic) {
-		if ([_textFieldMessage.text isEqualToString:kLivePlotInitiateString]) {
-			_dataToSend = _textFieldMessage.text;
-			[self initiateLivePlotting];
-		}
-		else {
-			[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
-		}
-		
+		[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
 	}
 	else {
 		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];
@@ -292,6 +274,21 @@
 			[self setupDevice];
 		}
 		
+	}
+}
+
+#pragma mark - Public methods
+
+#pragma mark - Actions
+
+- (IBAction)buttonSendMessageClicked:(UIButton *)sender {
+	[_textFieldMessage resignFirstResponder];
+	if ([_textFieldMessage.text isEqualToString:kLivePlotInitiateString]) {
+		_dataToSend = _textFieldMessage.text;
+		[self initiateLivePlotting];
+	}
+	else {
+		[self connectAndWrite:_textFieldMessage.text];
 	}
 }
 
