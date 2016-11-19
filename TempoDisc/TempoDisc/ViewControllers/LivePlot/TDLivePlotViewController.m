@@ -34,7 +34,7 @@
 	NSDate *rightNow = [NSDate date];
 	NSMutableArray *mockedData = [@[] mutableCopy];
 	for (NSInteger i=0; i<30; i++) {
-		TDLivePlotData *data = [[TDLivePlotData alloc] initWithString:@"" timestamp:[rightNow dateByAddingTimeInterval:i]];
+		TDLivePlotData *data = [[TDLivePlotData alloc] initWithString:@"T25.4H56.7D16.8" timestamp:[rightNow dateByAddingTimeInterval:i]];
 		[mockedData addObject:data];
 	}
 	
