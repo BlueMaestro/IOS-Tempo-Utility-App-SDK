@@ -194,7 +194,12 @@
 										[weakself addLogMessage:@"Could not find RX characteristic" type:LogMessageTypeInbound];
 									}
 									if (weakself.writeCharacteristic && weakself.dataToSend) {
-										[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
+										if ([weakself.dataToSend isEqualToString:kLivePlotInitiateString]) {
+											[weakself initiateLivePlotting];
+										}
+										else {
+											[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
+										}
 										weakself.dataToSend = nil;
 									}
 								}
@@ -233,6 +238,21 @@
 	}];
 }
 
+- (void)initiateLivePlotting {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"Would you like to view this data in a graph?", nil) preferredStyle:UIAlertControllerStyleAlert];
+	
+	__weak typeof(self) weakself = self;
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself performSegueWithIdentifier:@"segueLivePlot" sender:nil];
+	}]];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+		[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
+	}]];
+	
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - Public methods
 
 #pragma mark - Actions
@@ -240,7 +260,14 @@
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender {
 	[_textFieldMessage resignFirstResponder];
 	if (_writeCharacteristic) {
-		[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
+		if ([_textFieldMessage.text isEqualToString:kLivePlotInitiateString]) {
+			_dataToSend = _textFieldMessage.text;
+			[self initiateLivePlotting];
+		}
+		else {
+			[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
+		}
+		
 	}
 	else {
 		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];

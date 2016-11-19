@@ -14,6 +14,8 @@
 
 #pragma mark - Graph constants
 
+#define kLivePlotInitiateString @"*bur"
+
 #define kGraphSymbolSize CGSizeMake(4,4)
 #define kGraphSymbolSelectedSize 15
 #define kGraphSymboldTouchArea 10.0
