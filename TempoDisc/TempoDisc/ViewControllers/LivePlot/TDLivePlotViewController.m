@@ -16,9 +16,7 @@
 
 @property (nonatomic, strong) CPTGraphHostingView *hostView;
 
-@property (nonatomic, strong) CPTGraph *graphTemperature;
-@property (nonatomic, strong) CPTGraph *graphHumidity;
-@property (nonatomic, strong) CPTGraph *graphDewPoint;
+@property (nonatomic, strong) CPTGraph *graph;
 
 @property (nonatomic, strong) CPTScatterPlot *plotTemperature;
 @property (nonatomic, strong) CPTScatterPlot *plotHumidity;
@@ -33,9 +31,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-	TDLivePlotData *data = [[TDLivePlotData alloc] initWithString:@"" timestamp:[NSDate date]];
-	_dataSource = @[data];
+	NSDate *rightNow = [NSDate date];
+	NSMutableArray *mockedData = [@[] mutableCopy];
+	for (NSInteger i=0; i<30; i++) {
+		TDLivePlotData *data = [[TDLivePlotData alloc] initWithString:@"" timestamp:[rightNow dateByAddingTimeInterval:i]];
+		[mockedData addObject:data];
+	}
+	
+	_dataSource = mockedData;
 	[self initPlot];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
 	[self adjustPlotsRange];
 }
 
@@ -59,60 +67,31 @@
 - (void)adjustPlotsRange {
 //	TempoDevice *device = [TDDefaultDevice sharedDevice].selectedDevice;
 	/**
-	 *	Adjust range for plot so that all points fit in the view with one hour before and after
+	 *	Adjust range for plot so that the last point is in the center with a few seconds to the left and right of the x axis
 	 **/
-	/*CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
-	NSArray *readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-	if (!_buttonAll.selected) {
-		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
-	}
-	double lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
-	double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
-	plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
+	CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)_graph.defaultPlotSpace;
+	TDLivePlotData *lastData = [_dataSource lastObject];
 	
-	CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphHumidity.defaultPlotSpace;
-	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-	if (!_buttonAll.selected) {
-		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
-	}
-	lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
-	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
-	plotSpaceHumidity.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
-	
-	CPTXYPlotSpace *plotSpaceDewPoint = (CPTXYPlotSpace *)_graphDewPoint.defaultPlotSpace;
-	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-	if (!_buttonAll.selected) {
-		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
-	}
-	lastReading = [[(Reading*)[readings firstObject] timestamp] timeIntervalSince1970];
-	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
-	plotSpaceDewPoint.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];*/
+	plotSpace.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(lastData.timestamp.timeIntervalSince1970-kLivePlotPaddingInSeconds) lengthDecimal:CPTDecimalFromFloat(kLivePlotWindowInSeconds)];
+	plotSpace.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(kLivePlotMinXAxisValue) lengthDecimal:CPTDecimalFromFloat(kLivePlotMaxXAxisValue)];
 }
 
 -(void)initPlot
 {
-	/*if (_graphTemperature.superlayer) {
-		[_graphTemperature removeFromSuperlayer];
-	}
-	if (_graphHumidity.superlayer) {
-		[_graphHumidity removeFromSuperlayer];
-	}
-	if (_graphDewPoint.superlayer) {
-		[_graphDewPoint removeFromSuperlayer];
-	}*/
 	_hostView = [self configureHost:_viewPlotContainer forGraph:_hostView];
-	_graphTemperature = [self configureGraph:_graphTemperature hostView:_hostView graphView:_viewPlotContainer title:nil];
-	_plotTemperature = [self configurePlot:_plotTemperature forGraph:_graphTemperature identifier:@"Temperature"];
-	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostView graphView:_viewPlotContainer title:nil];
-	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graphHumidity identifier:@"Humidity"];
-	_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostView graphView:_viewPlotContainer title:nil];
-	_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graphDewPoint identifier:@"DewPoint"];
-	[self configureAxesForGraph:_graphTemperature plot:_plotTemperature];
-	[self configureAxesForGraph:_graphHumidity plot:_plotHumidity];
-	[self configureAxesForGraph:_graphDewPoint plot:_plotDewPoint];
+	_graph = [self configureGraph:_graph hostView:_hostView graphView:_viewPlotContainer title:nil];
+	_plotTemperature = [self configurePlot:_plotTemperature forGraph:_graph identifier:@"Temperature"];
+	[self configureAxesForGraph:_graph plot:_plotTemperature lineColor:kColorLivePlotLineTemperature.CGColor];
+	
+	/*_hostViewHumidity = [self configureHost:_viewPlotContainer forGraph:_hostViewHumidity];
+	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewPlotContainer title:nil];*/
+	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graph identifier:@"Humidity"];
+	[self configureAxesForGraph:_graph plot:_plotHumidity lineColor:kColorLivePlotLineHumidty.CGColor];
+	
+	/*_hostViewDewPoint = [self configureHost:_viewPlotContainer forGraph:_hostViewDewPoint];
+	_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostViewDewPoint graphView:_viewPlotContainer title:nil];*/
+	_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graph identifier:@"DewPoint"];
+	[self configureAxesForGraph:_graph plot:_plotDewPoint lineColor:kColorLivePlotLineDewPoint.CGColor];
 }
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host
@@ -178,15 +157,15 @@
 	
 	// Set up the plot, including the look of the plot itself.
 	plot = [self plotWithIdentifier:identifier];
-	for (id plot in graph.allPlots) {
+	/*for (id plot in graph.allPlots) {
 		[graph removePlot:plot];
-	}
+	}*/
 	[graph addPlot:plot toPlotSpace:plotSpace];
 	
 	return plot;
 }
 
-- (void)configureAxesForGraph:(CPTGraph*)graph plot:(CPTScatterPlot*)plot
+- (void)configureAxesForGraph:(CPTGraph*)graph plot:(CPTScatterPlot*)plot lineColor:(CGColorRef)color
 {
 	// Set up axis.
 	CPTXYAxisSet * axisSet = (CPTXYAxisSet *) graph.axisSet;
@@ -197,7 +176,7 @@
 	axisSet.xAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 	
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateFormat:@"dd MMM\nHH:mm"];
+	[formatter setDateFormat:@"mm:ss"];
 	CPTTimeFormatter *timeFormatter = [[CPTTimeFormatter alloc] initWithDateFormatter:formatter];
 	timeFormatter.referenceDate = [NSDate dateWithTimeIntervalSince1970:0];
 	[(CPTXYAxisSet *)graph.axisSet xAxis].labelFormatter = timeFormatter;
@@ -219,6 +198,7 @@
 	axisSet.yAxis.minorTickLineStyle = tickLineStyle;
 	axisSet.yAxis.majorGridLineStyle = majorGridLineStyle;
 	axisSet.yAxis.minorGridLineStyle = minorGridLineStyle;
+	axisSet.yAxis.preferredNumberOfMajorTicks = 5;
 	axisSet.yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 	
 	NSNumberFormatter *formatterY = [[NSNumberFormatter alloc] init];
@@ -250,7 +230,7 @@
 	
 	CPTMutableLineStyle *minrangeLineStyle = [plot.dataLineStyle mutableCopy];
 	minrangeLineStyle.lineWidth = kGraphLineWidth;
-	minrangeLineStyle.lineColor = kColorGraphAverage;
+	minrangeLineStyle.lineColor = [CPTColor colorWithCGColor:color];
 	
 	plot.dataLineStyle=minrangeLineStyle;
 	plot.interpolation=GRAPH_LINE_TYPE;

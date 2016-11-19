@@ -199,8 +199,8 @@
 										}
 										else {
 											[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
+											weakself.dataToSend = nil;
 										}
-										weakself.dataToSend = nil;
 									}
 								}
 								else {
@@ -248,6 +248,7 @@
 	
 	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
 		[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
+		weakself.dataToSend = nil;
 	}]];
 	
 	[self presentViewController:alert animated:YES completion:nil];

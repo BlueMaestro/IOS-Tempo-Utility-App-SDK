@@ -15,6 +15,13 @@
 #pragma mark - Graph constants
 
 #define kLivePlotInitiateString @"*bur"
+#define kLivePlotPaddingInSeconds	10.
+#define kLivePlotWindowInSeconds	20.
+#define kLivePlotMinXAxisValue		0.
+#define kLivePlotMaxXAxisValue		120.
+#define kColorLivePlotLineTemperature [UIColor redColor]
+#define kColorLivePlotLineHumidty [UIColor blueColor]
+#define kColorLivePlotLineDewPoint [UIColor greenColor]
 
 #define kGraphSymbolSize CGSizeMake(4,4)
 #define kGraphSymbolSelectedSize 15
