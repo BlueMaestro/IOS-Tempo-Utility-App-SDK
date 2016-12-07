@@ -84,13 +84,15 @@
 - (NSArray*)dataForType:(TempoReadingType)type {
 	NSString *readingType;
 	switch (type) {
-  case TempoReadingTypeTemperature:
+	    case TempoReadingTypeTemperature:
 			readingType = @"Temperature";
 			break;
 		case TempoReadingTypeHumidity:
 			readingType = @"Humidity";
+		break;
 		case TempoReadingTypeDewPoint:
 			readingType = @"DewPoint";
+		break;
 			
   default:
 			break;
