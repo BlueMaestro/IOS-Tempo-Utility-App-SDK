@@ -29,6 +29,7 @@
 
 @property (nonatomic, strong) NSMutableArray *dataSourceLogMessages;
 @property (nonatomic, strong) LGCharacteristic *writeCharacteristic;
+@property (nonatomic, strong) LGCharacteristic *readCharacteristic;
 
 @property (nonatomic, strong) NSString *dataToSend;
 
@@ -58,7 +59,14 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	if (_readCharacteristic) {
+		[_readCharacteristic setNotifyValue:NO completion:^(NSError *error) {
+			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+		}];
+	}
+	else {
+		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	}
 }
 
 - (void)didReceiveMemoryWarning {
@@ -163,6 +171,7 @@
 										if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
 											[weakself addLogMessage:[NSString stringWithFormat:@"Found TX characteristic %@", characteristic.UUIDString] type:LogMessageTypeInbound];
 											readCharacteristic = characteristic;
+											weakself.readCharacteristic = characteristic;
 											/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
 																														  value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
 											LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/

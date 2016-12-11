@@ -33,6 +33,7 @@
 @property (nonatomic, strong) CPTScatterPlot *plotDewPoint;
 
 @property (nonatomic, strong) LGCharacteristic *writeCharacteristic;
+@property (nonatomic, strong) LGCharacteristic *readCharacteristic;
 
 @property (nonatomic, strong) NSMutableArray* dataSource;
 
@@ -69,7 +70,14 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	if (_readCharacteristic) {
+		[_readCharacteristic setNotifyValue:NO completion:^(NSError *error) {
+			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+		}];
+	}
+	else {
+		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	}
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 }
 
@@ -152,6 +160,7 @@
 													if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
 														NSLog(@"Found TX characteristic %@", characteristic.UUIDString);
 														readCharacteristic = characteristic;
+														weakself.readCharacteristic = characteristic;
 														/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
 														 value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
 														 LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/
