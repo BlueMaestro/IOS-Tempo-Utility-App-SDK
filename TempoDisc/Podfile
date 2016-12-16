@@ -3,7 +3,7 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
-target 'TempoDisc' do
+target 'Tempo Utility’ do
 
 pod "LGBluetooth", "~> 1.1.5"
 pod 'MBProgressHUD', '~> 0.9'

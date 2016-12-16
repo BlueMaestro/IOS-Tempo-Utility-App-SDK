@@ -487,9 +487,10 @@
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"Choose download type:", nil) preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];
 		
 		__weak typeof(self) weakself = self;
+        /*
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download All", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			if (!weakself.uartAllDataDownloader) {
 				weakself.uartAllDataDownloader = [[TDUARTAllDataDownloader alloc] init];
@@ -507,7 +508,7 @@
 				}
 				[weakself refreshCurrentDevice];
 			}];
-		}]];
+		}]];*/
 		
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download New", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			if (!weakself.uartDownloader) {
