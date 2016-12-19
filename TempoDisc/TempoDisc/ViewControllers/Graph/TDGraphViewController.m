@@ -569,56 +569,52 @@
 #pragma mark - CPTPlotSpaceDelegate
 
 -(void)scatterPlot:(CPTPlot *)plot
-plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index
+plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativeEvent *)event
 {
-    CPTGraph *plotGraph;
     Reading *reading;
-    /*
+	NSArray *dataSource = @[];
+	
     if ([plot.identifier isEqual:@"Temperature"]) {
-        //dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-        plotGraph = self.hostViewTemperature.hostedGraph;
+        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     }
     else if ([plot.identifier isEqual:@"Humidity"]) {
-        //dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-        plotGraph = self.hostViewHumidity.hostedGraph;
+        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     }
     else if ([plot.identifier isEqual:@"DewPoint"]) {
-        //dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-        plotGraph = self.hostViewDewPoint.hostedGraph;
+        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     }
-    
-    NSValue *value = [self.dataSource objectAtIndex:index];
-    
-    NSLog(@"Value at index %@", [NSValue v])
-    
-    //CGPoint point = [fakeValue CGPointValue];
-    
+	
+	reading = [dataSource objectAtIndex:index];
+	NSDecimalNumber *value = reading.avgValue;
+	
+	NSLog(@"Value at index %@", value);
 
     // Setup a style for the annotation
     CPTMutableTextStyle *hitAnnotationTextStyle = [CPTMutableTextStyle textStyle];
     hitAnnotationTextStyle.color = [CPTColor grayColor];
     hitAnnotationTextStyle.fontSize = 16.0f;
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
+	
+	CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:plot.graph.hostingView];
     
     // Determine point of symbol in plot coordinates
-    NSNumber *x = [NSNumber numberWithFloat:point.x];
-    NSNumber *y = [NSNumber numberWithFloat:point.y];
+    NSNumber *x = [NSNumber numberWithFloat:point.x+plot.frame.origin.x];
+    NSNumber *y = [NSNumber numberWithFloat:point.y+plot.frame.origin.y];
     NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
     
     
     // First make a string for the y value
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setMaximumFractionDigits:2];
-    NSString *yString = [formatter stringFromNumber:y];
+    NSString *yString = [formatter stringFromNumber:value];
     
     // Now add the annotation to the plot area
     CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yString style:hitAnnotationTextStyle];
     CPTPlotSpaceAnnotation *symbolTextAnnotation;
-    symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plotGraph.defaultPlotSpace  anchorPlotPoint:anchorPoint];
+    symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plot.plotSpace  anchorPlotPoint:anchorPoint];
     symbolTextAnnotation.contentLayer = textLayer;
     symbolTextAnnotation.displacement = CGPointMake(0.0f, 20.0f);
-    [plotGraph.plotAreaFrame.plotArea addAnnotation:symbolTextAnnotation];
-    */
+    [plot addAnnotation:symbolTextAnnotation];
     
 }
 
