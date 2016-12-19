@@ -26,10 +26,10 @@
 #define kGraphSymbolSize CGSizeMake(4,4)
 #define kGraphSymbolSelectedSize 15
 #define kGraphSymboldTouchArea 10.0
-#define kColorGraphAverage [CPTColor colorWithComponentRed:157.0f/255.0f green:157.0f/255.0f blue:157.0f/255.0f alpha:1]
+#define kColorGraphAverage [CPTColor colorWithComponentRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]
 #define kColorGraphAxis [CPTColor colorWithComponentRed:17.0f/255.0f green:90.0f/255.0f blue:140.0f/255.0f alpha:1]
 #define kFontGraphAxis @"Montserrat-Regular"
-#define kGraphLineWidth 1
+#define kGraphLineWidth 2
 #define kGraphiPhoneFontSize 10
 #define kGraphiPadFontSize 15
 #define POPUP_TIME 5.0

@@ -302,10 +302,10 @@
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
-		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚ %@", device.currentTemperature.floatValue, unit];
+		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº %@", device.currentTemperature.floatValue, unit];
 	}
 	else {
-		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚ %@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, unit];
+		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº %@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, unit];
 	}
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%% RH", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
@@ -325,7 +325,7 @@
 	
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice* disc = (TempoDiscDevice*)device;
-		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1f˚ %@", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius"];
+		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº %@", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius"];
 	}
 	else {
 		cell.labelCurrentDewPointValue.text = @"0";

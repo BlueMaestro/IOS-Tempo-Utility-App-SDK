@@ -435,16 +435,18 @@
 - (void)insertData:(NSArray*)collection forReadingType:(TempoReadingType)type {
 	NSString *readingType;
 	switch (type) {
-  case TempoReadingTypeTemperature:
+        case TempoReadingTypeTemperature:
 			readingType = @"Temperature";
 			break;
 		case TempoReadingTypeHumidity:
 			readingType = @"Humidity";
-  default:
+        default:
 			break;
 	}
 	if (readingType) {
-		[[TDDefaultDevice sharedDevice].selectedDevice addData:collection forReadingType:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        
+        [[TDDefaultDevice sharedDevice].selectedDevice addDataFirst:collection forReadingType:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        
 	}
 }
 
@@ -525,6 +527,7 @@
 					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
 					[weakself presentViewController:alert animated:YES completion:nil];
 				}
+                
 				[weakself refreshCurrentDevice];
 			}];
 		}]];

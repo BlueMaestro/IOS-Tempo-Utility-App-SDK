@@ -50,6 +50,8 @@ typedef enum : NSInteger {
 
 @property (nonatomic, strong) NSNumber *logCounter;
 
+@property (nonatomic, strong) NSDate *startingTimeStamp;
+
 @end
 
 @implementation TDUARTDownloader
@@ -79,37 +81,36 @@ typedef enum : NSInteger {
 }
 
 - (void)parseData:(NSData*)data {
+    char * d = (char *)data.bytes;
 	NSLog(@"data received: %@", data);
-	if (data.length == 15 ) {
+	if (d[14] == kDataTerminationHeaderValue) {
 		NSLog(@"Header data received: %@", data);
-		char * d = (char *)data.bytes;
-		if (d[14] == kDataTerminationHeaderValue) {
-			NSInteger sendLogPointer = [self getIntLsb:d[1] msb:d[0]];
-			NSInteger sendRecordsNeeded = [self getIntLsb:d[3] msb:d[2]];
-			NSUInteger sendGlobalLogCount = [self getIntLsb:d[5] msb:d[4]];
-			NSInteger sendRecordSize = [self getIntLsb:d[7] msb:d[6]];
-			NSInteger mode = d[8];
-			NSInteger alarmFlag = d[9];
-			NSInteger alarm1Value = [self getIntLsb:d[11] msb:d[10]];
-			NSInteger alarm2Value = [self getIntLsb:d[13] msb:d[14]];
-			NSLog(@"---------------------------------------");
-			NSLog(@"Header data parsed");
-			NSLog(@"send_log_pointer : %ld", (long)sendLogPointer);
-			NSLog(@"send_records_needed: %ld", (long)sendRecordsNeeded);
-			NSLog(@"send_global_log_count: %lu", (unsigned long)sendGlobalLogCount);
-			NSLog(@"send_record_size: %ld", (long)sendRecordSize);
-			NSLog(@"mode: %ld", (long)mode);
-			NSLog(@"alarm_flag_for_header: %ld", (long)alarmFlag);
-			NSLog(@"alarm_1_value: %ld", (long)alarm1Value);
-			NSLog(@"alarm_2_value: %ld", (long)alarm2Value);
-			//header data, parse next point and dont impor
-			NSUInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
-			_logCounter = @(nextCounter);
-			return;
-		}
-	}
+        NSInteger sendLogPointer = [self getIntLsb:d[1] msb:d[0]];
+        NSInteger sendRecordsNeeded = [self getIntLsb:d[3] msb:d[2]];
+        NSUInteger sendGlobalLogCount = [self getIntLsb:d[5] msb:d[4]];
+        NSInteger sendRecordSize = [self getIntLsb:d[7] msb:d[6]];
+        NSInteger mode = d[8];
+        NSInteger alarmFlag = d[9];
+        NSInteger alarm1Value = [self getIntLsb:d[11] msb:d[10]];
+        NSInteger alarm2Value = [self getIntLsb:d[13] msb:d[14]];
+        NSLog(@"---------------------------------------");
+        NSLog(@"Header data parsed");
+        NSLog(@"send_log_pointer : %ld", (long)sendLogPointer);
+        NSLog(@"send_records_needed: %ld", (long)sendRecordsNeeded);
+        NSLog(@"send_global_log_count: %lu", (unsigned long)sendGlobalLogCount);
+        NSLog(@"send_record_size: %ld", (long)sendRecordSize);
+        NSLog(@"mode: %ld", (long)mode);
+        NSLog(@"alarm_flag_for_header: %ld", (long)alarmFlag);
+        NSLog(@"alarm_1_value: %ld", (long)alarm1Value);
+        NSLog(@"alarm_2_value: %ld", (long)alarm2Value);
+        //header data, parse next point and dont impor
+        NSUInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
+        _logCounter = @(nextCounter);
+        [self setNewTimeStamp:sendRecordsNeeded];
+        return;
+    }
+	
 	NSInteger length = data.length;
-	char * d = (char*)[data bytes];
 	for (NSInteger i=0; i<length; i+=2) {
 		if (d[i] == kDataTerminationValue) {
 			//termination symbol found, abort data download and insert into database
@@ -150,11 +151,15 @@ typedef enum : NSInteger {
 	switch (type) {
 		case DataDownloadTypeTemperature:
 			downloadType = DataDownloadTypeHumidity;
-			stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringHumidity, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
+            //Download all data, not just missing data
+            stringToWrite = [NSString stringWithFormat:@"%@0", kDataStringHumidity];
+			//stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringHumidity, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case  DataDownloadTypeHumidity:
 			downloadType = DataDownloadTypeDewPoint;
-			stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringDewPoint, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
+            //Download all data, not just missing data
+            stringToWrite = [NSString stringWithFormat:@"%@0", kDataStringDewPoint];
+			//stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringDewPoint, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeFinish;
@@ -192,12 +197,15 @@ typedef enum : NSInteger {
 			break;
 	}
 	if (readingType) {
-		NSDate *timestamp = _downloadStartTimestamp;
-		Reading *lastReading = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType] lastObject];
-		if (lastReading) {
-			timestamp = lastReading.timestamp;
-		}
-		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+
+        NSLog(@"Deleting old data");
+        [[TDDefaultDevice sharedDevice].selectedDevice deleteOldData:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [NSThread sleepForTimeInterval: 0.5];
+        
+        NSLog(@"Writing new data");
+		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:_startingTimeStamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [NSThread sleepForTimeInterval: 0.5];
+        
 	}
 	
 }
@@ -216,6 +224,17 @@ typedef enum : NSInteger {
 		_completion(NO);
 		_completion = nil;
 	}
+}
+
+- (void)setNewTimeStamp:(NSInteger)sendRecordsNeeded {
+    NSInteger timeInterval = [[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval] integerValue];
+    NSDate *dateNow = [NSDate date];
+    
+    //Calculate start date
+    NSTimeInterval totalSeconds = timeInterval * sendRecordsNeeded;
+    _startingTimeStamp = [dateNow dateByAddingTimeInterval:-totalSeconds];
+    NSLog(@"Records needed is %i, date now is %@, time interval is %i and starting date for logging is %@", (int)sendRecordsNeeded, dateNow, (int)timeInterval, _startingTimeStamp);
+    
 }
 
 #pragma mark - Public methods
@@ -300,7 +319,9 @@ typedef enum : NSInteger {
 													NSLog(@"Could not find RX characteristic");
 												}
 												if (weakself.writeCharacteristic) {
-													[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];
+                                                    [weakself writeData:[NSString stringWithFormat:@"%@0", kDataStringTemperature] toCharacteristic:weakself.writeCharacteristic];
+                                                    
+													/*[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];*/
 													weakself.dataToSend = nil;
 												}
 											}

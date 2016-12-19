@@ -11,7 +11,7 @@
 @implementation UIColor (Tempo)
 
 +(UIColor *)blueMaestroBlue {
-	return ([UIColor colorWithRed:0/255.0f green:82/255.0f blue:121/255.0f alpha:1]);
+	return ([UIColor colorWithRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]);
 }
 
 + (UIColor *)botomBarSeparatorGrey {
@@ -19,7 +19,7 @@
 }
 
 +(UIColor *)buttonDarkGrey {
-	return ([UIColor colorWithRed:59/255.0f green:59/255.0f blue:59/255.0f alpha:1]);
+	return ([UIColor colorWithRed:59/255.0f green:59/255.0f blue:59/255.0f alpha:0.6]);
 }
 
 + (UIColor *)buttonSeparator {

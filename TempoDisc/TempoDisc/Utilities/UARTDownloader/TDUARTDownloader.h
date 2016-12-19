@@ -17,4 +17,6 @@ typedef void(^DataDownloadCompletion)(BOOL);
 
 - (void)downloadDataForDevice:(TempoDiscDevice*)device withCompletion:(DataDownloadCompletion)completion;
 
+- (void)setNewTimeStamp: (NSInteger)sendRecordsNeeded;
+
 @end

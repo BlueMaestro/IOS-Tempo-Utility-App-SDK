@@ -22,6 +22,7 @@
 	[[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont regularFontWithSize:18.0]}];
 	[[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont regularFontWithSize:16.0]} forState:UIControlStateNormal];
 	[[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont regularFontWithSize:16.0]} forState:UIControlStateNormal];
+    [[UINavigationBar appearance] setBarStyle:UIBarStyleBlack];
 	return YES;
 }
 

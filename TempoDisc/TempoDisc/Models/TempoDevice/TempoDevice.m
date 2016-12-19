@@ -26,7 +26,8 @@ int getInt(char lsb,char msb)
 
 + (TempoDevice *)deviceWithName:(NSString *)name data:(NSDictionary *)data uuid:(nonnull NSString *)uuid context:(nonnull NSManagedObjectContext *)context {
 	TempoDevice *device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
-	[device fillWithData:data name:name uuid:uuid];
+    
+    [device fillWithData:data name:name uuid:uuid];
 	return device;
 }
 
@@ -75,6 +76,7 @@ int getInt(char lsb,char msb)
 		return NO;
 	}
 }
+
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid {
 	
@@ -160,7 +162,49 @@ int getInt(char lsb,char msb)
 	}
 }
 
-- (void)addData:(NSArray *)data forReadingType:(NSString *)type startTimestamp:(NSDate*)timestamp interval:(NSInteger)interval context:(NSManagedObjectContext *)context {
+- (void)deleteOldData:(NSString *)type context:(NSManagedObjectContext *)context {
+    
+    NSString *readingType;
+    readingType = type;
+    for (ReadingType *type in [TDDefaultDevice sharedDevice].selectedDevice.readingTypes) {
+        if ([type.type isEqualToString:readingType]) {
+            [[TDDefaultDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
+            break;
+        }
+    }
+    /*
+    ReadingType *targetReadingType;
+    for (ReadingType *readingType in self.readingTypes) {
+        if ([readingType.type isEqualToString:type]) {
+            targetReadingType = readingType;
+        }
+    }
+    NSLog(@"The type coming through for deletion is %@", type);
+    NSFetchRequest *allData = [[NSFetchRequest alloc] init];
+    [allData setEntity:[NSEntityDescription entityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context]];
+    NSPredicate *narrowSearchToType = [NSPredicate predicateWithFormat:@"type is Temperature"];
+    [allData setPredicate:narrowSearchToType];
+    NSLog(@"The name of the entity is %@", NSStringFromClass([ReadingType class]));
+    [allData setIncludesPropertyValues:NO]; //only fetch the managedObjectID
+    NSLog(@"In deleteOldData() and deleting objects");
+    NSError *error = nil;
+    
+    //for (Reading * readings in allData.reading)
+    NSArray *dataToBeDeleted = [context executeFetchRequest:allData error:&error];
+    NSLog(@"Number of records in array = %d", [dataToBeDeleted count]);
+    /*if (![dataToBeDeleted count]) return;
+    //error handling goes here
+    for (targetReadingType in dataToBeDeleted) {
+        [context deleteObject:targetReadingType];
+    }
+    NSError *saveError = nil;
+    [context save:&saveError];
+    */
+    
+}
+
+
+- (void)addData:(NSArray *)data forReadingType:(NSString *)type startTimestamp:(NSDate*)timeStamp interval:(NSInteger)interval context:(NSManagedObjectContext *)context {
 	ReadingType *targetReadingType;
 	for (ReadingType *readingType in self.readingTypes) {
 		if ([readingType.type isEqualToString:type]) {
@@ -168,17 +212,10 @@ int getInt(char lsb,char msb)
 		}
 	}
 
-	//if there is data reading should be added at the end
-	BOOL addToExistingData = NO;
-	if (targetReadingType) {
-		addToExistingData = YES;
-	}
-	
 	targetReadingType = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context];
 	[self addReadingTypesObject:targetReadingType];
 	targetReadingType.type = type;
 	
-//	NSLog(@"Start timestamp: %@", timestamp);
 	NSInteger index = 0;
 	for (NSArray *sample in data) {
 		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
@@ -192,13 +229,10 @@ int getInt(char lsb,char msb)
 			reading.avgValue = [sample firstObject];
 		}
 		
-		if (addToExistingData) {
-			reading.timestamp = [timestamp dateByAddingTimeInterval:interval*index];
-		}
-		else {
-			reading.timestamp = [timestamp dateByAddingTimeInterval:-interval*((NSInteger)data.count-1-index)];
-		}
-//		NSLog(@"Timetamp: %@", reading.timestamp);
+        reading.timestamp = [timeStamp dateByAddingTimeInterval:interval*index];
+
+
+		NSLog(@"Timestamp: %@, calculated from a start date of %@ and an interval of %li", reading.timestamp, timeStamp, (long)interval);
 		index++;
 	}
 	NSError *saveError;
@@ -208,9 +242,12 @@ int getInt(char lsb,char msb)
 	}
 }
 
+//Not used
 - (void)addData:(NSArray *)data forReadingType:(NSString *)type context:(NSManagedObjectContext *)context {
-	[self addData:data forReadingType:type startTimestamp:[NSDate date] interval:-3600 context:context];
+    NSLog(@"In spare method for addData for TempoDevice");
+	//[self addData:data forReadingType:type startTimestamp:timeStamp interval:interval context:context];
 }
+
 
 - (NSArray *)readingsForType:(NSString *)typeOfReading {
 	for (ReadingType *readingType in self.readingTypes) {

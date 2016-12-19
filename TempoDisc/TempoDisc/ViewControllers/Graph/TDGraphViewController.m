@@ -12,7 +12,7 @@
 
 #define kTresholdZoomAngle 30
 
-#define kInitialDataLoadCount 140
+#define kInitialDataLoadCount 40
 
 @interface TDGraphViewController () <CPTScatterPlotDataSource, CPTScatterPlotDelegate, CPTPlotSpaceDelegate, IBActionSheetDelegate>
 
@@ -88,7 +88,7 @@
 				_viewGraphHumidity = nil;
 			}
 		  [_labelReadingType setText:NSLocalizedString(@"TEMPERATURE", nil)];
-		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
+		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
 			_activeGraph = _graphTemperature;
 			_activeGraphView = _viewGraphTemperature;
 			break;
@@ -111,7 +111,7 @@
 				_viewGraphHumidity = nil;
 			}
 			[_labelReadingType setText:NSLocalizedString(@"DEW POINT", nil)];
-			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"˚ FAHRENHEIT" : @"˚ CELSIUS";
+			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
 			_activeGraph = _graphDewPoint;
 			_activeGraphView = _viewGraphDewPoint;
 			break;
@@ -212,8 +212,8 @@
 	
 	[sheet setButtonTextColor:[UIColor blueMaestroBlue]];
 	
-	[sheet setFont:[UIFont regularFontWithSize:15.0]];
-	[sheet setTitleFont:[UIFont regularFontWithSize:12.0]];
+	[sheet setFont:[UIFont regularFontWithSize:18.0]];
+	[sheet setTitleFont:[UIFont regularFontWithSize:15.0]];
 	
 	[sheet showInView:self.parentViewController.view];
 	/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"READING TYPE", nil) message:NSLocalizedString(@"Choose reading type", nil) preferredStyle:UIAlertControllerStyleActionSheet];
@@ -332,7 +332,7 @@
 	//	_graph.plotAreaFrame.plotArea.delegate = self;
 	
 	// Set up the look of the plot. Want
-	[graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
+	[graph applyTheme:[CPTTheme themeNamed:kCPTSlateTheme]];
 	
 	// Make things see through.
 	graph.backgroundColor = nil;
@@ -371,6 +371,10 @@
 	CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph.defaultPlotSpace;
 	plotSpace.allowsUserInteraction = YES;
 	plotSpace.delegate = self;
+    NSNumber *range = [NSNumber numberWithInt:(10)];
+    NSNumber *start = [NSNumber numberWithInt:(0)];
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:start length:range];
+
 	
 	// Set up the plot, including the look of the plot itself.
 	plot = [self plotWithIdentifier:identifier];
@@ -402,19 +406,25 @@
 	//    axisSet.yAxis.preferredNumberOfMajorTicks = 6;
 	CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];
 	majorGridLineStyle.lineColor = [CPTColor colorWithGenericGray:0.7];
-	majorGridLineStyle.lineWidth = 0.5;
+	majorGridLineStyle.lineWidth = 0.8;
 	
 	CPTMutableLineStyle *minorGridLineStyle = [CPTMutableLineStyle lineStyle];
 	minorGridLineStyle.lineColor = [CPTColor colorWithGenericGray:0.8];
-	minorGridLineStyle.lineWidth = 0.25;
+	minorGridLineStyle.lineWidth = 0.5;
 	
 	CPTMutableLineStyle *tickLineStyle = [CPTMutableLineStyle lineStyle];
 	tickLineStyle.lineColor = [CPTColor colorWithGenericGray:0.1];
-	tickLineStyle.lineWidth = 0.25;
+	tickLineStyle.lineWidth = 0.5;
+    
+    CPTMutableLineStyle *axisLineStyle = [CPTMutableLineStyle lineStyle];
+    axisLineStyle.lineColor = [CPTColor colorWithGenericGray:0.5];
+    axisLineStyle.lineWidth = 4.0;
 	
 	axisSet.yAxis.minorTickLineStyle = tickLineStyle;
+    axisSet.yAxis.axisLineStyle = axisLineStyle;
 	axisSet.yAxis.majorGridLineStyle = majorGridLineStyle;
 	axisSet.yAxis.minorGridLineStyle = minorGridLineStyle;
+    axisSet.xAxis.axisLineStyle = axisLineStyle;
 	axisSet.yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 	
 	NSNumberFormatter *formatterY = [[NSNumberFormatter alloc] init];
@@ -442,7 +452,6 @@
 	axisSet.yAxis.labelTextStyle = labelTextStyle;
 	
 	//25-3
-	CPTColor *linecolor = kColorGraphAverage;
 	
 	CPTMutableLineStyle *minrangeLineStyle = [plot.dataLineStyle mutableCopy];
 	minrangeLineStyle.lineWidth = kGraphLineWidth;
@@ -453,12 +462,12 @@
 	
 	CPTMutableLineStyle *newSymbolLineStyle = [CPTMutableLineStyle lineStyle];
 	newSymbolLineStyle.lineColor=kColorGraphAverage;
-	newSymbolLineStyle.lineWidth=1.0;
+	newSymbolLineStyle.lineWidth=2.0;
 	
 	CPTPlotSymbol *temperatureSymbol = [CPTPlotSymbol ellipsePlotSymbol];  //dot symbol
 	temperatureSymbol.lineStyle = minrangeLineStyle;
 	temperatureSymbol.size=kGraphSymbolSize;
-	temperatureSymbol.fill=[CPTFill fillWithColor:linecolor];
+	temperatureSymbol.fill=[CPTFill fillWithColor:kColorGraphAverage];
 	temperatureSymbol.lineStyle = newSymbolLineStyle;
 	plot.plotSymbol = temperatureSymbol;
 	
@@ -547,8 +556,13 @@
 #pragma mark - CPTScatterPlotDelegate
 
 - (CPTPlotSymbol *)symbolForScatterPlot:(CPTScatterPlot *)plot recordIndex:(NSUInteger)idx {
-	CPTPlotSymbol *temperatureSymbol = [CPTPlotSymbol diamondPlotSymbol];
-	temperatureSymbol.fill = [CPTFill fillWithColor:[CPTColor colorWithGenericGray:1.0]];
+	CPTPlotSymbol *temperatureSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+    CPTMutableLineStyle *minrangeLineStyle = [plot.dataLineStyle mutableCopy];
+    minrangeLineStyle.lineWidth = kGraphLineWidth;
+    minrangeLineStyle.lineColor = kColorGraphAverage;
+    temperatureSymbol.size=kGraphSymbolSize;
+    temperatureSymbol.fill=[CPTFill fillWithColor:[CPTColor whiteColor]];
+    temperatureSymbol.lineStyle = minrangeLineStyle;
 	return temperatureSymbol;
 }
 
