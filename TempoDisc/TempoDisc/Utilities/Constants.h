@@ -30,8 +30,8 @@
 #define kColorGraphAxis [CPTColor colorWithComponentRed:17.0f/255.0f green:90.0f/255.0f blue:140.0f/255.0f alpha:1]
 #define kFontGraphAxis @"Montserrat-Regular"
 #define kGraphLineWidth 2
-#define kGraphiPhoneFontSize 10
-#define kGraphiPadFontSize 15
+#define kGraphiPhoneFontSize 14
+#define kGraphiPadFontSize 20
 #define POPUP_TIME 5.0
 #define GRAPH_LINE_TYPE CPTScatterPlotInterpolationCurved
 //#define GRAPH_LINE_TYPE CPTScatterPlotInterpolationLinear

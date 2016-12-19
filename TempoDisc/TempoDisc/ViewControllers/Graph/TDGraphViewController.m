@@ -316,7 +316,7 @@
 	for (UIView* subview in graphView.subviews) {
 		[subview removeFromSuperview];
 	}
-	host = [(CPTGraphHostingView *)[CPTGraphHostingView alloc] initWithFrame:CGRectInset(graphView.bounds, 10, 12)];
+	host = [(CPTGraphHostingView *)[CPTGraphHostingView alloc] initWithFrame:CGRectInset(graphView.bounds, 5, 6)];
 	host.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[graphView addSubview:host];
 	return host;
@@ -325,7 +325,7 @@
 - (CPTGraph*)configureGraph:(CPTGraph*)graph hostView:(CPTGraphHostingView*)hostView graphView:(UIView*)viewGraph title:(NSString*)title
 {
 	// 1 - Create the graph
-	graph = [[CPTXYGraph alloc] initWithFrame:CGRectInset(viewGraph.bounds, 10, 10)];
+	graph = [[CPTXYGraph alloc] initWithFrame:CGRectInset(viewGraph.bounds, 5, 5)];
 	graph.title = title;
 	graph.titleDisplacement = CGPointMake(0, 15.0);
 	hostView.hostedGraph = graph;
@@ -567,6 +567,60 @@
 }
 
 #pragma mark - CPTPlotSpaceDelegate
+
+-(void)scatterPlot:(CPTPlot *)plot
+plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index
+{
+    CPTGraph *plotGraph;
+    Reading *reading;
+    /*
+    if ([plot.identifier isEqual:@"Temperature"]) {
+        //dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        plotGraph = self.hostViewTemperature.hostedGraph;
+    }
+    else if ([plot.identifier isEqual:@"Humidity"]) {
+        //dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        plotGraph = self.hostViewHumidity.hostedGraph;
+    }
+    else if ([plot.identifier isEqual:@"DewPoint"]) {
+        //dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        plotGraph = self.hostViewDewPoint.hostedGraph;
+    }
+    
+    NSValue *value = [self.dataSource objectAtIndex:index];
+    
+    NSLog(@"Value at index %@", [NSValue v])
+    
+    //CGPoint point = [fakeValue CGPointValue];
+    
+
+    // Setup a style for the annotation
+    CPTMutableTextStyle *hitAnnotationTextStyle = [CPTMutableTextStyle textStyle];
+    hitAnnotationTextStyle.color = [CPTColor grayColor];
+    hitAnnotationTextStyle.fontSize = 16.0f;
+    hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
+    
+    // Determine point of symbol in plot coordinates
+    NSNumber *x = [NSNumber numberWithFloat:point.x];
+    NSNumber *y = [NSNumber numberWithFloat:point.y];
+    NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
+    
+    
+    // First make a string for the y value
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setMaximumFractionDigits:2];
+    NSString *yString = [formatter stringFromNumber:y];
+    
+    // Now add the annotation to the plot area
+    CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yString style:hitAnnotationTextStyle];
+    CPTPlotSpaceAnnotation *symbolTextAnnotation;
+    symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plotGraph.defaultPlotSpace  anchorPlotPoint:anchorPoint];
+    symbolTextAnnotation.contentLayer = textLayer;
+    symbolTextAnnotation.displacement = CGPointMake(0.0f, 20.0f);
+    [plotGraph.plotAreaFrame.plotArea addAnnotation:symbolTextAnnotation];
+    */
+    
+}
 
 #pragma mark - IBActionSheetDelegate
 
