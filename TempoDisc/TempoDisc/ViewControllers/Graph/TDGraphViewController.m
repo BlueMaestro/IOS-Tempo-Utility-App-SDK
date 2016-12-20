@@ -491,28 +491,28 @@
 - (NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
 	if ([plot.identifier isEqual:@"Temperature"]) {
-		if (!_buttonAll.selected) {
+		/*if (!_buttonAll.selected) {
 			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count, kInitialDataLoadCount);
 		}
-		else {
+		else {*/
 			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count;
-		}
+		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
-		if (!_buttonAll.selected) {
+		/*if (!_buttonAll.selected) {
 			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count, kInitialDataLoadCount);
 		}
-		else {
+		else { */
 			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count;
-		}
+		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
-		if (!_buttonAll.selected) {
+		/*if (!_buttonAll.selected) {
 			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
 		}
-		else {
+		else { */
 			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count;
-		}
+		/*}*/
 	}
 	else {
 		return 0;
