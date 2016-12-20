@@ -37,6 +37,8 @@
 @property (nonatomic, weak) CPTGraph *activeGraph;
 @property (nonatomic, weak) UIView *activeGraphView;
 
+@property (nonatomic, strong) UIView *viewAnnotationShowed;
+
 /**
  *	Properties used for graph zooming
  **/
@@ -610,15 +612,18 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 {
     Reading *reading;
 	NSArray *dataSource = @[];
-	
+	UIView *viewGraph;
     if ([plot.identifier isEqual:@"Temperature"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		viewGraph = _viewGraphTemperature;
     }
     else if ([plot.identifier isEqual:@"Humidity"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		viewGraph = _viewGraphHumidity;
     }
     else if ([plot.identifier isEqual:@"DewPoint"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		viewGraph = _viewGraphDewPoint;
     }
 	
 	reading = [dataSource objectAtIndex:index];
@@ -632,13 +637,12 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     hitAnnotationTextStyle.fontSize = 16.0f;
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
 	
-	CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:plot.graph.hostingView];
+	CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:viewGraph];
     
     // Determine point of symbol in plot coordinates
     NSNumber *x = [NSNumber numberWithFloat:point.x+plot.frame.origin.x];
     NSNumber *y = [NSNumber numberWithFloat:point.y+plot.frame.origin.y];
     NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
-    
     
     // First make a string for the y value
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
@@ -651,8 +655,32 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plot.plotSpace  anchorPlotPoint:anchorPoint];
     symbolTextAnnotation.contentLayer = textLayer;
     symbolTextAnnotation.displacement = CGPointMake(0.0f, 20.0f);
-    [plot addAnnotation:symbolTextAnnotation];
-    
+//    [plot addAnnotation:symbolTextAnnotation];
+	
+	
+	[_viewAnnotationShowed removeFromSuperview];
+	//create view to host the label info
+	float width = [yString sizeWithAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12]}].width;//text width
+	//point is the graph symbol location, adjust view frame as needed
+	UIView *viewHostLabel = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y-50-10, width+20, 50)];//20pts padding, fixed 50pts height
+	viewHostLabel.backgroundColor = [UIColor blueMaestroBlue];
+	
+	//add label withing the host view
+	UILabel *labelAnnotation = [[UILabel alloc] initWithFrame:viewHostLabel.bounds];
+	labelAnnotation.text = yString;
+	labelAnnotation.textAlignment = NSTextAlignmentCenter;
+	labelAnnotation.textColor = [UIColor whiteColor];
+	[viewHostLabel addSubview:labelAnnotation];
+	
+	[viewGraph addSubview:viewHostLabel];
+	
+	//auto remove after 5s
+	[viewHostLabel performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:5.0];
+    _viewAnnotationShowed = viewHostLabel;
+}
+
+- (void)plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate {
+	[_viewAnnotationShowed removeFromSuperview];
 }
     
 - (void)displayMessageForNoData {
