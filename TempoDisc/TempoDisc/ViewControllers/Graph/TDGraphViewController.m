@@ -612,20 +612,22 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 {
     Reading *reading;
 	NSArray *dataSource = @[];
+    NSString *valueSymbol;
 
 	UIView *viewGraph;
-	CPTGraph *graph;
     if ([plot.identifier isEqual:@"Temperature"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        valueSymbol = @"º";
 		viewGraph = _viewGraphTemperature;
-		graph = self.hostViewTemperature.hostedGraph;
 	}
     else if ([plot.identifier isEqual:@"Humidity"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        valueSymbol = @"% RH";
 		viewGraph = _viewGraphHumidity;
     }
     else if ([plot.identifier isEqual:@"DewPoint"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        valueSymbol = @"º";
 		viewGraph = _viewGraphDewPoint;
     }
 	
@@ -633,12 +635,21 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 	NSDecimalNumber *value = reading.avgValue;//reading value
 	NSDate *timestamp = reading.timestamp;//reading date
 	
-	NSLog(@"Value at index %@", value);
+	NSLog(@"Value at index %@ with timestamp of %@", value, timestamp);
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"dd-MMM"];
+    
+    NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+    [timeFormat setDateFormat:@"HH:mm"];
+    
+    NSString *timeFromTimestamp = [timeFormat stringFromDate:timestamp];
+    NSString *dateFromTimestamp = [dateFormat stringFromDate:timestamp];
 
     // Setup a style for the annotation
     CPTMutableTextStyle *hitAnnotationTextStyle = [CPTMutableTextStyle textStyle];
     hitAnnotationTextStyle.color = [CPTColor grayColor];
-    hitAnnotationTextStyle.fontSize = 16.0f;
+    hitAnnotationTextStyle.fontSize = 13.0f;
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
 	
 	CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:viewGraph];
@@ -654,6 +665,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setMaximumFractionDigits:2];
     NSString *yString = [formatter stringFromNumber:value];
+    NSString *yStringWithSymbol = [NSString stringWithFormat:@"%@%@", yString, valueSymbol];
     
     // Now add the annotation to the plot area
     CPTTextLayer *textLayer = [[CPTTextLayer alloc] initWithText:yString style:hitAnnotationTextStyle];
@@ -669,12 +681,19 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 	//create view to host the label info
 	float width = [yString sizeWithAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:12]}].width;//text width
 	//point is the graph symbol location, adjust view frame as needed
-	UIView *viewHostLabel = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y-50-10, width+20, 50)];//20pts padding, fixed 50pts height
+	UIView *viewHostLabel = [[UIView alloc] initWithFrame:CGRectMake(point.x, point.y-80, width+50, 70)];//30pts padding, fixed 35pts height
+    viewHostLabel.layer.cornerRadius = 8.0;
+    viewHostLabel.clipsToBounds = true;
 	viewHostLabel.backgroundColor = [UIColor blueMaestroBlue];
+    
 	
 	//add label withing the host view
 	UILabel *labelAnnotation = [[UILabel alloc] initWithFrame:viewHostLabel.bounds];
-	labelAnnotation.text = yString;
+    labelAnnotation.numberOfLines = 0;
+    NSString *labelString = [NSString stringWithFormat:@"%@ \r %@ \r %@", yStringWithSymbol, timeFromTimestamp, dateFromTimestamp];
+    //NSString *labelString = @"%@\n%@", yString, timestamp;
+    [labelAnnotation setFont:[UIFont fontWithName:@"Montserrat-Regular" size:13.0]];
+    labelAnnotation.text = labelString;
 	labelAnnotation.textAlignment = NSTextAlignmentCenter;
 	labelAnnotation.textColor = [UIColor whiteColor];
 	[viewHostLabel addSubview:labelAnnotation];
