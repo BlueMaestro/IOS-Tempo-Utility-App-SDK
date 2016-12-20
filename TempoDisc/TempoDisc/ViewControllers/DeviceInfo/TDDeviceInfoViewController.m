@@ -490,13 +490,6 @@
 
 
 
-- (IBAction)graphButtonClicked:(UIButton *)sender {
-    
-    NSLog(@"Button pushed");
-}
-
-
-
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
@@ -579,6 +572,34 @@
 }
 
 - (IBAction)buttonGraphClicked:(UIButton *)sender {
+    NSArray *readings = @[];
+    readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    if (readings.count == 0) {
+        
+        NSLog(@"Error in populating array for temperature");
+            
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"No Data"
+                                                  message:@"There is no data to graph"
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            
+            
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           NSLog(@"OK action");
+                                       }];
+            [alertController addAction:okAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        
+        return;
+        
+    } else {
+        
 	[self performSegueWithIdentifier:@"segueShowGraph" sender:nil];
+
+    }
 }
 @end
