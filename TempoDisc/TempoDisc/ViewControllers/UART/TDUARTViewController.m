@@ -59,6 +59,7 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    /*  Removed since causing a crash, reinstated else
 	if (_readCharacteristic) {
 		[_readCharacteristic setNotifyValue:NO completion:^(NSError *error) {
 			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
@@ -66,7 +67,10 @@
 	}
 	else {
 		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
-	}
+	}*/
+    
+    [[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning {
