@@ -612,11 +612,14 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 {
     Reading *reading;
 	NSArray *dataSource = @[];
+
 	UIView *viewGraph;
+	CPTGraph *graph;
     if ([plot.identifier isEqual:@"Temperature"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 		viewGraph = _viewGraphTemperature;
-    }
+		graph = self.hostViewTemperature.hostedGraph;
+	}
     else if ([plot.identifier isEqual:@"Humidity"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 		viewGraph = _viewGraphHumidity;
@@ -627,7 +630,8 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     }
 	
 	reading = [dataSource objectAtIndex:index];
-	NSDecimalNumber *value = reading.avgValue;
+	NSDecimalNumber *value = reading.avgValue;//reading value
+	NSDate *timestamp = reading.timestamp;//reading date
 	
 	NSLog(@"Value at index %@", value);
 
@@ -638,6 +642,8 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
 	
 	CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:viewGraph];
+//    CGPoint point = [value CGPointValue];
+    //CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:plot.graph.hostingView];
     
     // Determine point of symbol in plot coordinates
     NSNumber *x = [NSNumber numberWithFloat:point.x+plot.frame.origin.x];
@@ -655,6 +661,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plot.plotSpace  anchorPlotPoint:anchorPoint];
     symbolTextAnnotation.contentLayer = textLayer;
     symbolTextAnnotation.displacement = CGPointMake(0.0f, 20.0f);
+
 //    [plot addAnnotation:symbolTextAnnotation];
 	
 	
@@ -681,6 +688,8 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 
 - (void)plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate {
 	[_viewAnnotationShowed removeFromSuperview];
+//    [graph.plotAreaFrame.plotArea addAnnotation:symbolTextAnnotation];
+	
 }
     
 - (void)displayMessageForNoData {
