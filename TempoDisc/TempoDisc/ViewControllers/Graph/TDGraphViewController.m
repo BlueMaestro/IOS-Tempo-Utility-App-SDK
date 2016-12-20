@@ -610,9 +610,11 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 {
     Reading *reading;
 	NSArray *dataSource = @[];
+    CPTGraph *graph;
 	
     if ([plot.identifier isEqual:@"Temperature"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        graph = self.hostViewTemperature.hostedGraph;
     }
     else if ([plot.identifier isEqual:@"Humidity"]) {
         dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -632,7 +634,8 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     hitAnnotationTextStyle.fontSize = 16.0f;
     hitAnnotationTextStyle.fontName = @"Helvetica-Bold";
 	
-	CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:plot.graph.hostingView];
+    CGPoint point = [value CGPointValue];
+    //CGPoint point = [[[[event allTouches] allObjects] firstObject] locationInView:plot.graph.hostingView];
     
     // Determine point of symbol in plot coordinates
     NSNumber *x = [NSNumber numberWithFloat:point.x+plot.frame.origin.x];
@@ -651,7 +654,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     symbolTextAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plot.plotSpace  anchorPlotPoint:anchorPoint];
     symbolTextAnnotation.contentLayer = textLayer;
     symbolTextAnnotation.displacement = CGPointMake(0.0f, 20.0f);
-    [plot addAnnotation:symbolTextAnnotation];
+    [graph.plotAreaFrame.plotArea addAnnotation:symbolTextAnnotation];
     
 }
     
