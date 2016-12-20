@@ -23,6 +23,7 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
 
+- (IBAction)buttonGraphClicked:(UIButton *)sender;
 
 
 @end

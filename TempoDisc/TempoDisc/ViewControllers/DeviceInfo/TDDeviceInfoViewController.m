@@ -578,4 +578,7 @@
 	}
 }
 
+- (IBAction)buttonGraphClicked:(UIButton *)sender {
+	[self performSegueWithIdentifier:@"segueShowGraph" sender:nil];
+}
 @end
