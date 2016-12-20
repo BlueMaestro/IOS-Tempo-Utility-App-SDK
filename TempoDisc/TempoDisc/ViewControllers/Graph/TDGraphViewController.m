@@ -12,7 +12,7 @@
 
 #define kTresholdZoomAngle 30
 
-#define kInitialDataLoadCount 40
+#define kInitialDataLoadCount 24
 
 #define kInitialReadingsLoad 30
 
@@ -89,8 +89,10 @@
 				_viewGraphTemperature = _viewGraphHumidity ? _viewGraphHumidity : _viewGraphDewPoint;
 				_viewGraphHumidity = nil;
 			}
-		  [_labelReadingType setText:NSLocalizedString(@"TEMPERATURE", nil)];
+		  [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
 		  _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
+            _labelReadingType.font = [UIFont fontWithName:@"Montserrat-Regular" size:18];
+            _labelUnit.font = [UIFont fontWithName:@"Montserrat-Regular" size:12];
 			_activeGraph = _graphTemperature;
 			_activeGraphView = _viewGraphTemperature;
 			break;
@@ -100,8 +102,10 @@
 				_viewGraphHumidity = _viewGraphTemperature ? _viewGraphTemperature : _viewGraphDewPoint;
 				_viewGraphTemperature = nil;
 			}
-			[_labelReadingType setText:NSLocalizedString(@"HUMIDITY", nil)];
+			[_labelReadingType setText:NSLocalizedString(@"Humidity", nil)];
+            _labelReadingType.font = [UIFont fontWithName:@"Montserrat-Regular" size:18];
 			_labelUnit.text = @"% RELATIVE HUMIDITY";
+            _labelUnit.font = [UIFont fontWithName:@"Montserrat-Regular" size:12];
 			_activeGraph = _graphHumidity;
 			_activeGraphView = _viewGraphHumidity;
 			break;
@@ -112,8 +116,10 @@
 				_viewGraphTemperature = nil;
 				_viewGraphHumidity = nil;
 			}
-			[_labelReadingType setText:NSLocalizedString(@"DEW POINT", nil)];
+			[_labelReadingType setText:NSLocalizedString(@"Dew Point", nil)];
 			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
+            _labelReadingType.font = [UIFont fontWithName:@"Montserrat-Regular" size:18];
+            _labelUnit.font = [UIFont fontWithName:@"Montserrat-Regular" size:12];
 			_activeGraph = _graphDewPoint;
 			_activeGraphView = _viewGraphDewPoint;
 			break;
@@ -247,15 +253,17 @@
 #pragma mark - Graph setup
 
 - (void)adjustPlotsRange {
+    NSArray *readings = @[];
 	TempoDevice *device = [TDDefaultDevice sharedDevice].selectedDevice;
 	/**
 	 *	Adjust range for plot so that all points fit in the view with one hour before and after
 	 **/
 	CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
-	NSArray *readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-	/*if (!_buttonAll.selected) {
+	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    if (readings.count == 0) NSLog(@"Error in populating array for temperature");
+	if (!_buttonAll.selected) {
 		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
-	}*/
+	}
 	double lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
 	double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 	plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
@@ -524,7 +532,7 @@
 	NSArray *dataSource = @[];
 	Reading *reading;
 	if ([plot.identifier isEqual:@"Temperature"]) {
-		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		NSArray *dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
 		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -532,7 +540,15 @@
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
 		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
-	reading = [dataSource objectAtIndex:index];
+    if ([dataSource count] == 0) {
+        NSLog(@"Empty Data source");
+        reading = 0;
+        
+    } else {
+        
+    reading = [dataSource objectAtIndex:index];
+        
+    }
 	
 	switch (fieldEnum) {
 		case CPTScatterPlotFieldX:

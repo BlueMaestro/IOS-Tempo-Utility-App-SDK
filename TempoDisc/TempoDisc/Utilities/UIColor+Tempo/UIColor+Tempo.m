@@ -19,7 +19,7 @@
 }
 
 +(UIColor *)buttonDarkGrey {
-	return ([UIColor colorWithRed:59/255.0f green:59/255.0f blue:59/255.0f alpha:0.6]);
+	return ([UIColor colorWithRed:59/255.0f green:59/255.0f blue:59/255.0f alpha:0.8]);
 }
 
 + (UIColor *)buttonSeparator {

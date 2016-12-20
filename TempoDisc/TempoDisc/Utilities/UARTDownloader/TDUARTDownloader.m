@@ -200,11 +200,11 @@ typedef enum : NSInteger {
 
         NSLog(@"Deleting old data");
         [[TDDefaultDevice sharedDevice].selectedDevice deleteOldData:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
-        [NSThread sleepForTimeInterval: 0.5];
+        [NSThread sleepForTimeInterval: 1.0];
         
         NSLog(@"Writing new data");
 		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:_startingTimeStamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
-        [NSThread sleepForTimeInterval: 0.5];
+        [NSThread sleepForTimeInterval: 1.0];
         
 	}
 	

@@ -489,7 +489,7 @@
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];
+		/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];*/
 		
 		__weak typeof(self) weakself = self;
         /*
@@ -512,11 +512,12 @@
 			}];
 		}]];*/
 		
-		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download New", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		/*[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download New", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			if (!weakself.uartDownloader) {
 				weakself.uartDownloader = [[TDUARTDownloader alloc] init];
-			}
-			
+			}*/
+            if (!weakself.uartDownloader) {
+                weakself.uartDownloader = [[TDUARTDownloader alloc] init];
 			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
 			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
 			[weakself.uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
@@ -530,11 +531,11 @@
                 
 				[weakself refreshCurrentDevice];
 			}];
-		}]];
+		};
 		
-		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
+		//[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
 		
-		[self presentViewController:alert animated:YES completion:nil];
+		//[self presentViewController:alert animated:YES completion:nil];
 	}
 	else {
 		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
