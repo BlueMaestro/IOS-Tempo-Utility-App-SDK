@@ -10,6 +10,8 @@
 #import "TDBaseDeviceViewController.h"
 @interface TDDeviceInfoViewController : TDBaseDeviceViewController
 
+
+@property (strong, nonatomic) IBOutlet UIButton *graphButton;
 @property (strong, nonatomic) IBOutlet UILabel *labelTemperatureValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelHumidityValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelLastDownloadTimestamp;
@@ -21,7 +23,6 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
 
-- (IBAction)buttonDownloadClicked:(UIButton *)sender;
 
 
 @end

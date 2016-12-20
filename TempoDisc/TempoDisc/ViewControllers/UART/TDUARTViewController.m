@@ -324,10 +324,12 @@
 	UILabel *labelMessage = (UILabel*)[cell viewWithTag:545];
 	
 	labelMessage.text = message.text;
-	labelMessage.textColor = message.type == LogMessageTypeOutbound ? [UIColor greenColor] : [UIColor blackColor];
+	labelMessage.textColor = message.type == LogMessageTypeOutbound ? [UIColor greenColor] : [UIColor buttonDarkGrey];
 	
 	return cell;
 }
+
+
 
 #pragma mark - UITableViewDelegate
 

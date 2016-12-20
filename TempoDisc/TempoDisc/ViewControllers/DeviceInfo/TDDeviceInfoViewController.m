@@ -487,6 +487,17 @@
 
 #pragma mark - Actions
 
+
+
+
+- (IBAction)graphButtonClicked:(UIButton *)sender {
+    
+    NSLog(@"Button pushed");
+}
+
+
+
+
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];*/

@@ -78,8 +78,15 @@
 - (void)setupView {
 	[super setupView];
 	[_buttonAll setBackgroundImage:[[_buttonAll backgroundImageForState:UIControlStateNormal] copy] forState:UIControlStateSelected];
-	[self initPlot];
-	[self adjustPlotsRange];
+    NSArray *emptyArrayTest = @[];
+    emptyArrayTest = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    if ([emptyArrayTest count] == 0){
+        NSLog(@"There is an empty array");
+    
+    } else {
+            [self initPlot];
+            [self adjustPlotsRange];
+    }
 }
 
 - (void)changeReadingType:(TempoReadingType)type {
@@ -260,15 +267,21 @@
 	 **/
 	CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
 	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-    if (readings.count == 0) NSLog(@"Error in populating array for temperature");
+    if (readings.count == 0) {
+    
+        NSLog(@"Error in populating array for temperature");
+        [self displayMessageForNoData];
+        
+    }
 	if (!_buttonAll.selected) {
 		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
 	}
+    
 	double lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
 	double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 	plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
 	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
-	
+        
 	CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphHumidity.defaultPlotSpace;
 	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	if (!_buttonAll.selected) {
@@ -532,7 +545,7 @@
 	NSArray *dataSource = @[];
 	Reading *reading;
 	if ([plot.identifier isEqual:@"Temperature"]) {
-		NSArray *dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
 		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -542,7 +555,13 @@
 	}
     if ([dataSource count] == 0) {
         NSLog(@"Empty Data source");
-        reading = 0;
+        
+        UIAlertController *alertController = [UIAlertController
+                                              alertControllerWithTitle:@"No Data"
+                                              message:@"There is no data to graph"
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        
+        
         
     } else {
         
@@ -635,6 +654,26 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     [plot addAnnotation:symbolTextAnnotation];
     
 }
+    
+- (void)displayMessageForNoData {
+    
+    UIAlertController *alertController = [UIAlertController
+                                          alertControllerWithTitle:@"No Data"
+                                          message:@"There is no data to graph"
+                                          preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    UIAlertAction *okAction = [UIAlertAction
+                            actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction *action)
+                            {
+                                NSLog(@"OK action");
+                            }];
+    [alertController addAction:okAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+    
 
 #pragma mark - IBActionSheetDelegate
 
