@@ -269,12 +269,6 @@
 	 **/
 	CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
 	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-    if (readings.count == 0) {
-    
-        NSLog(@"Error in populating array for temperature");
-        [self displayMessageForNoData];
-        
-    }
 	if (!_buttonAll.selected) {
 		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
 	}
@@ -413,6 +407,7 @@
 
 - (void)configureAxesForGraph:(CPTGraph*)graph plot:(CPTScatterPlot*)plot
 {
+    // Need to add the ability to plot two or three graphs
 	// Set up axis.
 	CPTXYAxisSet * axisSet = (CPTXYAxisSet *) graph.axisSet;
 	
