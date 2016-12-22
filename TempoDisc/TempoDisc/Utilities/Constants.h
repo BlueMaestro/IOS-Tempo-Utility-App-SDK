@@ -28,6 +28,9 @@
 #define kGraphSymboldTouchArea 10.0
 #define kColorGraphAverage [CPTColor colorWithComponentRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]
 #define kColorGraphAxis [CPTColor colorWithComponentRed:17.0f/255.0f green:90.0f/255.0f blue:140.0f/255.0f alpha:1]
+#define kColorGraphHumidity [CPTColor colorWithComponentRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]
+#define kColorGraphTemperature [CPTColor colorWithComponentRed:208/255.0f green:3/255.0f blue:3/255.0f alpha:1]
+#define kColorGraphDewPoint [CPTColor colorWithComponentRed:13/255.0f green:204/255.0f blue:80/255.0f alpha:1]
 #define kFontGraphAxis @"Montserrat-Regular"
 #define kGraphLineWidth 2
 #define kGraphiPhoneFontSize 14
