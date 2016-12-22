@@ -11,6 +11,8 @@
 @interface UIColor (Tempo)
 
 +(UIColor *)blueMaestroBlue;
++(UIColor *)graphTemperature;
++(UIColor *)graphDewPoint;
 +(UIColor *)botomBarSeparatorGrey;
 +(UIColor *)buttonDarkGrey;
 +(UIColor *)buttonSeparator;

@@ -14,6 +14,14 @@
 	return ([UIColor colorWithRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]);
 }
 
++(UIColor *)graphTemperature {
+    return ([UIColor colorWithRed:208/255.0f green:3/255.0f blue:3/255.0f alpha:1]);
+}
+
++(UIColor *)graphDewPoint {
+    return ([UIColor colorWithRed:13/255.0f green:204/255.0f blue:80/255.0f alpha:1]);
+}
+
 + (UIColor *)botomBarSeparatorGrey {
 	return ([UIColor colorWithRed:153/255.0f green:155/255.0f blue:157/255.0f alpha:1]);
 }
