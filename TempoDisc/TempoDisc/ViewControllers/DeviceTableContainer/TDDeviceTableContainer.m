@@ -90,15 +90,16 @@
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateFormat:@"HH:mm\tdd/MM/yyyy"];
 	//[formatter setDateFormat:@"dd/MM/yyyy\tHH:mm"];
-	NSArray *temperature = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"];
-	NSArray *humidity = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"];
-	NSArray *dewPoint = [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"];
-	for (NSInteger index = 0; index < temperature.count; index++) {
-		Reading *readingTemperature = index < temperature.count ? temperature[index] : nil;
-		Reading *readingHumidity = index < humidity.count ? humidity[index] : nil;
-		Reading *readingDewPoint = index < dewPoint.count ? dewPoint[index] : nil;
+	NSArray *temperature = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	NSArray *humidity = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	NSArray *dewPoint = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+    
+    for (NSInteger index = (temperature.count - 1); index >= 0; index--) {
+		Reading *readingTemperature = index >= 0 ? temperature[index] : nil;
+		Reading *readingHumidity = index >= 0 ? humidity[index] : nil;
+		Reading *readingDewPoint = index >= 0 ? dewPoint[index] : nil;
 		
-		[writer writeField:[NSString stringWithFormat:@"%lu", (unsigned long)index+1]];
+		[writer writeField:[NSString stringWithFormat:@"%lu", (unsigned long)index]];
 		[writer writeField:[NSString stringWithFormat:@"%@", [formatter stringFromDate:readingTemperature.timestamp]]];
 		[writer writeField:[NSString stringWithFormat:@"%@", readingTemperature.avgValue]];
 		[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
@@ -153,7 +154,7 @@
 	  NSForegroundColorAttributeName,
 	  nil]];
 	[mailComposeVC setNeedsStatusBarAppearanceUpdate];*/
-	[mailComposeVC setSubject:@"Device data export"];
+	[mailComposeVC setSubject:@"Data Export"];
 	
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateFormat:@"dd-MM-yyyy"];
