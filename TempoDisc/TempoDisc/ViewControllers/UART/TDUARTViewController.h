@@ -19,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollViewMain;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *constraintScrollViewBottom;
 
+@property (strong, nonatomic) NSString *option;//option with which the screen was opened
+
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender;
 - (IBAction)buttonConnectClicked:(UIButton *)sender;
 

@@ -26,7 +26,7 @@
 
 - (IBAction)buttonGraphClicked:(UIButton *)sender;
 
-- (IBAction)showUserDataEntryForm;
+- (IBAction)buttonConsoleClicked:(UIButton *)sender;
 
 
 @end

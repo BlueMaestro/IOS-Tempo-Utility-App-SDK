@@ -14,6 +14,7 @@
 #import "TempoDiscDevice+CoreDataProperties.h"
 //#import "TDUARTDownloader.h"
 #import "TDUARTAllDataDownloader.h"
+#import "TDUARTViewController.h"
 
 #define kDeviceConnectTimeout 10.0
 
@@ -157,6 +158,10 @@
     // Pass the selected object to the new view controller.
 	if ([segue.destinationViewController isKindOfClass:[DeviceInfoTableViewController class]]) {
 		_controllerTable = segue.destinationViewController;
+	}
+	if ([segue.destinationViewController isKindOfClass:[TDUARTViewController class]]) {
+		TDUARTViewController *uartController = (TDUARTViewController*)segue.destinationViewController;
+		uartController.option = sender;
 	}
 }
 
@@ -604,5 +609,39 @@
 	[self performSegueWithIdentifier:@"segueShowGraph" sender:nil];
 
     }
+}
+
+- (IBAction)buttonConsoleClicked:(UIButton *)sender {
+	/**
+	 *	Create alert controller
+	 *	UIAlertControllerStyleAlert - Alert popup
+	 *	UIAlertControllerStyleAlert - Action Sheet (from bottom)
+	 **/
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Command" message:@"Choose command" preferredStyle:UIAlertControllerStyleAlert];
+	
+	/**
+	 *	Add buttons
+	 *	We need some way of passing the selected option to the UART screen.
+	 *	We can pass the selected option through sender.
+	 **/
+	__weak typeof(self) weakself = self;
+	[alert addAction:[UIAlertAction actionWithTitle:@"Console" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself performSegueWithIdentifier:@"segueShowUART" sender:@"console"];
+		
+		/**
+		 *	Alternative method, push controller to navigation stack programatically
+		 **/
+		/*TDUARTViewController *uartController = [weakself.storyboard instantiateViewControllerWithIdentifier:@"viewControllerUART"];
+		uartController.option = @"console";
+		[weakself.navigationController pushViewController:uartController animated:YES];*/
+	}]];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself performSegueWithIdentifier:@"segueShowUART" sender:@"rename"];
+	}]];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+	
+	[self presentViewController:alert animated:YES completion:nil];
 }
 @end

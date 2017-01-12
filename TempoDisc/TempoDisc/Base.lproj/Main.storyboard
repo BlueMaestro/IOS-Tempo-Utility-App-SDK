@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="odE-mI-OPm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="odE-mI-OPm">
     <device id="ipad12_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -74,8 +74,8 @@
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CURRENT DEW POINT" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XpE-J9-SLV">
-                                            <rect key="frame" x="20" y="157" width="136.5" height="16"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CURRENT DEW POINT" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XpE-J9-SLV">
+                                            <rect key="frame" x="20" y="158" width="148" height="16"/>
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="13"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -695,7 +695,7 @@
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <segue destination="CxN-Gb-rgC" kind="show" id="ksw-HN-G1m"/>
+                                            <action selector="buttonConsoleClicked:" destination="tMM-iH-sIM" eventType="touchUpInside" id="rs3-bf-RpN"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pcj-e4-qwg">
@@ -761,11 +761,12 @@
                         <outletCollection property="buttonOptions" destination="Pcj-e4-qwg" id="FqP-rA-ADn"/>
                         <outletCollection property="buttonOptions" destination="cp9-rh-oic" id="jCM-gg-JBk"/>
                         <segue destination="1ae-lz-4lE" kind="show" identifier="segueShowGraph" id="VS3-Wr-sIG"/>
+                        <segue destination="CxN-Gb-rgC" kind="show" identifier="segueShowUART" id="adK-NJ-0Tu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ruS-qd-Jbs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="765" y="404"/>
+            <point key="canvasLocation" x="717" y="360"/>
         </scene>
         <!--Command Line-->
         <scene sceneID="kxq-98-f4N">
@@ -922,7 +923,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MPC-fW-gyK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2290" y="-174"/>
+            <point key="canvasLocation" x="2228" y="-174"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="3aG-cy-WNV">
@@ -1279,6 +1280,7 @@
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
+                                            <action selector="buttonConsoleClicked:" destination="Ld5-H0-NvG" eventType="touchUpInside" id="xqj-8p-4lE"/>
                                             <action selector="showUserDataEntryForm:" destination="Ld5-H0-NvG" eventType="touchUpInside" id="rVL-9j-JdB"/>
                                             <segue destination="bEP-8G-cVC" kind="popoverPresentation" identifier="popOver" popoverAnchorView="AcU-Eb-gEO" id="Nd2-V7-L1X">
                                                 <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
@@ -1348,11 +1350,12 @@
                         <outletCollection property="buttonOptions" destination="e3S-oH-43K" id="7ha-a8-0s9"/>
                         <outletCollection property="buttonOptions" destination="AcU-Eb-gEO" id="hxg-Vm-JlZ"/>
                         <segue destination="1ae-lz-4lE" kind="show" identifier="segueShowGraph" id="Hao-aV-WAq"/>
+                        <segue destination="CxN-Gb-rgC" kind="show" identifier="segueShowUART" id="qe2-cK-DC4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1RA-li-B0W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="676.79999999999995" y="-529.38530734632684"/>
+            <point key="canvasLocation" x="717" y="-517"/>
         </scene>
         <!--Device Info Table View Controller-->
         <scene sceneID="9aE-Cd-w3C">
@@ -1657,6 +1660,7 @@
         <image name="tab-list-selected" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Hao-aV-WAq"/>
+        <segue reference="VS3-Wr-sIG"/>
+        <segue reference="adK-NJ-0Tu"/>
     </inferredMetricsTieBreakers>
 </document>
