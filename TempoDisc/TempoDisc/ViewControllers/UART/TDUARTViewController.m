@@ -43,7 +43,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	_dataSourceLogMessages = [NSMutableArray array];
-	[self setupView];
+	//[self setupView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -92,7 +92,7 @@
 
 - (void)setupView {
 	[super setupView];
-	_tableViewLog.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+	//_tableViewLog.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	_tableViewLog.rowHeight = UITableViewAutomaticDimension;
 	_tableViewLog.estimatedRowHeight = 44.0;
 	

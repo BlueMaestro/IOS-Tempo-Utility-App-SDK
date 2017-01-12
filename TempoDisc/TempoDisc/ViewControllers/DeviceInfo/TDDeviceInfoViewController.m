@@ -48,6 +48,7 @@
 
 @interface TDDeviceInfoViewController ()
 
+
 @property (nonatomic, strong) NSDateFormatter *formatterLastDownload;
 
 @property (nonatomic, strong) MBProgressHUD *hudDownloadData;
@@ -72,6 +73,8 @@
 @end
 
 @implementation TDDeviceInfoViewController
+
+
 
 #pragma mark - Data Parse
 

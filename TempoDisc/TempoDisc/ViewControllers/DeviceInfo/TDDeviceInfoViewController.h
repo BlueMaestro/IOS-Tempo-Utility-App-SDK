@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TDBaseDeviceViewController.h"
+
 @interface TDDeviceInfoViewController : TDBaseDeviceViewController
 
 
@@ -24,6 +25,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
 
 - (IBAction)buttonGraphClicked:(UIButton *)sender;
+
+- (IBAction)showUserDataEntryForm;
 
 
 @end
