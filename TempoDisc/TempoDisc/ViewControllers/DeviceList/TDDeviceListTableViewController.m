@@ -302,12 +302,12 @@
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
-		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº %@", device.currentTemperature.floatValue, unit];
+		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", device.currentTemperature.floatValue];
 	}
 	else {
-		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº %@", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue, unit];
+		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
 	}
-	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%% RH", (long)device.currentHumidity.integerValue];
+	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
 	
 	if (device.version) {
@@ -319,13 +319,13 @@
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
 		cell.labelDeviceVersionValue.hidden = YES;
 	}
-	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%ld dBm", device.peripheral.RSSI];
+	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", device.peripheral.RSSI];
 	
 	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
 	
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice* disc = (TempoDiscDevice*)device;
-		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº %@", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue, device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius"];
+		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue];
 	}
 	else {
 		cell.labelCurrentDewPointValue.text = @"0";

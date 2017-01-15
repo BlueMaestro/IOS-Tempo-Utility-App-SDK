@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7174D4061E2A4BBC0031EEFC /* Artboard 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7174D4051E2A4BBC0031EEFC /* Artboard 1.png */; };
 		B348E042FAA81A40FE9426CD /* libPods-Tempo Utility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F3B5A64DC297B9F6942E40 /* libPods-Tempo Utility.a */; };
 		CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */; };
 		CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */; };
@@ -56,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		23F3B5A64DC297B9F6942E40 /* libPods-Tempo Utility.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tempo Utility.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7174D4051E2A4BBC0031EEFC /* Artboard 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Artboard 1.png"; path = "../../../Creative Cloud Files/Artboard 1.png"; sourceTree = "<group>"; };
 		821ACA4690AA2A0B5F0C2EC0 /* Pods-Tempo Utility.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tempo Utility.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tempo Utility/Pods-Tempo Utility.release.xcconfig"; sourceTree = "<group>"; };
 		CB14AD1A1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TempoDiscDevice+CoreDataClass.h"; sourceTree = "<group>"; };
 		CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscDevice+CoreDataClass.m"; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 		CB16BA351C82E67E00C99C41 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7174D4051E2A4BBC0031EEFC /* Artboard 1.png */,
 				CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */,
 				CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */,
 				CB16BA361C82E67E00C99C41 /* main.m */,
@@ -653,6 +656,7 @@
 				CB16BA451C82E67E00C99C41 /* Assets.xcassets in Resources */,
 				CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */,
 				CB16BA401C82E67E00C99C41 /* Main.storyboard in Resources */,
+				7174D4061E2A4BBC0031EEFC /* Artboard 1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -611,19 +611,26 @@
     }
 }
 
+
+
+
+
+
+
 - (IBAction)buttonConsoleClicked:(UIButton *)sender {
-	/**
+    /*
+	**
 	 *	Create alert controller
 	 *	UIAlertControllerStyleAlert - Alert popup
 	 *	UIAlertControllerStyleAlert - Action Sheet (from bottom)
-	 **/
+	 **
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Command" message:@"Choose command" preferredStyle:UIAlertControllerStyleAlert];
 	
 	/**
 	 *	Add buttons
 	 *	We need some way of passing the selected option to the UART screen.
 	 *	We can pass the selected option through sender.
-	 **/
+	 **
 	__weak typeof(self) weakself = self;
 	[alert addAction:[UIAlertAction actionWithTitle:@"Console" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		[weakself performSegueWithIdentifier:@"segueShowUART" sender:@"console"];
@@ -633,7 +640,7 @@
 		 **/
 		/*TDUARTViewController *uartController = [weakself.storyboard instantiateViewControllerWithIdentifier:@"viewControllerUART"];
 		uartController.option = @"console";
-		[weakself.navigationController pushViewController:uartController animated:YES];*/
+		[weakself.navigationController pushViewController:uartController animated:YES];*
 	}]];
 	
 	[alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -643,5 +650,6 @@
 	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
 	
 	[self presentViewController:alert animated:YES completion:nil];
+    */
 }
 @end
