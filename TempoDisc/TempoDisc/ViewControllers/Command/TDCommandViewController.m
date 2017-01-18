@@ -8,6 +8,10 @@
 
 #import "TDCommandViewController.h"
 #import "TDCommandCollectionViewCell.h"
+#import <LGBluetooth/LGBluetooth.h>
+
+#define CHAR_ID @"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define SERVICE_ID @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 
 typedef enum : NSInteger {
 	DeviceCommandChangeName = 0,
@@ -188,7 +192,15 @@ typedef enum : NSInteger {
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 	DeviceCommand command = [_dataSourceCommands[indexPath.row] integerValue];
-	[self actionForCommand:command];
+	/**
+	 *	If there is a custom action which should not implement the standard alert then override here instead of calling actionForCommand:
+	 **/
+	if (command == DeviceCommandCommandConsole) {
+		[self performSegueWithIdentifier:@"segueShowUART" sender:nil];
+	}
+	else {
+		[self actionForCommand:command];
+	}
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -199,8 +211,28 @@ typedef enum : NSInteger {
 
 #pragma mark - Commands
 
+//general
+- (void)writeStringToDevice:(NSString*)string {
+	__weak typeof(self) weakself = self;
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	[LGUtils writeData:[string dataUsingEncoding:NSUTF8StringEncoding] charactUUID:CHAR_ID serviceUUID:SERVICE_ID peripheral:[TDDefaultDevice sharedDevice].selectedDevice.peripheral completion:^(NSError *error) {
+		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+		if (!error) {
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
+			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+			[self presentViewController:alert animated:YES completion:nil];
+		}
+		else {
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Error writing: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
+			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+			[self presentViewController:alert animated:YES completion:nil];
+		}
+		[weakself refreshCurrentDevice];
+	}];
+}
+
 - (void)changeName:(NSString*)name {
-	
+	[self writeStringToDevice:[NSString stringWithFormat:@"*nam %@", name]];
 }
 
 @end
