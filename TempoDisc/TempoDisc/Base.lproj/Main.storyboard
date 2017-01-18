@@ -24,7 +24,7 @@
         <scene sceneID="Jkm-OP-FMy">
             <objects>
                 <navigationController id="odE-mI-OPm" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="E16-QP-yoc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="E16-QP-yoc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -50,7 +50,7 @@
                                 <rect key="frame" x="0.0" y="28" width="414" height="122"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N2B-hu-upH" id="9DL-JK-ka7">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="121"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="122"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Blue Box" translatesAutoresizingMaskIntoConstraints="NO" id="OVv-j6-T84">
@@ -264,7 +264,7 @@
                                 <rect key="frame" x="0.0" y="150" width="414" height="110"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="4hT-ST-Ilr" id="C2D-Um-vLJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="109"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="110"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRO-NE-vKr">
@@ -287,7 +287,7 @@
                                 <rect key="frame" x="0.0" y="260" width="414" height="134"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="skw-Zh-SdA" id="PPi-6f-yCH">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="133"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="134"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kvR-I2-Wt5">
@@ -1074,18 +1074,18 @@
                                 <rect key="frame" x="0.0" y="28" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xdk-gP-6Fx" id="qlD-Qy-O2j">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5T3-nR-0UU">
-                                            <rect key="frame" x="15" y="5" width="35" height="20"/>
+                                            <rect key="frame" x="15" y="6" width="35" height="19.666666666666668"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WI4-Vs-veT">
-                                            <rect key="frame" x="15" y="25" width="44" height="14"/>
+                                            <rect key="frame" x="14.999999999999996" y="25.666666666666668" width="43.666666666666664" height="13.666666666666666"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="11"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1098,7 +1098,7 @@
                                 <rect key="frame" x="0.0" y="72" width="600" height="104"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="skK-Lc-Sbz" id="s24-T0-lKN">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="103"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="104"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="DATE AND TIME:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="idZ-ZZ-sMc">
@@ -1478,21 +1478,21 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Red Box" translatesAutoresizingMaskIntoConstraints="NO" id="FNg-Hv-8eo">
-                                                <rect key="frame" x="137" y="30" width="94" height="68"/>
+                                                <rect key="frame" x="139" y="30" width="94" height="68"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100.2˚" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Od-cZ-88v" userLabel="Temperature Value">
-                                                <rect key="frame" x="154" y="65.666666666666686" width="60" height="25"/>
+                                                <rect key="frame" x="156" y="65.666666666666686" width="60" height="25"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMP." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3lG-Mc-zQI" userLabel="Temperature Label">
-                                                <rect key="frame" x="166" y="36" width="37.666666666666657" height="14.666666666666686"/>
+                                                <rect key="frame" x="168" y="36" width="37.666666666666657" height="14.666666666666686"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Bold" family="Montserrat" pointSize="12"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Celsius" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="loL-vW-co4" userLabel="Temp Units Label">
-                                                <rect key="frame" x="170" y="51.666666666666686" width="29" height="10"/>
+                                                <rect key="frame" x="172" y="51.666666666666686" width="29" height="10"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="8"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -1520,20 +1520,20 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Green Box" translatesAutoresizingMaskIntoConstraints="NO" id="M4j-Py-5be">
-                                                <rect key="frame" x="369" y="30" width="94" height="68"/>
+                                                <rect key="frame" x="367" y="30" width="94" height="68"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DEW POINT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dq-A0-ydY" userLabel="Dew Point Label">
-                                                <rect key="frame" x="386" y="37" width="60" height="13"/>
+                                                <rect key="frame" x="384" y="37" width="60" height="13"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Bold" family="Montserrat" pointSize="10"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Celsius" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8cm-1Y-nP0" userLabel="Dew Units Label">
-                                                <rect key="frame" x="402" y="51.666666666666686" width="29" height="10"/>
+                                                <rect key="frame" x="400" y="51.666666666666686" width="29" height="10"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="8"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100.2˚" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kql-dy-W8d" userLabel="Dew Point Value">
-                                                <rect key="frame" x="386" y="65.666666666666686" width="60" height="25"/>
+                                                <rect key="frame" x="384" y="65.666666666666686" width="60" height="25"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="20"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -1554,11 +1554,11 @@
                                             <constraint firstItem="Aj5-He-Ktv" firstAttribute="centerX" secondItem="BMP-pT-Voq" secondAttribute="centerX" id="Ife-a4-cDV"/>
                                             <constraint firstItem="BMP-pT-Voq" firstAttribute="height" secondItem="FNg-Hv-8eo" secondAttribute="height" id="JSp-V9-iav"/>
                                             <constraint firstItem="Wtv-ID-bMP" firstAttribute="centerX" secondItem="BMP-pT-Voq" secondAttribute="centerX" id="LS5-CB-uIU"/>
-                                            <constraint firstItem="M4j-Py-5be" firstAttribute="leading" secondItem="BMP-pT-Voq" secondAttribute="trailing" constant="22" id="LXx-dt-vR9"/>
+                                            <constraint firstItem="M4j-Py-5be" firstAttribute="leading" secondItem="BMP-pT-Voq" secondAttribute="trailing" constant="20" id="LXx-dt-vR9"/>
                                             <constraint firstItem="6dq-A0-ydY" firstAttribute="centerX" secondItem="M4j-Py-5be" secondAttribute="centerX" id="LYs-W3-Dqz"/>
                                             <constraint firstItem="8cm-1Y-nP0" firstAttribute="centerY" secondItem="loL-vW-co4" secondAttribute="centerY" id="LZc-NI-KRj"/>
                                             <constraint firstItem="chs-Qz-eK0" firstAttribute="centerX" secondItem="ve3-W4-mZj" secondAttribute="centerX" id="OwG-kh-lJV"/>
-                                            <constraint firstItem="BMP-pT-Voq" firstAttribute="leading" secondItem="FNg-Hv-8eo" secondAttribute="trailing" constant="22" id="QHr-3d-ACM"/>
+                                            <constraint firstItem="BMP-pT-Voq" firstAttribute="leading" secondItem="FNg-Hv-8eo" secondAttribute="trailing" constant="20" id="QHr-3d-ACM"/>
                                             <constraint firstItem="M4j-Py-5be" firstAttribute="height" secondItem="FNg-Hv-8eo" secondAttribute="height" id="QVN-id-NSA"/>
                                             <constraint firstItem="kql-dy-W8d" firstAttribute="centerY" secondItem="1Od-cZ-88v" secondAttribute="centerY" id="RCp-yj-K9F"/>
                                             <constraint firstItem="8cm-1Y-nP0" firstAttribute="centerX" secondItem="M4j-Py-5be" secondAttribute="centerX" id="S3C-gv-ssE"/>
@@ -1987,9 +1987,47 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="600" height="1000"/>
                     <connections>
+                        <outlet property="imageViewBatteryStatus" destination="p5Z-tB-AYH" id="MF3-VW-eRk"/>
+                        <outlet property="labelCurrentDeviceDewPointUnit" destination="8cm-1Y-nP0" id="BMf-8m-wYi"/>
+                        <outlet property="labelCurrentDeviceDewPointValue" destination="kql-dy-W8d" id="vLW-7I-a9B"/>
+                        <outlet property="labelCurrentDeviceHumidityValue" destination="Cch-H7-hRT" id="9gf-2F-OXf"/>
+                        <outlet property="labelCurrentDeviceTemperatureUnit" destination="loL-vW-co4" id="SPJ-aQ-Vur"/>
+                        <outlet property="labelCurrentDeviceTemperatureValue" destination="1Od-cZ-88v" id="ytg-d0-feB"/>
+                        <outlet property="labelDeviceBatteryValue" destination="P2C-eS-6qg" id="DRI-Do-pWx"/>
+                        <outlet property="labelDeviceID" destination="eTG-CK-8dK" id="vkB-su-Y6T"/>
+                        <outlet property="labelDeviceName" destination="NKD-vX-e7f" id="FZ6-TN-Xdo"/>
+                        <outlet property="labelDeviceRSSIValue" destination="Pss-d2-ohM" id="hIw-YB-3vP"/>
+                        <outlet property="labelDeviceUUID" destination="p37-w7-bWv" id="HYQ-Ul-TtL"/>
+                        <outlet property="labelDeviceVersion" destination="L2N-dX-O1R" id="IEB-PR-HRo"/>
+                        <outlet property="labelFirstLogDateValue" destination="KIz-5L-XN1" id="0Ve-O2-YjJ"/>
+                        <outlet property="labelHighLowDeviceDewPointHighValue" destination="qPs-bp-u9N" id="3ne-M3-CJK"/>
+                        <outlet property="labelHighLowDeviceDewPointLowValue" destination="scD-dY-mCB" id="jl1-KN-7Zd"/>
+                        <outlet property="labelHighLowDeviceHumidityHighValue" destination="1xV-25-Adg" id="FRQ-oh-Kxt"/>
+                        <outlet property="labelHighLowDeviceHumidityLowValue" destination="Fbb-Lu-bcv" id="11S-K9-Z2l"/>
+                        <outlet property="labelHighLowDeviceTemperatureHighValue" destination="fSI-hd-MBD" id="Dfw-6D-nkh"/>
+                        <outlet property="labelHighLowDeviceTemperatureLowValue" destination="aLa-RA-WWZ" id="m2c-01-a2c"/>
+                        <outlet property="labelLast24DeviceDewPointAverageValue" destination="dse-t0-7ZZ" id="NdN-nA-MQX"/>
+                        <outlet property="labelLast24DeviceDewPointHighValue" destination="fdx-Mk-psv" id="Iwg-k3-3em"/>
+                        <outlet property="labelLast24DeviceDewPointLowValue" destination="M9Q-dZ-sjF" id="iSj-n9-wJe"/>
+                        <outlet property="labelLast24DeviceHumidityAverageValue" destination="IPv-NL-WO9" id="HSm-8t-4Kb"/>
+                        <outlet property="labelLast24DeviceHumidityHighValue" destination="lnQ-Mt-LHt" id="JkY-tW-RDY"/>
+                        <outlet property="labelLast24DeviceHumidityLowValue" destination="5ez-Tf-eea" id="tZX-cf-wjw"/>
+                        <outlet property="labelLast24DeviceTemperatureAverageValue" destination="Ttm-up-mPa" id="JbE-fE-TX3"/>
+                        <outlet property="labelLast24DeviceTemperatureHighValue" destination="Y7v-An-MKQ" id="Z4E-aU-sIZ"/>
+                        <outlet property="labelLast24DeviceTemperatureLowValue" destination="1zY-92-ndM" id="iaU-w2-JnX"/>
+                        <outlet property="labelLastDownloadValue" destination="NX3-RN-KWH" id="7XN-TT-y4r"/>
                         <outlet property="viewBottomContainer" destination="4yC-xc-5r7" id="J3U-3e-zYH"/>
                         <outletCollection property="buttonOptions" destination="fI8-3T-w9G" id="bv9-xa-daN"/>
                         <outletCollection property="buttonOptions" destination="e3S-oH-43K" id="7ha-a8-0s9"/>
+                        <outletCollection property="boxImageViews" destination="FNg-Hv-8eo" id="kkQ-tS-S5j"/>
+                        <outletCollection property="boxImageViews" destination="BMP-pT-Voq" id="fQV-bg-6bN"/>
+                        <outletCollection property="boxImageViews" destination="M4j-Py-5be" id="KD7-bH-Ag1"/>
+                        <outletCollection property="boxImageViews" destination="Oto-Kw-mGd" id="KYG-qe-u7L"/>
+                        <outletCollection property="boxImageViews" destination="Bi6-v0-LtT" id="UhW-Ad-DzX"/>
+                        <outletCollection property="boxImageViews" destination="bKG-jZ-TkC" id="yiM-y4-gAB"/>
+                        <outletCollection property="boxImageViews" destination="qe5-Ke-vwT" id="E0P-dg-I1V"/>
+                        <outletCollection property="boxImageViews" destination="8pi-RO-cQQ" id="ULD-fA-q24"/>
+                        <outletCollection property="boxImageViews" destination="fRe-od-cZ7" id="5L2-RN-6iK"/>
                         <segue destination="1ae-lz-4lE" kind="show" identifier="segueShowGraph" id="Hao-aV-WAq"/>
                         <segue destination="CxN-Gb-rgC" kind="show" identifier="segueShowUART" id="qe2-cK-DC4"/>
                     </connections>
@@ -2110,7 +2148,7 @@
                                 <rect key="frame" x="0.0" y="28" width="414" height="180"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hnl-s9-1Kf" id="ncS-7W-1S0">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="179"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="180"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dzc-KG-1fb">
@@ -2260,7 +2298,7 @@
                                 <rect key="frame" x="0.0" y="208" width="414" height="97"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XIb-hv-8he" id="TCR-tP-Q62">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="97"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TEMPO V3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pri-Vr-bXt">
