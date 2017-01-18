@@ -110,8 +110,21 @@ typedef enum : NSInteger {
 }
 
 - (void)actionForCommand:(DeviceCommand)command {
+	__block UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *action = nil;
+	NSString *title = @"";
+	NSString *descript = @"";
+	NSString *placeholder = @"";
+	__weak typeof(self) weakself = self;
 	switch (command) {
-		case DeviceCommandChangeName:
+		case DeviceCommandChangeName: {
+			title = @"Name Change";
+			descript = @"Please enter new device name";
+			placeholder = @"Name here";
+			action = [UIAlertAction actionWithTitle:@"Enter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				[weakself changeName:alert.textFields[0].text];
+			}];
+		}
 			break;
 		case DeviceCommandLogginInterval:
 			break;
@@ -138,6 +151,16 @@ typedef enum : NSInteger {
 		case DeviceCommandCommandConsole:
 			break;
 	}
+	alert.title = title;
+	alert.message = descript;
+	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+	if (action) {
+		[alert addAction:action];
+	}
+	[alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+		textField.placeholder = placeholder;
+	}];
+	[self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Actions
@@ -172,6 +195,12 @@ typedef enum : NSInteger {
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
 	return CGSizeMake(([UIScreen mainScreen].bounds.size.width-60)/3, 56);
+}
+
+#pragma mark - Commands
+
+- (void)changeName:(NSString*)name {
+	
 }
 
 @end
