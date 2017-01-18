@@ -33,4 +33,8 @@
 + (UIColor *)buttonSeparator {
 	return ([UIColor colorWithRed:144/255.0f green:148/255.0f blue:150/255.0f alpha:1]);
 }
+
++ (UIColor *)commandBorder {
+	return ([UIColor colorWithRed:116/255.0f green:120/255.0f blue:123/255.0f alpha:1]);
+}
 @end

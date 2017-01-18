@@ -16,4 +16,5 @@
 +(UIColor *)botomBarSeparatorGrey;
 +(UIColor *)buttonDarkGrey;
 +(UIColor *)buttonSeparator;
++(UIColor *)commandBorder;
 @end
