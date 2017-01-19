@@ -55,13 +55,60 @@ int intValue(char lsb,char msb)
 	self.lowestHumidity = @(intValue(data[custom.length-19], data[custom.length-20]) / 10.f);
 	self.highestDayTemperature = @(intValue(data[custom.length-17], data[custom.length-18]) / 10.f);
 	self.highestDayHumidity = @(intValue(data[custom.length-15], data[custom.length-16]) / 10.f);
-	self.highestDayDew = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
-	self.lowestDayTemperature = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
-	self.lowestDayHumidity = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
-	self.lowestDayDew = @(intValue(data[custom.length-7], data[custom.length-8]) / 10.f);
-	self.averageDayTemperature = @(intValue(data[custom.length-5], data[custom.length-6]) / 10.f);
-	self.averageDayHumidity = @(intValue(data[custom.length-3], data[custom.length-4]) / 10.f);
-	self.averageDayDew = @(intValue(data[custom.length-1], data[custom.length-2]) / 10.f);
+	
+	if (self.version.integerValue < 23) {
+		self.highestDayDew = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
+		self.lowestDayTemperature = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
+		self.lowestDayHumidity = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
+		self.lowestDayDew = @(intValue(data[custom.length-7], data[custom.length-8]) / 10.f);
+		self.averageDayTemperature = @(intValue(data[custom.length-5], data[custom.length-6]) / 10.f);
+		self.averageDayHumidity = @(intValue(data[custom.length-3], data[custom.length-4]) / 10.f);
+		self.averageDayDew = @(intValue(data[custom.length-1], data[custom.length-2]) / 10.f);
+	}
+	else {
+		//verson 23 parse
+		self.lowestDayTemperature = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
+		self.lowestDayHumidity = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
+		self.averageDayTemperature = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
+		self.averageDayHumidity = @(intValue(data[custom.length-7], data[custom.length-8]) / 10.f);
+		
+		/**
+		 *	If there is any humidity calculation it should be done here
+		 **/
+		
+		
+		/**
+		 *	Rest of Version 23 data
+		 **/
+		self.globalIdentifier = @(data[custom.length-6]);
+		
+		//date digits, should be reverse from what is written, not sure about indexes
+		NSNumber *fullValue = @( (((int) data[custom.length-3]) & 0xFF) | (((int) data[custom.length-4]) << 8) | (((int) data[custom.length-5]) << 16) | (((int) data[custom.length-6]) << 24) );
+		
+		/**
+		 *	parse digits into date
+		 *	yymmddhhmm
+		 **/
+		NSInteger minutes = fullValue.integerValue % 100;
+		NSInteger hours = (fullValue.integerValue/100) % 100;
+		NSInteger days = (fullValue.integerValue/10000) % 100;
+		NSInteger months = (fullValue.integerValue/1000000) % 100;
+		NSInteger years = (fullValue.integerValue/100000000) % 100;
+		
+		NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+		NSDateComponents *components = [[NSDateComponents alloc] init];
+		//MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+		components.minute = MIN(minutes, 60);
+		components.hour = MIN(hours, 24);
+		components.day = MIN(days, 31);
+		components.month = MIN(months, 12);
+		components.year = years;
+		
+		self.startTimestamp = [calendar dateFromComponents:components];
+		
+		
+		NSLog(@"Parsed version 23 data");
+	}
 	
 	/*NSLog(@"---------------------------------------------------------------");
 	 NSLog(@"PARSING TEMPO DISC DEVICE DATA:");

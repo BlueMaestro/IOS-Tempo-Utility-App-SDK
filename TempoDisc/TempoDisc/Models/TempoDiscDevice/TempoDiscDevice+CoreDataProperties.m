@@ -32,5 +32,8 @@
 @dynamic averageDayTemperature;
 @dynamic averageDayHumidity;
 @dynamic averageDayDew;
+@dynamic logCount;
+@dynamic globalIdentifier;
+@dynamic startTimestamp;
 
 @end

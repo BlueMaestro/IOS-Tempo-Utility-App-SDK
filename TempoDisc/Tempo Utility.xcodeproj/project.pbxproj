@@ -149,6 +149,7 @@
 		CBF066511DA571D200210428 /* TDUARTDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTDownloader.m; sourceTree = "<group>"; };
 		CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		CBF854801E30C89900A46CDC /* TempoDisc 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TempoDisc 2.xcdatamodel"; sourceTree = "<group>"; };
 		E18F34A6DBB02B981295989B /* Pods-Tempo Utility.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tempo Utility.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tempo Utility/Pods-Tempo Utility.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -955,9 +956,10 @@
 		CB16BA411C82E67E00C99C41 /* TempoDisc.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				CBF854801E30C89900A46CDC /* TempoDisc 2.xcdatamodel */,
 				CB16BA421C82E67E00C99C41 /* TempoDisc.xcdatamodel */,
 			);
-			currentVersion = CB16BA421C82E67E00C99C41 /* TempoDisc.xcdatamodel */;
+			currentVersion = CBF854801E30C89900A46CDC /* TempoDisc 2.xcdatamodel */;
 			path = TempoDisc.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
