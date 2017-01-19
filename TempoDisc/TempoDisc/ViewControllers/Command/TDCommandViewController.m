@@ -64,6 +64,9 @@ typedef enum : NSInteger {
 	[super setupView];
 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
 	
+	/**
+	 *	To reorder command list just adjust this list
+	 **/
 	_dataSourceCommands = @[
 							@(DeviceCommandChangeName),
 							@(DeviceCommandLogginInterval),
@@ -116,9 +119,9 @@ typedef enum : NSInteger {
 - (void)actionForCommand:(DeviceCommand)command {
 	__block UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *action = nil;
-	NSString *title = @"";
-	NSString *descript = @"";
-	NSString *placeholder = @"";
+	NSString *title = @"";//title of the alert view
+	NSString *descript = @"";//description in the alert view
+	NSString *placeholder = @"";//placeholder for the text field in the alert view
 	__weak typeof(self) weakself = self;
 	switch (command) {
 		case DeviceCommandChangeName: {
