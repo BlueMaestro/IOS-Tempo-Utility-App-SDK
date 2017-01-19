@@ -35,6 +35,8 @@
 
 @property (nonatomic, assign) BOOL didDisconnect;
 
+@property (nonatomic, copy) WriteCompletion writeCompletion;
+
 @end
 
 @implementation TDUARTViewController
@@ -239,10 +241,18 @@
 	__weak typeof(self) weakself = self;
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
+			if (_writeCompletion) {
+				_writeCompletion(YES, nil);
+				_writeCompletion = nil;
+			}
 //			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
 		else {
 			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error] type:LogMessageTypeInbound];
+			if (_writeCompletion) {
+				_writeCompletion(NO, error);
+				_writeCompletion = nil;
+			}
 		}
 	}];
 }
@@ -262,13 +272,18 @@
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)connectAndWrite:(NSString *)data withCompletion:(WriteCompletion)completion {
+	_writeCompletion = completion;
+	[self connectAndWrite:data];
+}
+
 - (void)connectAndWrite:(NSString*)data {
 	if (_writeCharacteristic) {
 		[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
 	}
 	else {
 		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];
-		_dataToSend = _textFieldMessage.text;
+		_dataToSend = data;
 		
 		/**
 		 *	 If there was a disconnect the device will need ot be scanned for again.

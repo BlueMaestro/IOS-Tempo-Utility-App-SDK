@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "TDBaseDeviceViewController.h"
 
+typedef void(^WriteCompletion)(BOOL, NSError*);
+
 @interface TDUARTViewController : TDBaseDeviceViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UITextField *textFieldMessage;
@@ -23,5 +25,9 @@
 
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender;
 - (IBAction)buttonConnectClicked:(UIButton *)sender;
+
+//BLE interaction
+- (void)connectAndWrite:(NSString*)data;
+- (void)connectAndWrite:(NSString *)data withCompletion:(WriteCompletion)completion;
 
 @end

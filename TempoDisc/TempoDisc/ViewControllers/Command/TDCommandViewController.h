@@ -6,9 +6,9 @@
 //  Copyright © 2017 BlueMaestro. All rights reserved.
 //
 
-#import "TDBaseDeviceViewController.h"
+#import "TDUARTViewController.h"
 
-@interface TDCommandViewController : TDBaseDeviceViewController <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface TDCommandViewController : TDUARTViewController <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceUUID;
 @property (strong, nonatomic) IBOutlet UILabel *labelBatteryValue;

@@ -43,6 +43,17 @@ typedef enum : NSInteger {
 	[self setupView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	[self refreshCurrentDevice];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -170,6 +181,31 @@ typedef enum : NSInteger {
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)handleDisconnectNotification:(NSNotification*)note {
+	if ([MBProgressHUD allHUDsForView:self.view].count > 0) {
+		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"There was an error writing data.", nil)] preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+	[self refreshCurrentDevice];
+}
+
+- (void)showAlertForAction:(BOOL)success error:(NSError*)error {
+	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+	if (success) {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+	else {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Error writing: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+
+}
+
 #pragma mark - Actions
 
 - (IBAction)buttonBackClicked:(id)sender {
@@ -214,28 +250,12 @@ typedef enum : NSInteger {
 
 #pragma mark - Commands
 
-//general
-- (void)writeStringToDevice:(NSString*)string {
+- (void)changeName:(NSString*)name {
 	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-	[LGUtils writeData:[string dataUsingEncoding:NSUTF8StringEncoding] charactUUID:CHAR_ID serviceUUID:SERVICE_ID peripheral:[TDDefaultDevice sharedDevice].selectedDevice.peripheral completion:^(NSError *error) {
-		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-		if (!error) {
-			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
-			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
-			[self presentViewController:alert animated:YES completion:nil];
-		}
-		else {
-			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Error writing: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
-			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
-			[self presentViewController:alert animated:YES completion:nil];
-		}
-		[weakself refreshCurrentDevice];
+	[self connectAndWrite:[NSString stringWithFormat:@"*nam %@", name] withCompletion:^(BOOL success, NSError *error) {
+		[weakself showAlertForAction:success error:error];
 	}];
-}
-
-- (void)changeName:(NSString*)name {
-	[self writeStringToDevice:[NSString stringWithFormat:@"*nam %@", name]];
 }
 
 @end
