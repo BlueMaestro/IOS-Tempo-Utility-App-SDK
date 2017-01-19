@@ -165,6 +165,7 @@ typedef enum : NSInteger {
 			downloadType = DataDownloadTypeFinish;
 			stringToWrite = kDataStringTransmitEnd;
 			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;

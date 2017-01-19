@@ -597,6 +597,7 @@
 				}
                 
 				[weakself refreshCurrentDevice];
+				[weakself fillData];
 			}];
 		};
 		

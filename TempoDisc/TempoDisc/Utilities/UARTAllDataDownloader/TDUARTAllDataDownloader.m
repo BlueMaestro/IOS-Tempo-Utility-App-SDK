@@ -138,6 +138,7 @@ typedef enum : NSInteger {
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeFinish;
 			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;
