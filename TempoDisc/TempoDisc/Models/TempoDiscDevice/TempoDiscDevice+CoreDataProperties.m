@@ -34,6 +34,5 @@
 @dynamic averageDayDew;
 @dynamic logCount;
 @dynamic globalIdentifier;
-@dynamic startTimestamp;
 
 @end

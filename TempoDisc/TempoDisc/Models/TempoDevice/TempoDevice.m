@@ -7,6 +7,7 @@
 //
 
 #import "TempoDevice.h"
+#import "TempoDiscDevice+CoreDataClass.h"
 
 #define MANUF_ID_BLUE_MAESTRO 0x0133
 #define BM_MODEL_T30 0
@@ -215,7 +216,7 @@ int getInt(char lsb,char msb)
 	targetReadingType = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([ReadingType class]) inManagedObjectContext:context];
 	[self addReadingTypesObject:targetReadingType];
 	targetReadingType.type = type;
-	
+
 	NSInteger index = 0;
 	for (NSArray *sample in data) {
 		Reading *reading = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([Reading class]) inManagedObjectContext:context];
@@ -229,8 +230,12 @@ int getInt(char lsb,char msb)
 			reading.avgValue = [sample firstObject];
 		}
 		
-        reading.timestamp = [timeStamp dateByAddingTimeInterval:interval*index];
-
+		if (self.startTimestamp) {
+			reading.timestamp = [self.startTimestamp dateByAddingTimeInterval:interval*index];
+		}
+		else {
+			reading.timestamp = [timeStamp dateByAddingTimeInterval:interval*index];
+		}
 
 		NSLog(@"Timestamp: %@, calculated from a start date of %@ and an interval of %li", reading.timestamp, timeStamp, (long)interval);
 		index++;

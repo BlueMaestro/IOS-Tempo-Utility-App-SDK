@@ -28,5 +28,7 @@
 @dynamic readingTypes;
 @dynamic isBlueMaestroDevice;
 @dynamic isFahrenheit;
+@dynamic startTimestamp;
+@dynamic inRange;
 
 @end
