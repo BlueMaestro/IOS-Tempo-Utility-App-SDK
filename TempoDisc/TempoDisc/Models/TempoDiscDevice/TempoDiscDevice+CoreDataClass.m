@@ -25,11 +25,20 @@ int intValue(char lsb,char msb)
 	[super fillWithData:advertisedData name:name uuid:uuid];
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	char * data = (char*)[custom bytes];
+    NSUInteger dataLength = custom.length;
+    for (NSUInteger i = 0; i < dataLength; i++) {
+        Byte byte = 0;
+        [custom getBytes:&byte range:NSMakeRange(i, 1)];
+        NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
+        }
+    Byte byte;
+    [custom getBytes:&byte range:NSMakeRange(2, 1)];
 	/**
 	 *	Status bits
 	 *	Not sure about data read
 	 **/
-	self.version = [NSNumber numberWithInt:data[2]].stringValue;
+    NSInteger version = byte;
+    self.version = [NSString stringWithFormat:@"%ld", (long)version];
 	self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
 	self.timerInterval = @(intValue(data[5], data[4]));
 	self.intervalCounter = @(intValue(data[7], data[6]));
@@ -56,7 +65,7 @@ int intValue(char lsb,char msb)
 	self.highestDayTemperature = @(intValue(data[custom.length-17], data[custom.length-18]) / 10.f);
 	self.highestDayHumidity = @(intValue(data[custom.length-15], data[custom.length-16]) / 10.f);
 	
-	if (self.version.integerValue < 23) {
+	if (self.version.integerValue == 22) {
 		self.highestDayDew = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
 		self.lowestDayTemperature = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
 		self.lowestDayHumidity = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
@@ -65,7 +74,8 @@ int intValue(char lsb,char msb)
 		self.averageDayHumidity = @(intValue(data[custom.length-3], data[custom.length-4]) / 10.f);
 		self.averageDayDew = @(intValue(data[custom.length-1], data[custom.length-2]) / 10.f);
 	}
-	else {
+    
+    if (self.version.integerValue == 23) {
 		//verson 23 parse
 		self.lowestDayTemperature = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
 		self.lowestDayHumidity = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);

@@ -17,6 +17,7 @@ typedef enum : NSInteger {
 	TempoDeviceTypeLegacy,
 	TempoDeviceTypeT30,
 	TempoDeviceTypeTHP,
+    TempoDeviceType23
 	
 } TempoDeviceType ;
 
@@ -28,6 +29,7 @@ typedef enum : NSInteger {
 
 + (BOOL)isTempoDiscDeviceWithAdvertisementData:(NSDictionary*)custom;
 + (BOOL)isBlueMaestroDeviceWithAdvertisementData:(NSDictionary*)data;
++ (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)hasManufacturerData:(NSDictionary*)data;
 
 + (TempoDevice*)deviceWithName:(NSString*)name data:(NSDictionary*)data uuid:(NSString*)uuid context:(NSManagedObjectContext*)context;

@@ -208,6 +208,10 @@
 	 **/
 	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	BOOL isBlueMaestroDevice = [TempoDevice isBlueMaestroDeviceWithAdvertisementData:peripheral.advertisingData];
+    BOOL isTempoDisc23 = [TempoDevice isTempoDisc23WithAdvertisementDate:peripheral.advertisingData];
+    
+    if (isTempoDisc23) {NSLog(@"Found Tempo Disc 23");}
+    
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
 	NSError *fetchError;
@@ -231,7 +235,7 @@
 	}
 	else if (!fetchError && hasManufacturerData) {
 		//detected new device
-		if (isTempoDiscDevice) {
+		if ((isTempoDiscDevice) || (isTempoDisc23)) {
 			device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
 		}
 		else {
