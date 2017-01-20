@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TDBaseDeviceViewController.h"
 
-typedef void(^WriteCompletion)(BOOL, NSError*);
+typedef void(^WriteCompletion)(BOOL success, NSError* error);
 
 @interface TDUARTViewController : TDBaseDeviceViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 

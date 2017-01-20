@@ -29,9 +29,11 @@ typedef enum : NSInteger {
 	DeviceCommandCommandConsole
 } DeviceCommand;
 
-@interface TDCommandViewController ()
+@interface TDCommandViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) NSArray *dataSourceCommands;
+@property (nonatomic, weak) UITextField *textFieldCommandPopupActive;
+@property (nonatomic, strong) NSDateFormatter *dateFormatterCommand;
 
 @end
 
@@ -74,6 +76,10 @@ typedef enum : NSInteger {
 - (void)setupView {
 	[super setupView];
 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
+	
+	_dateFormatterCommand = [[NSDateFormatter alloc] init];
+//	_dateFormatterCommand.locale = [NSLocale localeWithLocaleIdentifier:@"us"];
+	_dateFormatterCommand.dateFormat = @"yyyy MM dd HH:mm";
 	
 	/**
 	 *	To reorder command list just adjust this list
@@ -148,7 +154,17 @@ typedef enum : NSInteger {
 			break;
 		case DeviceCommandSensorInterval:
 			break;
-		case DeviceCommandReferenceDateAndTime:
+		case DeviceCommandReferenceDateAndTime: {
+			title = @"Reference Date & Time Change";
+			descript = @"Please enter new device reference date and time";
+			placeholder = @"";
+			action = [UIAlertAction actionWithTitle:@"Enter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
+				if (parsedDate) {
+					[weakself changeReferenceTimeAndDate:parsedDate];
+				}
+			}];
+		}
 			break;
 		case DeviceCommandAlarm1:
 			break;
@@ -175,8 +191,17 @@ typedef enum : NSInteger {
 	if (action) {
 		[alert addAction:action];
 	}
+	
 	[alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+		if (command == DeviceCommandReferenceDateAndTime) {
+			UIDatePicker *picker = [[UIDatePicker alloc] init];
+			picker.datePickerMode = UIDatePickerModeDateAndTime;
+			[picker addTarget:weakself action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
+			textField.inputView = picker;
+		}
 		textField.placeholder = placeholder;
+		textField.delegate = weakself;
+		weakself.textFieldCommandPopupActive = textField;
 	}];
 	[self presentViewController:alert animated:YES completion:nil];
 }
@@ -210,6 +235,10 @@ typedef enum : NSInteger {
 
 - (IBAction)buttonBackClicked:(id)sender {
 	[self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)datePickerValueChanged:(UIDatePicker*)sender {
+	_textFieldCommandPopupActive.text = [_dateFormatterCommand stringFromDate:sender.date];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -248,6 +277,8 @@ typedef enum : NSInteger {
 	return CGSizeMake(([UIScreen mainScreen].bounds.size.width-60)/3, 56);
 }
 
+#pragma mark - UITextFieldDelegate
+
 #pragma mark - Commands
 
 - (void)changeName:(NSString*)name {
@@ -256,6 +287,20 @@ typedef enum : NSInteger {
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam %@", name] withCompletion:^(BOOL success, NSError *error) {
 		[weakself showAlertForAction:success error:error];
 	}];
+}
+
+- (void)changeReferenceTimeAndDate:(NSDate*)targetDate {
+	NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+	unsigned unitFlags = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute);
+	NSDateComponents *components = [calendar components:unitFlags fromDate:targetDate];
+	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + components.year*100000000;
+	
+	__weak typeof(self) weakself = self;
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	[self connectAndWrite:[NSString stringWithFormat:@"*d %ld", number] withCompletion:^(BOOL success, NSError *error) {
+		[weakself showAlertForAction:success error:error];
+	}];
+	
 }
 
 @end
