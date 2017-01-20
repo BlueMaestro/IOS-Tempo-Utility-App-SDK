@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7174D4061E2A4BBC0031EEFC /* Artboard 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7174D4051E2A4BBC0031EEFC /* Artboard 1.png */; };
 		B348E042FAA81A40FE9426CD /* libPods-Tempo Utility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F3B5A64DC297B9F6942E40 /* libPods-Tempo Utility.a */; };
 		CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1B1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m */; };
 		CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */; };
@@ -683,7 +682,6 @@
 				CB16BA451C82E67E00C99C41 /* Assets.xcassets in Resources */,
 				CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */,
 				CB16BA401C82E67E00C99C41 /* Main.storyboard in Resources */,
-				7174D4061E2A4BBC0031EEFC /* Artboard 1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

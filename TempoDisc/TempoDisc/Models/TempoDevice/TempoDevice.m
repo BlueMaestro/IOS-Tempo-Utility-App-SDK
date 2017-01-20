@@ -13,6 +13,7 @@
 #define BM_MODEL_T30 0
 #define BM_MODEL_THP 1
 #define BM_MODEL_DISC '\x16'
+#define BM_MODEL_DISC_23 '\x17'
 
 int getInt(char lsb,char msb)
 {
@@ -26,8 +27,8 @@ int getInt(char lsb,char msb)
 // Insert code here to add functionality to your managed object subclass
 
 + (TempoDevice *)deviceWithName:(NSString *)name data:(NSDictionary *)data uuid:(nonnull NSString *)uuid context:(nonnull NSManagedObjectContext *)context {
-	TempoDevice *device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
     
+	TempoDevice *device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
     [device fillWithData:data name:name uuid:uuid];
 	return device;
 }
@@ -69,6 +70,28 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
++ (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data {
+    NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+    //BlueMaestro device
+    if (custom != nil)
+    {
+        unsigned char * d = (unsigned char*)[custom bytes];
+        unsigned int manuf = d[1] << 8 | d[0];
+        
+        //Is this one of ours?
+        if (manuf == MANUF_ID_BLUE_MAESTRO) {
+            if (d[2] == BM_MODEL_DISC_23) {
+            return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+
+
+
+
 + (BOOL)hasManufacturerData:(NSDictionary*)data {
 	if (data[@"kCBAdvDataManufacturerData"]) {
 		return YES;
@@ -90,11 +113,11 @@ int getInt(char lsb,char msb)
 	bool isTempoT30 = false;
 	bool isTempoTHP = false;
 	bool isTempoDisc = false;
+    bool isTempoDisc23 = false;
 	NSString *deviceType = nil;
 	
 	//BlueMaestro device
-	if (custom != nil)
-	{
+	if (custom != nil) {
 		unsigned char * d = (unsigned char*)[custom bytes];
 		unsigned int manuf = d[1] << 8 | d[0];
 		
@@ -111,18 +134,23 @@ int getInt(char lsb,char msb)
 				deviceType = @"TEMPO_DISC";
 				isTempoDisc = true;
 			}
+            else if (d[2] == BM_MODEL_DISC_23) {
+                deviceType = @"TEMPO_DISC_23";
+                isTempoDisc23 = true;
+            }
 		}
-	}
-	else {
+	} else {
 		//device is legacy
 		self.modelType = @"TEMPO_LEGACY";
 	}
+    
 	if (!isTempoLegacy) {
 		self.modelType = deviceType;
 		char * data = (char*)[custom bytes];
 		if (isTempoDisc) {
 			
 		}
+        
 		else {
 			float min = getInt(data[3],data[4]) / 10.0f;
 			float avg = getInt(data[5],data[6]) / 10.0f;
@@ -158,6 +186,9 @@ int getInt(char lsb,char msb)
 	else if ([self.modelType isEqualToString:@"TEMPO_THP"]) {
 		return TempoDeviceTypeT30;
 	}
+    else if ([self.modelType isEqualToString:@"TEMPO_DISC_23"]) {
+        return TempoDeviceType23;
+    }
 	else {
 		return TempoDeviceTypeUnknown;
 	}
