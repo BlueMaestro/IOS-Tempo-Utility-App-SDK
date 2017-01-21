@@ -193,12 +193,21 @@ typedef enum : NSInteger {
 	}
 	
 	[alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+		/**
+		 *	Customize text field for the popup here
+		 *	Everything that works on UITextField should work here also
+		 **/
 		if (command == DeviceCommandReferenceDateAndTime) {
+			//customize date picker text field
 			UIDatePicker *picker = [[UIDatePicker alloc] init];
 			picker.datePickerMode = UIDatePickerModeDateAndTime;
 			[picker addTarget:weakself action:@selector(datePickerValueChanged:) forControlEvents:UIControlEventValueChanged];
 			textField.inputView = picker;
+			textField.text = [_dateFormatterCommand stringFromDate:[NSDate date]];
 		}
+
+		textField.textColor = [UIColor blueMaestroBlue];
+		textField.font = [UIFont fontWithName:@"Montserrat-Regular" size:textField.font.pointSize];
 		textField.placeholder = placeholder;
 		textField.delegate = weakself;
 		weakself.textFieldCommandPopupActive = textField;
@@ -282,6 +291,13 @@ typedef enum : NSInteger {
 #pragma mark - Commands
 
 - (void)changeName:(NSString*)name {
+	/**
+	 *	This would be the base for any command
+	 *	Every command should at least have this code with maybe some data parse or validation
+	 *	weakself is for memory management (strong reference cycles) so our callback blocks dont retain the controller
+	 *	MBProgressHUD is to block the UI until the action is complete
+	 *	showAlertForAction:error: shows the alert that reports if the action was a success and does the cleanup (e.g. removes the MBProgressHUD)
+	 **/
 	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam %@", name] withCompletion:^(BOOL success, NSError *error) {
