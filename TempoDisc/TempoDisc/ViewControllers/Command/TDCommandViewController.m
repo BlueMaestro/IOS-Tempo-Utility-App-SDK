@@ -274,7 +274,7 @@ typedef enum : NSInteger {
 #pragma mark - UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return CGSizeMake(([UIScreen mainScreen].bounds.size.width-60)/3, 56);
+	return CGSizeMake(([UIScreen mainScreen].bounds.size.width-60)/3, 60);
 }
 
 #pragma mark - UITextFieldDelegate

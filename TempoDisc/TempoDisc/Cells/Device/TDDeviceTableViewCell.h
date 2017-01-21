@@ -28,6 +28,8 @@ typedef enum : NSInteger {
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceBatteryValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelCurrentDewPoint;
 @property (strong, nonatomic) IBOutlet UILabel *labelCurrentDewPointValue;
+@property (weak, nonatomic) IBOutlet UIImageView *RSSIImage;
+@property (strong, nonatomic) IBOutlet UIImageView *batteryImage;
 
 - (void)setupBatteryStatus:(TempoBatteryStatus)status;
 

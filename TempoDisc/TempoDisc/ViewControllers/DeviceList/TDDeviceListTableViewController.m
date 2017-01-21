@@ -303,6 +303,14 @@
 #pragma mark - Cell fill
 
 - (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TempoDevice*)device {
+    UIImage *lowBattImage = [UIImage imageNamed:@"battery_low"];
+    UIImage *mediumBattImage = [UIImage imageNamed:@"battery_medium"];
+    UIImage *highBattImage = [UIImage imageNamed:@"battery_high"];
+    UIImage *strongRSSIImage = [UIImage imageNamed:@"rssi_high"];
+    UIImage *mediumRSSIImage = [UIImage imageNamed:@"rssi_medium"];
+    UIImage *lowRSSIImage = [UIImage imageNamed:@"rssi_low"];
+    
+    
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
@@ -313,6 +321,18 @@
 	}
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
+    if (device.battery.integerValue > 85) {
+        [cell.batteryImage setImage:highBattImage];
+    }
+    if ((device.battery.integerValue < 85) && (device.battery.integerValue > 70)) {
+        [cell.batteryImage setImage:mediumBattImage];
+    }
+    if (device.battery.integerValue < 70) {
+        [cell.batteryImage setImage:lowBattImage];
+    }
+                                
+                                
+                                
 	
 	if (device.version) {
 		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version:", nil)];
@@ -323,17 +343,31 @@
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
 		cell.labelDeviceVersionValue.hidden = YES;
 	}
-	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", device.peripheral.RSSI];
+	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%ddB", device.peripheral.RSSI];
+    
+    if (device.peripheral.RSSI > -90) {
+        [cell.RSSIImage setImage:strongRSSIImage];
+        
+    }
+    if ((device.peripheral.RSSI < -90) && (device.peripheral.RSSI >-100)){
+        [cell.RSSIImage setImage:mediumRSSIImage];
+        
+    }
+    if (device.peripheral.RSSI < -100){
+        [cell.RSSIImage setImage:lowRSSIImage];
+        
+    }
+    
 	
 	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
 	
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice* disc = (TempoDiscDevice*)device;
 		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue];
-	}
-	else {
+	} else {
 		cell.labelCurrentDewPointValue.text = @"0";
 	}
+    
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
