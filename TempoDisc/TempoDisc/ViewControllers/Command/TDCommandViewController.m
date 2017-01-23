@@ -76,7 +76,7 @@ typedef enum : NSInteger {
 
 - (void)setupView {
 	[super setupView];
-	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
 	
 	_dateFormatterCommand = [[NSDateFormatter alloc] init];
 //	_dateFormatterCommand.locale = [NSLocale localeWithLocaleIdentifier:@"us"];
