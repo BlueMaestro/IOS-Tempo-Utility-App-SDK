@@ -30,4 +30,6 @@ typedef void(^WriteCompletion)(BOOL success, NSError* error);
 - (void)connectAndWrite:(NSString*)data;
 - (void)connectAndWrite:(NSString *)data withCompletion:(WriteCompletion)completion;
 
+- (void)handleDeviceDataReceive:(NSData*)data error:(NSError*)error;
+
 @end

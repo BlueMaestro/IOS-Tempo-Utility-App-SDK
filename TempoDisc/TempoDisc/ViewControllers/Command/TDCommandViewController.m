@@ -225,6 +225,9 @@ typedef enum : NSInteger {
 	[self refreshCurrentDevice];
 }
 
+/**
+ *	Not being used, device response data (handleDeviceDataReceive:error:) will cleanup
+ **/
 - (void)showAlertForAction:(BOOL)success error:(NSError*)error {
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (success) {
@@ -237,7 +240,23 @@ typedef enum : NSInteger {
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 		[self presentViewController:alert animated:YES completion:nil];
 	}
+}
 
+#pragma mark - Public methods
+
+- (void)handleDeviceDataReceive:(NSData *)data error:(NSError *)error {
+	NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+	if (!error) {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+	else {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:message ? message : [NSString stringWithFormat:NSLocalizedString(@"Error writing: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
 }
 
 #pragma mark - Actions
@@ -298,10 +317,10 @@ typedef enum : NSInteger {
 	 *	MBProgressHUD is to block the UI until the action is complete
 	 *	showAlertForAction:error: shows the alert that reports if the action was a success and does the cleanup (e.g. removes the MBProgressHUD)
 	 **/
-	__weak typeof(self) weakself = self;
+//	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam %@", name] withCompletion:^(BOOL success, NSError *error) {
-		[weakself showAlertForAction:success error:error];
+//		[weakself showAlertForAction:success error:error];
 	}];
 }
 
@@ -312,10 +331,10 @@ typedef enum : NSInteger {
 	//yyMMddHHmm
 	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + (components.year%100)*100000000;
 	
-	__weak typeof(self) weakself = self;
+//	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*d %ld", number] withCompletion:^(BOOL success, NSError *error) {
-		[weakself showAlertForAction:success error:error];
+//		[weakself showAlertForAction:success error:error];
 	}];
 	
 }
