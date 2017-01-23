@@ -241,6 +241,21 @@ typedef enum : NSInteger {
 	}];
 }
 
+- (NSString*)manipulateString:(NSString*)target {
+	/**
+	 *	Do some manipulation
+	 **/
+	
+	
+	return target;
+	
+	/**
+	 *	If this method is used in more UIViewControllers then its better to move it to TDHelper class so it can be called everywhere with:
+	 *	[TDHepler manipulateString:string]
+	 *	Just use "+" instead of "-" at the start to make it class method instead of instance method
+	 **/
+}
+
 #pragma mark - Public methods
 
 - (void)handleDeviceDataReceive:(NSData *)data error:(NSError *)error {
@@ -248,6 +263,28 @@ typedef enum : NSInteger {
 	NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	
 	BOOL hasWordError = [message containsString:@"error"];
+	
+	//if we need the position of the "error" string
+	NSRange rangeOfError = [message rangeOfString:@"error"];
+	if (rangeOfError.location != NSNotFound) {
+		/**
+		 *	exists
+		 *	rangeOfError.location is the location of the "e" character
+		 *	rangeOfError.length is the length of the "error" string
+		**/
+		
+		//to get the rest of the string after "error" we can use
+		NSString *restOfMessage = [message substringFromIndex:rangeOfError.location+rangeOfError.length];
+		
+		//or before
+		NSString *beforeErrorString = [message substringToIndex:rangeOfError.location];
+		
+		//to remove the "error" from the message we can use
+		NSString *messageWithoutError = [message stringByReplacingOccurrencesOfString:@"error" withString:@""];
+		
+		//finally this method can be adjusted to manipulate the string for the desired effect
+		NSString *endResult = [self manipulateString:message];
+	}
 	
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (!error) {
