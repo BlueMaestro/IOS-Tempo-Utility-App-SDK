@@ -309,7 +309,8 @@ typedef enum : NSInteger {
 	NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
 	unsigned unitFlags = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute);
 	NSDateComponents *components = [calendar components:unitFlags fromDate:targetDate];
-	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + components.year*100000000;
+	//yyMMddHHmm
+	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + (components.year%100)*100000000;
 	
 	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
