@@ -31,5 +31,5 @@ typedef void(^WriteCompletion)(BOOL success, NSError* error);
 - (void)connectAndWrite:(NSString *)data withCompletion:(WriteCompletion)completion;
 
 - (void)handleDeviceDataReceive:(NSData*)data error:(NSError*)error;
-
+- (void)handleDisconnectNotification:(NSNotification*)note;
 @end

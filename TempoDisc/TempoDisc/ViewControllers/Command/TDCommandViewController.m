@@ -51,12 +51,10 @@ typedef enum : NSInteger {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self refreshCurrentDevice];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -218,16 +216,6 @@ typedef enum : NSInteger {
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)handleDisconnectNotification:(NSNotification*)note {
-	if ([MBProgressHUD allHUDsForView:self.view].count > 0) {
-		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"There was an error writing data.", nil)] preferredStyle:UIAlertControllerStyleAlert];
-		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
-		[self presentViewController:alert animated:YES completion:nil];
-	}
-	[self refreshCurrentDevice];
-}
-
 /**
  *	Not being used, device response data (handleDeviceDataReceive:error:) will cleanup
  **/
@@ -258,6 +246,9 @@ typedef enum : NSInteger {
 - (void)handleDeviceDataReceive:(NSData *)data error:(NSError *)error {
 	[_timerResponseTimeout invalidate];
 	NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	
+	BOOL hasWordError = [message containsString:@"error"];
+	
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (!error) {
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -267,8 +258,20 @@ typedef enum : NSInteger {
 	else {
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:message ? message : [NSString stringWithFormat:NSLocalizedString(@"Error writing: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		NSLog(@"Present data receive fail");
 		[self presentViewController:alert animated:YES completion:nil];
 	}
+}
+
+- (void)handleDisconnectNotification:(NSNotification *)note {
+	if ([MBProgressHUD allHUDsForView:self.view].count > 0 && !_timerResponseTimeout) {
+		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"There was an error writing data.", nil)] preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		NSLog(@"Present disconnect");
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+	[super handleDisconnectNotification:note];
 }
 
 #pragma mark - Actions
