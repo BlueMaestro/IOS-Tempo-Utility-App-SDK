@@ -13,6 +13,8 @@
 #define CHAR_ID @"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define SERVICE_ID @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 
+#define kResponseTimeout 2
+
 typedef enum : NSInteger {
 	DeviceCommandChangeName = 0,
 	DeviceCommandLogginInterval,
@@ -34,6 +36,7 @@ typedef enum : NSInteger {
 @property (nonatomic, strong) NSArray *dataSourceCommands;
 @property (nonatomic, weak) UITextField *textFieldCommandPopupActive;
 @property (nonatomic, strong) NSDateFormatter *dateFormatterCommand;
+@property (nonatomic, strong) NSTimer *timerResponseTimeout;
 
 @end
 
@@ -242,9 +245,18 @@ typedef enum : NSInteger {
 	}
 }
 
+- (void)startTimeout {
+	__weak typeof (self) weakself = self;
+	_timerResponseTimeout = [NSTimer timerWithTimeInterval:kResponseTimeout repeats:NO block:^(NSTimer * _Nonnull timer) {
+		[weakself showAlertForAction:NO error:nil];
+		[[weakself timerResponseTimeout] invalidate];
+	}];
+}
+
 #pragma mark - Public methods
 
 - (void)handleDeviceDataReceive:(NSData *)data error:(NSError *)error {
+	[_timerResponseTimeout invalidate];
 	NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (!error) {
@@ -317,10 +329,10 @@ typedef enum : NSInteger {
 	 *	MBProgressHUD is to block the UI until the action is complete
 	 *	showAlertForAction:error: shows the alert that reports if the action was a success and does the cleanup (e.g. removes the MBProgressHUD)
 	 **/
-//	__weak typeof(self) weakself = self;
+	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam %@", name] withCompletion:^(BOOL success, NSError *error) {
-//		[weakself showAlertForAction:success error:error];
+		[weakself startTimeout];
 	}];
 }
 
@@ -331,12 +343,11 @@ typedef enum : NSInteger {
 	//yyMMddHHmm
 	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + (components.year%100)*100000000;
 	
-//	__weak typeof(self) weakself = self;
+	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*d %ld", number] withCompletion:^(BOOL success, NSError *error) {
-//		[weakself showAlertForAction:success error:error];
+		[weakself startTimeout];
 	}];
-	
 }
 
 @end
