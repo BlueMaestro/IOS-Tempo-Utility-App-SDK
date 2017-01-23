@@ -21,6 +21,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelVersion;
 @property (strong, nonatomic) IBOutlet UILabel *labelRSSI;
 @property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
+@property (weak, nonatomic) IBOutlet UIImageView *RSSIImage;
+@property (strong, nonatomic) IBOutlet UIImageView *batteryImage;
 
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
 
@@ -38,6 +40,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceBatteryValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceRSSIValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceID;
+@property (strong, nonatomic) IBOutlet UILabel *labelDeviceIDValue;
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageViewBatteryStatus;
 

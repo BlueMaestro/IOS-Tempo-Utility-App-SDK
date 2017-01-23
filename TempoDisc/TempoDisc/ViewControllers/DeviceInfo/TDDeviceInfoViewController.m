@@ -170,6 +170,7 @@
 
 - (void)setupView {
 	[super setupView];
+
 	_formatterLastDownload = [[NSDateFormatter alloc] init];
 	_formatterLastDownload.dateFormat = @"HH:mm EEEE d";
 	
@@ -190,6 +191,36 @@
 }
 
 - (void)fillData {
+    UIImage *lowBattImage = [UIImage imageNamed:@"battery_low"];
+    UIImage *mediumBattImage = [UIImage imageNamed:@"battery_medium"];
+    UIImage *highBattImage = [UIImage imageNamed:@"battery_high"];
+    UIImage *strongRSSIImage = [UIImage imageNamed:@"rssi_high"];
+    UIImage *mediumRSSIImage = [UIImage imageNamed:@"rssi_medium"];
+    UIImage *lowRSSIImage = [UIImage imageNamed:@"rssi_low"];
+
+    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue > 85) {
+        [self.batteryImage setImage:highBattImage];
+    }
+    if (([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue < 85) && ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue > 70)) {
+        [self.batteryImage setImage:mediumBattImage];
+    }
+    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue < 70) {
+        [self.batteryImage setImage:lowBattImage];
+    }
+    if ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI > -90) {
+        [self.RSSIImage setImage:strongRSSIImage];
+        
+    }
+    if (([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI < -90) && ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI >-100)){
+        [self.RSSIImage setImage:mediumRSSIImage];
+        
+    }
+    if ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI < -100){
+        [self.RSSIImage setImage:lowRSSIImage];
+        
+    }
+    
+    
 	_labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:[TDDefaultDevice sharedDevice].selectedDevice.currentTemperature forDevice:[TDDefaultDevice sharedDevice].selectedDevice].floatValue, [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 	_labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)[TDDefaultDevice sharedDevice].selectedDevice.currentHumidity.integerValue];
 	if ([TDDefaultDevice sharedDevice].selectedDevice.lastDownload) {
@@ -198,18 +229,19 @@
 	else {
 		_labelLastDownloadTimestamp.text = NSLocalizedString(@"Not yet downloaded", nil);
 	}
-	_labelRSSI.text = [NSString stringWithFormat:@"%lddbm", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
+	_labelRSSI.text = [NSString stringWithFormat:@"%lddB", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
 	_labelUUID.text = [TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString;
 	_labelVersion.text = [TDDefaultDevice sharedDevice].selectedDevice.version;
+    _labelDeviceBatteryValue.text = [[TDDefaultDevice sharedDevice].selectedDevice.battery stringValue];
 	
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
 		
-		_labelDeviceUUID.text = [NSString stringWithFormat:@"UUID : %@", device.peripheral.UUIDString];
+		_labelDeviceUUID.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
 		_labelDeviceVersion.text = [NSString stringWithFormat:@"VERSION : %@", device.version];
 		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.integerValue];
 		_labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddb", device.peripheral.RSSI];
-		_labelDeviceID.text = @"ID : 12-12";
+		_labelDeviceID.text = @"CLASS ID";
 		
 		//if there is a full and empty battery set the empty to not highlighted and full to higlighted and this will update the status (50%+ is full now)
 		_imageViewBatteryStatus.highlighted = device.battery.integerValue > 50;
