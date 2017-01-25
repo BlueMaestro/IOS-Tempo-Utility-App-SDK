@@ -186,6 +186,7 @@
 	
 	
 	//adjust image for all box views
+	NSInteger i=0;
 	for (UIImageView* boxImage in _boxImageViews) {
 		boxImage.image = [boxImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12) resizingMode:UIImageResizingModeTile];
 	}
@@ -226,9 +227,9 @@
 	}
 	else if (screenWidth <= 320) {
 		//narrow phones (4, 4s, 5, 5c, 5s)
-		/*for (NSLayoutConstraint *widthConstraint in _boxWidthConstraints) {
+		for (NSLayoutConstraint *widthConstraint in _boxWidthConstraints) {
 			widthConstraint.constant *= ratio;
-		}*/
+		}
 		for (NSLayoutConstraint *constraint in _buttonWidthConstraints) {
 			constraint.constant *= ratio;
 		}
