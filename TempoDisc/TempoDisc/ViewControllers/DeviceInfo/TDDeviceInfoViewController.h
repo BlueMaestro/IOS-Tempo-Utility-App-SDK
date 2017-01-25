@@ -11,28 +11,25 @@
 
 @interface TDDeviceInfoViewController : TDBaseDeviceViewController
 
-
+//Buttons at bottom
 @property (strong, nonatomic) IBOutlet UIButton *graphButton;
-@property (strong, nonatomic) IBOutlet UILabel *labelTemperatureValue;
-@property (strong, nonatomic) IBOutlet UILabel *labelHumidityValue;
-@property (strong, nonatomic) IBOutlet UILabel *labelLastDownloadTimestamp;
-@property (strong, nonatomic) IBOutlet UIButton *buttonUART;
-@property (strong, nonatomic) IBOutlet UILabel *labelUUID;
-@property (strong, nonatomic) IBOutlet UILabel *labelVersion;
-@property (strong, nonatomic) IBOutlet UILabel *labelRSSI;
-@property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
-@property (weak, nonatomic) IBOutlet UIImageView *RSSIImage;
-@property (strong, nonatomic) IBOutlet UIImageView *batteryImage;
-
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;
+@property (strong, nonatomic) IBOutlet UIButton *buttonUART;
+
+//Any alerts
+@property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
+
 
 /**
  *	UI update components
  **/
 
 //box image views that need image resize
-@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *boxImageViews;
-
+/*
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *upperBoxImageViews;
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *middleBoxImageViews;
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *lowerBoxImageViews;
+*/
 
 //device info view
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceUUID;
@@ -41,8 +38,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceRSSIValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceID;
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceIDValue;
-
-@property (strong, nonatomic) IBOutlet UIImageView *imageViewBatteryStatus;
+@property (weak, nonatomic) IBOutlet UIImageView *RSSIImage;
+@property (strong, nonatomic) IBOutlet UIImageView *batteryImage;
 
 //record dates view
 @property (strong, nonatomic) IBOutlet UILabel *labelFirstLogDateValue;
@@ -71,8 +68,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelHighLowDeviceTemperatureLowValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelHighLowDeviceHumidityHighValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelHighLowDeviceHumidityLowValue;
-@property (strong, nonatomic) IBOutlet UILabel *labelHighLowDeviceDewPointHighValue;
-@property (strong, nonatomic) IBOutlet UILabel *labelHighLowDeviceDewPointLowValue;
 
 
 

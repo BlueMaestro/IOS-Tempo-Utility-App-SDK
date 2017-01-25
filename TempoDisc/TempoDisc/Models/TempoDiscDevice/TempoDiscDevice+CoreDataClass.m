@@ -112,7 +112,7 @@ int intValue(char lsb,char msb)
 		components.hour = MIN(hours, 24);
 		components.day = MIN(days, 31);
 		components.month = MIN(months, 12);
-		components.year = years;
+		components.year = years+2000;//add century as its only last 2 digits
 		
 		self.startTimestamp = [calendar dateFromComponents:components];
 		

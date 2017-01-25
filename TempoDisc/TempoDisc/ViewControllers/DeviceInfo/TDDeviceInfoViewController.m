@@ -184,9 +184,28 @@
 	_buttonUART.layer.cornerRadius = 12;
 	_buttonUART.clipsToBounds = YES;
 	
-	for (UIImageView* boxImage in _boxImageViews) {
+    /*
+	for (UIImageView* boxImage in _upperBoxImageViews) {
 		boxImage.image = [boxImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12) resizingMode:UIImageResizingModeTile];
 	}
+    
+    
+    //Get size of screen for placement of assets
+    CGRect screenBound = [[UIScreen mainScreen] bounds];
+    CGSize screenSize = screenBound.size;
+    CGFloat screenWidth = screenSize.width;
+    CGFloat screenHeight = screenSize.height;
+    
+    NSLog (@"screenWidth = %f", screenWidth);
+    
+    
+    for (UIImageView * upperBoxImage in _upperBoxImageViews) {
+        CGRect newFrame = upperBoxImage.frame;
+        newFrame.size. width = (screenWidth / 3 - 15);
+        [upperBoxImage setFrame:newFrame];
+    }
+     */
+    
 
 }
 
@@ -221,17 +240,17 @@
     }
     
     
-	_labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:[TDDefaultDevice sharedDevice].selectedDevice.currentTemperature forDevice:[TDDefaultDevice sharedDevice].selectedDevice].floatValue, [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
-	_labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)[TDDefaultDevice sharedDevice].selectedDevice.currentHumidity.integerValue];
+	_labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:[TDDefaultDevice sharedDevice].selectedDevice.currentTemperature forDevice:[TDDefaultDevice sharedDevice].selectedDevice].floatValue, [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
+	_labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)[TDDefaultDevice sharedDevice].selectedDevice.currentHumidity.integerValue];
 	if ([TDDefaultDevice sharedDevice].selectedDevice.lastDownload) {
-		_labelLastDownloadTimestamp.text = [_formatterLastDownload stringFromDate:[TDDefaultDevice sharedDevice].selectedDevice.lastDownload];
+		_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:[TDDefaultDevice sharedDevice].selectedDevice.lastDownload];
 	}
 	else {
-		_labelLastDownloadTimestamp.text = NSLocalizedString(@"Not yet downloaded", nil);
+		_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 	}
-	_labelRSSI.text = [NSString stringWithFormat:@"%lddB", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
-	_labelUUID.text = [TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString;
-	_labelVersion.text = [TDDefaultDevice sharedDevice].selectedDevice.version;
+	_labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
+	_labelDeviceUUID.text = [TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString;
+	//_labelVersion.text = [TDDefaultDevice sharedDevice].selectedDevice.version;
     _labelDeviceBatteryValue.text = [[TDDefaultDevice sharedDevice].selectedDevice.battery stringValue];
 	
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
@@ -244,7 +263,7 @@
 		_labelDeviceID.text = @"CLASS ID";
 		
 		//if there is a full and empty battery set the empty to not highlighted and full to higlighted and this will update the status (50%+ is full now)
-		_imageViewBatteryStatus.highlighted = device.battery.integerValue > 50;
+		//_imageViewBatteryStatus.highlighted = device.battery.integerValue > 50;
 		
 		if (device) {
 			Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
@@ -255,32 +274,41 @@
 			_labelFirstLogDateValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 			_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 		}
-		
+        
+        
+        //Sets Values for Current Temperature humidity and Dew Point
 		_labelCurrentDeviceTemperatureUnit.text = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
 		_labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
-		_labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.1f%%", device.currentHumidity.floatValue];
+		_labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.0f%%", device.currentHumidity.floatValue];
 		_labelCurrentDeviceDewPointUnit.text = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
 		_labelCurrentDeviceDewPointValue.text = [NSString stringWithFormat:@"%.1f%%", device.dewPoint.floatValue];
 		
+        
+        //Sets Values for Last 24 Hours - Temperature
 		_labelLast24DeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayTemperature.floatValue];
 		_labelLast24DeviceTemperatureAverageValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayTemperature.floatValue];
 		_labelLast24DeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDayTemperature.floatValue];
-		_labelLast24DeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayHumidity.floatValue];
-		_labelLast24DeviceHumidityAverageValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayHumidity.floatValue];
-		_labelLast24DeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayDew.floatValue];
+        
+        
+        //Sets Values for Last 24 Hours - Humidity
+		_labelLast24DeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.0f%%", device.highestDayHumidity.floatValue];
+		_labelLast24DeviceHumidityAverageValue.text = [NSString stringWithFormat:@"%.0f%%", device.averageDayHumidity.floatValue];
+		_labelLast24DeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.0f%%", device.lowestDayHumidity.floatValue];
+        
+        
+        //Sets Values for Last 24 Hours - Dew Point
 		_labelLast24DeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayDew.floatValue];
 		_labelLast24DeviceDewPointAverageValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayDew.floatValue];
 		_labelLast24DeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDayDew.floatValue];
 		
+        
+        //Sets Values for Highest and Lowest
 		_labelHighLowDeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestTemperature.floatValue];
 		_labelHighLowDeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestTemperature.floatValue];
-		_labelHighLowDeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestHumidity.floatValue];
-		_labelHighLowDeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestHumidity.floatValue];
-		/**
-		 *	Not sure about these values
-		 **/
-//		_labelHighLowDeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
-//		_labelHighLowDeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
+		_labelHighLowDeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.0f%%", device.highestHumidity.floatValue];
+		_labelHighLowDeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.0f%%", device.lowestHumidity.floatValue];
+        //_labelHighLowDeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDewPoint.floatValue];
+		//_labelHighLowDeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
 	}
 	
 	

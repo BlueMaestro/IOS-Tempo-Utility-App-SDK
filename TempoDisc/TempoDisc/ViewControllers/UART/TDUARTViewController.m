@@ -190,12 +190,7 @@
 													[weakself addLogMessage:[NSString stringWithFormat:@"Error subscribing for TX characteristic: %@", error4] type:LogMessageTypeInbound];
 												}
 											} onUpdate:^(NSData *data, NSError *error5) {
-												if (!error5) {
-													[weakself addLogMessage:[NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
-												}
-												else {
-													[weakself addLogMessage:[NSString stringWithFormat:@"Error on updating TX data: %@", error5] type:LogMessageTypeInbound];
-												}
+												[weakself handleDeviceDataReceive:data error:error5];
 											}];
 										}
 										else if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartRXCharacteristicUUIDString]) {
@@ -241,17 +236,17 @@
 	__weak typeof(self) weakself = self;
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
-			if (_writeCompletion) {
-				_writeCompletion(YES, nil);
-				_writeCompletion = nil;
+			if (weakself.writeCompletion) {
+				weakself.writeCompletion(YES, nil);
+				weakself.writeCompletion = nil;
 			}
 //			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
 		else {
 			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error] type:LogMessageTypeInbound];
-			if (_writeCompletion) {
-				_writeCompletion(NO, error);
-				_writeCompletion = nil;
+			if (weakself.writeCompletion) {
+				weakself.writeCompletion(NO, error);
+				weakself.writeCompletion = nil;
 			}
 		}
 	}];
@@ -279,7 +274,7 @@
 
 - (void)connectAndWrite:(NSString*)data {
 	if (_writeCharacteristic) {
-		[self writeData:_textFieldMessage.text toCharacteristic:_writeCharacteristic];
+		[self writeData:data toCharacteristic:_writeCharacteristic];
 	}
 	else {
 		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];
@@ -307,6 +302,15 @@
 }
 
 #pragma mark - Public methods
+
+- (void)handleDeviceDataReceive:(NSData*)data error:(NSError*)error {
+	if (!error) {
+		[self addLogMessage:[NSString stringWithFormat:@"%@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]] type:LogMessageTypeInbound];
+	}
+	else {
+		[self addLogMessage:[NSString stringWithFormat:@"Error on updating TX data: %@", error] type:LogMessageTypeInbound];
+	}
+}
 
 #pragma mark - Actions
 

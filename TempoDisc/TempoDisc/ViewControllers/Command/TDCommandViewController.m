@@ -13,6 +13,8 @@
 #define CHAR_ID @"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define SERVICE_ID @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 
+#define kResponseTimeout 2
+
 typedef enum : NSInteger {
 	DeviceCommandChangeName = 0,
 	DeviceCommandLogginInterval,
@@ -28,6 +30,11 @@ typedef enum : NSInteger {
 	DeviceCommandResetDevice,
     DeviceCommandUnits,
     DeviceCommandLock,
+    DeviceCalibrateTemperature,
+    DeviceCalibrateHumidity,
+    DeviceDisableButton,
+    DeviceSetDeviceID,
+    DeviceSetTransmissionInterval,
 	DeviceCommandCommandConsole
 } DeviceCommand;
 
@@ -36,6 +43,7 @@ typedef enum : NSInteger {
 @property (nonatomic, strong) NSArray *dataSourceCommands;
 @property (nonatomic, weak) UITextField *textFieldCommandPopupActive;
 @property (nonatomic, strong) NSDateFormatter *dateFormatterCommand;
+@property (nonatomic, strong) NSTimer *timerResponseTimeout;
 
 @end
 
@@ -50,12 +58,10 @@ typedef enum : NSInteger {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self refreshCurrentDevice];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,7 +83,7 @@ typedef enum : NSInteger {
 
 - (void)setupView {
 	[super setupView];
-	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(buttonBackClicked:)];
 	
 	_dateFormatterCommand = [[NSDateFormatter alloc] init];
 //	_dateFormatterCommand.locale = [NSLocale localeWithLocaleIdentifier:@"us"];
@@ -104,6 +110,11 @@ typedef enum : NSInteger {
 							@(DeviceCommandResetDevice),
                             @(DeviceCommandUnits),
                             @(DeviceCommandLock),
+                            @(DeviceCalibrateTemperature),
+                            @(DeviceCalibrateHumidity),
+                            @(DeviceDisableButton),
+                            @(DeviceSetDeviceID),
+                            @(DeviceSetTransmissionInterval),
 							@(DeviceCommandCommandConsole)
 							];
 	[_collectionViewCommands reloadData];
@@ -142,9 +153,9 @@ typedef enum : NSInteger {
 		case DeviceCommandReferenceDateAndTime:
 			return @"Reference\nDate & Time";
 		case DeviceCommandAlarm1:
-			return @"Alarm 1";
+			return @"Alarm 1\nSet";
 		case DeviceCommandAlarm2:
-			return @"Alarm 2";
+			return @"Alarm 2\nSet";
 		case DeviceCommandClearAlarms:
 			return @"Clear\nAlarms";
 		case DeviceCommandAlarmOnOff:
@@ -160,7 +171,17 @@ typedef enum : NSInteger {
         case DeviceCommandUnits:
             return @"Change\n ºC / ºF";
         case DeviceCommandLock:
-            return@"Lock/Unlock";
+            return@"Lock/Unlock\nDevice";
+        case DeviceCalibrateHumidity:
+            return@"Calibrate\nHumidity";
+        case DeviceCalibrateTemperature:
+            return@"Calibrate\nTemperature";
+        case DeviceDisableButton:
+            return@"Disable\nButton";
+        case DeviceSetDeviceID:
+            return@"Set Device\nClass ID";
+        case DeviceSetTransmissionInterval:
+            return@"Set Advertising\nFrequency";
 		case DeviceCommandCommandConsole:
 			return @"Command\nConsole";
 	}
@@ -168,6 +189,7 @@ typedef enum : NSInteger {
 
 - (void)actionForCommand:(DeviceCommand)command {
 	__block UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
+    __block UIAlertController *alert_input_issue = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
 	UIAlertAction *actionOne = nil;
     UIAlertAction *actionTwo = nil;
     UIAlertAction *actionThree = nil;
@@ -178,52 +200,85 @@ typedef enum : NSInteger {
 	NSString *placeholder = @"";//placeholder for the text field in the alert view
 	__weak typeof(self) weakself = self;
 	switch (command) {
-		case DeviceCommandChangeName: {
+        
+		case DeviceCommandChangeName:
+        {
 			title = @"Name Change";
-			descript = @"Please enter new device name.\nThis cannot be more than 8 characters long.";
-			placeholder = @"Name here";
-			actionOne = [UIAlertAction actionWithTitle:@"Enter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			descript = @"Please enter new device name.\nThis cannot be more than 8 characters long and any name longer will be shortened.";
+			placeholder = @"Enter new name";
+			actionOne = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 				[weakself changeName:alert.textFields[0].text];
 			}];
             presentInputBox = true;
+            break;
 		}
-			break;
-        case DeviceCommandLogginInterval: {
+			
+
+            
+        case DeviceCommandLogginInterval:
+        {
             title = @"Logging Interval";
-            descript = @"Please enter logging interval in seconds.  The default is 3,600 seconds.  Please enter a value between 2 and 86,400.";
-            actionOne = [UIAlertAction actionWithTitle:@"Enter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakself changeName:alert.textFields[0].text];
+            descript = @"Please enter logging interval in seconds.  The default is 3,600 seconds (1 hour).  Please enter a value between 2 and 86,400 (24 hours).";
+            actionOne = [UIAlertAction actionWithTitle:@"Set" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                int value = [alert.textFields[0].text intValue];
+                if ((value < 2) || (value > 86400)) {
+                    alert_input_issue.title = @"Invalid Parameter";
+                    alert_input_issue.message = @"The value entered appears to be outside the required parameters.  Please check and try again.";
+                    [alert_input_issue addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                    [self presentViewController:alert_input_issue animated:YES completion:nil];
+                    
+                } else {
+                [weakself changeLoggingInterval:value];
+                }
             }];
             presentInputBox = true;
+            break;
         }
-			break;
-        case DeviceCommandSensorInterval: {
+			
+            
+        case DeviceCommandSensorInterval:
+        {
             title = @"Sensor Interval";
-            descript = @"Please sensor interval in seconds.  This is the rate at which the sensors are polled.  It does not affect the logging interval.  The default is 10 seconds.  Please enter a value between 2 and 86,400.";
+            descript = @"Please enter sensor interval in seconds.  This is the rate at which the sensors are polled and current values are updated.  It does not affect the logging interval.  The default is 10 seconds.  Please enter a value between 2 and 86,400 (24 hours).";
             actionOne = [UIAlertAction actionWithTitle:@"Enter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakself changeName:alert.textFields[0].text];
+                int value = [alert.textFields[0].text intValue];
+                if ((value < 2) || (value > 86400)) {
+                    alert_input_issue.title = @"Invalid Parameter";
+                    alert_input_issue.message = @"The value entered appears to be outside the required parameters.  Please check and try again.";
+                    [alert_input_issue addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+                    [self presentViewController:alert_input_issue animated:YES completion:nil];
+                    
+                } else {
+                [weakself changeSensorInterval:value];
+                }
             }];
             presentInputBox = true;
+            break;
         }
-			break;
+			
+            
+            
 		case DeviceCommandReferenceDateAndTime:
         {
-			title = @"Reference Date & Time Change";
-			descript = @"Please enter new device reference date and time";
+			title = @"Reference Date & Time";
+			descript = @"Please enter a reference date and time for logging purposes.  This should be when the device was first turned on or reset since the first log is recorded straight away.  Each subsequent log timestamp will refer back to this.";
 			placeholder = @"";
-			actionOne = [UIAlertAction actionWithTitle:@"Enter" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			actionOne = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 				NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
 				if (parsedDate) {
 					[weakself changeReferenceTimeAndDate:parsedDate];
 				}
 			}];
             presentInputBox = true;
+            break;
         }
-			break;
+			
+            
+            
 		case DeviceCommandAlarm1:
         {
             title = @"Set Alarm 1";
-            descript = @"Enter a value and the alarm parameter.  For example Temperature < 10 means each time temperature is below 10, this will be logged and an alert will be raised when scanning the device.  Enter only whole numbers for the relavant units of measure.";
+            descript = @"Enter a value and and then select an alarm parameter.  For example Temperature < 10 means each time temperature is below 10, this will be logged and an alert will be raised when scanning the device.  Enter only whole numbers for the relavant units of measure.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Temperature < Value" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
@@ -250,15 +305,16 @@ typedef enum : NSInteger {
                 }
             }];
             presentInputBox = true;
+            break;
             
         }
-			break;
+			
             
             
 		case DeviceCommandAlarm2:
         {
             title = @"Set Alarm 2";
-            descript = @"Enter a value and the alarm parameter.  For example Temperature < 10 means each time temperature is below 10, this will be logged and an alert will be raised when scanning the device.  Enter only whole numbers for the relavant units of measure.";
+            descript = @"Enter a value and and then select an alarm parameter.  For example Temperature < 10 means each time temperature is below 10, this will be logged and an alert will be raised when scanning the device.  Enter only whole numbers for the relavant units of measure.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Temperature < Value" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
@@ -285,14 +341,15 @@ typedef enum : NSInteger {
                 }
             }];
             presentInputBox = true;
-            
-            
+            break;
         }
-			break;
+		
+          
+            
 		case DeviceCommandClearAlarms:
         {
             title = @"Clear Alarms";
-            descript = @"This clears the alarms by reseting the alarm counter, but does not change the parameters";
+            descript = @"This clears the alarms by reseting the alarm counter, but does not change any parameters";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
@@ -300,8 +357,11 @@ typedef enum : NSInteger {
                     [weakself changeReferenceTimeAndDate:parsedDate];
                 }
             }];
+            break;
         }
-			break;
+			
+            
+            
 		case DeviceCommandAlarmOnOff:
         {
             title = @"Turn Alarms On / Off";
@@ -319,8 +379,11 @@ typedef enum : NSInteger {
                     [weakself changeReferenceTimeAndDate:parsedDate];
                 }
             }];
+            break;
         }
-			break;
+			
+            
+            
 		case DeviceCommandAirplaneModeOnOff:
         {
             title = @"Turn Airplane Mode On / Off";
@@ -338,10 +401,12 @@ typedef enum : NSInteger {
                     [weakself changeReferenceTimeAndDate:parsedDate];
                 }
             }];
-            
+            break;
             
         }
-			break;
+			
+            
+            
 		case DeviceCommandTransmitPower:
         {
             title = @"Set transmission power";
@@ -359,8 +424,11 @@ typedef enum : NSInteger {
             actionThree = [UIAlertAction actionWithTitle:@"-4dB (weakest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
+            break;
         }
-			break;
+			
+            
+            
 		case DeviceCommandClearStoredData:
         {
             title = @"Clear Stored Data";
@@ -372,9 +440,12 @@ typedef enum : NSInteger {
                     [weakself changeReferenceTimeAndDate:parsedDate];
                 }
             }];
+            break;
         }
             
-			break;
+			
+            
+            
 		case DeviceCommandResetDevice:
         {
             title = @"Reset the Device";
@@ -392,9 +463,12 @@ typedef enum : NSInteger {
             actionThree = [UIAlertAction actionWithTitle:@"-4dB (weakest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
+            break;
         }
             
-			break;
+			
+            
+            
         case DeviceCommandUnits:
         {
             title = @"Set Units";
@@ -409,23 +483,117 @@ typedef enum : NSInteger {
             actionTwo = [UIAlertAction actionWithTitle:@"º Celsius" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
             }];
+            break;
             
         }
-            break;
+            
+            
+            
         case DeviceCommandLock:
         {
             title = @"Lock / Unlock the Device";
             descript = @"Enter a 4 digit pin to prevent settings being changed by locking the device.  If the pin is forgotten, removing the battery will reset it.  Re-enter the same pin to unlock the device";
             placeholder = @"";
-            actionOne = [UIAlertAction actionWithTitle:@"Confirm Pin" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            actionOne = [UIAlertAction actionWithTitle:@"Enter Pin" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
                 if (parsedDate) {
                     [weakself changeReferenceTimeAndDate:parsedDate];
                 }
             }];
             presentInputBox = true;
+            break;
             
         }
+            
+            
+        case DeviceCalibrateHumidity:
+        {
+            title = @"Calibrate Humidity";
+            descript = @"Enter the calibration offset for humidity.  This will apply to logged values going forward and does not affect existing logged values.";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"Calibrate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            presentInputBox = true;
+            break;
+            
+        }
+            
+            
+    
+        case DeviceCalibrateTemperature:
+        {
+            title = @"Calibrate Temperature";
+            descript = @"Enter the calibration offset for temperature.  This will apply to logged values going forward and does not affect existing logged values.  Enter a value applicable to the current units of measure set for the device.";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"Calibrate" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                         }];
+            presentInputBox = true;
+            break;
+            
+        }
+            
+            
+            
+            
+        case DeviceDisableButton:
+        {
+            title = @"Disable Button";
+            descript = @"This command disables the button to prevent it turning the device off.  Pressing it will still cause the device's LED to blink and cause the device to advertise if it is in airplane mode.";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"Toggle On/Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            break;
+        }
+            
+            
+            
+        case DeviceSetDeviceID:
+        {
+            
+            title = @"Set Device Class ID";
+            descript = @"Enter a number between 1 - 255 that will be an additional identifier for the device.  This function is ideal if you want to organise devices into groups (based on location, for example) where the name alone is not sufficient to identify the device.";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"Set" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            presentInputBox = true;
+            break;
+        }
+            
+            
+            
+        case DeviceSetTransmissionInterval:
+        {
+            title = @"Transmission Fequency";
+            descript = @"Choose a transmission (or advertising) frequency to prolong battery life.  A higher setting means less frequent transmissions and increased battery life.  Note, on a button push or finishing a connection, the device is always fast for 3 minutes.";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"100ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            actionTwo = [UIAlertAction actionWithTitle:@"300ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            actionThree = [UIAlertAction actionWithTitle:@"600ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            actionFour = [UIAlertAction actionWithTitle:@"1000ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            break;
+            
+        }
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
             break;
@@ -472,16 +640,10 @@ typedef enum : NSInteger {
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)handleDisconnectNotification:(NSNotification*)note {
-	if ([MBProgressHUD allHUDsForView:self.view].count > 0) {
-		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"There was an error writing data.", nil)] preferredStyle:UIAlertControllerStyleAlert];
-		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
-		[self presentViewController:alert animated:YES completion:nil];
-	}
-	[self refreshCurrentDevice];
-}
 
+/**
+ *	Not being used, device response data (handleDeviceDataReceive:error:) will cleanup
+ **/
 - (void)showAlertForAction:(BOOL)success error:(NSError*)error {
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (success) {
@@ -494,7 +656,84 @@ typedef enum : NSInteger {
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 		[self presentViewController:alert animated:YES completion:nil];
 	}
+}
 
+- (void)startTimeout {
+	__weak typeof (self) weakself = self;
+	_timerResponseTimeout = [NSTimer timerWithTimeInterval:kResponseTimeout repeats:NO block:^(NSTimer * _Nonnull timer) {
+		[weakself showAlertForAction:NO error:nil];
+		[[weakself timerResponseTimeout] invalidate];
+	}];
+}
+
+- (NSString*)manipulateString:(NSString*)target {
+	/**
+	 *	Do some manipulation
+	 **/
+	
+	
+	return target;
+	
+	/**
+	 *	If this method is used in more UIViewControllers then its better to move it to TDHelper class so it can be called everywhere with:
+	 *	[TDHepler manipulateString:string]
+	 *	Just use "+" instead of "-" at the start to make it class method instead of instance method
+	 **/
+}
+
+#pragma mark - Public methods
+
+- (void)handleDeviceDataReceive:(NSData *)data error:(NSError *)error {
+	[_timerResponseTimeout invalidate];
+	NSString *message = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+	
+	BOOL hasWordError = [message containsString:@"error"];
+	
+	//if we need the position of the "error" string
+	NSRange rangeOfError = [message rangeOfString:@"error"];
+	if (rangeOfError.location != NSNotFound) {
+		/**
+		 *	exists
+		 *	rangeOfError.location is the location of the "e" character
+		 *	rangeOfError.length is the length of the "error" string
+		**/
+		
+		//to get the rest of the string after "error" we can use
+		NSString *restOfMessage = [message substringFromIndex:rangeOfError.location+rangeOfError.length];
+		
+		//or before
+		NSString *beforeErrorString = [message substringToIndex:rangeOfError.location];
+		
+		//to remove the "error" from the message we can use
+		NSString *messageWithoutError = [message stringByReplacingOccurrencesOfString:@"error" withString:@""];
+		
+		//finally this method can be adjusted to manipulate the string for the desired effect
+		NSString *endResult = [self manipulateString:message];
+	}
+	
+	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+	if (!error) {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+	else {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:message ? message : [NSString stringWithFormat:NSLocalizedString(@"Error writing: %@", nil), error] preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		NSLog(@"Present data receive fail");
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+}
+
+- (void)handleDisconnectNotification:(NSNotification *)note {
+	if ([MBProgressHUD allHUDsForView:self.view].count > 0 && !_timerResponseTimeout) {
+		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:[NSString stringWithFormat:NSLocalizedString(@"There was an error writing data.", nil)] preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
+		NSLog(@"Present disconnect");
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+	[super handleDisconnectNotification:note];
 }
 
 #pragma mark - Actions
@@ -545,6 +784,9 @@ typedef enum : NSInteger {
 
 #pragma mark - UITextFieldDelegate
 
+
+
+
 #pragma mark - Commands
 
 - (void)changeName:(NSString*)name {
@@ -560,25 +802,37 @@ typedef enum : NSInteger {
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam%@", name] withCompletion:^(BOOL success, NSError *error) {
 		[weakself showAlertForAction:success error:error];
 	}];
+    
+    
+    
 }
 
 - (void)changeReferenceTimeAndDate:(NSDate*)targetDate {
+    __block UIAlertController *alert_input_issue = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
 	NSCalendar *calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
 	unsigned unitFlags = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute);
 	NSDateComponents *components = [calendar components:unitFlags fromDate:targetDate];
-	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + components.year*100000000;
+	NSInteger number = components.minute + components.hour*100 + components.day*10000 + components.month*1000000 + (components.year-2000)*100000000;
     NSLog(@"The number for the date is %ld", (long)number);
-	__weak typeof(self) weakself = self;
-	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-	[self connectAndWrite:[NSString stringWithFormat:@"*d%ld", number] withCompletion:^(BOOL success, NSError *error) {
+    if (((long)number < 1700000000) || ((long)number > 1800000000)) {
+        alert_input_issue.title = @"Invalid Parameter";
+        alert_input_issue.message = @"The value entered appears to be outside the required parameters.  Please check and try again.";
+        [alert_input_issue addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [self presentViewController:alert_input_issue animated:YES completion:nil];
+        
+    } else {
+        __weak typeof(self) weakself = self;
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self connectAndWrite:[NSString stringWithFormat:@"*d%ld", number] withCompletion:^(BOOL success, NSError *error) {
 		[weakself showAlertForAction:success error:error];
-	}];
-	
+        }];
+    }
 }
 
 -(void)changeLoggingInterval:(NSInteger)seconds {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    NSLog(@"The seconds coming through are %d", seconds);
     [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", seconds] withCompletion:^(BOOL success, NSError *error) {
         [weakself showAlertForAction:success error:error];
     }];
@@ -591,5 +845,24 @@ typedef enum : NSInteger {
         [weakself showAlertForAction:success error:error];
     }];
 }
+
+-(void)changeUnits:(NSInteger)which {
+    //if which==1 then change to celsius if which !=1 then change to fahrenheit
+    __weak typeof(self) weakself = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    if (which == 1) {
+        [self connectAndWrite:[NSString stringWithFormat:@"*unitsc"] withCompletion:^(BOOL success, NSError *error) {
+        [weakself showAlertForAction:success error:error];
+        }];
+    } else {
+        [self connectAndWrite:[NSString stringWithFormat:@"*unitsf"] withCompletion:^(BOOL success, NSError *error) {
+        [weakself showAlertForAction:success error:error];
+        }];
+    }
+    
+}
+
+
+
 
 @end

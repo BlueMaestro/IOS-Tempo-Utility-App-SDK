@@ -21,8 +21,10 @@
 @dynamic numBreach;
 @dynamic highestTemperature;
 @dynamic highestHumidity;
+@dynamic highestDew;
 @dynamic lowestTemperature;
 @dynamic lowestHumidity;
+@dynamic lowestDew;
 @dynamic highestDayTemperature;
 @dynamic highestDayHumidity;
 @dynamic highestDayDew;

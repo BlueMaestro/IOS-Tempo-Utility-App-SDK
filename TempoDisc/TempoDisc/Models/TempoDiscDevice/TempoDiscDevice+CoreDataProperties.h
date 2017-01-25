@@ -22,8 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *numBreach;
 @property (nullable, nonatomic, copy) NSNumber *highestTemperature;
 @property (nullable, nonatomic, copy) NSNumber *highestHumidity;
+@property (nullable, nonatomic, copy) NSNumber *highestDew;
 @property (nullable, nonatomic, copy) NSNumber *lowestTemperature;
 @property (nullable, nonatomic, copy) NSNumber *lowestHumidity;
+@property (nullable, nonatomic, copy) NSNumber *lowestDew;
 @property (nullable, nonatomic, copy) NSNumber *highestDayTemperature;
 @property (nullable, nonatomic, copy) NSNumber *highestDayHumidity;
 @property (nullable, nonatomic, copy) NSNumber *highestDayDew;
