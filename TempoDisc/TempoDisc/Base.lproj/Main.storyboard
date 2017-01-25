@@ -1922,7 +1922,7 @@ Change</string>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="% Relative " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wtv-ID-bMP" userLabel="Humi Units Label">
-                                                <rect key="frame" x="186" y="56" width="44" height="12"/>
+                                                <rect key="frame" x="186" y="58" width="44" height="10"/>
                                                 <fontDescription key="fontDescription" name="Montserrat-Regular" family="Montserrat" pointSize="8"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -1986,9 +1986,9 @@ Change</string>
                                             <constraint firstItem="8cm-1Y-nP0" firstAttribute="centerX" secondItem="M4j-Py-5be" secondAttribute="centerX" id="dTY-EV-XKd"/>
                                             <constraint firstItem="BMP-pT-Voq" firstAttribute="top" secondItem="Aj5-He-Ktv" secondAttribute="bottom" constant="-23" id="gvY-zX-9QO"/>
                                             <constraint firstItem="FNg-Hv-8eo" firstAttribute="centerY" secondItem="BMP-pT-Voq" secondAttribute="centerY" id="hU3-jN-9g9"/>
-                                            <constraint firstItem="Wtv-ID-bMP" firstAttribute="top" secondItem="Aj5-He-Ktv" secondAttribute="bottom" constant="3" id="kKC-27-ym6"/>
                                             <constraint firstItem="Cch-H7-hRT" firstAttribute="centerX" secondItem="BMP-pT-Voq" secondAttribute="centerX" id="lW5-fY-m45"/>
                                             <constraint firstItem="6dq-A0-ydY" firstAttribute="centerX" secondItem="8cm-1Y-nP0" secondAttribute="centerX" id="m3q-KU-crP"/>
+                                            <constraint firstItem="Wtv-ID-bMP" firstAttribute="top" secondItem="Aj5-He-Ktv" secondAttribute="bottom" constant="5" id="pCf-2Y-8fS"/>
                                             <constraint firstItem="M4j-Py-5be" firstAttribute="top" secondItem="6dq-A0-ydY" secondAttribute="bottom" constant="-22" id="rZ6-gs-5b6"/>
                                             <constraint firstItem="kql-dy-W8d" firstAttribute="top" secondItem="8cm-1Y-nP0" secondAttribute="bottom" constant="7" id="scR-0I-5dn"/>
                                             <constraint firstAttribute="height" constant="125" id="sgW-yi-Aan"/>
@@ -2002,9 +2002,7 @@ Change</string>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="CEb-VZ-Djs"/>
-                                                <exclude reference="Cmc-kz-SvY"/>
                                                 <exclude reference="Ddr-Ct-AS7"/>
-                                                <exclude reference="kKC-27-ym6"/>
                                                 <exclude reference="m3q-KU-crP"/>
                                                 <exclude reference="wgS-Nm-UyK"/>
                                                 <exclude reference="t7Y-Ge-Rxs"/>
@@ -2014,14 +2012,12 @@ Change</string>
                                             <mask key="constraints">
                                                 <exclude reference="CEb-VZ-Djs"/>
                                                 <exclude reference="Ddr-Ct-AS7"/>
-                                                <include reference="kKC-27-ym6"/>
                                                 <exclude reference="m3q-KU-crP"/>
                                                 <exclude reference="t7Y-Ge-Rxs"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=compact">
                                             <mask key="constraints">
-                                                <include reference="Cmc-kz-SvY"/>
                                                 <include reference="wgS-Nm-UyK"/>
                                             </mask>
                                         </variation>
@@ -2367,15 +2363,11 @@ Change</string>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="0Ec-Bq-BMZ"/>
-                                                <exclude reference="4c6-aP-eWi"/>
                                                 <exclude reference="AWt-mW-Gi4"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
                                             <mask key="constraints">
-                                                <include reference="0Ec-Bq-BMZ"/>
-                                                <include reference="4c6-aP-eWi"/>
                                                 <exclude reference="AWt-mW-Gi4"/>
                                             </mask>
                                         </variation>
@@ -2397,16 +2389,12 @@ Change</string>
                                         </state>
                                         <variation key="default">
                                             <mask key="constraints">
-                                                <exclude reference="KoS-ET-6Vi"/>
                                                 <exclude reference="O5v-aI-esU"/>
-                                                <exclude reference="vcj-vM-ouP"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
                                             <mask key="constraints">
-                                                <include reference="KoS-ET-6Vi"/>
                                                 <exclude reference="O5v-aI-esU"/>
-                                                <include reference="vcj-vM-ouP"/>
                                             </mask>
                                         </variation>
                                         <connections>
@@ -2424,18 +2412,6 @@ Change</string>
                                         <state key="normal" title="Download">
                                             <color key="titleColor" red="0.0" green="0.36862745099999999" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="R97-Tw-UQV"/>
-                                                <exclude reference="jcQ-ed-nPa"/>
-                                            </mask>
-                                        </variation>
-                                        <variation key="widthClass=compact">
-                                            <mask key="constraints">
-                                                <include reference="R97-Tw-UQV"/>
-                                                <include reference="jcQ-ed-nPa"/>
-                                            </mask>
-                                        </variation>
                                         <connections>
                                             <action selector="buttonDownloadClicked:" destination="Ld5-H0-NvG" eventType="touchUpInside" id="hn9-8T-ArB"/>
                                         </connections>
@@ -2450,6 +2426,7 @@ Change</string>
                                     <constraint firstItem="AcU-Eb-gEO" firstAttribute="leading" secondItem="4yC-xc-5r7" secondAttribute="leading" constant="12" id="D4t-np-cQK"/>
                                     <constraint firstItem="fI8-3T-w9G" firstAttribute="centerX" secondItem="Dup-Wi-53n" secondAttribute="centerX" id="HCG-8y-Uip"/>
                                     <constraint firstItem="e3S-oH-43K" firstAttribute="leading" secondItem="fI8-3T-w9G" secondAttribute="trailing" constant="15" id="HFB-DU-Hw6"/>
+                                    <constraint firstAttribute="height" constant="100" id="IcU-EL-5EI"/>
                                     <constraint firstAttribute="bottom" secondItem="Dup-Wi-53n" secondAttribute="bottom" constant="10" id="Ovz-ff-eRz"/>
                                     <constraint firstItem="fI8-3T-w9G" firstAttribute="leading" secondItem="AcU-Eb-gEO" secondAttribute="trailing" constant="15" id="T5z-EE-a8c"/>
                                     <constraint firstItem="fI8-3T-w9G" firstAttribute="top" secondItem="e3S-oH-43K" secondAttribute="top" id="TBC-5g-Ix5"/>
@@ -2459,7 +2436,6 @@ Change</string>
                                     <constraint firstItem="Dup-Wi-53n" firstAttribute="bottom" secondItem="4yC-xc-5r7" secondAttribute="bottomMargin" id="ZLb-8C-nwH"/>
                                     <constraint firstItem="Dup-Wi-53n" firstAttribute="top" secondItem="AcU-Eb-gEO" secondAttribute="bottom" constant="8" symbolic="YES" id="Zue-g3-gbn"/>
                                     <constraint firstItem="AcU-Eb-gEO" firstAttribute="top" secondItem="4yC-xc-5r7" secondAttribute="top" constant="14" id="k2w-s0-gCY"/>
-                                    <constraint firstAttribute="height" constant="100" id="l2S-cn-XgY"/>
                                     <constraint firstItem="fI8-3T-w9G" firstAttribute="centerY" secondItem="AcU-Eb-gEO" secondAttribute="centerY" id="rvT-RK-13L"/>
                                     <constraint firstItem="fI8-3T-w9G" firstAttribute="baseline" secondItem="AcU-Eb-gEO" secondAttribute="firstBaseline" id="v89-ER-08J"/>
                                     <constraint firstItem="fI8-3T-w9G" firstAttribute="centerX" secondItem="4yC-xc-5r7" secondAttribute="centerX" id="vcf-qP-roe"/>
@@ -2467,52 +2443,32 @@ Change</string>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="l2S-cn-XgY"/>
-                                        <exclude reference="4DT-bC-zVP"/>
                                         <exclude reference="75B-0k-BIu"/>
                                         <exclude reference="Awz-1u-Yzw"/>
-                                        <exclude reference="D4t-np-cQK"/>
                                         <exclude reference="k2w-s0-gCY"/>
-                                        <exclude reference="Ovz-ff-eRz"/>
                                         <exclude reference="ZLb-8C-nwH"/>
                                         <exclude reference="Zue-g3-gbn"/>
                                         <exclude reference="CEC-oC-0Fg"/>
-                                        <exclude reference="HCG-8y-Uip"/>
                                         <exclude reference="T5z-EE-a8c"/>
                                         <exclude reference="TBC-5g-Ix5"/>
-                                        <exclude reference="rvT-RK-13L"/>
                                         <exclude reference="v89-ER-08J"/>
-                                        <exclude reference="vcf-qP-roe"/>
                                         <exclude reference="zqc-9k-ZiL"/>
                                         <exclude reference="HFB-DU-Hw6"/>
-                                        <exclude reference="UYr-sr-FC4"/>
-                                        <exclude reference="VWn-ka-gl2"/>
-                                        <exclude reference="XNP-Rs-A0t"/>
                                     </mask>
                                 </variation>
                                 <variation key="widthClass=compact">
                                     <mask key="constraints">
-                                        <include reference="l2S-cn-XgY"/>
-                                        <include reference="4DT-bC-zVP"/>
                                         <exclude reference="75B-0k-BIu"/>
                                         <exclude reference="Awz-1u-Yzw"/>
-                                        <include reference="D4t-np-cQK"/>
                                         <exclude reference="k2w-s0-gCY"/>
-                                        <include reference="Ovz-ff-eRz"/>
                                         <exclude reference="ZLb-8C-nwH"/>
                                         <exclude reference="Zue-g3-gbn"/>
                                         <exclude reference="CEC-oC-0Fg"/>
-                                        <include reference="HCG-8y-Uip"/>
                                         <exclude reference="T5z-EE-a8c"/>
                                         <exclude reference="TBC-5g-Ix5"/>
-                                        <include reference="rvT-RK-13L"/>
                                         <exclude reference="v89-ER-08J"/>
-                                        <include reference="vcf-qP-roe"/>
                                         <exclude reference="zqc-9k-ZiL"/>
                                         <exclude reference="HFB-DU-Hw6"/>
-                                        <include reference="UYr-sr-FC4"/>
-                                        <include reference="VWn-ka-gl2"/>
-                                        <include reference="XNP-Rs-A0t"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -2520,6 +2476,8 @@ Change</string>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Mjy-Ye-V8e" firstAttribute="leading" secondItem="o2Z-ue-K9D" secondAttribute="leading" id="AQl-wo-uup"/>
+                            <constraint firstItem="4yC-xc-5r7" firstAttribute="leading" secondItem="o2Z-ue-K9D" secondAttribute="leading" id="FLq-AK-yaW"/>
+                            <constraint firstItem="OZC-fd-Cpo" firstAttribute="top" secondItem="4yC-xc-5r7" secondAttribute="bottom" id="I88-3V-z81"/>
                             <constraint firstItem="Mjy-Ye-V8e" firstAttribute="centerY" secondItem="o2Z-ue-K9D" secondAttribute="centerY" id="JZt-CH-BbS"/>
                             <constraint firstItem="Mjy-Ye-V8e" firstAttribute="top" secondItem="t14-ab-s9A" secondAttribute="bottom" constant="4" id="K1M-hm-WPh"/>
                             <constraint firstItem="Mjy-Ye-V8e" firstAttribute="trailing" secondItem="4yC-xc-5r7" secondAttribute="trailing" id="Lf7-HC-ohB"/>
@@ -2528,16 +2486,16 @@ Change</string>
                             <constraint firstItem="4yC-xc-5r7" firstAttribute="bottom" secondItem="OZC-fd-Cpo" secondAttribute="top" id="ZbK-RO-vje"/>
                             <constraint firstItem="Mjy-Ye-V8e" firstAttribute="width" secondItem="o2Z-ue-K9D" secondAttribute="width" id="aZM-Cj-6no"/>
                             <constraint firstItem="AcU-Eb-gEO" firstAttribute="top" secondItem="t14-ab-s9A" secondAttribute="bottom" constant="622" id="r5G-4c-XNt"/>
+                            <constraint firstAttribute="trailing" secondItem="4yC-xc-5r7" secondAttribute="trailing" id="uWi-oI-ksF"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="ZbK-RO-vje"/>
                                 <exclude reference="r5G-4c-XNt"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="constraints">
-                                <include reference="ZbK-RO-vje"/>
+                                <exclude reference="ZbK-RO-vje"/>
                                 <exclude reference="r5G-4c-XNt"/>
                             </mask>
                         </variation>
@@ -2651,6 +2609,9 @@ Change</string>
                         <outletCollection property="topOffsetContraints" destination="eT4-5z-od9" id="Xs4-Y9-0DU"/>
                         <outletCollection property="topOffsetContraints" destination="hkF-QB-iM4" id="kIF-h5-udB"/>
                         <outletCollection property="topOffsetContraints" destination="kZd-Bz-Ct3" id="6Fe-eq-xN6"/>
+                        <outletCollection property="buttonWidthConstraints" destination="KoS-ET-6Vi" id="g3q-52-jGH"/>
+                        <outletCollection property="buttonWidthConstraints" destination="R97-Tw-UQV" id="v2p-Rs-lus"/>
+                        <outletCollection property="buttonWidthConstraints" destination="4c6-aP-eWi" id="42X-EA-tMT"/>
                         <segue destination="1ae-lz-4lE" kind="show" identifier="segueShowGraph" id="Hao-aV-WAq"/>
                         <segue destination="CxN-Gb-rgC" kind="show" identifier="segueShowUART" id="qe2-cK-DC4"/>
                     </connections>

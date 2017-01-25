@@ -229,6 +229,9 @@
 		/*for (NSLayoutConstraint *widthConstraint in _boxWidthConstraints) {
 			widthConstraint.constant *= ratio;
 		}*/
+		for (NSLayoutConstraint *constraint in _buttonWidthConstraints) {
+			constraint.constant *= ratio;
+		}
 	}
 	else if (screenWidth > 375) {
 		//6+, 6s+, 7+
