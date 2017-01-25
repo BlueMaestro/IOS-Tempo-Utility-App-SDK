@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="odE-mI-OPm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="odE-mI-OPm">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -2381,7 +2381,6 @@ Change</string>
                                                 <exclude reference="bNf-A2-1dO"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <exclude reference="4Kn-Ts-Qfi"/>
                                                 <exclude reference="9SF-e6-hKr"/>
                                                 <exclude reference="A0Z-5l-Nrt"/>
                                                 <exclude reference="4Wf-rK-NHN"/>
@@ -2389,6 +2388,7 @@ Change</string>
                                                 <exclude reference="wJg-xH-9Rc"/>
                                                 <exclude reference="jUy-7g-tHP"/>
                                                 <exclude reference="x1E-nM-qM6"/>
+                                                <exclude reference="4Kn-Ts-Qfi"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -2400,7 +2400,6 @@ Change</string>
                                                 <exclude reference="Pss-d2-ohM"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <include reference="4Kn-Ts-Qfi"/>
                                                 <include reference="9SF-e6-hKr"/>
                                                 <include reference="A0Z-5l-Nrt"/>
                                                 <include reference="4Wf-rK-NHN"/>
@@ -2408,6 +2407,7 @@ Change</string>
                                                 <include reference="wJg-xH-9Rc"/>
                                                 <include reference="jUy-7g-tHP"/>
                                                 <include reference="x1E-nM-qM6"/>
+                                                <include reference="4Kn-Ts-Qfi"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -2669,8 +2669,6 @@ Change</string>
                     <connections>
                         <outlet property="RSSIImage" destination="ZOe-Dd-nEi" id="RXc-mf-U5B"/>
                         <outlet property="batteryImage" destination="p5Z-tB-AYH" id="D6P-Mx-BSh"/>
-                        <outlet property="imageViewBatteryStatus" destination="p5Z-tB-AYH" id="diK-jj-5yI"/>
-                        <outlet property="imageViewRSSIStatus" destination="ZOe-Dd-nEi" id="Gr7-2f-M87"/>
                         <outlet property="labelCurrentDeviceDewPointUnit" destination="8cm-1Y-nP0" id="BMf-8m-wYi"/>
                         <outlet property="labelCurrentDeviceDewPointValue" destination="kql-dy-W8d" id="vLW-7I-a9B"/>
                         <outlet property="labelCurrentDeviceHumidityValue" destination="Cch-H7-hRT" id="9gf-2F-OXf"/>
@@ -2696,24 +2694,11 @@ Change</string>
                         <outlet property="labelLast24DeviceTemperatureAverageValue" destination="Ttm-up-mPa" id="JbE-fE-TX3"/>
                         <outlet property="labelLast24DeviceTemperatureHighValue" destination="Y7v-An-MKQ" id="Z4E-aU-sIZ"/>
                         <outlet property="labelLast24DeviceTemperatureLowValue" destination="1zY-92-ndM" id="iaU-w2-JnX"/>
-                        <outlet property="labelLastDownloadTimestamp" destination="NX3-RN-KWH" id="8Ls-hU-zak"/>
                         <outlet property="labelLastDownloadValue" destination="NX3-RN-KWH" id="7XN-TT-y4r"/>
-                        <outlet property="labelRSSI" destination="rBL-go-O4i" id="z5I-Ie-q0z"/>
                         <outlet property="viewBottomContainer" destination="4yC-xc-5r7" id="J3U-3e-zYH"/>
                         <outletCollection property="buttonOptions" destination="fI8-3T-w9G" id="bv9-xa-daN"/>
                         <outletCollection property="buttonOptions" destination="e3S-oH-43K" id="7ha-a8-0s9"/>
-                        <outletCollection property="boxImageViews" destination="FNg-Hv-8eo" id="kkQ-tS-S5j"/>
-                        <outletCollection property="boxImageViews" destination="BMP-pT-Voq" id="fQV-bg-6bN"/>
-                        <outletCollection property="boxImageViews" destination="M4j-Py-5be" id="KD7-bH-Ag1"/>
-                        <outletCollection property="boxImageViews" destination="Oto-Kw-mGd" id="KYG-qe-u7L"/>
-                        <outletCollection property="boxImageViews" destination="Bi6-v0-LtT" id="UhW-Ad-DzX"/>
-                        <outletCollection property="boxImageViews" destination="bKG-jZ-TkC" id="yiM-y4-gAB"/>
-                        <outletCollection property="boxImageViews" destination="qe5-Ke-vwT" id="E0P-dg-I1V"/>
-                        <outletCollection property="boxImageViews" destination="8pi-RO-cQQ" id="ULD-fA-q24"/>
                         <outletCollection property="buttonOptions" destination="AcU-Eb-gEO" id="oCW-fb-4Bk"/>
-                        <outletCollection property="upperBoxImageViews" destination="M4j-Py-5be" id="TdR-L6-x16"/>
-                        <outletCollection property="upperBoxImageViews" destination="BMP-pT-Voq" id="Ofi-6k-poS"/>
-                        <outletCollection property="upperBoxImageViews" destination="FNg-Hv-8eo" id="Eoc-W4-Teg"/>
                         <segue destination="1ae-lz-4lE" kind="show" identifier="segueShowGraph" id="Hao-aV-WAq"/>
                         <segue destination="CxN-Gb-rgC" kind="show" identifier="segueShowUART" id="qe2-cK-DC4"/>
                     </connections>
