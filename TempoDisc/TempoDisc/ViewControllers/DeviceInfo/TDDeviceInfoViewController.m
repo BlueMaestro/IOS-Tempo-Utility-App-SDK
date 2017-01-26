@@ -134,7 +134,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-	[self setupView];
+//	[self setupView];//will be called from super
 	[self fillData];
 }
 
@@ -184,8 +184,10 @@
 	_buttonUART.layer.cornerRadius = 12;
 	_buttonUART.clipsToBounds = YES;
 	
-    /*
-	for (UIImageView* boxImage in _upperBoxImageViews) {
+	
+	//adjust image for all box views
+	NSInteger i=0;
+	for (UIImageView* boxImage in _boxImageViews) {
 		boxImage.image = [boxImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12) resizingMode:UIImageResizingModeTile];
 	}
     
@@ -197,16 +199,47 @@
     CGFloat screenHeight = screenSize.height;
     
     NSLog (@"screenWidth = %f", screenWidth);
-    
-    
-    for (UIImageView * upperBoxImage in _upperBoxImageViews) {
-        CGRect newFrame = upperBoxImage.frame;
-        newFrame.size. width = (screenWidth / 3 - 15);
-        [upperBoxImage setFrame:newFrame];
-    }
-     */
-    
-
+	
+	float baseWidth = 414;//screen width in storyboard (7+)
+	float ratio = screenWidth/baseWidth;
+	
+	if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+	{
+		/* Device is iPad */
+//		ratio *= 2;
+		for (NSLayoutConstraint *constraint in _boxWidthConstraints) {
+			constraint.constant *= ratio;
+		}
+		for (NSLayoutConstraint *constraint in _boxHeightConstraints) {
+			constraint.constant *= ratio;
+		}
+		for (NSLayoutConstraint *constraint in _containerHeightConstraints) {
+			constraint.constant *= ratio;
+		}
+		for (NSLayoutConstraint *constraint in _topOffsetContraints) {
+			constraint.constant *= ratio;
+		}
+		
+		
+		for (UILabel *label in _boxLabels) {
+			label.font = [UIFont fontWithName:label.font.fontName size:label.font.pointSize*ratio];
+		}
+	}
+	else if (screenWidth <= 320) {
+		//narrow phones (4, 4s, 5, 5c, 5s)
+		for (NSLayoutConstraint *widthConstraint in _boxWidthConstraints) {
+			widthConstraint.constant *= ratio;
+		}
+		for (NSLayoutConstraint *constraint in _buttonWidthConstraints) {
+			constraint.constant *= ratio;
+		}
+	}
+	else if (screenWidth > 375) {
+		//6+, 6s+, 7+
+	}
+	else {
+		//6, 6s, 7
+	}
 }
 
 - (void)fillData {

@@ -19,10 +19,18 @@
 //Any alerts
 @property (strong, nonatomic) IBOutlet UILabel *labelAlerts;
 
-
 /**
  *	UI update components
  **/
+@property (strong, nonatomic) IBOutletCollection(UIImageView) NSArray *boxImageViews;//colored views for image resize
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *boxHeightConstraints;//height constraints for image views
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *boxWidthConstraints;//width contstraints for image views
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *containerHeightConstraints;//individual containter height constraints
+@property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *boxLabels;//labels whose fonts need to be increased for ipad
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *topOffsetContraints;//top constraints for labels in image views for ipad
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *buttonWidthConstraints;//bottom button constraints
+
+
 
 //box image views that need image resize
 /*
