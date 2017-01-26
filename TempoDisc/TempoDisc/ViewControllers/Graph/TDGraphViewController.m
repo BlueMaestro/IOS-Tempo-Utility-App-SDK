@@ -48,6 +48,10 @@
 @property (nonatomic, assign) double initialLengthX;
 @property (nonatomic, assign) double initialLengthY;
 
+@property (nonatomic, strong) NSArray *temperatureData;
+@property (nonatomic, strong) NSArray *humidityData;
+@property (nonatomic, strong) NSArray *dewPointData;
+
 @end
 
 @implementation TDGraphViewController
@@ -58,8 +62,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+	
+	combinedGraph = false;
 	[self changeReadingType:TempoReadingTypeTemperature];
-    combinedGraph = false;
+	
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	__weak typeof(self) weakself = self;
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+		weakself.temperatureData = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.humidityData = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.dewPointData = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[weakself changeReadingType:TempoReadingTypeTemperature];
+			[MBProgressHUD hideHUDForView:weakself.view animated:NO];
+		});
+	});
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -261,7 +279,7 @@
 	 *	Adjust range for plot so that all points fit in the view with one hour before and after
 	 **/
 	CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
-	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	readings = _temperatureData;
 	if (!_buttonAll.selected) {
 		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
 	}
@@ -271,7 +289,7 @@
 	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
         
 	CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphHumidity.defaultPlotSpace;
-	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	readings = _humidityData;
 	if (!_buttonAll.selected) {
 		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
 	}
@@ -281,7 +299,7 @@
 	plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
 	
 	CPTXYPlotSpace *plotSpaceDewPoint = (CPTXYPlotSpace *)_graphDewPoint.defaultPlotSpace;
-	readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	readings = _dewPointData;
 	if (!_buttonAll.selected) {
 		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
 	}
@@ -293,7 +311,7 @@
     if (combinedGraph == true){
         
         CPTXYPlotSpace *plotSpaceDewPoint = (CPTXYPlotSpace *)_graphCombinedTHD.defaultPlotSpace;
-        readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor                     sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		readings = _dewPointData;
         readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
         lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
         firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
@@ -301,7 +319,7 @@
         plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
         
         CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphCombinedTHD.defaultPlotSpace;
-        readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		readings = _humidityData;
         if (!_buttonAll.selected) {
             readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
         }
@@ -557,7 +575,7 @@
 			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count, kInitialDataLoadCount);
 		}
 		else {*/
-			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count;
+			return _temperatureData.count;
 		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
@@ -565,7 +583,7 @@
 			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count, kInitialDataLoadCount);
 		}
 		else { */
-			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count;
+			return _humidityData.count;
 		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
@@ -573,7 +591,7 @@
 			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
 		}
 		else { */
-			return [[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count;
+			return _dewPointData.count;
 		/*}*/
 	}
 	else {
@@ -586,13 +604,13 @@
 	NSArray *dataSource = @[];
 	Reading *reading;
 	if ([plot.identifier isEqual:@"Temperature"]) {
-        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dataSource = _temperatureData;
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
-		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dataSource = _humidityData;
 	}
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
-		dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dataSource = _dewPointData;
 	}
     
     reading = [dataSource objectAtIndex:index];
@@ -651,7 +669,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 
 	UIView *viewGraph;
     if ([plot.identifier isEqual:@"Temperature"]) {
-        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dataSource = _temperatureData;
         valueSymbol = @"º";
         if (combinedGraph) {
             viewGraph = _viewGraphCombinedTHD;
@@ -660,7 +678,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
         }
 	}
     else if ([plot.identifier isEqual:@"Humidity"]) {
-        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dataSource = _humidityData;
         valueSymbol = @"% RH";
         if (combinedGraph) {
             viewGraph = _viewGraphCombinedTHD;
@@ -669,7 +687,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
         }
     }
     else if ([plot.identifier isEqual:@"DewPoint"]) {
-        dataSource = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		dataSource = _dewPointData;
         valueSymbol = @"º";
         if (combinedGraph) {
             viewGraph = _viewGraphCombinedTHD;

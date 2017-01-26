@@ -294,4 +294,13 @@ int getInt(char lsb,char msb)
 	return @[];
 }
 
+- (BOOL)hasDataForType:(NSString*)type {
+	for (ReadingType *readingType in self.readingTypes) {
+		if ([readingType.type isEqualToString:type]) {
+			return YES;
+		}
+	}
+	return NO;
+}
+
 @end

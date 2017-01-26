@@ -41,6 +41,7 @@ typedef enum : NSInteger {
 - (void)addDataFirst:(NSArray*)data forReadingType:(NSString*)type context:(NSManagedObjectContext*)context;
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid;
 - (NSArray*)readingsForType:(NSString*)type;
+- (BOOL)hasDataForType:(NSString*)type;
 
 @end
 

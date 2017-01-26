@@ -731,9 +731,7 @@
 }
 
 - (IBAction)buttonGraphClicked:(UIButton *)sender {
-    NSArray *readings = @[];
-    readings = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-    if (readings.count == 0) {
+    if (![[TDDefaultDevice sharedDevice].selectedDevice hasDataForType:@"Temperature"]) {
         
         NSLog(@"Error in populating array for temperature");
             
