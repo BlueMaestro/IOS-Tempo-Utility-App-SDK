@@ -47,8 +47,11 @@ typedef enum : NSInteger {
 @property (nonatomic, assign) NSInteger dataDownloadInterval;
 
 @property (nonatomic, copy) DataDownloadCompletion completion;
+@property (nonatomic, copy) DataProgressUpdate update;
 
 @property (nonatomic, strong) NSNumber *logCounter;
+
+@property (nonatomic, assign) NSInteger totalCurrentSample;
 
 @property (nonatomic, strong) NSDate *startingTimeStamp;
 
@@ -106,11 +109,27 @@ typedef enum : NSInteger {
         //header data, parse next point and dont impor
         NSUInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
         _logCounter = @(nextCounter);
+		_totalCurrentSample = sendGlobalLogCount;
         [self setNewTimeStamp:sendRecordsNeeded];
+		
+		switch (_currentDownloadType) {
+			case DataDownloadTypeTemperature:
+				[self notifyUpdateForProgress:0.0];
+				break;
+			case DataDownloadTypeHumidity:
+				[self notifyUpdateForProgress:1/3.0];
+				break;
+			case DataDownloadTypeDewPoint:
+				[self notifyUpdateForProgress:2/3.0];
+				
+			default:
+				break;
+		}
         return;
     }
 	
 	NSInteger length = data.length;
+	float baseProgress = 0.0;
 	for (NSInteger i=0; i<length; i+=2) {
 		if (d[i] == kDataTerminationValue) {
 			//termination symbol found, abort data download and insert into database
@@ -120,15 +139,18 @@ typedef enum : NSInteger {
 		}
 		else {
 			NSString *type = @"UNKNOWN";
+			
 			switch (_currentDownloadType) {
 				case DataDownloadTypeTemperature:
 					type = @"T";
 					break;
 				case DataDownloadTypeHumidity:
+					baseProgress = 1/3.0;
 					type = @"H";
 					break;
 				case DataDownloadTypeDewPoint:
 					type = @"D";
+					baseProgress = 2/3.0;
 					break;
 				default:
 					break;
@@ -137,8 +159,10 @@ typedef enum : NSInteger {
 			NSInteger value = [self getIntLsb:d[i+1] msb:d[i]];
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
+			[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
 		}
 	}
+	
 }
 
 - (void)didFinishDownloadForType:(DataDownloadType)type {
@@ -166,6 +190,8 @@ typedef enum : NSInteger {
 			stringToWrite = kDataStringTransmitEnd;
 			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
 			[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			
+			_update = nil;
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;
@@ -238,6 +264,12 @@ typedef enum : NSInteger {
     
 }
 
+- (void)notifyUpdateForProgress:(float)progress {
+	if (_update) {
+		_update(progress);
+	}
+}
+
 #pragma mark - Public methods
 
 + (TDUARTDownloader *)shared {
@@ -247,6 +279,11 @@ typedef enum : NSInteger {
 		singleton = [[TDUARTDownloader alloc] init];
 	});
 	return singleton;
+}
+
+- (void)downloadDataForDevice:(TempoDiscDevice *)device withUpdate:(DataProgressUpdate)update withCompletion:(DataDownloadCompletion)completion {
+	_update = update;
+	[self downloadDataForDevice:device withCompletion:completion];
 }
 
 - (void)downloadDataForDevice:(TempoDiscDevice *)device withCompletion:(void (^)(BOOL))completion {

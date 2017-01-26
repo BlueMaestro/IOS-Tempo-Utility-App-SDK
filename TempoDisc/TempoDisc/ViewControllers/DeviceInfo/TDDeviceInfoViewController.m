@@ -681,19 +681,25 @@
             if (!weakself.uartDownloader) {
                 weakself.uartDownloader = [[TDUARTDownloader alloc] init];
 			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
+				weakself.hudDownloadData.mode = MBProgressHUDModeDeterminateHorizontalBar;
 			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
-			[weakself.uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
-				[weakself.hudDownloadData hide:YES];
-				weakself.uartDownloader = nil;
-				if (!succcess) {
-					UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
-					[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
-					[weakself presentViewController:alert animated:YES completion:nil];
-				}
-                
-				[weakself refreshCurrentDevice];
-				[weakself fillData];
-			}];
+				[weakself.uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withUpdate:^(float progress) {
+					//update block
+					dispatch_async(dispatch_get_main_queue(), ^{
+						weakself.hudDownloadData.progress = progress;
+					});
+				} withCompletion:^(BOOL succcess) {
+					[weakself.hudDownloadData hide:YES];
+					weakself.uartDownloader = nil;
+					if (!succcess) {
+						UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", nil) message:NSLocalizedString(@"Unable to download. Please try again", nil) preferredStyle:UIAlertControllerStyleAlert];
+						[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil) style:UIAlertActionStyleCancel handler:nil]];
+						[weakself presentViewController:alert animated:YES completion:nil];
+					}
+					
+					[weakself refreshCurrentDevice];
+					[weakself fillData];
+				}];
 		};
 		
 		//[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];

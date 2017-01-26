@@ -11,9 +11,13 @@
 
 typedef void(^DataDownloadCompletion)(BOOL);
 
+typedef void(^DataProgressUpdate)(float progress);
+
 @interface TDUARTDownloader : NSObject
 
 + (TDUARTDownloader*)shared;
+
+- (void)downloadDataForDevice:(TempoDiscDevice*)device withUpdate:(DataProgressUpdate)update withCompletion:(DataDownloadCompletion)completion;
 
 - (void)downloadDataForDevice:(TempoDiscDevice*)device withCompletion:(DataDownloadCompletion)completion;
 
