@@ -17,6 +17,11 @@ typedef void(^WriteCompletion)(BOOL success, NSError* error);
 @property (strong, nonatomic) IBOutlet UIButton *buttonSendMessage;
 @property (strong, nonatomic) IBOutlet UIButton *buttonConnect;
 
+@property (strong, nonatomic) IBOutlet UIButton *buttonDeviceInfo;
+@property (strong, nonatomic) IBOutlet UIButton *buttonAlarmInfo;
+@property (strong, nonatomic) IBOutlet UIButton *buttonStreamData;
+
+
 @property (strong, nonatomic) IBOutlet UITableView *tableViewLog;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollViewMain;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *constraintScrollViewBottom;
@@ -25,6 +30,7 @@ typedef void(^WriteCompletion)(BOOL success, NSError* error);
 
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender;
 - (IBAction)buttonConnectClicked:(UIButton *)sender;
+- (IBAction)buttonHelperClicked:(UIButton *)sender;
 
 //BLE interaction
 - (void)connectAndWrite:(NSString*)data;

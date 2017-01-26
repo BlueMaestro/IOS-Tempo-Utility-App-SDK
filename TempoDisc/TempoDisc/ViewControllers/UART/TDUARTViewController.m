@@ -329,6 +329,42 @@
 	[self setupDevice];
 }
 
+- (IBAction)buttonHelperClicked:(UIButton *)sender {
+	NSString *title = nil;
+	NSString *message = nil;
+	UIAlertAction *action = nil;
+	__weak typeof (self) weakself = self;
+	
+	if ([sender isEqual:_buttonDeviceInfo]) {
+		title = @"Device info";
+		message = @"Device info message";
+		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			[weakself connectAndWrite:@"*info"];
+		}];
+	}
+	else if ([sender isEqual:_buttonAlarmInfo]) {
+		title = @"Alarm info";
+		message = @"Alarm info message";
+		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			[weakself connectAndWrite:@"*alrmi"];
+		}];
+	}
+	else if ([sender isEqual:_buttonStreamData]) {
+		title = @"Stream data";
+		message = @"Stream data message";
+		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			[weakself connectAndWrite:@"*bur"];
+		}];
+	}
+	
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+	if (action) {
+		[alert addAction:action];
+	}
+	
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
