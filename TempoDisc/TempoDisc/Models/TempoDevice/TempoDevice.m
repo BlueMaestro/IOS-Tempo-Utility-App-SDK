@@ -224,7 +224,7 @@ int getInt(char lsb,char msb)
     //for (Reading * readings in allData.reading)
     NSArray *dataToBeDeleted = [context executeFetchRequest:allData error:&error];
     NSLog(@"Number of records in array = %d", [dataToBeDeleted count]);
-    /*if (![dataToBeDeleted count]) return;
+    if (![dataToBeDeleted count]) return;
     //error handling goes here
     for (targetReadingType in dataToBeDeleted) {
         [context deleteObject:targetReadingType];

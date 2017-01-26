@@ -427,9 +427,11 @@
 	
 	// Set up the plot, including the look of the plot itself.
 	plot = [self plotWithIdentifier:identifier];
+    /*
 	for (id plot in graph.allPlots) {
 		//[graph removePlot:plot];
 	}
+     */
 
     [graph addPlot:plot toPlotSpace:plotSpace];
 

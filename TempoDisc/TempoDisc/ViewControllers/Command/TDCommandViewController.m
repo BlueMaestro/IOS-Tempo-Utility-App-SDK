@@ -823,7 +823,7 @@ typedef enum : NSInteger {
     } else {
         __weak typeof(self) weakself = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [self connectAndWrite:[NSString stringWithFormat:@"*d%ld", number] withCompletion:^(BOOL success, NSError *error) {
+        [self connectAndWrite:[NSString stringWithFormat:@"*d%ld", (long)number] withCompletion:^(BOOL success, NSError *error) {
 		[weakself showAlertForAction:success error:error];
         }];
     }
@@ -833,7 +833,7 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSLog(@"The seconds coming through are %d", seconds);
-    [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", seconds] withCompletion:^(BOOL success, NSError *error) {
+    [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
         [weakself showAlertForAction:success error:error];
     }];
 }
@@ -841,7 +841,7 @@ typedef enum : NSInteger {
 -(void)changeSensorInterval:(NSInteger)seconds {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", seconds] withCompletion:^(BOOL success, NSError *error) {
+    [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
         [weakself showAlertForAction:success error:error];
     }];
 }

@@ -29,7 +29,7 @@ int intValue(char lsb,char msb)
     for (NSUInteger i = 0; i < dataLength; i++) {
         Byte byte = 0;
         [custom getBytes:&byte range:NSMakeRange(i, 1)];
-        NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
+        //NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
         }
     Byte byte;
     [custom getBytes:&byte range:NSMakeRange(2, 1)];
@@ -58,14 +58,16 @@ int intValue(char lsb,char msb)
 	float timeAtLastBreach = intValue(data[17], data[16]);
 	float nameLength = data[18];
 	
-	self.highestTemperature = @(intValue(data[custom.length-25], data[custom.length-26]) / 10.f);
-	self.highestHumidity = @(intValue(data[custom.length-23], data[custom.length-24]) / 10.f);
-	self.lowestTemperature = @(intValue(data[custom.length-21], data[custom.length-22]) / 10.f);
-	self.lowestHumidity = @(intValue(data[custom.length-19], data[custom.length-20]) / 10.f);
-	self.highestDayTemperature = @(intValue(data[custom.length-17], data[custom.length-18]) / 10.f);
-	self.highestDayHumidity = @(intValue(data[custom.length-15], data[custom.length-16]) / 10.f);
+	
 	
 	if (self.version.integerValue == 22) {
+        
+        self.highestTemperature = @(intValue(data[custom.length-25], data[custom.length-26]) / 10.f);
+        self.highestHumidity = @(intValue(data[custom.length-23], data[custom.length-24]) / 10.f);
+        self.lowestTemperature = @(intValue(data[custom.length-21], data[custom.length-22]) / 10.f);
+        self.lowestHumidity = @(intValue(data[custom.length-19], data[custom.length-20]) / 10.f);
+        self.highestDayTemperature = @(intValue(data[custom.length-17], data[custom.length-18]) / 10.f);
+        self.highestDayHumidity = @(intValue(data[custom.length-15], data[custom.length-16]) / 10.f);
 		self.highestDayDew = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
 		self.lowestDayTemperature = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
 		self.lowestDayHumidity = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
@@ -77,28 +79,40 @@ int intValue(char lsb,char msb)
     
     if (self.version.integerValue == 23) {
 		//verson 23 parse
-		self.lowestDayTemperature = @(intValue(data[custom.length-13], data[custom.length-14]) / 10.f);
-		self.lowestDayHumidity = @(intValue(data[custom.length-11], data[custom.length-12]) / 10.f);
-		self.averageDayTemperature = @(intValue(data[custom.length-9], data[custom.length-10]) / 10.f);
-		self.averageDayHumidity = @(intValue(data[custom.length-7], data[custom.length-8]) / 10.f);
-		
-		/**
-		 *	If there is any humidity calculation it should be done here
-		 **/
-		
-		
-		/**
-		 *	Rest of Version 23 data
-		 **/
-		self.globalIdentifier = @(data[custom.length-6]);
+        
+        self.highestTemperature = @(intValue(data[custom.length-24], data[custom.length-25]) / 10.f);
+        self.highestHumidity = @(intValue(data[custom.length-22], data[custom.length-23]) / 10.f);
+        self.lowestTemperature = @(intValue(data[custom.length-20], data[custom.length-21]) / 10.f);
+        self.lowestHumidity = @(intValue(data[custom.length-18], data[custom.length-19]) / 10.f);
+        self.highestDayTemperature = @(intValue(data[custom.length-16], data[custom.length-17]) / 10.f);
+        self.highestDayHumidity = @(intValue(data[custom.length-14], data[custom.length-15]) / 10.f);
+        float highDewPointCalculation = ([self.highestDayTemperature floatValue] - ((100 - [self.highestDayHumidity floatValue]) /5));
+        self.highestDayDew = @(highDewPointCalculation);
+        //NSLog(@"highest day temperature is %f", [self.highestDayTemperature floatValue]);
+        //NSLog(@"highest day humidity is %f", [self.highestDayHumidity floatValue]);
+        //NSLog(@"dewpoint calculation is %f", dewPointCalculation);
+        self.lowestDayTemperature = @(intValue(data[custom.length-12], data[custom.length-13]) / 10.f);
+        self.lowestDayHumidity = @(intValue(data[custom.length-10], data[custom.length-11]) / 10.f);
+        float lowDewPointCalculation = ([self.lowestDayTemperature floatValue] - ((100 - [self.lowestDayHumidity floatValue]) /5));
+        self.lowestDayDew = @(lowDewPointCalculation);
+        self.averageDayTemperature = @(intValue(data[custom.length-8], data[custom.length-9]) / 10.f);
+        self.averageDayHumidity = @(intValue(data[custom.length-6], data[custom.length-7]) / 10.f);
+        float avgDewPointCalculation = ([self.averageDayTemperature floatValue] - ((100 - [self.averageDayHumidity floatValue]) /5));
+        self.averageDayDew = @(avgDewPointCalculation);
+
+		self.globalIdentifier = @(data[custom.length-5]);
 		
 		//date digits, should be reverse from what is written, not sure about indexes
-		NSNumber *fullValue = @( (((int) data[custom.length-3]) & 0xFF) | (((int) data[custom.length-4]) << 8) | (((int) data[custom.length-5]) << 16) | (((int) data[custom.length-6]) << 24) );
+		NSNumber *fullValue = @( (((int) data[custom.length-1]) & 0xFF) | (((int) data[custom.length-2]) << 8) | (((int) data[custom.length-3]) << 16) | (((int) data[custom.length-4]) << 24) );
 		
 		/**
 		 *	parse digits into date
 		 *	yymmddhhmm
 		 **/
+        NSLog(@"Raw date number is %i", [fullValue intValue]);
+        
+        if (([fullValue intValue] != 0) || ([fullValue longValue] > 170000000000) || ([fullValue longValue] < 1900000000)) {
+        
 		NSInteger minutes = fullValue.integerValue % 100;
 		NSInteger hours = (fullValue.integerValue/100) % 100;
 		NSInteger days = (fullValue.integerValue/10000) % 100;
@@ -113,9 +127,14 @@ int intValue(char lsb,char msb)
 		components.day = MIN(days, 31);
 		components.month = MIN(months, 12);
 		components.year = years+2000;//add century as its only last 2 digits
-		
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+        NSDate *date = [calendar dateFromComponents:components];
+            
 		self.startTimestamp = [calendar dateFromComponents:components];
-		
+            NSLog(@"%@", [dateFormatter stringFromDate:date]);
+            
+        }
 		
 		NSLog(@"Parsed version 23 data");
 	}

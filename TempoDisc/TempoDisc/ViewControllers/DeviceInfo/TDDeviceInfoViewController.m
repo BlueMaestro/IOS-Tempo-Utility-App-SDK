@@ -210,6 +210,8 @@
 }
 
 - (void)fillData {
+    
+    //Required images
     UIImage *lowBattImage = [UIImage imageNamed:@"battery_low"];
     UIImage *mediumBattImage = [UIImage imageNamed:@"battery_medium"];
     UIImage *highBattImage = [UIImage imageNamed:@"battery_high"];
@@ -217,6 +219,7 @@
     UIImage *mediumRSSIImage = [UIImage imageNamed:@"rssi_medium"];
     UIImage *lowRSSIImage = [UIImage imageNamed:@"rssi_low"];
 
+    //Set images depending on values
     if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue > 85) {
         [self.batteryImage setImage:highBattImage];
     }
@@ -239,50 +242,56 @@
         
     }
     
-    
-	_labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚%@", [TDHelper temperature:[TDDefaultDevice sharedDevice].selectedDevice.currentTemperature forDevice:[TDDefaultDevice sharedDevice].selectedDevice].floatValue, [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
-	_labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)[TDDefaultDevice sharedDevice].selectedDevice.currentHumidity.integerValue];
+    //Generic device info
 	if ([TDDefaultDevice sharedDevice].selectedDevice.lastDownload) {
 		_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:[TDDefaultDevice sharedDevice].selectedDevice.lastDownload];
-	}
-	else {
+	} else {
 		_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 	}
 	_labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
 	_labelDeviceUUID.text = [TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString;
+    
+    //Version Number not being showed at the moment
 	//_labelVersion.text = [TDDefaultDevice sharedDevice].selectedDevice.version;
-    _labelDeviceBatteryValue.text = [[TDDefaultDevice sharedDevice].selectedDevice.battery stringValue];
-	
+    
+    
+    //Specific to Tempo Disc Devices
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
 		
-		_labelDeviceUUID.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
-		_labelDeviceVersion.text = [NSString stringWithFormat:@"VERSION : %@", device.version];
 		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.integerValue];
-		_labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddb", device.peripheral.RSSI];
 		_labelDeviceID.text = @"CLASS ID";
-		
-		//if there is a full and empty battery set the empty to not highlighted and full to higlighted and this will update the status (50%+ is full now)
-		//_imageViewBatteryStatus.highlighted = device.battery.integerValue > 50;
-		
-		if (device) {
-			Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
-			_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:firstReading.timestamp];
-			_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:device.lastDownload];
-		}
-		else {
-			_labelFirstLogDateValue.text = NSLocalizedString(@"Not yet downloaded", nil);
-			_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
-		}
+        if (device.version.intValue == 23) {
+            if (device) {
+                Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
+                _labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:firstReading.timestamp];
+                _labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:device.lastDownload];
+            }
+            else {
+                _labelFirstLogDateValue.text = NSLocalizedString(@"Not yet downloaded", nil);
+                _labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
+            }
+            _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
+        } else {
+            
+        }
         
         
-        //Sets Values for Current Temperature humidity and Dew Point
-		_labelCurrentDeviceTemperatureUnit.text = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
-		_labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
-		_labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.0f%%", device.currentHumidity.floatValue];
-		_labelCurrentDeviceDewPointUnit.text = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
-		_labelCurrentDeviceDewPointValue.text = [NSString stringWithFormat:@"%.1f%%", device.dewPoint.floatValue];
+        //Sets labels with current temperature, humidity and dew point
+        _labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
+        _labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentHumidity.floatValue];
+        _labelCurrentDeviceDewPointValue.text = [NSString stringWithFormat:@"%.1f˚", device.dewPoint.floatValue];
 		
+        
+        //Sets temperature and dew points units labels
+        if (device.mode.intValue > 100) {
+            _labelCurrentDeviceTemperatureUnit.text = @"Fahrenheit";
+            _labelCurrentDeviceDewPointUnit.text = @"Fahrenheit";
+        } else {
+            _labelCurrentDeviceTemperatureUnit.text = @"Celsius";
+            _labelCurrentDeviceDewPointUnit.text = @"Celsius";
+        }
+        
         
         //Sets Values for Last 24 Hours - Temperature
 		_labelLast24DeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayTemperature.floatValue];
@@ -302,13 +311,12 @@
 		_labelLast24DeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDayDew.floatValue];
 		
         
-        //Sets Values for Highest and Lowest
+        //Sets Values for Highest and Lowest Temperature and Humidity
 		_labelHighLowDeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestTemperature.floatValue];
 		_labelHighLowDeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestTemperature.floatValue];
 		_labelHighLowDeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.0f%%", device.highestHumidity.floatValue];
 		_labelHighLowDeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.0f%%", device.lowestHumidity.floatValue];
-        //_labelHighLowDeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDewPoint.floatValue];
-		//_labelHighLowDeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
+
 	}
 	
 	
@@ -338,12 +346,6 @@
 							_versionService = service;
 						}
 					}
-					/**
-					 *	Start download process in order
-					 *	1. Battery
-					 *	2. Version
-					 *	3. Data
-					 **/
 					if (_batteryService) {
 						[self downloadBatteryDataFromService:_batteryService];
 					}
@@ -742,7 +744,7 @@
 	 **
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Command" message:@"Choose command" preferredStyle:UIAlertControllerStyleAlert];
 	
-	/**
+	**
 	 *	Add buttons
 	 *	We need some way of passing the selected option to the UART screen.
 	 *	We can pass the selected option through sender.
@@ -751,7 +753,7 @@
 	[alert addAction:[UIAlertAction actionWithTitle:@"Console" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		[weakself performSegueWithIdentifier:@"segueShowUART" sender:@"console"];
 		
-		/**
+		**
 		 *	Alternative method, push controller to navigation stack programatically
 		 **/
 		/*TDUARTViewController *uartController = [weakself.storyboard instantiateViewControllerWithIdentifier:@"viewControllerUART"];

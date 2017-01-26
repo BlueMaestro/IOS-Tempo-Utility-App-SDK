@@ -63,7 +63,7 @@
 																					[humArrayBytes addObject:[NSString stringWithFormat:@"%hhu", byte]];
 																				}
 																				//REDO
-																				NSLog(@"Error : %@ -> Index : %hd", error, indexDownload);
+																				NSLog(@"Error : %@ -> Index : %ld", error, (long)indexDownload);
 																				[self reWriteAndRead:peripheral];
 																			}];
 												  }];
