@@ -35,6 +35,7 @@ typedef enum : NSInteger {
     DeviceDisableButton,
     DeviceSetDeviceID,
     DeviceSetTransmissionInterval,
+    DeviceFirmwareUpgrade,
 	DeviceCommandCommandConsole
 } DeviceCommand;
 
@@ -115,6 +116,7 @@ typedef enum : NSInteger {
                             @(DeviceDisableButton),
                             @(DeviceSetDeviceID),
                             @(DeviceSetTransmissionInterval),
+                            @(DeviceFirmwareUpgrade),
 							@(DeviceCommandCommandConsole)
 							];
 	[_collectionViewCommands reloadData];
@@ -135,6 +137,7 @@ typedef enum : NSInteger {
                                 @(DeviceCommandResetDevice),
                                 @(DeviceCommandUnits),
                                 @(DeviceCommandLock),
+                                @(DeviceFirmwareUpgrade),
                                 @(DeviceCommandCommandConsole)
                                 ];
         [_collectionViewCommands reloadData];
@@ -182,6 +185,8 @@ typedef enum : NSInteger {
             return@"Set Device\nClass ID";
         case DeviceSetTransmissionInterval:
             return@"Set Advertising\nFrequency";
+        case DeviceFirmwareUpgrade:
+            return@"Firmware\nUpgrade";
 		case DeviceCommandCommandConsole:
 			return @"Command\nConsole";
 	}
@@ -556,7 +561,8 @@ typedef enum : NSInteger {
             title = @"Set Device Class ID";
             descript = @"Enter a number between 1 - 255 that will be an additional identifier for the device.  This function is ideal if you want to organise devices into groups (based on location, for example) where the name alone is not sufficient to identify the device.";
             placeholder = @"";
-            actionOne = [UIAlertAction actionWithTitle:@"Set" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            actionOne = [UIAlertAction actionWithTitle:@"Set ID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                //[set ID]
                 
             }];
             presentInputBox = true;
@@ -571,25 +577,35 @@ typedef enum : NSInteger {
             descript = @"Choose a transmission (or advertising) frequency to prolong battery life.  A higher setting means less frequent transmissions and increased battery life.  Note, on a button push or finishing a connection, the device is always fast for 3 minutes.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"100ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self setAdvertisingSpeed:100];
                 
             }];
             actionTwo = [UIAlertAction actionWithTitle:@"300ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self setAdvertisingSpeed:300];
                 
             }];
             actionThree = [UIAlertAction actionWithTitle:@"600ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self setAdvertisingSpeed:600];
                 
             }];
             actionFour = [UIAlertAction actionWithTitle:@"1000ms" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self setAdvertisingSpeed:1000];
                 
             }];
             break;
             
         }
-            
-            
-            
-            
-            
+    
+        case DeviceFirmwareUpgrade:
+        {
+            title = @"Firmware Upgrade";
+            descript = @"This puts the device into DFU mode ready to accept a firmware upgrade.  The device will advertise itself as 'DFU Targ' and will no longer be visible in this app until the firmware is upgraded.  For further instructions please refer to www.bluemaestro.com";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"Upgrade" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            break;
+        }
             
             
             
@@ -859,6 +875,56 @@ typedef enum : NSInteger {
         [weakself showAlertForAction:success error:error];
         }];
     }
+    
+}
+
+
+
+
+
+-(void)setAdvertisingSpeed:(int)speed {
+    __weak typeof(self) weakself = self;
+    switch (speed)
+    {
+        case 100:
+        {
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            [self connectAndWrite:[NSString stringWithFormat:@"*sadv100"] withCompletion:^(BOOL success, NSError *error) {
+                [weakself showAlertForAction:success error:error];
+            }];
+            break;
+        }
+        case 300:
+        {
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            [self connectAndWrite:[NSString stringWithFormat:@"*sadv300"] withCompletion:^(BOOL success, NSError *error) {
+                [weakself showAlertForAction:success error:error];
+            }];
+            break;
+        }
+        case 600:
+        {
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            [self connectAndWrite:[NSString stringWithFormat:@"*sadv600"] withCompletion:^(BOOL success, NSError *error) {
+                [weakself showAlertForAction:success error:error];
+            }];
+            break;
+        }
+        case 1000:
+        {
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            [self connectAndWrite:[NSString stringWithFormat:@"*sadv1000"] withCompletion:^(BOOL success, NSError *error) {
+                [weakself showAlertForAction:success error:error];
+            }];
+            break;
+        }
+            default:
+            break;
+        
+    }
+    
+    
+    
     
 }
 
