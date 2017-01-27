@@ -369,13 +369,18 @@
 	else if ([sender isEqual:_buttonStreamData]) {
 		title = @"Stream data";
 		message = @"Stream data message";
-		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		UIAlertAction* livePlotAction = [UIAlertAction actionWithTitle:@"Live Plot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			[weakself performSegueWithIdentifier:@"segueLivePlot" sender:nil];
+		}];
+		
+		UIAlertAction *streamAction = [UIAlertAction actionWithTitle:@"Streaming Values" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			[weakself connectAndWrite:@"*bur"];
 		}];
+		
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-		if (action) {
-			[alert addAction:action];
-		}
+		[alert addAction:livePlotAction];
+		[alert addAction:streamAction];
+		[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
 		
 		[self presentViewController:alert animated:YES completion:nil];
 	}
