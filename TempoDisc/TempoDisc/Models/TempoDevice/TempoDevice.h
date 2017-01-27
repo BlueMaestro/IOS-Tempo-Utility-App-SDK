@@ -27,6 +27,8 @@ typedef enum : NSInteger {
 
 @property (nullable ,nonatomic, strong) LGPeripheral *peripheral;
 
+- (NSInteger)classID;
+
 + (BOOL)isTempoDiscDeviceWithAdvertisementData:(NSDictionary*)custom;
 + (BOOL)isBlueMaestroDeviceWithAdvertisementData:(NSDictionary*)data;
 + (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data;

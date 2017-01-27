@@ -22,9 +22,19 @@
 
 #define kDeviceOutOfRangeTimer 60.0
 
+typedef enum : NSInteger {
+	DeviceSortTypeNone = 0,
+	DeviceSortTypeName,
+	DeviceSortTypeClassID,
+	DeviceSortTypeSignalStrength,
+} DeviceSortType;
+
 @interface TDDeviceListTableViewController()
 
 @property (nonatomic, strong) NSTimer *timerUpdateList;
+
+@property (nonatomic, assign) DeviceSortType sortType;
+@property (nonatomic, strong) NSNumber* deviceFilterId;
 
 @end
 
@@ -88,7 +98,7 @@
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scan"] style:UIBarButtonItemStyleDone target:self action:@selector(buttonScanClicked:)];
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Scan" style:UIBarButtonItemStyleDone target:self action:@selector(buttonScanClicked:)];
 }
 
 - (void)startScan {
@@ -133,7 +143,32 @@
 	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
 	for (TempoDevice *device in result) {
 		if (device.lastDetected && fabs(device.lastDetected.timeIntervalSinceNow) < kDeviceOutOfRangeTimer) {
-			[_dataSource addObject:device];
+			if (_deviceFilterId) {
+				//filter by class id enabled
+				if ([device classID] == _deviceFilterId.integerValue) {
+					[_dataSource addObject:device];
+				}
+			}
+			else {
+				[_dataSource addObject:device];
+			}
+		}
+	}
+	if (_sortType != DeviceSortTypeNone) {
+		//sorting is active
+		switch (_sortType) {
+			case DeviceSortTypeName:
+				[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)]]];
+				break;
+			case DeviceSortTypeSignalStrength:
+				[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"peripheral.RSSI" ascending:YES]]];
+				break;
+			case DeviceSortTypeClassID:
+				[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"classID" ascending:YES]]];
+				break;
+				
+			default:
+    break;
 		}
 	}
 	[self.tableView reloadData];
@@ -249,6 +284,12 @@
 }
 
 - (void)handleReturnToForeground:(NSNotification*)note {
+	//reset filters and sort
+	_sortType = DeviceSortTypeNone;
+	_deviceFilterId = nil;
+	[self updateDeviceList];
+	
+	//resume scanning
 	if (!_ignoreScan) {
 		[self startScan];
 	}
@@ -281,7 +322,59 @@
 #pragma mark - Actions
 
 - (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
-	[self scanForDevices];
+	__weak typeof(self) weakself = self;
+	
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please select from he following scan options" message:nil preferredStyle:UIAlertControllerStyleAlert];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:@"Sort Device" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		
+		UIAlertController *sortAlert = [UIAlertController alertControllerWithTitle:@"Please select how you would like the devices sorted" message:nil preferredStyle:UIAlertControllerStyleAlert];
+		
+		[sortAlert addAction:[UIAlertAction actionWithTitle:@"Name" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			weakself.sortType = DeviceSortTypeName;
+			[weakself updateDeviceList];
+		}]];
+		
+		[sortAlert addAction:[UIAlertAction actionWithTitle:@"Class ID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			weakself.sortType = DeviceSortTypeClassID;
+			[weakself updateDeviceList];
+		}]];
+		
+		[sortAlert addAction:[UIAlertAction actionWithTitle:@"Signal Strength" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			weakself.sortType = DeviceSortTypeSignalStrength;
+			[weakself updateDeviceList];
+		}]];
+		
+		[sortAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+		
+		[weakself presentViewController:sortAlert animated:YES completion:nil];
+	}]];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:@"Filter Device" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		UIAlertController *filterAlert = [UIAlertController alertControllerWithTitle:@"Filter devices to show only devices with a certain Class ID. Please enter a Class ID between 0 (default) and 255" message:nil preferredStyle:UIAlertControllerStyleAlert];
+		
+		[filterAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+			textField.keyboardType = UIKeyboardTypeNumberPad;
+		}];
+		
+		[filterAlert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			NSInteger number = filterAlert.textFields[0].text.integerValue;
+			weakself.deviceFilterId = @(number);
+			[weakself updateDeviceList];
+		}]];
+		
+		[filterAlert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+		
+		[weakself presentViewController:filterAlert animated:YES completion:nil];
+	}]];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:@"Restart Scan" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		[weakself scanForDevices];
+	}]];
+	
+	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+	
+	[self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Cell fill

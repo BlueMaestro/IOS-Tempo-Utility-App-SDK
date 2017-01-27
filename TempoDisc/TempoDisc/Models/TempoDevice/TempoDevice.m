@@ -24,6 +24,10 @@ int getInt(char lsb,char msb)
 
 @dynamic peripheral;
 
+- (NSInteger)classID {
+	return 0;
+}
+
 // Insert code here to add functionality to your managed object subclass
 
 + (TempoDevice *)deviceWithName:(NSString *)name data:(NSDictionary *)data uuid:(nonnull NSString *)uuid context:(nonnull NSManagedObjectContext *)context {

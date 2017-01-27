@@ -52,8 +52,8 @@
 
 #pragma mark - Actions
 
-- (IBAction)buttonStartScanClicked:(UIButton *)sender {
-	[_controllerDeviceList scanForDevices];
+- (IBAction)buttonStartScanClicked:(UIBarButtonItem *)sender {
+	[_controllerDeviceList buttonScanClicked:sender];
 }
 
 - (IBAction)buttonHistoryClicked:(UIButton *)sender {

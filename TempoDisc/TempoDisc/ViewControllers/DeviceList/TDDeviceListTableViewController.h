@@ -18,4 +18,6 @@
 - (void)scanForDevices;
 - (void)loadDevices:(NSArray*)devices;
 
+- (IBAction)buttonScanClicked:(UIBarButtonItem*)sender;
+
 @end
