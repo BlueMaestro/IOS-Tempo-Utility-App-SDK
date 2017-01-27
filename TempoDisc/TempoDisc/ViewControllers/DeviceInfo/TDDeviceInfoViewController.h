@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *boxLabels;//labels whose fonts need to be increased for ipad
 @property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *topOffsetContraints;//top constraints for labels in image views for ipad
 @property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *buttonWidthConstraints;//bottom button constraints
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomMenuHeight;
 
 
 

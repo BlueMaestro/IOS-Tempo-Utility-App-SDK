@@ -219,7 +219,11 @@
 		for (NSLayoutConstraint *constraint in _topOffsetContraints) {
 			constraint.constant *= ratio;
 		}
+		for (NSLayoutConstraint *constraint in _buttonWidthConstraints) {
+			constraint.constant *= ratio;
+		}
 		
+		_bottomMenuHeight.constant += 20;
 		
 		for (UILabel *label in _boxLabels) {
 			label.font = [UIFont fontWithName:label.font.fontName size:label.font.pointSize*ratio];
