@@ -172,7 +172,7 @@
 	[super setupView];
 
 	_formatterLastDownload = [[NSDateFormatter alloc] init];
-	_formatterLastDownload.dateFormat = @"HH:mm EEEE d";
+	_formatterLastDownload.dateFormat = @"HH:mm EEEE dd MMM yyyy";
 	
 	_buttonDownload.layer.borderColor = [UIColor blackColor].CGColor;
 	_buttonDownload.layer.borderWidth = 1.0;
