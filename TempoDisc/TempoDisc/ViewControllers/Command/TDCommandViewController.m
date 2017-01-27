@@ -357,10 +357,7 @@ typedef enum : NSInteger {
             descript = @"This clears the alarms by reseting the alarm counter, but does not change any parameters";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+                    [weakself clearAlarms];
             }];
             break;
         }
@@ -878,6 +875,16 @@ typedef enum : NSInteger {
         [self connectAndWrite:[NSString stringWithFormat:@"*rboot"] withCompletion:^(BOOL success, NSError *error) {
             [weakself showAlertForAction:success error:error];
         }];
+}
+
+-(void)clearAlarms{
+    __weak typeof(self) weakself = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self connectAndWrite:[NSString stringWithFormat:@"*alrmclr"] withCompletion:^(BOOL success, NSError *error) {
+        [weakself showAlertForAction:success error:error];
+    }];
+    
+    
 }
 
 
