@@ -354,7 +354,7 @@
 		[self presentViewController:alert animated:YES completion:nil];
 	}
 	else if ([sender isEqual:_buttonAlarmInfo]) {
-		title = @"Alarm info";
+		/*title = @"Alarm info";
 		message = @"Alarm info message";
 		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			[weakself connectAndWrite:@"*alrmi"];
@@ -364,7 +364,7 @@
 			[alert addAction:action];
 		}
 		
-		[self presentViewController:alert animated:YES completion:nil];
+		[self presentViewController:alert animated:YES completion:nil];*/
 	}
 	else if ([sender isEqual:_buttonStreamData]) {
 		title = @"Stream data";
