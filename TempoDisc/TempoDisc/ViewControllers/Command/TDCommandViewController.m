@@ -357,10 +357,7 @@ typedef enum : NSInteger {
             descript = @"This clears the alarms by reseting the alarm counter, but does not change any parameters";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+                    [weakself clearAlarms];
             }];
             break;
         }
@@ -457,17 +454,10 @@ typedef enum : NSInteger {
             descript = @"Resets the device back to factory settings.  All data and settings are erased.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"+4dB (strongest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+                    [weakself rebootDevice];
+            
             }];
-            actionTwo = [UIAlertAction actionWithTitle:@"0dB" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            actionThree = [UIAlertAction actionWithTitle:@"-4dB (weakest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
+           
             break;
         }
             
@@ -480,12 +470,12 @@ typedef enum : NSInteger {
             descript = @"Set the units of measure for temperature.  The default is º Celsius";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"º Fahrenheit" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+            
+                    [weakself changeUnits:0];
+                
             }];
             actionTwo = [UIAlertAction actionWithTitle:@"º Celsius" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakself changeUnits:1];
                 
             }];
             break;
@@ -875,6 +865,25 @@ typedef enum : NSInteger {
         [weakself showAlertForAction:success error:error];
         }];
     }
+    
+}
+
+-(void)rebootDevice{
+
+    __weak typeof(self) weakself = self;
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self connectAndWrite:[NSString stringWithFormat:@"*rboot"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
+}
+
+-(void)clearAlarms{
+    __weak typeof(self) weakself = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self connectAndWrite:[NSString stringWithFormat:@"*alrmclr"] withCompletion:^(BOOL success, NSError *error) {
+        [weakself showAlertForAction:success error:error];
+    }];
+    
     
 }
 
