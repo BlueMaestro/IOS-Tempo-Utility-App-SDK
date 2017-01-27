@@ -480,12 +480,12 @@ typedef enum : NSInteger {
             descript = @"Set the units of measure for temperature.  The default is º Celsius";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"º Fahrenheit" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+            
+                    [weakself changeUnits:0];
+                
             }];
             actionTwo = [UIAlertAction actionWithTitle:@"º Celsius" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [weakself changeUnits:1];
                 
             }];
             break;
