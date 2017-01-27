@@ -37,6 +37,8 @@
 
 @property (nonatomic, copy) WriteCompletion writeCompletion;
 
+@property (nonatomic, assign) BOOL streamingData;//if the "*bur" action was initiated
+
 @end
 
 @implementation TDUARTViewController
@@ -70,9 +72,13 @@
 	else {
 		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	}*/
-    
-    [[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
-    
+	
+	if (_streamingData) {
+		[self connectAndWrite:@"*qq"];
+	}
+	else {
+		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	}
 }
 
 - (void)didReceiveMemoryWarning {
@@ -111,6 +117,9 @@
 	_tableViewLog.layer.cornerRadius = 8;
 	_tableViewLog.layer.borderWidth = 1;
 	_tableViewLog.layer.borderColor = [UIColor buttonSeparator].CGColor;
+	
+	[_buttonStreamData setBackgroundImage:[SCHelper imageWithColor:[UIColor redColor]] forState:UIControlStateSelected];
+	[_buttonStreamData setTitle:@"STOP" forState:UIControlStateSelected];
 }
 
 - (void)handleDisconnectNotification:(NSNotification*)note {
@@ -332,7 +341,6 @@
 - (IBAction)buttonHelperClicked:(UIButton *)sender {
 	NSString *title = nil;
 	NSString *message = nil;
-	UIAlertAction *action = nil;
 	__weak typeof (self) weakself = self;
 	
 	if ([sender isEqual:_buttonDeviceInfo]) {
@@ -367,25 +375,31 @@
 		[self presentViewController:alert animated:YES completion:nil];*/
 	}
 	else if ([sender isEqual:_buttonStreamData]) {
-		title = @"Stream data";
-		message = @"Stream data message";
-		UIAlertAction* livePlotAction = [UIAlertAction actionWithTitle:@"Live Plot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-			[weakself performSegueWithIdentifier:@"segueLivePlot" sender:nil];
-		}];
-		
-		UIAlertAction *streamAction = [UIAlertAction actionWithTitle:@"Streaming Values" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-			[weakself connectAndWrite:@"*bur"];
-		}];
-		
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-		[alert addAction:livePlotAction];
-		[alert addAction:streamAction];
-		[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-		
-		[self presentViewController:alert animated:YES completion:nil];
+		if (sender.selected) {
+			[self connectAndWrite:@"*qq"];
+			sender.selected = NO;
+		}
+		else {
+			title = @"Stream data";
+			message = @"Stream data message";
+			UIAlertAction* livePlotAction = [UIAlertAction actionWithTitle:@"Live Plot" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				[weakself performSegueWithIdentifier:@"segueLivePlot" sender:nil];
+			}];
+			
+			UIAlertAction *streamAction = [UIAlertAction actionWithTitle:@"Streaming Values" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+				weakself.streamingData = YES;
+				weakself.buttonStreamData.selected = YES;
+				[weakself connectAndWrite:@"*bur"];
+			}];
+			
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+			[alert addAction:livePlotAction];
+			[alert addAction:streamAction];
+			[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+			
+			[self presentViewController:alert animated:YES completion:nil];
+		}
 	}
-	
-	
 }
 
 #pragma mark - UITableViewDataSource
