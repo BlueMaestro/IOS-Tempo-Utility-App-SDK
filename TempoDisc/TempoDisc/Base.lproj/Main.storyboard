@@ -2427,7 +2427,6 @@ Change</string>
                         <outletCollection property="buttonOptions" destination="fI8-3T-w9G" id="bv9-xa-daN"/>
                         <outletCollection property="buttonOptions" destination="e3S-oH-43K" id="7ha-a8-0s9"/>
                         <outletCollection property="buttonOptions" destination="AcU-Eb-gEO" id="oCW-fb-4Bk"/>
-                        <outletCollection property="boxLabels" destination="chs-Qz-eK0" id="HPs-Ka-Qpm"/>
                         <outletCollection property="boxLabels" destination="3lG-Mc-zQI" id="jOM-5t-SJG"/>
                         <outletCollection property="boxLabels" destination="loL-vW-co4" id="BHo-1i-zcu"/>
                         <outletCollection property="boxLabels" destination="1Od-cZ-88v" id="MZA-6P-Emf"/>
@@ -2437,7 +2436,6 @@ Change</string>
                         <outletCollection property="boxLabels" destination="6dq-A0-ydY" id="aVn-Vn-u0p"/>
                         <outletCollection property="boxLabels" destination="8cm-1Y-nP0" id="dOP-9P-AyB"/>
                         <outletCollection property="boxLabels" destination="kql-dy-W8d" id="feA-rr-QhD"/>
-                        <outletCollection property="boxLabels" destination="SEU-Ws-bJx" id="Eal-A9-rgS"/>
                         <outletCollection property="boxLabels" destination="g51-mC-hFE" id="vKn-nm-Zql"/>
                         <outletCollection property="boxLabels" destination="Y7v-An-MKQ" id="hd3-Pe-MvB"/>
                         <outletCollection property="boxLabels" destination="qqr-AP-gFh" id="fPX-Ow-Upm"/>
@@ -2456,7 +2454,6 @@ Change</string>
                         <outletCollection property="boxLabels" destination="dse-t0-7ZZ" id="Seq-uA-wcP"/>
                         <outletCollection property="boxLabels" destination="1b6-vN-unl" id="2AN-JM-Yrg"/>
                         <outletCollection property="boxLabels" destination="M9Q-dZ-sjF" id="vHH-6a-fTt"/>
-                        <outletCollection property="boxLabels" destination="rF4-1e-2hp" id="IDa-4p-oxB"/>
                         <outletCollection property="boxLabels" destination="yna-Om-PwR" id="d2M-4z-U7e"/>
                         <outletCollection property="boxLabels" destination="fSI-hd-MBD" id="80G-w6-FbO"/>
                         <outletCollection property="boxLabels" destination="rgH-oI-dD4" id="slU-pR-0YA"/>
@@ -2501,6 +2498,9 @@ Change</string>
                         <outletCollection property="topMenuSpacingConstraints" destination="wJg-xH-9Rc" id="tYG-Ba-hFx"/>
                         <outletCollection property="topMenuSpacingConstraints" destination="tSE-ad-ORj" id="svk-NE-r3x"/>
                         <outletCollection property="topMenuSpacingConstraints" destination="GNH-DR-f3a" id="wtP-ql-z4h"/>
+                        <outletCollection property="boxHeaderLabels" destination="chs-Qz-eK0" id="hax-t2-khs"/>
+                        <outletCollection property="boxHeaderLabels" destination="SEU-Ws-bJx" id="XEY-mm-cEL"/>
+                        <outletCollection property="boxHeaderLabels" destination="rF4-1e-2hp" id="5kd-9N-RJ3"/>
                         <segue destination="1ae-lz-4lE" kind="show" identifier="segueShowGraph" id="Hao-aV-WAq"/>
                         <segue destination="CxN-Gb-rgC" kind="show" identifier="segueShowUART" id="qe2-cK-DC4"/>
                     </connections>

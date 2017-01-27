@@ -31,6 +31,7 @@
 @property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *buttonWidthConstraints;//bottom button constraints
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomMenuHeight;
 @property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *topMenuSpacingConstraints;//class, batter, signal, etc
+@property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *boxHeaderLabels;
 
 
 

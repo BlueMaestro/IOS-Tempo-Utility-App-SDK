@@ -229,7 +229,10 @@
 		_bottomMenuHeight.constant += 20;
 		
 		for (UILabel *label in _boxLabels) {
-			label.font = [UIFont fontWithName:label.font.fontName size:label.font.pointSize*ratio];
+			label.font = [UIFont fontWithName:label.font.fontName size:label.font.pointSize*ratio-3];
+		}
+		for (UILabel *label in _boxHeaderLabels) {
+			label.font = [UIFont fontWithName:label.font.fontName size:self.labelDeviceName.font.pointSize+2];
 		}
 	}
 	else if (screenWidth <= 320) {
