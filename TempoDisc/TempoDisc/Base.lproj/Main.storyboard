@@ -2071,7 +2071,6 @@ Change</string>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Blue Box" translatesAutoresizingMaskIntoConstraints="NO" id="8pi-RO-cQQ">
                                                 <rect key="frame" x="226" y="24" width="180" height="90"/>
-                                                <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.80000000000000004"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="90" id="CzS-Gz-ffD"/>
                                                     <constraint firstAttribute="width" constant="180" id="j7V-oM-a94"/>
@@ -2924,7 +2923,7 @@ Change</string>
         <image name="tab-list-selected" width="26" height="26"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VS3-Wr-sIG"/>
-        <segue reference="adK-NJ-0Tu"/>
+        <segue reference="Hao-aV-WAq"/>
+        <segue reference="qe2-cK-DC4"/>
     </inferredMetricsTieBreakers>
 </document>
