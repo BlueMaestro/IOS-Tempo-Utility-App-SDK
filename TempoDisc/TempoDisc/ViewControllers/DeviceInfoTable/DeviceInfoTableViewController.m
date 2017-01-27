@@ -214,52 +214,52 @@ typedef enum : NSInteger {
 			return device.mode.stringValue;
 			break;
 		case DevicePropertyCurrentTemperature:
-			return [NSString stringWithFormat:@"%@ %@", device.currentTemperature, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.currentTemperature forDevice:device], unit];
 			break;
 		case DevicePropertyCurrentHumidity:
 			return [NSString stringWithFormat:@"%@%% RH ", device.currentHumidity];
 			break;
 		case DevicePropertyCurrentDew:
-			return [NSString stringWithFormat:@"%@ %@", device.dewPoint, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.dewPoint forDevice:device], unit];
 			break;
 		case DevicePropertyHighestTemperature:
-			return [NSString stringWithFormat:@"%@ %@", device.highestTemperature, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.highestTemperature forDevice:device], unit];
 			break;
 		case DevicePropertyHighestHumidity:
 			return [NSString stringWithFormat:@"%@%% RH", device.highestHumidity];
 			break;
 		case DevicePropertyLowestTemperature:
-			return [NSString stringWithFormat:@"%@ %@", device.lowestTemperature, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.lowestTemperature forDevice:device], unit];
 			break;
 		case DevicePropertyLowestHumidity:
 			return [NSString stringWithFormat:@"%@%% RH", device.lowestHumidity];
 			break;
 		case DevicePropertyHighestDayTemperature:
-			return [NSString stringWithFormat:@"%@ %@", device.highestDayTemperature, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.highestDayTemperature forDevice:device], unit];
 			break;
 		case DevicePropertyHighestDayHumidity:
 			return [NSString stringWithFormat:@"%@%% RH", device.highestDayHumidity];
 			break;
 		case DevicePropertyHighestDayDew:
-			return [NSString stringWithFormat:@"%@ %@", device.highestDayDew, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.highestDayDew forDevice:device], unit];
 			break;
 		case DevicePropertyAverageDayTemperature:
-			return [NSString stringWithFormat:@"%@ %@", device.averageDayTemperature, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.averageDayTemperature forDevice:device], unit];
 			break;
 		case DevicePropertyAverageDayHumidity:
 			return [NSString stringWithFormat:@"%@%% RH", device.averageDayHumidity];
 			break;
 		case DevicePropertyAverageDayDew:
-			return [NSString stringWithFormat:@"%@ %@", device.averageDayDew, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.averageDayDew forDevice:device], unit];
 			break;
 		case DevicePropertyLowestDayTemperature:
-			return [NSString stringWithFormat:@"%@ %@", device.lowestDayTemperature, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.lowestDayTemperature forDevice:device], unit];
 			break;
 		case DevicePropertyLowestDayHumidity:
 			return [NSString stringWithFormat:@"%@%% RH", device.lowestDayHumidity];
 			break;
 		case DevicePropertyLowestDayDew:
-			return [NSString stringWithFormat:@"%@ %@", device.lowestDayDew, unit];
+			return [NSString stringWithFormat:@"%@ %@", [TDHelper temperature:device.lowestDayDew forDevice:device], unit];
 			break;
 		case DevicePropertyNumberOfBreaches:
 			return device.numBreach.stringValue;

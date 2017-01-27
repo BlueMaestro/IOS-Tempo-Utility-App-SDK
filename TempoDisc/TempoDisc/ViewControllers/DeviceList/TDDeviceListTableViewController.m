@@ -393,12 +393,7 @@ typedef enum : NSInteger {
     
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
-	if ([device isKindOfClass:[TempoDiscDevice class]]) {
-		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", device.currentTemperature.floatValue];
-	}
-	else {
-		cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
-	}
+	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
     if (device.battery.integerValue > 85) {
@@ -409,10 +404,7 @@ typedef enum : NSInteger {
     }
     if (device.battery.integerValue < 70) {
         [cell.batteryImage setImage:lowBattImage];
-    }
-                                
-                                
-                                
+    }													
 	
 	if (device.version) {
 		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version:", nil)];

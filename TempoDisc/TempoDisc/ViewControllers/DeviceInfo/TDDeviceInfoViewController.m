@@ -323,13 +323,13 @@
 		
 		
         //Sets labels with current temperature, humidity and dew point
-        _labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
+        _labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
         _labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentHumidity.floatValue];
-        _labelCurrentDeviceDewPointValue.text = [NSString stringWithFormat:@"%.1f˚", device.dewPoint.floatValue];
+        _labelCurrentDeviceDewPointValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.dewPoint forDevice:device].floatValue];
 		
         
         //Sets temperature and dew points units labels
-        if (device.mode.intValue > 100) {
+        if (device.isFahrenheit) {
             _labelCurrentDeviceTemperatureUnit.text = @"Fahrenheit";
             _labelCurrentDeviceDewPointUnit.text = @"Fahrenheit";
         } else {
@@ -339,9 +339,9 @@
         
         
         //Sets Values for Last 24 Hours - Temperature
-		_labelLast24DeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayTemperature.floatValue];
-		_labelLast24DeviceTemperatureAverageValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayTemperature.floatValue];
-		_labelLast24DeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDayTemperature.floatValue];
+		_labelLast24DeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.highestDayTemperature forDevice:device].floatValue];
+		_labelLast24DeviceTemperatureAverageValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.averageDayTemperature forDevice:device].floatValue];
+		_labelLast24DeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.lowestDayTemperature forDevice:device].floatValue];
         
         
         //Sets Values for Last 24 Hours - Humidity
@@ -351,14 +351,14 @@
         
         
         //Sets Values for Last 24 Hours - Dew Point
-		_labelLast24DeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayDew.floatValue];
-		_labelLast24DeviceDewPointAverageValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayDew.floatValue];
-		_labelLast24DeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDayDew.floatValue];
+		_labelLast24DeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.highestDayDew forDevice:device].floatValue];
+		_labelLast24DeviceDewPointAverageValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.averageDayDew forDevice:device].floatValue];
+		_labelLast24DeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.lowestDayDew forDevice:device].floatValue];
 		
         
         //Sets Values for Highest and Lowest Temperature and Humidity
-		_labelHighLowDeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestTemperature.floatValue];
-		_labelHighLowDeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestTemperature.floatValue];
+		_labelHighLowDeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.highestTemperature forDevice:device].floatValue];
+		_labelHighLowDeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.lowestTemperature forDevice:device].floatValue];
 		_labelHighLowDeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.0f%%", device.highestHumidity.floatValue];
 		_labelHighLowDeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.0f%%", device.lowestHumidity.floatValue];
 
