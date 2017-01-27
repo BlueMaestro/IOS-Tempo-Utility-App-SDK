@@ -338,9 +338,20 @@
 	if ([sender isEqual:_buttonDeviceInfo]) {
 		title = @"Device info";
 		message = @"Device info message";
-		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		UIAlertAction* deviceInfoAction = [UIAlertAction actionWithTitle:@"Device Information" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			[weakself connectAndWrite:@"*info"];
 		}];
+		
+		UIAlertAction* telemetricInfoAction = [UIAlertAction actionWithTitle:@"Telemetric Information" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+			[weakself connectAndWrite:@"*tell"];
+		}];
+		
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:deviceInfoAction];
+		[alert addAction:telemetricInfoAction];
+		
+		[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
 	}
 	else if ([sender isEqual:_buttonAlarmInfo]) {
 		title = @"Alarm info";
@@ -348,6 +359,12 @@
 		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			[weakself connectAndWrite:@"*alrmi"];
 		}];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+		if (action) {
+			[alert addAction:action];
+		}
+		
+		[self presentViewController:alert animated:YES completion:nil];
 	}
 	else if ([sender isEqual:_buttonStreamData]) {
 		title = @"Stream data";
@@ -355,14 +372,15 @@
 		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			[weakself connectAndWrite:@"*bur"];
 		}];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+		if (action) {
+			[alert addAction:action];
+		}
+		
+		[self presentViewController:alert animated:YES completion:nil];
 	}
 	
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-	if (action) {
-		[alert addAction:action];
-	}
 	
-	[self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
