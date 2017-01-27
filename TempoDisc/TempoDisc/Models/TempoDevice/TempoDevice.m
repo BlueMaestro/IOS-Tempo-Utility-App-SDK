@@ -106,6 +106,7 @@ int getInt(char lsb,char msb)
 	
 	self.uuid = uuid;
 	self.name = advertisedData[@"kCBAdvDataLocalName"];
+	self.lastDetected = [NSDate date];
 	
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	

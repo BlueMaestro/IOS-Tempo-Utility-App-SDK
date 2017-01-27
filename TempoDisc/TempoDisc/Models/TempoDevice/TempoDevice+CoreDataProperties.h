@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *isFahrenheit;//BOOL
 @property (nullable, nonatomic, retain) NSNumber *inRange;//BOOL, transient
 @property (nullable, nonatomic, retain) NSDate *startTimestamp;
+@property (nullable, nonatomic, retain) NSDate *lastDetected;//transient
 
 
 @property (nullable, nonatomic, retain) NSSet<ReadingType *> *readingTypes;

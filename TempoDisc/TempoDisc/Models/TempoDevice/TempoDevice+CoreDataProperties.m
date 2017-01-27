@@ -30,5 +30,6 @@
 @dynamic isFahrenheit;
 @dynamic startTimestamp;
 @dynamic inRange;
+@dynamic lastDetected;
 
 @end

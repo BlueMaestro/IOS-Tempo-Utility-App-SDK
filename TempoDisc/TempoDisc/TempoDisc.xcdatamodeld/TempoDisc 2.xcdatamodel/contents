@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16C67" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="16C67" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="Reading" representedClassName="Reading" syncable="YES">
         <attribute name="avgValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="maxValue" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -24,6 +24,7 @@
         <attribute name="inRange" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isBlueMaestroDevice" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isFahrenheit" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastDetected" optional="YES" transient="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastDownload" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="modelType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -60,7 +61,7 @@
     <elements>
         <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
-        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="315"/>
+        <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="330"/>
         <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="375"/>
     </elements>
 </model>

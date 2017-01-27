@@ -20,6 +20,8 @@
 #define kDeviceListUpdateInterval 3.0
 #define kDeviceListUpdateScanInterval 2.0
 
+#define kDeviceOutOfRangeTimer 60.0
+
 @interface TDDeviceListTableViewController()
 
 @property (nonatomic, strong) NSTimer *timerUpdateList;
@@ -120,38 +122,20 @@
 }
 
 - (void)updateDeviceList {
-	NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
-	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
-	for (TempoDevice *device in result) {
-		device.inRange = @(NO);
-	}
-	
-	NSMutableArray *devicesInRange = [NSMutableArray array];
-	NSMutableArray *devicesOutOfRange = [NSMutableArray array];
-	if (!_dataSource) {
-		_dataSource = [NSMutableArray array];
-	}
+	_dataSource = [NSMutableArray array];
 	for (LGPeripheral *peripheral in [LGCentralManager sharedInstance].peripherals) {
 		TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
 		if (device) {
 			device.peripheral = peripheral;
-			device.inRange = @(YES);
-			[devicesInRange addObject:device];
-			NSInteger index = [[_dataSource valueForKey:@"uuid"] indexOfObject:device.uuid];
-			if (index < _dataSource.count) {
-				[_dataSource replaceObjectAtIndex:index withObject:device];
-			}
-			else {
-				[_dataSource addObject:device];
-			}
 		}
 	}
-	for (TempoDevice *device in _dataSource) {
-		if (![[devicesInRange valueForKey:@"uuid"] containsObject:device.uuid]) {
-			[devicesOutOfRange addObject:device];
+	NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
+	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
+	for (TempoDevice *device in result) {
+		if (device.lastDetected && fabs(device.lastDetected.timeIntervalSinceNow) < kDeviceOutOfRangeTimer) {
+			[_dataSource addObject:device];
 		}
 	}
-	[_dataSource removeObjectsInArray:devicesOutOfRange];
 	[self.tableView reloadData];
 }
 
@@ -164,8 +148,8 @@
 	[self stopScan];
 	
 	//show progress indicator
-	MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
-	hud.labelText = NSLocalizedString(@"Scanning...", nil);
+	/*MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
+	hud.labelText = NSLocalizedString(@"Scanning...", nil);*/
 	
 	__weak typeof(self) weakself = self;
 	//start scan
