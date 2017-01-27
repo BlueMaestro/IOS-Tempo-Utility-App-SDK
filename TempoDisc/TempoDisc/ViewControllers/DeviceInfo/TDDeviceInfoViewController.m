@@ -222,6 +222,9 @@
 		for (NSLayoutConstraint *constraint in _buttonWidthConstraints) {
 			constraint.constant *= ratio;
 		}
+		for (NSLayoutConstraint *constraint in _topMenuSpacingConstraints) {
+			constraint.constant *= 2*ratio;
+		}
 		
 		_bottomMenuHeight.constant += 20;
 		
