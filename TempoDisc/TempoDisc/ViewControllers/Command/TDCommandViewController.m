@@ -457,17 +457,10 @@ typedef enum : NSInteger {
             descript = @"Resets the device back to factory settings.  All data and settings are erased.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"+4dB (strongest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+                    [weakself rebootDevice];
+            
             }];
-            actionTwo = [UIAlertAction actionWithTitle:@"0dB" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            actionThree = [UIAlertAction actionWithTitle:@"-4dB (weakest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
+           
             break;
         }
             
@@ -876,6 +869,15 @@ typedef enum : NSInteger {
         }];
     }
     
+}
+
+-(void)rebootDevice{
+
+    __weak typeof(self) weakself = self;
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self connectAndWrite:[NSString stringWithFormat:@"*rboot"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
 }
 
 
