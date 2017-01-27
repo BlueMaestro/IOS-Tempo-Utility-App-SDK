@@ -299,24 +299,26 @@
 	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
 		
+		if (device) {
+			Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
+			_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:firstReading.timestamp];
+			_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:device.lastDownload];
+		}
+		else {
+			_labelFirstLogDateValue.text = NSLocalizedString(@"Not yet downloaded", nil);
+			_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
+		}
+		
 		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.integerValue];
 		_labelDeviceID.text = @"CLASS ID";
         if (device.version.intValue == 23) {
-            if (device) {
-                Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
-                _labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:firstReading.timestamp];
-                _labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:device.lastDownload];
-            }
-            else {
-                _labelFirstLogDateValue.text = NSLocalizedString(@"Not yet downloaded", nil);
-                _labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
-            }
+			
             _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
         } else {
-            
+			
         }
-        
-        
+		
+		
         //Sets labels with current temperature, humidity and dew point
         _labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentTemperature.floatValue];
         _labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentHumidity.floatValue];

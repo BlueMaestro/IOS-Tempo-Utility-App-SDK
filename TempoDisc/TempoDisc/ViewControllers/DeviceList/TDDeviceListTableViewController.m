@@ -142,14 +142,17 @@ typedef enum : NSInteger {
 	NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
 	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
 	for (TempoDevice *device in result) {
+		device.inRange = @(NO);
 		if (device.lastDetected && fabs(device.lastDetected.timeIntervalSinceNow) < kDeviceOutOfRangeTimer) {
 			if (_deviceFilterId) {
 				//filter by class id enabled
 				if ([device classID] == _deviceFilterId.integerValue) {
+					device.inRange = @(YES);
 					[_dataSource addObject:device];
 				}
 			}
 			else {
+				device.inRange = @(YES);
 				[_dataSource addObject:device];
 			}
 		}
