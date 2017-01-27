@@ -273,6 +273,9 @@
 #pragma mark - Graph setup
 
 - (void)adjustPlotsRange {
+	if (_temperatureData.count == 0) {
+		return;
+	}
     NSArray *readings = @[];
 	TempoDevice *device = [TDDefaultDevice sharedDevice].selectedDevice;
 	/**
