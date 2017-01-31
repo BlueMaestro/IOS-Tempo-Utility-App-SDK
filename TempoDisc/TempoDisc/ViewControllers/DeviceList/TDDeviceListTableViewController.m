@@ -433,9 +433,16 @@ typedef enum : NSInteger {
 	
 	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
 	
+	cell.labelDeviceIdentifierValue.text = @"Tempo Device";
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice* disc = (TempoDiscDevice*)device;
 		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue];
+		if (device.version.integerValue == 23) {
+			cell.labelDeviceIdentifierValue.text = @"Tempo Disc T/H/D v23";
+		}
+		else if (device.version.integerValue == 22) {
+			cell.labelDeviceIdentifierValue.text = @"Tempo Disc T/H/D v22";
+		}
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";
 	}
