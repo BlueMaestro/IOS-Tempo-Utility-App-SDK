@@ -81,7 +81,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelHighLowDeviceHumidityLowValue;
 
 
-
 /**
  *	Actions
  **/

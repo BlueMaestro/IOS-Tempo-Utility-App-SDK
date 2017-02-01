@@ -15,9 +15,9 @@
 #import "TempoDiscDevice+CoreDataProperties.h"
 #import "AppDelegate.h"
 
-#define kDeviceScanInterval 5.0
+#define kDeviceScanInterval 10.0
 
-#define kDeviceListUpdateInterval 3.0
+#define kDeviceListUpdateInterval 5.0
 #define kDeviceListUpdateScanInterval 2.0
 
 #define kDeviceOutOfRangeTimer 60.0
@@ -182,8 +182,8 @@ typedef enum : NSInteger {
 	if (self.scanning) {
 		return;
 	}
-	self.scanning = YES;
-	[self stopScan];
+	//self.scanning = YES;
+	//[self stopScan];
 	
 	//show progress indicator
 	/*MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
@@ -327,7 +327,7 @@ typedef enum : NSInteger {
 - (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
 	__weak typeof(self) weakself = self;
 	
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please select from he following scan options" message:nil preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please select from the following scan options" message:nil preferredStyle:UIAlertControllerStyleAlert];
 	
 	[alert addAction:[UIAlertAction actionWithTitle:@"Sort Device" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 		
@@ -393,6 +393,9 @@ typedef enum : NSInteger {
     
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
+    
+    cell.dewpointUnits.text = unit;
+    cell.temperatureUnits.text = unit;
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
@@ -433,15 +436,15 @@ typedef enum : NSInteger {
 	
 	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
 	
-	cell.labelDeviceIdentifierValue.text = @"Tempo Device";
+	cell.labelDeviceIdentifierValue.text = @"OTHER TEMPO DISC";
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
 		TempoDiscDevice* disc = (TempoDiscDevice*)device;
 		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue];
 		if (device.version.integerValue == 23) {
-			cell.labelDeviceIdentifierValue.text = @"Tempo Disc T/H/D v23";
+			cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T/H/D v23";
 		}
 		else if (device.version.integerValue == 22) {
-			cell.labelDeviceIdentifierValue.text = @"Tempo Disc T/H/D v22";
+			cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T/H/D v22";
 		}
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";

@@ -15,6 +15,8 @@
 //#import "TDUARTDownloader.h"
 #import "TDUARTAllDataDownloader.h"
 #import "TDUARTViewController.h"
+#import "TDCommandViewController.h"
+
 
 #define kDeviceConnectTimeout 10.0
 
@@ -47,8 +49,12 @@
 #define INVALID_TEMP_VALUE -3276.8f
 #define INVALID_HUMIDITY_VALUE -1
 
-@interface TDDeviceInfoViewController ()
-
+@interface TDDeviceInfoViewController () {
+    
+    NSInteger versionNumber;
+    NSString *versionID;
+    
+}
 
 @property (nonatomic, strong) NSDateFormatter *formatterLastDownload;
 
@@ -71,11 +77,11 @@
 @property (nonatomic, strong) TDUARTDownloader *uartDownloader;
 @property (nonatomic, strong) TDUARTAllDataDownloader *uartAllDataDownloader;
 
+
+
 @end
 
 @implementation TDDeviceInfoViewController
-
-
 
 #pragma mark - Data Parse
 
@@ -163,6 +169,12 @@
 		TDUARTViewController *uartController = (TDUARTViewController*)segue.destinationViewController;
 		uartController.option = sender;
 	}
+    
+    if ([segue.destinationViewController isKindOfClass:[TDCommandViewController class]]) {
+        TDCommandViewController *commandController = (TDCommandViewController*)segue.destinationViewController;
+        NSLog(@"In segue about to pass is %i", [[TDDefaultDevice sharedDevice].selectedDevice.version intValue]);
+        commandController.versionNumber = [[TDDefaultDevice sharedDevice].selectedDevice.version intValue];
+    }
 }
 
 
@@ -261,7 +273,11 @@
     UIImage *strongRSSIImage = [UIImage imageNamed:@"rssi_high"];
     UIImage *mediumRSSIImage = [UIImage imageNamed:@"rssi_medium"];
     UIImage *lowRSSIImage = [UIImage imageNamed:@"rssi_low"];
-
+    
+    //Capture version number
+    versionID = [TDDefaultDevice sharedDevice].selectedDevice.version;
+    NSLog(@"Version is %@", versionID);
+    
     //Set images depending on values
     if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue > 85) {
         [self.batteryImage setImage:highBattImage];
@@ -329,6 +345,7 @@
 		
         
         //Sets temperature and dew points units labels
+        NSLog(@"Mode of the device is %@", device.mode);
         if (device.isFahrenheit) {
             _labelCurrentDeviceTemperatureUnit.text = @"Fahrenheit";
             _labelCurrentDeviceDewPointUnit.text = @"Fahrenheit";
@@ -351,9 +368,9 @@
         
         
         //Sets Values for Last 24 Hours - Dew Point
-		_labelLast24DeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.highestDayDew forDevice:device].floatValue];
-		_labelLast24DeviceDewPointAverageValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.averageDayDew forDevice:device].floatValue];
-		_labelLast24DeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.lowestDayDew forDevice:device].floatValue];
+		_labelLast24DeviceDewPointHighValue.text = [NSString stringWithFormat:@"%.1f˚", device.highestDayDew.floatValue];
+		_labelLast24DeviceDewPointAverageValue.text = [NSString stringWithFormat:@"%.1f˚", device.averageDayDew.floatValue];
+		_labelLast24DeviceDewPointLowValue.text = [NSString stringWithFormat:@"%.1f˚", device.lowestDayDew.floatValue];
 		
         
         //Sets Values for Highest and Lowest Temperature and Humidity
@@ -776,47 +793,13 @@
 	[self performSegueWithIdentifier:@"segueShowGraph" sender:nil];
 
     }
+    
+   
 }
-
-
-
-
-
 
 
 - (IBAction)buttonConsoleClicked:(UIButton *)sender {
-    /*
-	**
-	 *	Create alert controller
-	 *	UIAlertControllerStyleAlert - Alert popup
-	 *	UIAlertControllerStyleAlert - Action Sheet (from bottom)
-	 **
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Command" message:@"Choose command" preferredStyle:UIAlertControllerStyleAlert];
-	
-	**
-	 *	Add buttons
-	 *	We need some way of passing the selected option to the UART screen.
-	 *	We can pass the selected option through sender.
-	 **
-	__weak typeof(self) weakself = self;
-	[alert addAction:[UIAlertAction actionWithTitle:@"Console" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		[weakself performSegueWithIdentifier:@"segueShowUART" sender:@"console"];
-		
-		**
-		 *	Alternative method, push controller to navigation stack programatically
-		 **/
-		/*TDUARTViewController *uartController = [weakself.storyboard instantiateViewControllerWithIdentifier:@"viewControllerUART"];
-		uartController.option = @"console";
-		[weakself.navigationController pushViewController:uartController animated:YES];*
-	}]];
-	
-	[alert addAction:[UIAlertAction actionWithTitle:@"Rename" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		[weakself performSegueWithIdentifier:@"segueShowUART" sender:@"rename"];
-	}]];
-	
-	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-	
-	[self presentViewController:alert animated:YES completion:nil];
-    */
+    [self performSegueWithIdentifier:@"segueCommands" sender:nil];
 }
+
 @end

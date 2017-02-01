@@ -39,6 +39,7 @@ typedef enum : NSInteger {
 	DeviceCommandCommandConsole
 } DeviceCommand;
 
+
 @interface TDCommandViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) NSArray *dataSourceCommands;
@@ -53,6 +54,7 @@ typedef enum : NSInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    NSLog(@"Version being passed through is %i", (int)self.versionNumber);
 	[self setupView];
 }
 
@@ -93,9 +95,7 @@ typedef enum : NSInteger {
 	/**
 	 *	To reorder command list just adjust this list
 	 **/
-    NSInteger versionNumber;
-    versionNumber = 23;
-    if (versionNumber == 23) {
+    if ((int)self.versionNumber == 23) {
 	_dataSourceCommands = @[
 							@(DeviceCommandChangeName),
 							@(DeviceCommandLogginInterval),
@@ -122,7 +122,7 @@ typedef enum : NSInteger {
 	[_collectionViewCommands reloadData];
     }
     
-    if (versionNumber == 22) {
+    if ((int)self.versionNumber != 23) {
         _dataSourceCommands = @[
                                 @(DeviceCommandChangeName),
                                 @(DeviceCommandLogginInterval),
@@ -745,7 +745,7 @@ typedef enum : NSInteger {
 #pragma mark - Actions
 
 - (IBAction)buttonBackClicked:(id)sender {
-	[self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)datePickerValueChanged:(UIDatePicker*)sender {

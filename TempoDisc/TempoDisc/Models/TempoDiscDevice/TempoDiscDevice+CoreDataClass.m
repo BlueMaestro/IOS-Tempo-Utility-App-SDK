@@ -51,10 +51,10 @@ int intValue(char lsb,char msb)
 	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
 	self.mode = @(data[14]);
 	if (self.mode.integerValue > 100) {
-		self.isFahrenheit = @(YES);
+		self.isFahrenheit = @(1);
 	}
 	else {
-		self.isFahrenheit = @(NO);
+		self.isFahrenheit = @(0);
 	}
 	self.numBreach = @(data[15]);
 	
@@ -79,6 +79,11 @@ int intValue(char lsb,char msb)
 		self.averageDayTemperature = @(intValue(data[custom.length-5], data[custom.length-6]) / 10.f);
 		self.averageDayHumidity = @(intValue(data[custom.length-3], data[custom.length-4]) / 10.f);
 		self.averageDayDew = @(intValue(data[custom.length-1], data[custom.length-2]) / 10.f);
+        if (self.mode.integerValue > 100) {
+            self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
+            self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
+            self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
+        }
 	}
     
     if (self.version.integerValue == 23) {
@@ -90,19 +95,21 @@ int intValue(char lsb,char msb)
         self.lowestHumidity = @(intValue(data[custom.length-18], data[custom.length-19]) / 10.f);
         self.highestDayTemperature = @(intValue(data[custom.length-16], data[custom.length-17]) / 10.f);
         self.highestDayHumidity = @(intValue(data[custom.length-14], data[custom.length-15]) / 10.f);
-        float highDewPointCalculation = ([self.highestDayTemperature floatValue] - ((100 - [self.highestDayHumidity floatValue]) /5));
+        float highDewPointCalculation = (float)([self.highestDayTemperature floatValue] - ((100 - [self.highestDayHumidity floatValue]) /5));
         self.highestDayDew = @(highDewPointCalculation);
-        //NSLog(@"highest day temperature is %f", [self.highestDayTemperature floatValue]);
-        //NSLog(@"highest day humidity is %f", [self.highestDayHumidity floatValue]);
-        //NSLog(@"dewpoint calculation is %f", dewPointCalculation);
         self.lowestDayTemperature = @(intValue(data[custom.length-12], data[custom.length-13]) / 10.f);
         self.lowestDayHumidity = @(intValue(data[custom.length-10], data[custom.length-11]) / 10.f);
-        float lowDewPointCalculation = ([self.lowestDayTemperature floatValue] - ((100 - [self.lowestDayHumidity floatValue]) /5));
+        float lowDewPointCalculation = (float)([self.lowestDayTemperature floatValue] - ((100 - [self.lowestDayHumidity floatValue]) /5));
         self.lowestDayDew = @(lowDewPointCalculation);
         self.averageDayTemperature = @(intValue(data[custom.length-8], data[custom.length-9]) / 10.f);
         self.averageDayHumidity = @(intValue(data[custom.length-6], data[custom.length-7]) / 10.f);
-        float avgDewPointCalculation = ([self.averageDayTemperature floatValue] - ((100 - [self.averageDayHumidity floatValue]) /5));
+        float avgDewPointCalculation = (float)([self.averageDayTemperature floatValue] - ((100 - [self.averageDayHumidity floatValue]) /5));
         self.averageDayDew = @(avgDewPointCalculation);
+        if (self.mode.integerValue > 100) {
+            self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
+            self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
+            self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
+        }
 
 		self.globalIdentifier = @(data[custom.length-5]);
 		
@@ -142,6 +149,8 @@ int intValue(char lsb,char msb)
 		
 		NSLog(@"Parsed version 23 data");
 	}
+    
+   
 	
 	/*NSLog(@"---------------------------------------------------------------");
 	 NSLog(@"PARSING TEMPO DISC DEVICE DATA:");
@@ -172,6 +181,13 @@ int intValue(char lsb,char msb)
 	 NSLog(@"Average 24h Dew: %f", avgDayDew);
 	 NSLog(@"---------------------------------------------------------------");*/
 }
+
+-(float) convertedValue:(float)preconversion {
+    float converted = ((preconversion * 1.8) + 32);
+    return converted;
+    
+}
+
 
 
 @end

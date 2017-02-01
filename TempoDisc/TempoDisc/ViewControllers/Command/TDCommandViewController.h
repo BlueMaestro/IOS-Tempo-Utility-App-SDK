@@ -13,6 +13,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceUUID;
 @property (strong, nonatomic) IBOutlet UILabel *labelBatteryValue;
 @property (strong, nonatomic) IBOutlet UILabel *labelRSSIValue;
+@property NSInteger *versionNumber;
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionViewCommands;
 @end
