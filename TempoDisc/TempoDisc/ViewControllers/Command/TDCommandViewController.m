@@ -392,16 +392,14 @@ typedef enum : NSInteger {
             descript = @"Airplane mode means the device will stop radio transmission after 5 minutes.  It continues to log data.  Transmission can be reactivated for another 5 minutes by pushing the button.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Airplane Mode On" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+                
+                    [weakself turnAirplaneMode:1];
+                
             }];
-            actionOne = [UIAlertAction actionWithTitle:@"Airplane Mode Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+            actionTwo = [UIAlertAction actionWithTitle:@"Airplane Mode Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                    [weakself turnAirplaneMode:0];
+                
             }];
             break;
             
@@ -865,6 +863,23 @@ typedef enum : NSInteger {
         [weakself showAlertForAction:success error:error];
         }];
     }
+    
+}
+
+-(void)turnAirplaneMode:(int)which {
+    //if which==1 then change then turn airplane on if which 0 then turn airplane off
+    __weak typeof(self) weakself = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    if (which == 1) {
+        [self connectAndWrite:[NSString stringWithFormat:@"*airon"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
+    } else {
+        [self connectAndWrite:[NSString stringWithFormat:@"*airoff"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
+    }
+    
     
 }
 
