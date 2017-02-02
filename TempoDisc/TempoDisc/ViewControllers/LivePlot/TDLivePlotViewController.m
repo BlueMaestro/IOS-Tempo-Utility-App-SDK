@@ -106,13 +106,13 @@
 		[self adjustPlotsRange];
 		
 		[_plotTemperature insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
-		[_plotTemperature reloadData];
+//		[_plotTemperature reloadData];
 		
 		[_plotHumidity insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
-		[_plotHumidity reloadData];
+//		[_plotHumidity reloadData];
 		
 		[_plotDewPoint insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
-		[_plotDewPoint reloadData];
+//		[_plotDewPoint reloadData];
 	}
 }
 
@@ -252,7 +252,7 @@
 	//	plotSpace.xRange = newRange;
 	[CPTAnimation animate:plotSpace property:@"xRange" fromPlotRange:plotSpace.xRange toPlotRange:newRange duration:0.3 animationCurve:CPTAnimationCurveLinear delegate:nil];
 	
-	plotSpace.xRange = newRange;
+//	plotSpace.xRange = newRange;
 	plotSpace.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(kLivePlotMinXAxisValue) lengthDecimal:CPTDecimalFromFloat(kLivePlotMaxXAxisValue)];
 }
 
