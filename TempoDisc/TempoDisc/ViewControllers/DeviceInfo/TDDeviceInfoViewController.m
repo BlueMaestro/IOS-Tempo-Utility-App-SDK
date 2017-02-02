@@ -261,6 +261,13 @@
 	}
 	else {
 		//6, 6s, 7
+		for (NSLayoutConstraint *widthConstraint in _boxWidthConstraints) {
+			widthConstraint.constant *= ratio;
+		}
+		for (NSLayoutConstraint *constraint in _buttonWidthConstraints) {
+			constraint.constant *= ratio;
+		}
+		_bottomMenuHeight.constant += 10;
 	}
 }
 
