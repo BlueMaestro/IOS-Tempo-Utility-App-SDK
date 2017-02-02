@@ -845,7 +845,7 @@ typedef enum : NSInteger {
 -(void)changeSensorInterval:(NSInteger)seconds {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
+    [self connectAndWrite:[NSString stringWithFormat:@"*sint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
         [weakself showAlertForAction:success error:error];
     }];
 }
