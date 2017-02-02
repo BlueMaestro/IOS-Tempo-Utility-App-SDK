@@ -143,29 +143,36 @@
 }
 
 - (IBAction)buttonExportCSVClicked:(UIButton *)sender {
-	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
-	MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
-	mailComposeVC.mailComposeDelegate = self;
-	mailComposeVC.modalPresentationStyle = UIModalPresentationPageSheet;
-	/*[mailComposeVC.navigationBar setTintColor:[UIColor blueMaestroBlue]];
-	[mailComposeVC.navigationBar setTitleTextAttributes:
-	 [NSDictionary dictionaryWithObjectsAndKeys:
+	if ([MFMailComposeViewController canSendMail]) {
+		[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+		MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+		mailComposeVC.mailComposeDelegate = self;
+		mailComposeVC.modalPresentationStyle = UIModalPresentationPageSheet;
+		/*[mailComposeVC.navigationBar setTintColor:[UIColor blueMaestroBlue]];
+		 [mailComposeVC.navigationBar setTitleTextAttributes:
+		 [NSDictionary dictionaryWithObjectsAndKeys:
 	  [UIColor whiteColor],
 	  NSForegroundColorAttributeName,
 	  nil]];
-	[mailComposeVC setNeedsStatusBarAppearanceUpdate];*/
-	[mailComposeVC setSubject:@"Data Export"];
-	
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateFormat:@"dd-MM-yyyy"];
-	
-	NSString *fileName = [self createFileNameWithAttachmentType:@"CSV" withPath:YES];
-	[self createCSVFile:fileName];
-	NSData * csvData=[NSData dataWithContentsOfFile:fileName];
-	[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDDefaultDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
-	
-	[MBProgressHUD hideHUDForView:self.view animated:NO];
-	[self presentViewController:mailComposeVC animated:YES completion:nil];
+		 [mailComposeVC setNeedsStatusBarAppearanceUpdate];*/
+		[mailComposeVC setSubject:@"Data Export"];
+		
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+		[formatter setDateFormat:@"dd-MM-yyyy"];
+		
+		NSString *fileName = [self createFileNameWithAttachmentType:@"CSV" withPath:YES];
+		[self createCSVFile:fileName];
+		NSData * csvData=[NSData dataWithContentsOfFile:fileName];
+		[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDDefaultDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
+		
+		[MBProgressHUD hideHUDForView:self.view animated:NO];
+		[self presentViewController:mailComposeVC animated:YES completion:nil];
+	}
+	else {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:@"There are no email accounts setup for this device" preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
 }
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
