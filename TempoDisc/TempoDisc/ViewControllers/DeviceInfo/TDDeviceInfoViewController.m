@@ -348,7 +348,7 @@
         
         //Sets temperature and dew points units labels
         NSLog(@"Mode of the device is %@", device.mode);
-        if (device.isFahrenheit) {
+        if (device.mode.intValue > 100) {
             _labelCurrentDeviceTemperatureUnit.text = @"Fahrenheit";
             _labelCurrentDeviceDewPointUnit.text = @"Fahrenheit";
         } else {
