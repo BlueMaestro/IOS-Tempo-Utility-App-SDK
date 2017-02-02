@@ -354,7 +354,7 @@ typedef enum : NSInteger {
 		case DeviceCommandClearAlarms:
         {
             title = @"Clear Alarms";
-            descript = @"This clears the alarms by reseting the alarm counter, but does not change any parameters";
+            descript = @"This clears the alarms by reseting the alarm counter, but does not change any parameters.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [weakself clearAlarms];
@@ -366,20 +366,18 @@ typedef enum : NSInteger {
             
 		case DeviceCommandAlarmOnOff:
         {
-            title = @"Turn Alarms On / Off";
-            descript = @"Select either On or Off to turn the alarms on and off.  The alarms will record the occurrences of readings outside the alarm paramters.  If no values are in the alarms, turning the alarms on will have no effect.";
+            title = @"Turn Alarms Off";
+            descript = @"If any of the alarms are set you can turn them off here.  This will not reset the alarm counter, but to turn them back on you will need to set them again.";
             placeholder = @"";
-            actionOne = [UIAlertAction actionWithTitle:@"Alarm On" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+            actionOne = [UIAlertAction actionWithTitle:@"Turn Alarm 1 Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                [weakself alarmOnOff:1];
+                
             }];
-            actionOne = [UIAlertAction actionWithTitle:@"Alarm Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+            actionTwo = [UIAlertAction actionWithTitle:@"Turn Alarm 2 Off" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                [weakself alarmOnOff:0];
+                
             }];
             break;
         }
@@ -435,10 +433,8 @@ typedef enum : NSInteger {
             descript = @"Clears the stored data, the reference date but leaves other settings such as name, units and logging interval unchanged.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
-                if (parsedDate) {
-                    [weakself changeReferenceTimeAndDate:parsedDate];
-                }
+                    [weakself clearStoredData];
+                
             }];
             break;
         }
@@ -451,7 +447,7 @@ typedef enum : NSInteger {
             title = @"Reset the Device";
             descript = @"Resets the device back to factory settings.  All data and settings are erased.";
             placeholder = @"";
-            actionOne = [UIAlertAction actionWithTitle:@"+4dB (strongest)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [weakself rebootDevice];
             
             }];
@@ -881,6 +877,32 @@ typedef enum : NSInteger {
     }
     
     
+}
+
+-(void)alarmOnOff:(int)which {
+    //if which==1 then change then turn alarm 2 off if which 0 then turn alarm 1 off
+    __weak typeof(self) weakself = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    if (which == 1) {
+        [self connectAndWrite:[NSString stringWithFormat:@"*alrm2t-"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
+    } else {
+        [self connectAndWrite:[NSString stringWithFormat:@"*alrm1t-"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
+    }
+    
+    
+    
+}
+
+-(void)clearStoredData {
+    __weak typeof(self) weakself = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self connectAndWrite:[NSString stringWithFormat:@"*clr"] withCompletion:^(BOOL success, NSError *error) {
+            [weakself showAlertForAction:success error:error];
+        }];
 }
 
 -(void)rebootDevice{
