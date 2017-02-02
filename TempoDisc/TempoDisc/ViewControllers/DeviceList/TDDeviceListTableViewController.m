@@ -457,22 +457,24 @@ typedef enum : NSInteger {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *selectedDevice = _dataSource[indexPath.row];
 //	if (selectedDevice.isTempoDiscDevice.boolValue) {
-		//Selected device is tempo disc. Set global singleton reference and go to details
-		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
+	//Selected device is tempo disc. Set global singleton reference and go to details
 		NSLog(@"Selected device: %@", selectedDevice.name);
-	if (!selectedDevice.inRange.boolValue) {
-		[self.parentViewController.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"viewControllerGraph"] animated:YES];
+	if ([selectedDevice isKindOfClass:[TempoDiscDevice class]] && (selectedDevice.version.integerValue == 22 || selectedDevice.version.integerValue == 23)) {
+		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
+		if (!selectedDevice.inRange.boolValue) {
+			[self.parentViewController.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"viewControllerGraph"] animated:YES];
+		}
+		else {
+			[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:selectedDevice];
+		}
 	}
-	else if ([selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:selectedDevice];
-	}
-	else {
-		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
-	}
-	/*}
 	else {
 		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	}
+	
+	/*else {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
 	}*/
 }
 
