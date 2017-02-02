@@ -399,10 +399,10 @@ typedef enum : NSInteger {
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
-    if (device.battery.integerValue > 85) {
+    if (device.battery.integerValue >= 85) {
         [cell.batteryImage setImage:highBattImage];
     }
-    if ((device.battery.integerValue < 85) && (device.battery.integerValue > 70)) {
+    if ((device.battery.integerValue < 85) && (device.battery.integerValue >= 70)) {
         [cell.batteryImage setImage:mediumBattImage];
     }
     if (device.battery.integerValue < 70) {

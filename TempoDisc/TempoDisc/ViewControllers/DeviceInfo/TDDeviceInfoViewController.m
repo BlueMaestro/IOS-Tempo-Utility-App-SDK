@@ -277,15 +277,16 @@
     //Capture version number
     versionID = [TDDefaultDevice sharedDevice].selectedDevice.version;
     NSLog(@"Version is %@", versionID);
+    NSLog(@"Battery is %li", [TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue);
     
     //Set images depending on values
-    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue > 85) {
+    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue >= 85) {
         [self.batteryImage setImage:highBattImage];
     }
-    if (([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue < 85) && ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue > 70)) {
+    if (([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue < 85) && ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue >= 70)) {
         [self.batteryImage setImage:mediumBattImage];
     }
-    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue < 70) {
+    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue <= 70) {
         [self.batteryImage setImage:lowBattImage];
     }
     if ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI > -90) {
@@ -328,7 +329,8 @@
 			_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 		}
 		
-		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.integerValue];
+		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.longValue];
+        
 		_labelDeviceID.text = @"CLASS ID";
         if (device.version.intValue == 23) {
 			
