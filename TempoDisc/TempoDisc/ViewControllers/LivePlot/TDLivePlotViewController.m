@@ -356,7 +356,7 @@
 	axisSet.xAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 	
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateFormat:@"mm:ss"];
+	[formatter setDateFormat:@"ss\nHH:mm"];
 	CPTTimeFormatter *timeFormatter = [[CPTTimeFormatter alloc] initWithDateFormatter:formatter];
 	timeFormatter.referenceDate = [NSDate dateWithTimeIntervalSince1970:0];
 	[(CPTXYAxisSet *)graph.axisSet xAxis].labelFormatter = timeFormatter;
@@ -394,11 +394,11 @@
 	
 	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
 	{
-		labelTextStyle.fontSize = kGraphiPhoneFontSize;
+		labelTextStyle.fontSize = kLivePlotiPhoneFontSize;
 	}
 	else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)//iPad
 	{
-		labelTextStyle.fontSize = kGraphiPadFontSize;
+		labelTextStyle.fontSize = kLivePlotiPadFontSize;
 	}
 	
 	axisSet.xAxis.labelTextStyle = labelTextStyle;
@@ -476,9 +476,26 @@
 #pragma mark - CPTScatterPlotDelegate
 
 - (CPTPlotSymbol *)symbolForScatterPlot:(CPTScatterPlot *)plot recordIndex:(NSUInteger)idx {
-	CPTPlotSymbol *temperatureSymbol = [CPTPlotSymbol diamondPlotSymbol];
-	temperatureSymbol.fill = [CPTFill fillWithColor:[CPTColor colorWithGenericGray:1.0]];
+	CPTPlotSymbol *temperatureSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+	CPTMutableLineStyle *minrangeLineStyle = [plot.dataLineStyle mutableCopy];
+	minrangeLineStyle.lineWidth = kGraphLineWidth;
+	if ([plot.identifier isEqual:@"Temperature"]) {
+		minrangeLineStyle.lineColor = kColorGraphTemperature;
+	}
+	else if ([plot.identifier isEqual:@"Humidity"]) {
+		minrangeLineStyle.lineColor = kColorGraphAverage;
+	}
+	else if ([plot.identifier isEqual:@"DewPoint"]) {
+		minrangeLineStyle.lineColor = kColorGraphDewPoint;
+	}
+	temperatureSymbol.size=kGraphSymbolSize;
+	temperatureSymbol.fill=[CPTFill fillWithColor:[CPTColor whiteColor]];
+	temperatureSymbol.lineStyle = minrangeLineStyle;
 	return temperatureSymbol;
+	
+	/*CPTPlotSymbol *temperatureSymbol = [CPTPlotSymbol diamondPlotSymbol];
+	temperatureSymbol.fill = [CPTFill fillWithColor:[CPTColor colorWithGenericGray:1.0]];
+	return temperatureSymbol;*/
 }
 
 @end

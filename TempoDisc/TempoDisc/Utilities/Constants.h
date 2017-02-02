@@ -35,6 +35,8 @@
 #define kGraphLineWidth 2
 #define kGraphiPhoneFontSize 14
 #define kGraphiPadFontSize 20
+#define kLivePlotiPhoneFontSize 13
+#define kLivePlotiPadFontSize 20
 #define POPUP_TIME 5.0
 #define GRAPH_LINE_TYPE CPTScatterPlotInterpolationCurved
 //#define GRAPH_LINE_TYPE CPTScatterPlotInterpolationLinear
