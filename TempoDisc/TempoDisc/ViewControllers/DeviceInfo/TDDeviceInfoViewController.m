@@ -198,7 +198,6 @@
 	
 	
 	//adjust image for all box views
-	NSInteger i=0;
 	for (UIImageView* boxImage in _boxImageViews) {
 		boxImage.image = [boxImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(12, 12, 12, 12) resizingMode:UIImageResizingModeTile];
 	}
@@ -208,7 +207,7 @@
     CGRect screenBound = [[UIScreen mainScreen] bounds];
     CGSize screenSize = screenBound.size;
     CGFloat screenWidth = screenSize.width;
-    CGFloat screenHeight = screenSize.height;
+    //CGFloat screenHeight = screenSize.height;
     
     NSLog (@"screenWidth = %f", screenWidth);
 	
@@ -280,11 +279,17 @@
     UIImage *strongRSSIImage = [UIImage imageNamed:@"rssi_high"];
     UIImage *mediumRSSIImage = [UIImage imageNamed:@"rssi_medium"];
     UIImage *lowRSSIImage = [UIImage imageNamed:@"rssi_low"];
+    UIImage *unlockedImage = [UIImage imageNamed:@"padlockopen"];
+    UIImage *lockedImage = [UIImage imageNamed:@"padlockclosed"];
+    UIImage *breachAlertImage = [UIImage imageNamed:@"alert_icon"];
+    
+    
     
     //Capture version number
     versionID = [TDDefaultDevice sharedDevice].selectedDevice.version;
     NSLog(@"Version is %@", versionID);
     NSLog(@"Battery is %li", [TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue);
+    
     
     //Set images depending on values
     if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue >= 85) {
@@ -342,9 +347,30 @@
         if (device.version.intValue == 23) {
 			
             _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
+            [_labelDeviceIDValue setHidden:NO];
+            [_classIDTagImage setHidden:NO];
+            [_labelDeviceID setHidden:NO];
+            if (device.numBreach.intValue > 0) {
+                _breachCount.text = [NSString stringWithFormat:@"%d", device.numBreach.intValue];
+                [_breachImage setImage:breachAlertImage];
+                [_breachCount setHidden:NO];
+                [_breachImage setHidden:NO];
+            } else {
+                [_breachCount setHidden:YES];
+                [_breachImage setHidden:YES];
+            }
+            if (device.referenceDateRawNumber.intValue == 0) {
+                _labelFirstLogDateValue.text = @"No Date Set";
+            } else {
+                (_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:device.startTimestamp]);
+            }
         } else {
+            [_labelDeviceIDValue setHidden:YES];
+            [_classIDTagImage setHidden:YES];
+            [_labelDeviceID setHidden:YES];
 			
         }
+        
 		
 		
         //Sets labels with current temperature, humidity and dew point
@@ -361,6 +387,13 @@
         } else {
             _labelCurrentDeviceTemperatureUnit.text = @"Celsius";
             _labelCurrentDeviceDewPointUnit.text = @"Celsius";
+        }
+        
+        int modeForLock = device.mode.intValue;
+        if (((modeForLock % 100) /10) > 0) {
+            [self.lockUmage setImage:lockedImage];
+        } else {
+            [self.lockUmage setImage:unlockedImage];
         }
         
         

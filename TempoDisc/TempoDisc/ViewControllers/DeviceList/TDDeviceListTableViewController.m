@@ -385,11 +385,38 @@ typedef enum : NSInteger {
     UIImage *strongRSSIImage = [UIImage imageNamed:@"rssi_high"];
     UIImage *mediumRSSIImage = [UIImage imageNamed:@"rssi_medium"];
     UIImage *lowRSSIImage = [UIImage imageNamed:@"rssi_low"];
+    UIImage *unlockedImage = [UIImage imageNamed:@"padlockopen"];
+    UIImage *lockedImage = [UIImage imageNamed:@"padlockclosed"];
+    UIImage *breachImage = [UIImage imageNamed:@"alert_icon"];
     
+    if ([device isKindOfClass:[TempoDiscDevice class]]) {
+        TempoDiscDevice* disc = (TempoDiscDevice*)device;
+        int mode = disc.mode.intValue;
+        int remainder = mode % 100;
+        remainder = remainder / 10;
+        NSLog(@"Mode is %d and remainder is %d", mode, remainder);
+        if (remainder > 0) {
+            [cell.lockImage setImage:lockedImage];
+        } else {
+            [cell.lockImage setImage:unlockedImage];
+        }
+        int breach_count = disc.numBreach.intValue;
+        if (breach_count > 0) {
+            [cell.alertImage setImage:breachImage];
+            cell.labelAlertCount.text = [NSString stringWithFormat:@"%d", breach_count];
+        } else {
+            [cell.alertImage setHidden:YES];
+            [cell.labelAlertCount setHidden:YES];
+        }
+        cell.classID.text = [NSString stringWithFormat:@"%d", (int)disc.classID];
     
+    }
+    
+
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
     
+
     cell.dewpointUnits.text = unit;
     cell.temperatureUnits.text = unit;
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
@@ -414,7 +441,7 @@ typedef enum : NSInteger {
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
 		cell.labelDeviceVersionValue.hidden = YES;
 	}
-	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%ddB", device.peripheral.RSSI];
+	cell.labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", device.peripheral.RSSI];
     
     if (device.peripheral.RSSI > -90) {
         [cell.RSSIImage setImage:strongRSSIImage];
@@ -438,9 +465,15 @@ typedef enum : NSInteger {
 		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue];
 		if (device.version.integerValue == 23) {
 			cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T/H/D v23";
+            [cell.classTagImageView setHidden:NO];
+            [cell.classID setHidden:NO];
+            [cell.classIDHeadingLabel setHidden:NO];
 		}
 		else if (device.version.integerValue == 22) {
 			cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T/H/D v22";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
 		}
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";

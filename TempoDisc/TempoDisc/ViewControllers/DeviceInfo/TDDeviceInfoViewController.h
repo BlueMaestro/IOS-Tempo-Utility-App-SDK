@@ -51,6 +51,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelDeviceIDValue;
 @property (weak, nonatomic) IBOutlet UIImageView *RSSIImage;
 @property (strong, nonatomic) IBOutlet UIImageView *batteryImage;
+@property (strong, nonatomic) IBOutlet UIImageView *lockUmage;
+@property (strong, nonatomic) IBOutlet UIImageView *breachImage;
+@property (strong, nonatomic) IBOutlet UILabel *breachCount;
+@property (strong, nonatomic) IBOutlet UIImageView *classIDTagImage;
 
 //record dates view
 @property (strong, nonatomic) IBOutlet UILabel *labelFirstLogDateValue;

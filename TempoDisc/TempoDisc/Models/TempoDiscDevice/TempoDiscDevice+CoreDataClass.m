@@ -13,6 +13,12 @@ int intValue(char lsb,char msb)
 	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
 }
 
+int largeIntValue(char lsb, char b3, char b2, char msb)
+{
+    return ((int) lsb) | (((int) b3) << 8) | (((int) b2) << 16) | (((int) msb) << 24);
+    
+}
+
 @implementation TempoDiscDevice
 
 - (NSInteger)classID {
@@ -28,12 +34,12 @@ int intValue(char lsb,char msb)
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid {
 	[super fillWithData:advertisedData name:name uuid:uuid];
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
-	char * data = (char*)[custom bytes];
+	unsigned char * data = (unsigned char*)[custom bytes];
     NSUInteger dataLength = custom.length;
     for (NSUInteger i = 0; i < dataLength; i++) {
         Byte byte = 0;
         [custom getBytes:&byte range:NSMakeRange(i, 1)];
-        //NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
+        NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
         }
     Byte byte;
     [custom getBytes:&byte range:NSMakeRange(2, 1)];
@@ -113,15 +119,15 @@ int intValue(char lsb,char msb)
 
 		self.globalIdentifier = @(data[custom.length-5]);
 		
+        const unsigned char dateBytes[] = {data[custom.length-4], data[custom.length-3], data[custom.length-2], data[custom.length-1]};
+        NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
 		//date digits, should be reverse from what is written, not sure about indexes
-		NSNumber *fullValue = @( (((int) data[custom.length-1]) & 0xFF) | (((int) data[custom.length-2]) << 8) | (((int) data[custom.length-3]) << 16) | (((int) data[custom.length-4]) << 24) );
-		
-		/**
-		 *	parse digits into date
-		 *	yymmddhhmm
-		 **/
-        NSLog(@"Raw date number is %i", [fullValue intValue]);
+        unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+        NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
         
+        NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+        self.referenceDateRawNumber = fullValue;
+    
         if (([fullValue intValue] != 0) || ([fullValue longValue] > 170000000000) || ([fullValue longValue] < 1900000000)) {
         
 		NSInteger minutes = fullValue.integerValue % 100;
