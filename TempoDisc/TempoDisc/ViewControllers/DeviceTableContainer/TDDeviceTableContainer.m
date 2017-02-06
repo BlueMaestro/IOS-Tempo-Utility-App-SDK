@@ -11,6 +11,7 @@
 #import <MessageUI/MFMailComposeViewController.h>
 #import "CHCSVParser.h"
 #import <MBProgressHUD.h>
+#import "TempoDiscDevice+CoreDataProperties.h"
 
 @interface TDDeviceTableContainer() <MFMailComposeViewControllerDelegate>
 
@@ -78,6 +79,40 @@
 -(void)createCSVFile:(NSString*)fileName{
 	NSOutputStream *output = [NSOutputStream outputStreamToMemory];
 	CHCSVWriter *writer = [[CHCSVWriter alloc] initWithOutputStream:output encoding:NSUTF8StringEncoding delimiter:','];
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	[formatter setDateFormat:@"HH:mm\tdd/MM/yyyy"];
+	
+	//write pre values data
+	TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
+	[writer writeField:@"Current Date and Time"];
+	[writer writeField:[formatter stringFromDate:[NSDate date]]];
+	[writer finishLine];
+	[writer writeField:@"Device Name"];
+	[writer writeField:device.name];
+	[writer finishLine];
+	[writer writeField:@"Device UUID"];
+	[writer writeField:device.uuid];
+	[writer finishLine];
+	[writer writeField:@"Class ID"];
+	[writer writeField:[NSString stringWithFormat:@"%ld", (long)device.globalIdentifier.integerValue]];
+	[writer finishLine];
+	[writer writeField:@"Battery Level"];
+	[writer writeField:[NSString stringWithFormat:@"%.2f", device.battery.floatValue]];
+	[writer finishLine];
+	[writer writeField:@"Radio Strength"];
+	[writer writeField:[NSString stringWithFormat:@"%ld", (long)device.peripheral.RSSI]];
+	[writer finishLine];
+	[writer writeField:@"Reference Date"];
+	[writer writeField:[formatter stringFromDate:device.startTimestamp]];
+	[writer finishLine];
+	[writer writeField:@"Last Download Date"];
+	[writer writeField:[formatter stringFromDate:device.lastDownload]];
+	[writer finishLine];
+	[writer writeField:@"The number of alert thresholds registered"];
+	[writer writeField:[NSString stringWithFormat:@"%ld", (long)device.numBreach.integerValue]];
+	[writer finishLine];
+	[writer finishLine];
+	
 	//wrting header name for csv file
 	[writer writeField:@"Record number"];
 	[writer writeField:@"Timestamp"];
@@ -87,8 +122,7 @@
 	[writer finishLine];
 	
 	
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	[formatter setDateFormat:@"HH:mm\tdd/MM/yyyy"];
+	
 	//[formatter setDateFormat:@"dd/MM/yyyy\tHH:mm"];
 	NSArray *temperature = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	NSArray *humidity = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
