@@ -15,6 +15,15 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	[self setupView];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handlePeripheralUpdateNotification:) name:kNotificationPeripheralUpdated object:nil];
+}
+
+- (void)dealloc {
+	
+}
+
+- (void)handlePeripheralUpdateNotification:(NSNotification*)note {
+	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
 }
 
 - (void)setupView {
@@ -44,6 +53,7 @@
 		for (LGPeripheral *peripheral in peripherals) {
 			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
 				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDDefaultDevice sharedDevice].selectedDevice fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.UUIDString];
 				NSLog(@"Rescanned for device: %@", peripheral.UUIDString);
 				[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPeripheralUpdated object:nil userInfo:@{kKeyNotificationPeripheralUpdatedPeripheral : peripheral}];
 				break;

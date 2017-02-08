@@ -426,6 +426,13 @@
 	
 }
 
+#pragma mark - Public methods
+
+- (void)handlePeripheralUpdateNotification:(NSNotification *)note {
+	[super handlePeripheralUpdateNotification:note];
+	[self fillData];
+}
+
 #pragma mark - Sync
 
 - (void)downloadDataFromPeripheral:(LGPeripheral*)peripheral {
