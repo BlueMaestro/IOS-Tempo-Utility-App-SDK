@@ -122,11 +122,10 @@
 	[writer finishLine];
 	
 	
-	
 	//[formatter setDateFormat:@"dd/MM/yyyy\tHH:mm"];
-	NSArray *temperature = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-	NSArray *humidity = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-	NSArray *dewPoint = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	NSArray *temperature = [[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	NSArray *humidity = [[device readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	NSArray *dewPoint = [[device readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     for (NSInteger index = (temperature.count - 1); index >= 0; index--) {
 		Reading *readingTemperature = index >= 0 ? temperature[index] : nil;
@@ -135,9 +134,9 @@
 		
 		[writer writeField:[NSString stringWithFormat:@"%lu", (unsigned long)index]];
 		[writer writeField:[NSString stringWithFormat:@"%@", [formatter stringFromDate:readingTemperature.timestamp]]];
-		[writer writeField:[NSString stringWithFormat:@"%@", readingTemperature.avgValue]];
+		[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingTemperature.avgValue forDevice:device]]];
 		[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
-		[writer writeField:[NSString stringWithFormat:@"%@", readingDewPoint.avgValue]];
+		[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:device]]];
 		[writer finishLine];
 	}
 	
