@@ -142,7 +142,6 @@ typedef enum : NSInteger {
                                 @(DeviceCommandResetDevice),
                                 @(DeviceCommandUnits),
                                 @(DeviceCommandLock),
-                                @(DeviceFirmwareUpgrade),
                                 @(DeviceCommandCommandConsole)
                                 ];
         [_collectionViewCommands reloadData];
