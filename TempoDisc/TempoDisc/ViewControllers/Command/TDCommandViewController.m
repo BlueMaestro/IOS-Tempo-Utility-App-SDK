@@ -13,7 +13,7 @@
 #define CHAR_ID @"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define SERVICE_ID @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 
-#define kResponseTimeout 2
+#define kResponseTimeout 10
 
 typedef enum : NSInteger {
 	DeviceCommandChangeName = 0,
@@ -684,6 +684,8 @@ typedef enum : NSInteger {
 		[weakself showAlertForAction:NO error:nil];
 		[[weakself timerResponseTimeout] invalidate];
 	}];
+	
+	[[NSRunLoop mainRunLoop] addTimer:_timerResponseTimeout forMode:NSDefaultRunLoopMode];
 }
 
 - (NSString*)manipulateString:(NSString*)target {
@@ -733,7 +735,7 @@ typedef enum : NSInteger {
 	
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (!error) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:[NSString stringWithFormat:@"Device Response:\n%@", message] preferredStyle:UIAlertControllerStyleAlert];
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 		[self presentViewController:alert animated:YES completion:nil];
 	}
@@ -754,6 +756,11 @@ typedef enum : NSInteger {
 		[self presentViewController:alert animated:YES completion:nil];
 	}
 	[super handleDisconnectNotification:note];
+}
+
+- (void)connectAndWrite:(NSString *)data withCompletion:(WriteCompletion)completion {
+	[self startTimeout];
+	[super connectAndWrite:data withCompletion:completion];
 }
 
 #pragma mark - Actions
@@ -820,7 +827,7 @@ typedef enum : NSInteger {
 	__weak typeof(self) weakself = self;
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam%@", name] withCompletion:^(BOOL success, NSError *error) {
-		[weakself showAlertForAction:success error:error];
+//		[weakself showAlertForAction:success error:error];
 	}];
     
     
@@ -844,7 +851,7 @@ typedef enum : NSInteger {
         __weak typeof(self) weakself = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*d%ld", (long)number] withCompletion:^(BOOL success, NSError *error) {
-		[weakself showAlertForAction:success error:error];
+//		[weakself showAlertForAction:success error:error];
         }];
     }
 }
@@ -854,7 +861,7 @@ typedef enum : NSInteger {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSLog(@"The seconds coming through are %d", seconds);
     [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
     }];
 }
 
@@ -862,7 +869,7 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*sint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
     }];
 }
 
@@ -872,11 +879,11 @@ typedef enum : NSInteger {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if (which == 1) {
         [self connectAndWrite:[NSString stringWithFormat:@"*unitsc"] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
         }];
     } else {
         [self connectAndWrite:[NSString stringWithFormat:@"*unitsf"] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
         }];
     }
     
@@ -888,11 +895,11 @@ typedef enum : NSInteger {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if (which == 1) {
         [self connectAndWrite:[NSString stringWithFormat:@"*airon"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
     } else {
         [self connectAndWrite:[NSString stringWithFormat:@"*airoff"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
     }
 }
@@ -902,7 +909,7 @@ typedef enum : NSInteger {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString* command = [NSString stringWithFormat:@"*txp%d", level];
     [self connectAndWrite:command withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
     }];
 }
 
@@ -914,11 +921,11 @@ typedef enum : NSInteger {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if (which == 1) {
         [self connectAndWrite:[NSString stringWithFormat:@"*alrm2t-"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
     } else {
         [self connectAndWrite:[NSString stringWithFormat:@"*alrm1t-"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
     }
 }
@@ -939,8 +946,8 @@ typedef enum : NSInteger {
     NSLog(@"Alarm concenated command is %@", concenatedComand);
    
     [self connectAndWrite:concenatedComand withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
-        
+//        [weakself showAlertForAction:success error:error];
+		
     }];
 }
 
@@ -949,7 +956,7 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*alrmclr"] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
     }];
 }
 
@@ -958,7 +965,7 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*clr"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
 }
 
@@ -968,7 +975,7 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*rboot"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
 }
 
@@ -989,7 +996,7 @@ typedef enum : NSInteger {
         NSString *command = [NSString stringWithFormat:@"*pwd%@", password];
         
         [self connectAndWrite:command withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
         
     }
@@ -1011,7 +1018,7 @@ typedef enum : NSInteger {
         NSString *command = [NSString stringWithFormat:@"*ch%@", newValue];
         
         [self connectAndWrite:command withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
 
     }
@@ -1032,8 +1039,8 @@ typedef enum : NSInteger {
         NSString *command = [NSString stringWithFormat:@"*ct%@", newValue];
         
         [self connectAndWrite:command withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
-            
+//            [weakself showAlertForAction:success error:error];
+			
         }];
     }
 }
@@ -1042,7 +1049,7 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*bd"] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
     }];
     
 }
@@ -1052,7 +1059,7 @@ typedef enum : NSInteger {
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*id%@",enteredValue] withCompletion:^(BOOL success, NSError *error) {
-        [weakself showAlertForAction:success error:error];
+//        [weakself showAlertForAction:success error:error];
     }];
 }
 
@@ -1067,7 +1074,7 @@ typedef enum : NSInteger {
         {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv100"] withCompletion:^(BOOL success, NSError *error) {
-                [weakself showAlertForAction:success error:error];
+//                [weakself showAlertForAction:success error:error];
             }];
             break;
         }
@@ -1075,7 +1082,7 @@ typedef enum : NSInteger {
         {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv300"] withCompletion:^(BOOL success, NSError *error) {
-                [weakself showAlertForAction:success error:error];
+//                [weakself showAlertForAction:success error:error];
             }];
             break;
         }
@@ -1083,7 +1090,7 @@ typedef enum : NSInteger {
         {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv600"] withCompletion:^(BOOL success, NSError *error) {
-                [weakself showAlertForAction:success error:error];
+//                [weakself showAlertForAction:success error:error];
             }];
             break;
         }
@@ -1091,7 +1098,7 @@ typedef enum : NSInteger {
         {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv1000"] withCompletion:^(BOOL success, NSError *error) {
-                [weakself showAlertForAction:success error:error];
+//                [weakself showAlertForAction:success error:error];
             }];
             break;
         }
@@ -1105,15 +1112,9 @@ typedef enum : NSInteger {
         __weak typeof(self) weakself = self;
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*dfu"] withCompletion:^(BOOL success, NSError *error) {
-            [weakself showAlertForAction:success error:error];
+//            [weakself showAlertForAction:success error:error];
         }];
     
 }
-    
-    
-
-
-
-
 
 @end

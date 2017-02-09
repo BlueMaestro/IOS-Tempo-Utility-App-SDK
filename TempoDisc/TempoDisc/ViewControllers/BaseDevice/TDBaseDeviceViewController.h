@@ -17,4 +17,5 @@
 - (void)setupView;
 
 - (void)refreshCurrentDevice;
+- (void)handlePeripheralUpdateNotification:(NSNotification*)note;
 @end
