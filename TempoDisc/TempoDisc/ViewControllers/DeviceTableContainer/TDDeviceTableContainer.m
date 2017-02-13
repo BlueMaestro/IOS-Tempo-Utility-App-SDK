@@ -111,6 +111,9 @@
 	[writer writeField:@"The number of alert thresholds registered"];
 	[writer writeField:[NSString stringWithFormat:@"%ld", (long)device.numBreach.integerValue]];
 	[writer finishLine];
+	[writer writeField:@"Temperature Unit"];
+	[writer writeField:device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius"];
+	[writer finishLine];
 	[writer finishLine];
 	
 	//wrting header name for csv file
