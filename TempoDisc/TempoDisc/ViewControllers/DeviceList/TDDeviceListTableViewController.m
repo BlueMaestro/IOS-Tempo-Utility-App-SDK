@@ -15,10 +15,10 @@
 #import "TempoDiscDevice+CoreDataProperties.h"
 #import "AppDelegate.h"
 
-#define kDeviceScanInterval 10.0
+#define kDeviceScanInterval 1.0
 
-#define kDeviceListUpdateInterval 5.0
-#define kDeviceListUpdateScanInterval 2.0
+#define kDeviceListUpdateInterval 2.0
+#define kDeviceListUpdateScanInterval 1.0
 
 #define kDeviceOutOfRangeTimer 60.0
 
@@ -46,10 +46,9 @@ typedef enum : NSInteger {
 	/**
 	 *	Wait until ready to perform scan
 	 **/
-	if (!_ignoreScan) {
-		[[LGCentralManager sharedInstance]
-		 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
-	}
+	_ignoreScan = YES;
+	[[LGCentralManager sharedInstance]
+	 addObserver:self forKeyPath:@"centralReady" options:NSKeyValueObservingOptionNew context:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleGoToBackgroundNotifications:) name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleReturnToForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -82,9 +81,11 @@ typedef enum : NSInteger {
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
 	if ([keyPath isEqualToString:@"centralReady"]) {
 		if ([LGCentralManager sharedInstance].isCentralReady) {
+			__weak typeof(self) weakself = self;
 			dispatch_async(dispatch_get_main_queue(), ^{
 				//Bluetooth is ready. Start scan.
-				[self scanForDevices];
+				[weakself scanForDevices];
+				weakself.ignoreScan = NO;
 //				[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
 				
 				//we dont need to listen to changes anymore since everything is set up
