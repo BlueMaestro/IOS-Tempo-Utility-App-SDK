@@ -161,13 +161,13 @@ typedef enum : NSInteger {
 	//default is by name
 	switch (_sortType) {
 		case DeviceSortTypeSignalStrength:
-			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"peripheral.RSSI" ascending:YES]]];
+			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"peripheral.RSSI" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"uuid" ascending:YES]]];
 			break;
 		case DeviceSortTypeClassID:
-			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"classID" ascending:YES]]];
+			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"classID" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"uuid" ascending:YES]]];
 			break;
 		default:
-			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)]]];
+			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)], [NSSortDescriptor sortDescriptorWithKey:@"uuid" ascending:YES]]];
 			break;
 	}
 	[self.tableView reloadData];
