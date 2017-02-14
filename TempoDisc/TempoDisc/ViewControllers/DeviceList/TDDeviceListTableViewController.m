@@ -132,15 +132,31 @@ typedef enum : NSInteger {
 }
 
 - (void)updateDeviceList {
-	_dataSource = [NSMutableArray array];
+	if (!_dataSource || _deviceFilterId) {
+		_dataSource = [NSMutableArray array];
+	}
+	NSMutableArray *uuids = [_dataSource valueForKey:@"uuid"];
 	for (LGPeripheral *peripheral in [LGCentralManager sharedInstance].peripherals) {
 		TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
 		if (device) {
 			device.peripheral = peripheral;
+			device.inRange = @(YES);
+			if (![uuids containsObject:device.uuid]) {
+				if (_deviceFilterId) {
+					if ([device classID] == _deviceFilterId.integerValue) {
+						[_dataSource addObject:device];
+					}
+				}
+				else {
+					[_dataSource addObject:device];
+				}
+			}
 		}
 	}
-	NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
+	
+	/*NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
 	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
+	
 	for (TempoDevice *device in result) {
 		device.inRange = @(NO);
 		if (device.lastDetected && fabs(device.lastDetected.timeIntervalSinceNow) < kDeviceOutOfRangeTimer) {
@@ -156,7 +172,7 @@ typedef enum : NSInteger {
 				[_dataSource addObject:device];
 			}
 		}
-	}
+	}*/
 	
 	//default is by name
 	switch (_sortType) {
