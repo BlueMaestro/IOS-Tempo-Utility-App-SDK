@@ -133,8 +133,17 @@ typedef enum : NSInteger {
 }
 
 - (void)updateDeviceList {
-	if (!_dataSource || _deviceFilterId) {
+	if (!_dataSource) {
 		_dataSource = [NSMutableArray array];
+	}
+	else if (_deviceFilterId) {
+		NSMutableArray *nonClassSIdDevices = [NSMutableArray array];
+		for (TempoDevice* device in _dataSource) {
+			if ([device classID] != _deviceFilterId.integerValue) {
+				[nonClassSIdDevices addObject:device];
+			}
+		}
+		[_dataSource removeObjectsInArray:nonClassSIdDevices];
 	}
 	NSMutableArray *uuids = [_dataSource valueForKey:@"uuid"];
 	for (LGPeripheral *peripheral in [LGCentralManager sharedInstance].peripherals) {
