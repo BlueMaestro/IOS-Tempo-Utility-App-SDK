@@ -11,8 +11,10 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "TDDeviceTableViewCell.h"
 #import "TDOtherDeviceTableViewCell.h"
+#import "TDPressureDeviceTableViewCell.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "TempoDiscDevice+CoreDataProperties.h"
+#import "TempoDiscPressureDevice+CoreDataClass.h"
 #import "AppDelegate.h"
 
 #define kDeviceScanInterval 1.0
@@ -253,8 +255,10 @@ typedef enum : NSInteger {
 	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	BOOL isBlueMaestroDevice = [TempoDevice isBlueMaestroDeviceWithAdvertisementData:peripheral.advertisingData];
     BOOL isTempoDisc23 = [TempoDevice isTempoDisc23WithAdvertisementDate:peripheral.advertisingData];
-    
+	BOOL isTempoPressure = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
+	
     if (isTempoDisc23) {NSLog(@"Found Tempo Disc 23");}
+	if (isTempoPressure) {NSLog(@"Found Tempo Disc 27");}
     
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
@@ -280,7 +284,12 @@ typedef enum : NSInteger {
 	else if (!fetchError && hasManufacturerData) {
 		//detected new device
 		if ((isTempoDiscDevice) || (isTempoDisc23)) {
-			device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+			if (isTempoPressure) {
+				device = [TempoDiscPressureDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+			}
+			else {
+				device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+			}
 		}
 		else {
 			device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
@@ -507,6 +516,11 @@ typedef enum : NSInteger {
     
 }
 
+- (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscPressureDevice*)device {
+	[self fillTempoDiscCell:cell model:device];
+	//fill rest of the data
+}
+
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
 	cell.labelDeviceName.text = device.name;
 }
@@ -547,6 +561,9 @@ typedef enum : NSInteger {
 	TempoDevice *device = _dataSource[indexPath.row];
 	
 	NSString *reuse = @"";
+	if ([device isKindOfClass:[TempoDiscPressureDevice class]]) {
+		reuse = @"cellDeviceTempoDiscPressure";
+	}
 	if (device.isBlueMaestroDevice.boolValue) {
 		reuse = @"cellDeviceTempoDisc";
 	}
@@ -556,6 +573,9 @@ typedef enum : NSInteger {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
+	if ([cell isKindOfClass:[TDPressureDeviceTableViewCell class]]) {
+		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscPressureDevice*)device];
+	}
 	if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
 	}

@@ -14,6 +14,7 @@
 #define BM_MODEL_THP 1
 #define BM_MODEL_DISC '\x16'
 #define BM_MODEL_DISC_23 '\x17'
+#define BM_MODEL_DISC_27 '\x1B'
 
 int getInt(char lsb,char msb)
 {
@@ -74,7 +75,7 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
-+ (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data {
++ (BOOL)isTempoDisc27WithAdvertisementDate:(NSDictionary*)data {
     NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
     //BlueMaestro device
     if (custom != nil)
@@ -84,7 +85,7 @@ int getInt(char lsb,char msb)
         
         //Is this one of ours?
         if (manuf == MANUF_ID_BLUE_MAESTRO) {
-            if (d[2] == BM_MODEL_DISC_23) {
+            if (d[2] == BM_MODEL_DISC_27) {
             return YES;
             }
         }

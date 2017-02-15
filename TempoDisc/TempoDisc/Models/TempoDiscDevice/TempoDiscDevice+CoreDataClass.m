@@ -26,7 +26,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 }
 
 + (TempoDiscDevice *)deviceWithName:(NSString *)name data:(NSDictionary *)data uuid:(nonnull NSString *)uuid context:(nonnull NSManagedObjectContext *)context {
-	TempoDiscDevice *device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDiscDevice class]) inManagedObjectContext:context];
+	TempoDiscDevice *device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([self class]) inManagedObjectContext:context];
 	[device fillWithData:data name:name uuid:uuid];
 	return device;
 }
