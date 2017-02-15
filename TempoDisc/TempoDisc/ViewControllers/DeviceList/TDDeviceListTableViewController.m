@@ -532,7 +532,10 @@ typedef enum : NSInteger {
 //	if (selectedDevice.isTempoDiscDevice.boolValue) {
 	//Selected device is tempo disc. Set global singleton reference and go to details
 		NSLog(@"Selected device: %@", selectedDevice.name);
-	if ([selectedDevice isKindOfClass:[TempoDiscDevice class]] && (selectedDevice.version.integerValue == 22 || selectedDevice.version.integerValue == 23)) {
+	if ([selectedDevice isKindOfClass:[TempoDiscPressureDevice class]]) {
+		[self.parentViewController performSegueWithIdentifier:@"segueTempoDevicePressureInfo" sender:selectedDevice];
+	}
+	else if ([selectedDevice isKindOfClass:[TempoDiscDevice class]] && (selectedDevice.version.integerValue == 22 || selectedDevice.version.integerValue == 23)) {
 		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
 		if (!selectedDevice.inRange.boolValue) {
 			[self.parentViewController.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"viewControllerGraph"] animated:YES];
@@ -564,7 +567,7 @@ typedef enum : NSInteger {
 	if ([device isKindOfClass:[TempoDiscPressureDevice class]]) {
 		reuse = @"cellDeviceTempoDiscPressure";
 	}
-	if (device.isBlueMaestroDevice.boolValue) {
+	else if (device.isBlueMaestroDevice.boolValue) {
 		reuse = @"cellDeviceTempoDisc";
 	}
 	else {

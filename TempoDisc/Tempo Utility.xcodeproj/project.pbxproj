@@ -40,6 +40,7 @@
 		CB34C3631E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3601E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m */; };
 		CB34C3641E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3621E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m */; };
 		CB34C3681E546D310008F214 /* TDPressureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */; };
+		CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */; };
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
 		CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
@@ -122,6 +123,8 @@
 		CB34C3621E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscPressureDevice+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CB34C3661E546D310008F214 /* TDPressureDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPressureDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPressureDeviceTableViewCell.m; sourceTree = "<group>"; };
+		CB34C36A1E546F340008F214 /* TDDevicePressureInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicePressureInfoViewController.h; sourceTree = "<group>"; };
+		CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicePressureInfoViewController.m; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
 		CB4954F71D91BDAF00C4AAAF /* LogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogMessage.m; sourceTree = "<group>"; };
 		CB4954FA1D91C5A900C4AAAF /* IBActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBActionSheet.h; sourceTree = "<group>"; };
@@ -299,6 +302,7 @@
 				CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */,
 				CB6895601C83353F00EB1A65 /* DeviceDataTable */,
 				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
+				CB34C3691E546F1D0008F214 /* DevicePressureInfo */,
 				CB16BA521C82E74200C99C41 /* DeviceList */,
 				CBAB5C3E1D47CA0F00EEBECD /* DevicesContainer */,
 				CBAB5C4A1D47F81400EEBECD /* DeviceTableContainer */,
@@ -483,6 +487,15 @@
 				CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */,
 			);
 			path = PressureDevice;
+			sourceTree = "<group>";
+		};
+		CB34C3691E546F1D0008F214 /* DevicePressureInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB34C36A1E546F340008F214 /* TDDevicePressureInfoViewController.h */,
+				CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */,
+			);
+			path = DevicePressureInfo;
 			sourceTree = "<group>";
 		};
 		CB4954F51D91BD9B00C4AAAF /* LogMessage */ = {
@@ -787,6 +800,7 @@
 				CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */,
 				CB8E7E801DE0B8680084F3CC /* TDLivePlotData.m in Sources */,
 				CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */,
+				CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */,
 				CB86F25D1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.m in Sources */,
 				CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */,
 				CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */,
@@ -813,6 +827,7 @@
 				CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */,
 				CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */,
 				CB16BA7F1C83126600C99C41 /* TDDefaultDevice.m in Sources */,
+				CB34C3681E546D310008F214 /* TDPressureDeviceTableViewCell.m in Sources */,
 				CB86F2591E2F98E500B4BCC8 /* TDCommandViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

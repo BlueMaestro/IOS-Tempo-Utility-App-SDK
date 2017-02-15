@@ -10,6 +10,10 @@
 
 @implementation TDDeviceTableViewCell
 
+- (void)awakeFromNib {
+	[super awakeFromNib];
+}
+
 #pragma mark - Public methods
 
 - (void)setupBatteryStatus:(TempoBatteryStatus)status {
