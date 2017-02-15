@@ -29,4 +29,30 @@ int intValueFrom(char lsb,char msb)
 	self.lowestPressure = @0;
 }
 
+#pragma mark - Dew point calcualtion
+
+- (float)averageDayDewPoint {
+	return 0;
+}
+
+- (float)dewPoint {
+	return 0;
+}
+
+- (float)highestDewPoint {
+	return 0;
+}
+
+- (float)highestDayDewPoint {
+	return 0;
+}
+
+- (float)lowestDewPoint {
+	return 0;
+}
+
+- (float)lowestDayDewPoint {
+	return 0;
+}
+
 @end
