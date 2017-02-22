@@ -138,9 +138,15 @@
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
+	/**
+	 *	Fetch device from database for data insert
+	 **/
+	[self fetchDevice];
+	
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 //	[self setupView];//will be called from super
+	
 	[self fillData];
 }
 
@@ -179,6 +185,33 @@
 
 
 #pragma mark - Private methods
+
+- (void)fetchDevice {
+	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
+	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid == %@", [TDDefaultDevice sharedDevice].activeDevice.uuid];
+	NSError *error;
+	NSManagedObjectContext *context = [(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
+	NSArray *result = [context executeFetchRequest:request error:&error];
+	if (!error) {
+		TempoDiscDevice *discDevice;
+		if (result.count > 0) {
+			discDevice = [result firstObject];
+		}
+		else {
+			discDevice = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDiscDevice class]) inManagedObjectContext:context];
+		}
+		[discDevice fillWithDevice:[TDDefaultDevice sharedDevice].activeDevice];
+		[TDDefaultDevice sharedDevice].selectedDevice = discDevice;
+	}
+	else {
+		NSLog(@"Error fetching device from storage: %@", error);
+	}
+	NSError *saveError;
+	[context save:&saveError];
+	if (saveError) {
+		NSLog(@"Error saving context on device fetch: %@", saveError);
+	}
+}
 
 - (void)setupView {
 	[super setupView];

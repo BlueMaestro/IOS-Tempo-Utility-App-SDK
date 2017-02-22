@@ -187,6 +187,56 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
     
 }
 
-
+- (void)fillWithDevice:(TDTempoDisc *)device {
+	self.peripheral = device.peripheral;
+	
+	self.uuid = device.uuid;
+	self.name = device.name;
+	self.battery = [NSDecimalNumber decimalNumberWithDecimal:device.battery.decimalValue];
+	self.modelType = device.modelType;
+	self.version = device.version;
+	self.currentTemperature = device.currentTemperature;
+	self.currentMinTemperature = device.currentMinTemperature;
+	self.currentMaxTemperature = device.currentMaxTemperature;
+	self.currentHumidity = device.currentHumidity;
+	self.currentPressure = device.currentPressure;
+	self.currentPressureData = device.currentPressureData;
+	self.lastDownload = device.lastDownload;
+	self.isBlueMaestroDevice = device.isBlueMaestroDevice;
+	self.isFahrenheit = device.isFahrenheit;
+	self.inRange = device.inRange;
+	self.startTimestamp = device.startTimestamp;
+	self.lastDetected = device.lastDetected;
+	self.timerInterval = device.timerInterval;
+	self.intervalCounter = device.intervalCounter;
+	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:device.dewPoint.decimalValue];
+	self.mode = device.mode;
+	self.numBreach = device.numBreach;
+	self.highestTemperature = device.highestTemperature;
+	self.highestHumidity = device.highestHumidity;
+	self.highestDew = device.highestDew;
+	self.lowestTemperature = device.lowestTemperature;
+	self.lowestHumidity = device.lowestHumidity;
+	self.lowestDew = device.lowestDew;
+	self.highestDayTemperature = device.highestDayTemperature;
+	self.highestDayHumidity = device.highestDayHumidity;
+	self.highestDayDew = device.highestDayDew;
+	self.lowestDayTemperature = device.lowestDayTemperature;
+	self.lowestDayHumidity = device.lowestDayHumidity;
+	self.lowestDayDew = device.lowestDayDew;
+	self.averageDayTemperature = device.averageDayTemperature;
+	self.averageDayHumidity = device.averageDayHumidity;
+	self.averageDayDew = device.averageDayDew;
+	self.logCount = device.logCount;
+	self.referenceDateRawNumber = device.referenceDateRawNumber;
+	self.globalIdentifier = device.globalIdentifier;
+	self.averageDayPressure = device.averageDayPressure;
+	self.pressure = device.pressure;
+	self.highestDayPressure = device.highestDayPressure;
+	self.highestPressure = device.highestPressure;
+	self.lowestDayPressure = device.lowestDayPressure;
+	self.lowestPressure = device.lowestPressure;
+	
+}
 
 @end
