@@ -38,6 +38,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *logCount;
 @property (nullable, nonatomic, copy) NSNumber *referenceDateRawNumber;
 @property (nullable, nonatomic, retain) NSNumber *globalIdentifier;
+@property (nullable, nonatomic, copy) NSNumber *averageDayPressure;
+@property (nullable, nonatomic, copy) NSNumber *pressure;
+@property (nullable, nonatomic, copy) NSNumber *highestDayPressure;
+@property (nullable, nonatomic, copy) NSNumber *highestPressure;
+@property (nullable, nonatomic, copy) NSNumber *lowestDayPressure;
+@property (nullable, nonatomic, copy) NSNumber *lowestPressure;
 
 @end
 

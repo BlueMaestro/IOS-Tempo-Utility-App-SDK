@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSNumber *currentMaxTemperature;
 @property (nullable, nonatomic, retain) NSNumber *currentHumidity;
 @property (nullable, nonatomic, retain) NSNumber *currentPressure;
-@property (nullable, nonatomic, retain) NSNumber *currentPressureDelta;
+@property (nullable, nonatomic, retain) NSNumber *currentPressureData;
 @property (nullable, nonatomic, retain) NSDate *lastDownload;
 @property (nullable, nonatomic, retain) NSNumber *isBlueMaestroDevice;
 @property (nullable, nonatomic, retain) NSNumber *isFahrenheit;//BOOL

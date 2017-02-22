@@ -36,5 +36,11 @@
 @dynamic averageDayDew;
 @dynamic logCount;
 @dynamic globalIdentifier;
+@dynamic averageDayPressure;
+@dynamic pressure;
+@dynamic highestDayPressure;
+@dynamic highestPressure;
+@dynamic lowestDayPressure;
+@dynamic lowestPressure;
 
 @end

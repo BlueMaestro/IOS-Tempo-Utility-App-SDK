@@ -22,7 +22,7 @@
 #define kDeviceListUpdateInterval 2.0
 #define kDeviceListUpdateScanInterval 1.0
 
-#define kDeviceOutOfRangeTimer 60.0
+#define kDeviceOutOfRangeTimer 20.0
 
 typedef enum : NSInteger {
 	DeviceSortTypeNone = 0,
@@ -105,9 +105,10 @@ typedef enum : NSInteger {
 }
 
 - (void)startScan {
+    self.scanning = YES;
 	if ([self isMemberOfClass:[TDDeviceListTableViewController class]]) {
 		if (![LGCentralManager sharedInstance].scanning) {
-			[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/ options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
+			[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
 		}
 		if (_timerUpdateList) {
 			[_timerUpdateList invalidate];
@@ -132,6 +133,7 @@ typedef enum : NSInteger {
 		[_timerUpdateList invalidate];
 		_timerUpdateList = nil;
 	}
+    self.scanning = NO;
 }
 
 - (void)updateDeviceList {
@@ -206,18 +208,12 @@ typedef enum : NSInteger {
 	if (self.scanning) {
 		return;
 	}
-	//self.scanning = YES;
-	//[self stopScan];
-	
-	//show progress indicator
-	/*MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
-	hud.labelText = NSLocalizedString(@"Scanning...", nil);*/
-	
+    
 	__weak typeof(self) weakself = self;
 	//start scan
 	[[LGCentralManager sharedInstance]
 	 scanForPeripheralsByInterval:kDeviceScanInterval
-	 services:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/
+	 services:nil
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
 		 //handle scan result
@@ -237,8 +233,6 @@ typedef enum : NSInteger {
 		 [self updateDeviceList];
 		 
 		 //cleanup
-		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
-		 weakself.scanning = NO;
 		 [self startScan];
 	 }];
 }
@@ -254,11 +248,13 @@ typedef enum : NSInteger {
 	 **/
 	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	BOOL isBlueMaestroDevice = [TempoDevice isBlueMaestroDeviceWithAdvertisementData:peripheral.advertisingData];
+    BOOL isTempoDisc22 = [TempoDevice isTempoDisc22WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc23 = [TempoDevice isTempoDisc23WithAdvertisementDate:peripheral.advertisingData];
-	BOOL isTempoPressure = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
+	BOOL isTempoDisc27 = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
 	
+    if (isTempoDisc22) {NSLog(@"Found Tempo Disc 22");}
     if (isTempoDisc23) {NSLog(@"Found Tempo Disc 23");}
-	if (isTempoPressure) {NSLog(@"Found Tempo Disc 27");}
+	if (isTempoDisc27) {NSLog(@"Found Tempo Disc 27");}
     
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
@@ -283,22 +279,16 @@ typedef enum : NSInteger {
 	}
 	else if (!fetchError && hasManufacturerData) {
 		//detected new device
-		if ((isTempoDiscDevice) || (isTempoDisc23)) {
-			if (isTempoPressure) {
-				device = [TempoDiscPressureDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
-			}
-			else {
-				device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
-			}
-		}
-		else {
+        if (isTempoDisc22 || isTempoDisc23 || isTempoDisc27) {
+            device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
+        } else {
 			device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
 			device.name = peripheral.name;
 			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
 		}
 		device.isBlueMaestroDevice = @(isBlueMaestroDevice);
 	}
-	else if (hasManufacturerData || fetchError) {
+	else if (hasManufacturerData && fetchError) {
 		NSLog(@"Error fetching devices: %@", fetchError.localizedDescription);
 	}
 	

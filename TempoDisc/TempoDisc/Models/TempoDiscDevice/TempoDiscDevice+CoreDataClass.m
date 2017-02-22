@@ -54,7 +54,6 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	self.intervalCounter = @(intValue(data[7], data[6]));
 	self.currentTemperature = @(intValue(data[9], data[8]) / 10.f);
 	self.currentHumidity = @(intValue(data[11], data[10]) / 10.f);
-	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
 	self.mode = @(data[14]);
 	if (self.mode.integerValue > 100) {
 		self.isFahrenheit = @(1);
@@ -63,15 +62,10 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 		self.isFahrenheit = @(0);
 	}
 	self.numBreach = @(data[15]);
-	
-	//looks like there's no data for this in the broadcast
-	float timeAtLastBreach = intValue(data[17], data[16]);
-	float nameLength = data[18];
-	
-	
+
 	
 	if (self.version.integerValue == 22) {
-        
+        self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
         self.highestTemperature = @(intValue(data[custom.length-25], data[custom.length-26]) / 10.f);
         self.highestHumidity = @(intValue(data[custom.length-23], data[custom.length-24]) / 10.f);
         self.lowestTemperature = @(intValue(data[custom.length-21], data[custom.length-22]) / 10.f);
@@ -93,8 +87,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	}
     
     if (self.version.integerValue == 23) {
-		//verson 23 parse
-        
+        self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
         self.highestTemperature = @(intValue(data[custom.length-24], data[custom.length-25]) / 10.f);
         self.highestHumidity = @(intValue(data[custom.length-22], data[custom.length-23]) / 10.f);
         self.lowestTemperature = @(intValue(data[custom.length-20], data[custom.length-21]) / 10.f);
@@ -127,9 +120,9 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
         
         NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
         self.referenceDateRawNumber = fullValue;
-    
-        if (([fullValue intValue] != 0) || ([fullValue longValue] > 170000000000) || ([fullValue longValue] < 1900000000)) {
-        
+        long lowDate = 1700000000; //1 January 2017
+        long highDate = 1900000000; //1 January 2019
+        if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
 		NSInteger minutes = fullValue.integerValue % 100;
 		NSInteger hours = (fullValue.integerValue/100) % 100;
 		NSInteger days = (fullValue.integerValue/10000) % 100;
