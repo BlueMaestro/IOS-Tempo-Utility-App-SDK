@@ -14,7 +14,6 @@
 #import "TDPressureDeviceTableViewCell.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "TempoDiscDevice+CoreDataProperties.h"
-#import "TempoDiscPressureDevice+CoreDataClass.h"
 #import "AppDelegate.h"
 
 #define kDeviceScanInterval 1.0
@@ -506,7 +505,7 @@ typedef enum : NSInteger {
     
 }
 
-- (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscPressureDevice*)device {
+- (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscDevice*)device {
 	[self fillTempoDiscCell:cell model:device];
 	//fill rest of the data
 }
@@ -522,7 +521,7 @@ typedef enum : NSInteger {
 //	if (selectedDevice.isTempoDiscDevice.boolValue) {
 	//Selected device is tempo disc. Set global singleton reference and go to details
 		NSLog(@"Selected device: %@", selectedDevice.name);
-	if ([selectedDevice isKindOfClass:[TempoDiscPressureDevice class]]) {
+	if ([(TempoDiscDevice*)selectedDevice version].integerValue == 27) {
 		[self.parentViewController performSegueWithIdentifier:@"segueTempoDevicePressureInfo" sender:selectedDevice];
 	}
 	else if ([selectedDevice isKindOfClass:[TempoDiscDevice class]] && (selectedDevice.version.integerValue == 22 || selectedDevice.version.integerValue == 23)) {
@@ -554,7 +553,7 @@ typedef enum : NSInteger {
 	TempoDevice *device = _dataSource[indexPath.row];
 	
 	NSString *reuse = @"";
-	if ([device isKindOfClass:[TempoDiscPressureDevice class]]) {
+	if ([device version].integerValue == 27) {
 		reuse = @"cellDeviceTempoDiscPressure";
 	}
 	else if (device.isBlueMaestroDevice.boolValue) {
@@ -566,10 +565,10 @@ typedef enum : NSInteger {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
-	if ([cell isKindOfClass:[TDPressureDeviceTableViewCell class]]) {
-		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscPressureDevice*)device];
+	if ([device version].integerValue == 27) {
+		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscDevice*)device];
 	}
-	if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
+	else if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
 	}
 	else if ([cell isKindOfClass:[TDOtherDeviceTableViewCell class]]) {

@@ -37,8 +37,6 @@
 		CB2B639E1D8B308B00B705CB /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC4F1D8B270800AFDDA2 /* Montserrat-Bold.ttf */; };
 		CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */; };
 		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
-		CB34C3631E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3601E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m */; };
-		CB34C3641E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3621E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m */; };
 		CB34C3681E546D310008F214 /* TDPressureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */; };
 		CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */; };
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
@@ -117,10 +115,6 @@
 		CB2B63A11D8B31B300B705CB /* UIFont+Tempo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Tempo.h"; sourceTree = "<group>"; };
 		CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Tempo.m"; sourceTree = "<group>"; };
 		CB34C35D1E54679A0008F214 /* TempoDisc 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TempoDisc 3.xcdatamodel"; sourceTree = "<group>"; };
-		CB34C35F1E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TempoDiscPressureDevice+CoreDataClass.h"; sourceTree = "<group>"; };
-		CB34C3601E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscPressureDevice+CoreDataClass.m"; sourceTree = "<group>"; };
-		CB34C3611E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TempoDiscPressureDevice+CoreDataProperties.h"; sourceTree = "<group>"; };
-		CB34C3621E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TempoDiscPressureDevice+CoreDataProperties.m"; sourceTree = "<group>"; };
 		CB34C3661E546D310008F214 /* TDPressureDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPressureDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPressureDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CB34C36A1E546F340008F214 /* TDDevicePressureInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicePressureInfoViewController.h; sourceTree = "<group>"; };
@@ -357,7 +351,6 @@
 				CB4954F51D91BD9B00C4AAAF /* LogMessage */,
 				CB16BA6D1C83007B00C99C41 /* TempoDevice */,
 				CB14AD191D9316CA0090AAA2 /* TempoDiscDevice */,
-				CB34C35E1E5468000008F214 /* TempoDiscPressureDevice */,
 				CB16BA681C83007B00C99C41 /* ReadingType */,
 				CB16BA631C83007B00C99C41 /* Reading */,
 			);
@@ -467,17 +460,6 @@
 				CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */,
 			);
 			path = "UIFont+Tempo";
-			sourceTree = "<group>";
-		};
-		CB34C35E1E5468000008F214 /* TempoDiscPressureDevice */ = {
-			isa = PBXGroup;
-			children = (
-				CB34C35F1E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.h */,
-				CB34C3601E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m */,
-				CB34C3611E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.h */,
-				CB34C3621E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m */,
-			);
-			path = TempoDiscPressureDevice;
 			sourceTree = "<group>";
 		};
 		CB34C3651E546D070008F214 /* PressureDevice */ = {
@@ -794,7 +776,6 @@
 				CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */,
 				CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */,
 				CB1674151DB7E2E900BC938A /* CHCSVParser.m in Sources */,
-				CB34C3631E5468000008F214 /* TempoDiscPressureDevice+CoreDataClass.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */,
 				CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */,
@@ -817,7 +798,6 @@
 				CB16BA731C83007B00C99C41 /* Reading.m in Sources */,
 				CB16BA741C83007B00C99C41 /* ReadingType+CoreDataProperties.m in Sources */,
 				CB16BA761C83007B00C99C41 /* TempoDevice+CoreDataProperties.m in Sources */,
-				CB34C3641E5468000008F214 /* TempoDiscPressureDevice+CoreDataProperties.m in Sources */,
 				CB256CF31DABFD8400293D81 /* TDDiscDataTableViewCell.m in Sources */,
 				CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */,
 				CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */,
