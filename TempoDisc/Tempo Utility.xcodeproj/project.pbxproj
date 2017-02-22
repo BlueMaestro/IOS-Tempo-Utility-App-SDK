@@ -45,6 +45,7 @@
 		CB73F9351DA6B9D50012C4D0 /* TDHistoryContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB73F9341DA6B9D50012C4D0 /* TDHistoryContainerViewController.m */; };
 		CB86F2591E2F98E500B4BCC8 /* TDCommandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB86F2581E2F98E500B4BCC8 /* TDCommandViewController.m */; };
 		CB86F25D1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB86F25C1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.m */; };
+		CB89850B1E5E0C7F008F12CB /* TDTempoDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = CB89850A1E5E0C7F008F12CB /* TDTempoDisc.m */; };
 		CB8E7E7C1DE0B5E70084F3CC /* TDLivePlotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8E7E7B1DE0B5E70084F3CC /* TDLivePlotViewController.m */; };
 		CB8E7E801DE0B8680084F3CC /* TDLivePlotData.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8E7E7F1DE0B8680084F3CC /* TDLivePlotData.m */; };
 		CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9421E91C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m */; };
@@ -131,6 +132,8 @@
 		CB86F2581E2F98E500B4BCC8 /* TDCommandViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCommandViewController.m; sourceTree = "<group>"; };
 		CB86F25B1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDCommandCollectionViewCell.h; sourceTree = "<group>"; };
 		CB86F25C1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDCommandCollectionViewCell.m; sourceTree = "<group>"; };
+		CB8985091E5E0C7F008F12CB /* TDTempoDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTempoDisc.h; sourceTree = "<group>"; };
+		CB89850A1E5E0C7F008F12CB /* TDTempoDisc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTempoDisc.m; sourceTree = "<group>"; };
 		CB8E7E7A1DE0B5E70084F3CC /* TDLivePlotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDLivePlotViewController.h; sourceTree = "<group>"; };
 		CB8E7E7B1DE0B5E70084F3CC /* TDLivePlotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDLivePlotViewController.m; sourceTree = "<group>"; };
 		CB8E7E7E1DE0B8680084F3CC /* TDLivePlotData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDLivePlotData.h; sourceTree = "<group>"; };
@@ -347,6 +350,7 @@
 		CB16BA621C83003200C99C41 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CB8985081E5E0C62008F12CB /* TempoDisc */,
 				CB8E7E7D1DE0B8590084F3CC /* LivePlotData */,
 				CB4954F51D91BD9B00C4AAAF /* LogMessage */,
 				CB16BA6D1C83007B00C99C41 /* TempoDevice */,
@@ -532,6 +536,15 @@
 				CB86F25C1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.m */,
 			);
 			path = Command;
+			sourceTree = "<group>";
+		};
+		CB8985081E5E0C62008F12CB /* TempoDisc */ = {
+			isa = PBXGroup;
+			children = (
+				CB8985091E5E0C7F008F12CB /* TDTempoDisc.h */,
+				CB89850A1E5E0C7F008F12CB /* TDTempoDisc.m */,
+			);
+			path = TempoDisc;
 			sourceTree = "<group>";
 		};
 		CB8E7E791DE0B5C80084F3CC /* LivePlot */ = {
@@ -792,6 +805,7 @@
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
 				CB14AD231D93211D0090AAA2 /* DeviceInfoTableViewController.m in Sources */,
+				CB89850B1E5E0C7F008F12CB /* TDTempoDisc.m in Sources */,
 				CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */,
 				CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,

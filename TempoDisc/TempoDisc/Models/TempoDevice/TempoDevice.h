@@ -10,18 +10,18 @@
 #import <CoreData/CoreData.h>
 #import <LGPeripheral.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 typedef enum : NSInteger {
 	TempoDeviceTypeUnknown = 0,
 	TempoDeviceTypeLegacy,
 	TempoDeviceTypeT30,
 	TempoDeviceTypeTHP,
-    TempoDeviceType22,
-    TempoDeviceType23,
-    TempoDeviceType27
+	TempoDeviceType22,
+	TempoDeviceType23,
+	TempoDeviceType27
 	
 } TempoDeviceType ;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface TempoDevice : NSManagedObject
 

@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TDTempoDisc.h"
 #import "TempoDevice.h"
 
 @interface TDDefaultDevice : NSObject
 
+@property (nonatomic, strong) TDTempoDisc *activeDevice;
 @property (nonatomic, strong) TempoDevice *selectedDevice;
 
 + (TDDefaultDevice*)sharedDevice;
