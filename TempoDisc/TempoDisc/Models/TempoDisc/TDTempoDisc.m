@@ -151,6 +151,7 @@
 		}
 		
 		self.globalIdentifier = @(data[custom.length-5]);
+        NSLog(@"Gloabal identifier is %@", self.globalIdentifier);
 		
 		const unsigned char dateBytes[] = {data[custom.length-4], data[custom.length-3], data[custom.length-2], data[custom.length-1]};
 		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
