@@ -192,35 +192,28 @@ int getInt(char lsb,char msb)
 		//device is legacy
 		self.modelType = @"TEMPO_LEGACY";
 	}
-    
+    self.modelType = deviceType;
 	if (!isTempoLegacy) {
-		self.modelType = deviceType;
+		
         char * data = (char*)[custom bytes];
-
-        if (isTempoDisc22 || isTempoDisc23 || isTempoDisc27) {
-            
-        return; //Do nothing
+		float min = getInt(data[3],data[4]) / 10.0f;
+		float avg = getInt(data[5],data[6]) / 10.0f;
+		float max = getInt(data[7],data[8]) / 10.0f;
+		
+		self.currentMinTemperature = [NSNumber numberWithFloat:min];
+		self.currentMaxTemperature = [NSNumber numberWithFloat:max];
+		self.currentTemperature = [NSNumber numberWithFloat:avg];
+		
+		if (!isTempoT30) {
+			int humidity = data[9];
+			self.currentHumidity = [NSNumber numberWithInt:humidity];
 			
-		} else {
-			float min = getInt(data[3],data[4]) / 10.0f;
-			float avg = getInt(data[5],data[6]) / 10.0f;
-			float max = getInt(data[7],data[8]) / 10.0f;
-			
-			self.currentMinTemperature = [NSNumber numberWithFloat:min];
-			self.currentMaxTemperature = [NSNumber numberWithFloat:max];
-			self.currentTemperature = [NSNumber numberWithFloat:avg];
-			
-			if (!isTempoT30) {
-				int humidity = data[9];
-				self.currentHumidity = [NSNumber numberWithInt:humidity];
+			if (isTempoTHP) {
+				int pressure = getInt(data[10],data[11]);
+				int pressureData = getInt(data[12],data[13]);
 				
-				if (isTempoTHP) {
-					int pressure = getInt(data[10],data[11]);
-					int pressureData = getInt(data[12],data[13]);
-					
-					self.currentPressure = [NSNumber numberWithInt:pressure];
-					self.currentPressureData = [NSNumber numberWithInt:pressureData];
-				}
+				self.currentPressure = [NSNumber numberWithInt:pressure];
+				self.currentPressureData = [NSNumber numberWithInt:pressureData];
 			}
 		}
 	}
