@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *intervalCounter;
 @property (nullable, nonatomic, copy) NSDecimalNumber *dewPoint;
 @property (nullable, nonatomic, copy) NSNumber *mode;
+@property (nullable, nonatomic, copy) NSNumber *version;
 @property (nullable, nonatomic, copy) NSNumber *numBreach;
 @property (nullable, nonatomic, copy) NSNumber *highestTemperature;
 @property (nullable, nonatomic, copy) NSNumber *highestHumidity;

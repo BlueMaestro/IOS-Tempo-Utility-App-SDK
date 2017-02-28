@@ -18,6 +18,7 @@
 @dynamic intervalCounter;
 @dynamic dewPoint;
 @dynamic mode;
+@dynamic version;
 @dynamic numBreach;
 @dynamic highestTemperature;
 @dynamic highestHumidity;

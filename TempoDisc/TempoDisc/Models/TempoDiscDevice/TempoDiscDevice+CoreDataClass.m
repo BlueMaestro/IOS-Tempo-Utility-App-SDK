@@ -187,7 +187,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
     
 }
 
-//This simply takes the devices current readings and populates a persistent store for that data.
+//This simply takes the devices current readings and populates structure ready for a persistent store
 - (void)fillDataForPersistentStore :(TDTempoDisc *)device {
 	self.peripheral = device.peripheral;
 	
