@@ -8,11 +8,10 @@
 
 #import "TDTempoDisc.h"
 #define MANUF_ID_BLUE_MAESTRO 0x0133
-#define BM_MODEL_T30 0
-#define BM_MODEL_THP 1
 #define BM_MODEL_DISC_22 0x16
 #define BM_MODEL_DISC_23 0x17
 #define BM_MODEL_DISC_27 0x1B
+#define BM_MODEL_DISC_99 0x63
 
 @implementation TDTempoDisc
 
@@ -36,112 +35,151 @@
 }
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid {
-	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
-	unsigned char * data = (unsigned char*)[custom bytes];
-	NSUInteger dataLength = custom.length;
+	NSData *manufacturerData = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
+	unsigned char * data = (unsigned char*)[manufacturerData bytes];
+	NSUInteger manufacturerDataLength = manufacturerData.length;
+    
+    //This for loop is to print out each byte to NSLog for debug purposes
+    /*
 	for (NSUInteger i = 0; i < dataLength; i++) {
 		Byte byte = 0;
-		[custom getBytes:&byte range:NSMakeRange(i, 1)];
-		NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
+		[manufacturerData getBytes:&byte range:NSMakeRange(i, 1)];
+		//NSLog(@"Byte %lu is %02x", (unsigned long)i, byte);
 	}
-	Byte byte;
-	[custom getBytes:&byte range:NSMakeRange(2, 1)];
-	/**
-	 *	Status bits
-	 *	Not sure about data read
-	 **/
-	NSInteger version = byte;
+     */
+
 	
-	//BlueMaestro device
-	if (custom != nil) {
-		unsigned char * d = (unsigned char*)[custom bytes];
+	//Check whether BlueMaestro device and if so what version it is
+	if (manufacturerData != nil) {
+		unsigned char * d = (unsigned char*)[manufacturerData bytes];
 		unsigned int manuf = d[1] << 8 | d[0];
 		
 		//Is this one of ours?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
 			self.isBlueMaestroDevice = @(YES);
-			if (d[2] == BM_MODEL_T30) {
-				self.modelType = @"TEMPO_T30";
-			}
-			else if (d[2] == BM_MODEL_THP) {
-				self.modelType = @"TEMPO_THP";
-			}
-			else if (d[2] == BM_MODEL_DISC_22) {
+            
+            //Is this one of our supported models for this app?
+			if (d[2] == BM_MODEL_DISC_22) {
 				self.modelType = @"TEMPO_DISC_22";
+                self.version = [NSNumber numberWithInteger:22];
 			}
 			else if (d[2] == BM_MODEL_DISC_23) {
 				self.modelType = @"TEMPO_DISC_23";
+                self.version = [NSNumber numberWithInteger:23];
 			}
 			else if (d[2] == BM_MODEL_DISC_27) {
 				self.modelType = @"TEMPO_DISC_27";
+                self.version = [NSNumber numberWithInteger:27];
 			}
-		}
-		else {
+            else if (d[2] == BM_MODEL_DISC_99) {
+                self.modelType = @"PACIF-I V2";
+                self.version = [NSNumber numberWithInteger:99];
+            }
+		} else {
+            
+            //Not a supported model
 			return;
 		}
 	} else {
+        //Not one of ours
 		self.isBlueMaestroDevice = @(NO);
-		self.modelType = @"TEMPO_LEGACY";
 		return;
 	}
-	
-	self.uuid = uuid;
-	self.name = advertisedData[@"kCBAdvDataLocalName"];
-	self.lastDetected = [NSDate date];
-	self.version = [NSString stringWithFormat:@"%ld", (long)version];
-	self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-	self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-	self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
-	self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
-	self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
-	self.mode = @(data[14]);
-	if (self.mode.integerValue > 100) {
-		self.isFahrenheit = @(1);
-	}
-	else {
-		self.isFahrenheit = @(0);
-	}
-	self.numBreach = @(data[15]);
-	
-	
+    
+    /**
+    *	Version 22
+    *
+    **/	
 	if (self.version.integerValue == 22) {
-		self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
-		self.highestTemperature = @([self intValueLsb:data[custom.length-25] msb:data[custom.length-26]] / 10.f);
-		self.highestHumidity = @([self intValueLsb:data[custom.length-23] msb:data[custom.length-24]] / 10.f);
-		self.lowestTemperature = @([self intValueLsb:data[custom.length-21] msb:data[custom.length-22]] / 10.f);
-		self.lowestHumidity = @([self intValueLsb:data[custom.length-19] msb:data[custom.length-20]] / 10.f);
-		self.highestDayTemperature = @([self intValueLsb:data[custom.length-17] msb:data[custom.length-18]] / 10.f);
-		self.highestDayHumidity = @([self intValueLsb:data[custom.length-15] msb:data[custom.length-16]] / 10.f);
-		self.highestDayDew = @([self intValueLsb:data[custom.length-13] msb:data[custom.length-14]] / 10.f);
-		self.lowestDayTemperature = @([self intValueLsb:data[custom.length-11] msb:data[custom.length-12]] / 10.f);
-		self.lowestDayHumidity = @([self intValueLsb:data[custom.length-9] msb:data[custom.length-10]] / 10.f);
-		self.lowestDayDew = @([self intValueLsb:data[custom.length-7] msb:data[custom.length-8]] / 10.f);
-		self.averageDayTemperature = @([self intValueLsb:data[custom.length-5] msb:data[custom.length-6]] / 10.f);
-		self.averageDayHumidity = @([self intValueLsb:data[custom.length-3] msb:data[custom.length-4]] / 10.f);
-		self.averageDayDew = @([self intValueLsb:data[custom.length-1] msb:data[custom.length-2]] / 10.f);
+        
+        //Variables not parsed
+        self.uuid = uuid;
+        self.name = advertisedData[@"kCBAdvDataLocalName"];
+        self.lastDetected = [NSDate date];
+        
+        //Advertisement packet
+        self.version = @(data[2]);
+        self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+        self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+        self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+        self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+        self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+        self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+        self.mode = @(data[14]);
+        if (self.mode.integerValue > 100) {
+            self.isFahrenheit = @(1);
+        }
+        else {
+            self.isFahrenheit = @(0);
+        }
+        self.numBreach = @(data[15]);
+		
+        //Scan response packet
+		self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
+		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-23] msb:data[manufacturerDataLength-24]] / 10.f);
+		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-21] msb:data[manufacturerDataLength-22]] / 10.f);
+		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-19] msb:data[manufacturerDataLength-20]] / 10.f);
+		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-17] msb:data[manufacturerDataLength-18]] / 10.f);
+		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-15] msb:data[manufacturerDataLength-16]] / 10.f);
+		self.highestDayDew = @([self intValueLsb:data[manufacturerDataLength-13] msb:data[manufacturerDataLength-14]] / 10.f);
+		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-11] msb:data[manufacturerDataLength-12]] / 10.f);
+		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-9] msb:data[manufacturerDataLength-10]] / 10.f);
+		self.lowestDayDew = @([self intValueLsb:data[manufacturerDataLength-7] msb:data[manufacturerDataLength-8]] / 10.f);
+		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-5] msb:data[manufacturerDataLength-6]] / 10.f);
+		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-3] msb:data[manufacturerDataLength-4]] / 10.f);
+		self.averageDayDew = @([self intValueLsb:data[manufacturerDataLength-1] msb:data[manufacturerDataLength-2]] / 10.f);
 		if (self.mode.integerValue > 100) {
 			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
 			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
 			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
 		}
 	}
+    
+    /**
+     *	Version 23
+     *
+     **/
 	
 	if (self.version.integerValue == 23) {
-		self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
-		self.highestTemperature = @([self intValueLsb:data[custom.length-24] msb:data[custom.length-25]] / 10.f);
-		self.highestHumidity = @([self intValueLsb:data[custom.length-22] msb:data[custom.length-23]] / 10.f);
-		self.lowestTemperature = @([self intValueLsb:data[custom.length-20] msb:data[custom.length-21]] / 10.f);
-		self.lowestHumidity = @([self intValueLsb:data[custom.length-18] msb:data[custom.length-19]] / 10.f);
-		self.highestDayTemperature = @([self intValueLsb:data[custom.length-16] msb:data[custom.length-17]] / 10.f);
-		self.highestDayHumidity = @([self intValueLsb:data[custom.length-14] msb:data[custom.length-15]] / 10.f);
+        
+        //Variables not parsed
+        self.uuid = uuid;
+        self.name = advertisedData[@"kCBAdvDataLocalName"];
+        self.lastDetected = [NSDate date];
+        self.version = @(data[2]);
+        
+        //Advertisement packet
+        self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+        self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+        self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+        self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+        self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+        self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+        self.mode = @(data[14]);
+        if (self.mode.integerValue > 100) {
+            self.isFahrenheit = @(1);
+        }
+        else {
+            self.isFahrenheit = @(0);
+        }
+        self.numBreach = @(data[15]);
+		
+    
+        //Scan response packet
+		self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-24] msb:data[manufacturerDataLength-25]] / 10.f);
+		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-22] msb:data[manufacturerDataLength-23]] / 10.f);
+		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-20] msb:data[manufacturerDataLength-21]] / 10.f);
+		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-18] msb:data[manufacturerDataLength-19]] / 10.f);
+		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-16] msb:data[manufacturerDataLength-17]] / 10.f);
+		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-14] msb:data[manufacturerDataLength-15]] / 10.f);
 		float highDewPointCalculation = (float)([self.highestDayTemperature floatValue] - ((100 - [self.highestDayHumidity floatValue]) /5));
 		self.highestDayDew = @(highDewPointCalculation);
-		self.lowestDayTemperature = @([self intValueLsb:data[custom.length-12] msb:data[custom.length-13]] / 10.f);
-		self.lowestDayHumidity = @([self intValueLsb:data[custom.length-10] msb:data[custom.length-11]] / 10.f);
+		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-12] msb:data[manufacturerDataLength-13]] / 10.f);
+		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-10] msb:data[manufacturerDataLength-11]] / 10.f);
 		float lowDewPointCalculation = (float)([self.lowestDayTemperature floatValue] - ((100 - [self.lowestDayHumidity floatValue]) /5));
 		self.lowestDayDew = @(lowDewPointCalculation);
-		self.averageDayTemperature = @([self intValueLsb:data[custom.length-8] msb:data[custom.length-9]] / 10.f);
-		self.averageDayHumidity = @([self intValueLsb:data[custom.length-6] msb:data[custom.length-7]] / 10.f);
+		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-8] msb:data[manufacturerDataLength-9]] / 10.f);
+		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-6] msb:data[manufacturerDataLength-7]] / 10.f);
 		float avgDewPointCalculation = (float)([self.averageDayTemperature floatValue] - ((100 - [self.averageDayHumidity floatValue]) /5));
 		self.averageDayDew = @(avgDewPointCalculation);
 		if (self.mode.integerValue > 100) {
@@ -150,10 +188,10 @@
 			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
 		}
 		
-		self.globalIdentifier = @(data[custom.length-5]);
+		self.globalIdentifier = @(data[manufacturerDataLength-5]);
         NSLog(@"Gloabal identifier is %@", self.globalIdentifier);
 		
-		const unsigned char dateBytes[] = {data[custom.length-4], data[custom.length-3], data[custom.length-2], data[custom.length-1]};
+		const unsigned char dateBytes[] = {data[manufacturerDataLength-4], data[manufacturerDataLength-3], data[manufacturerDataLength-2], data[manufacturerDataLength-1]};
 		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
 		//date digits, should be reverse from what is written, not sure about indexes
 		unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
@@ -186,11 +224,24 @@
 			NSLog(@"%@", [dateFormatter stringFromDate:date]);
 			
 		}
-		
 		NSLog(@"Parsed version 23 data");
 	}
+    
+    /**
+     *	Version 99 PACIF-I V2
+     *
+     **/
 	
-	
+    if (self.version.integerValue == 99) {
+        self.uuid = uuid;
+        self.name = advertisedData[@"kCBAdvDataLocalName"];
+        self.lastDetected = [NSDate date];
+        self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+        self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+        self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+        self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+        
+    }
 	
 	/*NSLog(@"---------------------------------------------------------------");
 	 NSLog(@"PARSING TEMPO DISC DEVICE DATA:");
@@ -223,27 +274,11 @@
 }
 
 - (TempoDeviceType)deviceType {
-	if ([self.modelType isEqualToString:@"TEMPO_LEGACY"]) {
-		return TempoDeviceTypeLegacy;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_T30"]) {
-		return TempoDeviceTypeT30;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_THP"]) {
-		return TempoDeviceTypeT30;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_DISC_22"]) {
-		return TempoDeviceType22;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_DISC_23"]) {
-		return TempoDeviceType23;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_DISC_27"]) {
-		return TempoDeviceType27;
-	}
-	else {
-		return TempoDeviceTypeUnknown;
-	}
+	if  (self.version.integerValue == 22) return TempoDeviceType22;
+    if  (self.version.integerValue == 23) return TempoDeviceType23;
+    if  (self.version.integerValue == 27) return TempoDeviceType27;
+    if  (self.version.integerValue == 99) return TempoDeviceType99;
+    return TempoDeviceTypeUnknown;
 }
 
 @end

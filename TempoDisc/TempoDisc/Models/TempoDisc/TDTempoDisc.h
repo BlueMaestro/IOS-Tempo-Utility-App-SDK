@@ -17,7 +17,7 @@
 @property (nullable, nonatomic, strong) NSString *name;
 @property (nullable, nonatomic, strong) NSNumber *battery;
 @property (nullable, nonatomic, strong) NSString *modelType;
-@property (nullable, nonatomic, strong) NSString *version;
+@property (nullable, nonatomic, strong) NSNumber *version;
 @property (nullable, nonatomic, strong) NSNumber *currentTemperature;
 @property (nullable, nonatomic, strong) NSNumber *currentMinTemperature;
 @property (nullable, nonatomic, strong) NSNumber *currentMaxTemperature;

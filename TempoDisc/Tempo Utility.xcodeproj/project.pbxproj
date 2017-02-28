@@ -184,7 +184,7 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		CB14AD191D9316CA0090AAA2 /* TempoDiscDevice */ = {
+		CB14AD191D9316CA0090AAA2 /* TempoDiscPersistentStorage */ = {
 			isa = PBXGroup;
 			children = (
 				CB14AD1A1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.h */,
@@ -192,6 +192,7 @@
 				CB14AD1C1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.h */,
 				CB14AD1D1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m */,
 			);
+			name = TempoDiscPersistentStorage;
 			path = TempoDiscDevice;
 			sourceTree = "<group>";
 		};
@@ -350,11 +351,11 @@
 		CB16BA621C83003200C99C41 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CB8985081E5E0C62008F12CB /* TempoDisc */,
+				CB8985081E5E0C62008F12CB /* TempoDiscScanning */,
 				CB8E7E7D1DE0B8590084F3CC /* LivePlotData */,
 				CB4954F51D91BD9B00C4AAAF /* LogMessage */,
 				CB16BA6D1C83007B00C99C41 /* TempoDevice */,
-				CB14AD191D9316CA0090AAA2 /* TempoDiscDevice */,
+				CB14AD191D9316CA0090AAA2 /* TempoDiscPersistentStorage */,
 				CB16BA681C83007B00C99C41 /* ReadingType */,
 				CB16BA631C83007B00C99C41 /* Reading */,
 			);
@@ -538,12 +539,13 @@
 			path = Command;
 			sourceTree = "<group>";
 		};
-		CB8985081E5E0C62008F12CB /* TempoDisc */ = {
+		CB8985081E5E0C62008F12CB /* TempoDiscScanning */ = {
 			isa = PBXGroup;
 			children = (
 				CB8985091E5E0C7F008F12CB /* TDTempoDisc.h */,
 				CB89850A1E5E0C7F008F12CB /* TDTempoDisc.m */,
 			);
+			name = TempoDiscScanning;
 			path = TempoDisc;
 			sourceTree = "<group>";
 		};

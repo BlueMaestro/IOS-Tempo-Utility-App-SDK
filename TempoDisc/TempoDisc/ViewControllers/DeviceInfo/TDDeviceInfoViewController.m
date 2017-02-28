@@ -52,7 +52,7 @@
 @interface TDDeviceInfoViewController () {
     
     NSInteger versionNumber;
-    NSString *versionID;
+    NSNumber *versionID;
     
 }
 
@@ -189,6 +189,7 @@
 - (void)fetchDevice {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
 	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid == %@", [TDDefaultDevice sharedDevice].activeDevice.uuid];
+    NSLog(@"activeDevice is %@", [TDDefaultDevice sharedDevice].activeDevice.name);
 	NSError *error;
 	NSManagedObjectContext *context = [(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 	NSArray *result = [context executeFetchRequest:request error:&error];
@@ -200,7 +201,8 @@
 		else {
 			discDevice = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDiscDevice class]) inManagedObjectContext:context];
 		}
-		[discDevice fillWithDevice:[TDDefaultDevice sharedDevice].activeDevice];
+        
+		[discDevice fillDataForPersistentStore:[TDDefaultDevice sharedDevice].activeDevice];
 		[TDDefaultDevice sharedDevice].selectedDevice = discDevice;
 	}
 	else {

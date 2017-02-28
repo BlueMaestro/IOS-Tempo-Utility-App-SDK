@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TempoDiscDevice : TempoDevice
 
-- (void)fillWithDevice:(TDTempoDisc*)device;
+- (void)fillDataForPersistentStore:(TDTempoDisc*)device;
 
 @end
 

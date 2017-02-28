@@ -15,6 +15,7 @@
 #define BM_MODEL_DISC_22 0x16
 #define BM_MODEL_DISC_23 0x17
 #define BM_MODEL_DISC_27 0x1B
+#define BM_MODEL_DISC_99 0x63
 
 int getInt(char lsb,char msb)
 {
@@ -36,27 +37,6 @@ int getInt(char lsb,char msb)
 	TempoDevice *device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
     [device fillWithData:data name:name uuid:uuid];
 	return device;
-}
-
-+ (BOOL)isTempoDiscDeviceWithAdvertisementData:(NSDictionary*)data {
-	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
-	//BlueMaestro device
-	if (custom != nil)
-	{
-		unsigned char * d = (unsigned char*)[custom bytes];
-		unsigned int manuf = d[1] << 8 | d[0];
-		
-		//Is this one of ours?
-		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			/*if (d[2] == BM_MODEL_DISC_22 ||
-				d[2] == BM_MODEL_THP ||
-				d[2] == BM_MODEL_T30) {
-				return YES;
-			}*/
-            return YES;
-		}
-	}
-	return NO;
 }
 
 
@@ -114,7 +94,6 @@ int getInt(char lsb,char msb)
     return NO;
 }
 
-
 + (BOOL)isTempoDisc27WithAdvertisementDate:(NSDictionary*)data {
 	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
 	//BlueMaestro device
@@ -133,6 +112,23 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
++ (BOOL)isTempoDisc99WithAdvertisementDate:(NSDictionary*)data {
+    NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+    //BlueMaestro device
+    if (custom != nil)
+    {
+        unsigned char * d = (unsigned char*)[custom bytes];
+        unsigned int manuf = d[1] << 8 | d[0];
+        
+        //Is this one of ours and is it version 99?
+        if (manuf == MANUF_ID_BLUE_MAESTRO) {
+            if (d[2] == BM_MODEL_DISC_27) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
 
 + (BOOL)hasManufacturerData:(NSDictionary*)data {
 	if (data[@"kCBAdvDataManufacturerData"]) {
@@ -143,7 +139,6 @@ int getInt(char lsb,char msb)
 	}
 }
 
-
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid {
 	
 	self.uuid = uuid;
@@ -152,12 +147,10 @@ int getInt(char lsb,char msb)
 	
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	
-	bool isTempoLegacy =  (custom == nil && [name isEqualToString:@"Tempo "]);
-	bool isTempoT30 = false;
-	bool isTempoTHP = false;
 	bool isTempoDisc22 = false;
     bool isTempoDisc23 = false;
     bool isTempoDisc27 = false;
+    bool isTempoDisc99 = false;
 	NSString *deviceType = nil;
 	
 	//BlueMaestro device
@@ -167,15 +160,8 @@ int getInt(char lsb,char msb)
 		
 		//Is this one of ours?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_T30) {
-				deviceType = @"TEMPO_T30";
-				isTempoT30 = true;
-			}
-            else if (d[2] == BM_MODEL_THP) {
-				deviceType = @"TEMPO_THP";
-				isTempoTHP = true;
-			}
-			else if (d[2] == BM_MODEL_DISC_22) {
+			
+            if (d[2] == BM_MODEL_DISC_22) {
 				deviceType = @"TEMPO_DISC_22";
 				isTempoDisc22 = true;
 			}
@@ -187,60 +173,21 @@ int getInt(char lsb,char msb)
                 deviceType = @"TEMPO_DISC_27";
                 isTempoDisc27 = true;
             }
+            else if (d[2] == BM_MODEL_DISC_27) {
+                deviceType = @"PACIF-I V2";
+                isTempoDisc99 = true;
+            }
 		}
-	} else {
-		//device is legacy
-		self.modelType = @"TEMPO_LEGACY";
 	}
     self.modelType = deviceType;
-	if (!isTempoLegacy) {
-		
-        char * data = (char*)[custom bytes];
-		float min = getInt(data[3],data[4]) / 10.0f;
-		float avg = getInt(data[5],data[6]) / 10.0f;
-		float max = getInt(data[7],data[8]) / 10.0f;
-		
-		self.currentMinTemperature = [NSNumber numberWithFloat:min];
-		self.currentMaxTemperature = [NSNumber numberWithFloat:max];
-		self.currentTemperature = [NSNumber numberWithFloat:avg];
-		
-		if (!isTempoT30) {
-			int humidity = data[9];
-			self.currentHumidity = [NSNumber numberWithInt:humidity];
-			
-			if (isTempoTHP) {
-				int pressure = getInt(data[10],data[11]);
-				int pressureData = getInt(data[12],data[13]);
-				
-				self.currentPressure = [NSNumber numberWithInt:pressure];
-				self.currentPressureData = [NSNumber numberWithInt:pressureData];
-			}
-		}
-	}
 }
 
 - (TempoDeviceType)deviceType {
-	if ([self.modelType isEqualToString:@"TEMPO_LEGACY"]) {
-		return TempoDeviceTypeLegacy;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_T30"]) {
-		return TempoDeviceTypeT30;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_THP"]) {
-		return TempoDeviceTypeT30;
-	}
-    else if ([self.modelType isEqualToString:@"TEMPO_DISC_22"]) {
-        return TempoDeviceType22;
-    }
-    else if ([self.modelType isEqualToString:@"TEMPO_DISC_23"]) {
-        return TempoDeviceType23;
-    }
-    else if ([self.modelType isEqualToString:@"TEMPO_DISC_27"]) {
-        return TempoDeviceType27;
-    }
-	else {
-		return TempoDeviceTypeUnknown;
-	}
+    if  (self.version.integerValue == 22) return TempoDeviceType22;
+    if  (self.version.integerValue == 23) return TempoDeviceType23;
+    if  (self.version.integerValue == 27) return TempoDeviceType27;
+    if  (self.version.integerValue == 99) return TempoDeviceType99;
+    return TempoDeviceTypeUnknown;
 }
 
 - (void)deleteOldData:(NSString *)type context:(NSManagedObjectContext *)context {
@@ -325,13 +272,6 @@ int getInt(char lsb,char msb)
 		NSLog(@"Error saving data import: %@", saveError);
 	}
 }
-
-//Not used
-- (void)addData:(NSArray *)data forReadingType:(NSString *)type context:(NSManagedObjectContext *)context {
-    NSLog(@"In spare method for addData for TempoDevice");
-	//[self addData:data forReadingType:type startTimestamp:timeStamp interval:interval context:context];
-}
-
 
 - (NSArray *)readingsForType:(NSString *)typeOfReading {
 	for (ReadingType *readingType in self.readingTypes) {

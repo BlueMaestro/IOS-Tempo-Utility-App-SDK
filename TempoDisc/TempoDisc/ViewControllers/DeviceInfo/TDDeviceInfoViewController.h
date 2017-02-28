@@ -11,6 +11,8 @@
 
 @interface TDDeviceInfoViewController : TDBaseDeviceViewController
 
+@property (nonatomic, strong) TDTempoDisc *passedInDevice;
+
 //Buttons at bottom
 @property (strong, nonatomic) IBOutlet UIButton *graphButton;
 @property (strong, nonatomic) IBOutlet UIButton *buttonDownload;

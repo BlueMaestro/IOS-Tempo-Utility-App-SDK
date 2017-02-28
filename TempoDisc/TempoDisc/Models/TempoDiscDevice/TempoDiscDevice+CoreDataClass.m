@@ -48,7 +48,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	 *	Not sure about data read
 	 **/
     NSInteger version = byte;
-    self.version = [NSString stringWithFormat:@"%ld", (long)version];
+    self.version = [NSNumber numberWithInt:version];
 	self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
 	self.timerInterval = @(intValue(data[5], data[4]));
 	self.intervalCounter = @(intValue(data[7], data[6]));
@@ -187,14 +187,16 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
     
 }
 
-- (void)fillWithDevice:(TDTempoDisc *)device {
+//This simply takes the devices current readings and populates a persistent store for that data.
+- (void)fillDataForPersistentStore :(TDTempoDisc *)device {
 	self.peripheral = device.peripheral;
 	
 	self.uuid = device.uuid;
 	self.name = device.name;
 	self.battery = [NSDecimalNumber decimalNumberWithDecimal:device.battery.decimalValue];
 	self.modelType = device.modelType;
-	self.version = device.version;
+    NSLog(@"Version is %@", device.version);
+    self.version = device.version;
 	self.currentTemperature = device.currentTemperature;
 	self.currentMinTemperature = device.currentMinTemperature;
 	self.currentMaxTemperature = device.currentMaxTemperature;
