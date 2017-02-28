@@ -240,6 +240,10 @@ typedef enum : NSInteger {
 - (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
 	__weak typeof(self) weakself = self;
 	
+    [weakself scanForDevices];
+    
+    //Options for filtering, sorting, scanning.  Just activating scanning for the moment.
+    /*
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please select from the following scan options" message:nil preferredStyle:UIAlertControllerStyleAlert];
 	
 	[alert addAction:[UIAlertAction actionWithTitle:@"Sort Device" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -291,6 +295,7 @@ typedef enum : NSInteger {
 	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
 	
 	[self presentViewController:alert animated:YES completion:nil];
+     */
 }
 
 #pragma mark - Cell fill
