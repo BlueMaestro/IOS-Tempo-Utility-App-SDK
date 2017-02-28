@@ -326,7 +326,7 @@ typedef enum : NSInteger {
             [cell.alertImage setHidden:YES];
             [cell.labelAlertCount setHidden:YES];
         }
-        cell.classID.text = [NSString stringWithFormat:@"%d", (int)disc.globalIdentifier];
+        cell.classID.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
     }
 
 	cell.labelDeviceName.text = device.name;
