@@ -194,9 +194,9 @@ int getInt(char lsb,char msb)
     
     NSString *readingType;
     readingType = type;
-    for (ReadingType *type in [TDDefaultDevice sharedDevice].selectedDevice.readingTypes) {
+    for (ReadingType *type in [TDSharedDevice sharedDevice].selectedDevice.readingTypes) {
         if ([type.type isEqualToString:readingType]) {
-            [[TDDefaultDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
+            [[TDSharedDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
             break;
         }
     }

@@ -66,18 +66,18 @@
     /*  Removed since causing a crash, reinstated else
 	if (_readCharacteristic) {
 		[_readCharacteristic setNotifyValue:NO completion:^(NSError *error) {
-			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+			[[TDSharedDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 		}];
 	}
 	else {
-		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+		[[TDSharedDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	}*/
 	
 	if (_streamingData) {
 		[self connectAndWrite:@"*qq"];
 	}
 	else {
-		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+		[[TDSharedDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	}
 }
 
@@ -164,12 +164,12 @@
 - (void)setupDevice {
 	[self addLogMessage:@"Connecting to device..." type:LogMessageTypeOutbound];
 	__weak typeof(self) weakself = self;
-	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+	[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
 		weakself.didDisconnect = NO;
 		if (!error) {
 			[weakself addLogMessage:@"Connected to device" type:LogMessageTypeInbound];
 			[weakself addLogMessage:@"Discovering device services..." type:LogMessageTypeOutbound];
-			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+			[[TDSharedDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
 				if (!error2) {
 					[weakself addLogMessage:@"Discovered services" type:LogMessageTypeInbound];
 					LGService *uartService;
@@ -295,8 +295,8 @@
 		if (_didDisconnect) {
 			[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReconnectTimeout completion:^(NSArray *peripherals) {
 				for (LGPeripheral *peripheral in peripherals) {
-					if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
-						[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
+					if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+						[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
 						[self setupDevice];
 						break;
 					}

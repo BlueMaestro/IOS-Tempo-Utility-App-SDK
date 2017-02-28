@@ -177,19 +177,19 @@ typedef enum : NSInteger {
 			downloadType = DataDownloadTypeHumidity;
             //Download all data, not just missing data
             stringToWrite = [NSString stringWithFormat:@"%@0", kDataStringHumidity];
-			//stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringHumidity, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
+			//stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringHumidity, [(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case  DataDownloadTypeHumidity:
 			downloadType = DataDownloadTypeDewPoint;
             //Download all data, not just missing data
             stringToWrite = [NSString stringWithFormat:@"%@0", kDataStringDewPoint];
-			//stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringDewPoint, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]];
+			//stringToWrite = [NSString stringWithFormat:@"%@%@", kDataStringDewPoint, [(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice logCount]];
 			break;
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeFinish;
 			stringToWrite = kDataStringTransmitEnd;
-			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
-			[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 			
 			_update = nil;
 			if (_completion) {
@@ -226,11 +226,11 @@ typedef enum : NSInteger {
 	if (readingType) {
 
         NSLog(@"Deleting old data");
-        [[TDDefaultDevice sharedDevice].selectedDevice deleteOldData:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [[TDSharedDevice sharedDevice].selectedDevice deleteOldData:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
         [NSThread sleepForTimeInterval: 1.0];
         
         NSLog(@"Writing new data");
-		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:_startingTimeStamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+		[[TDSharedDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:_startingTimeStamp interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
         [NSThread sleepForTimeInterval: 1.0];
         
 	}
@@ -254,7 +254,7 @@ typedef enum : NSInteger {
 }
 
 - (void)setNewTimeStamp:(NSInteger)sendRecordsNeeded {
-    NSInteger timeInterval = [[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval] integerValue];
+    NSInteger timeInterval = [[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval] integerValue];
     NSDate *dateNow = [NSDate date];
     
     //Calculate start date
@@ -297,16 +297,16 @@ typedef enum : NSInteger {
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
-			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
-				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
-				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+			if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
 					[timer invalidate];
 					timer = nil;
 					weakself.didDisconnect = NO;
 					if (!error) {
 						NSLog(@"Connected to device");
 						NSLog(@"Discovering device services...");
-						[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+						[[TDSharedDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
 							if (!error2) {
 								NSLog(@"Discovered services");
 								LGService *uartService;
@@ -359,7 +359,7 @@ typedef enum : NSInteger {
 												if (weakself.writeCharacteristic) {
                                                     [weakself writeData:[NSString stringWithFormat:@"%@0", kDataStringTemperature] toCharacteristic:weakself.writeCharacteristic];
                                                     
-													/*[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];*/
+													/*[weakself writeData:[NSString stringWithFormat:@"%@%@", kDataStringTemperature, [(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice logCount]] toCharacteristic:weakself.writeCharacteristic];*/
 													weakself.dataToSend = nil;
 												}
 											}

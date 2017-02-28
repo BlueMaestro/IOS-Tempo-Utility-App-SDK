@@ -1,5 +1,5 @@
 //
-//  TDDefaultDevice.h
+//  TDSharedDevice.h
 //  TempoDisc
 //
 //  Created by Nikola Misic on 2/28/16.
@@ -10,11 +10,11 @@
 #import "TDTempoDisc.h"
 #import "TempoDevice.h"
 
-@interface TDDefaultDevice : NSObject
+@interface TDSharedDevice : NSObject
 
 @property (nonatomic, strong) TDTempoDisc *activeDevice;
 @property (nonatomic, strong) TempoDevice *selectedDevice;
 
-+ (TDDefaultDevice*)sharedDevice;
++ (TDSharedDevice*)sharedDevice;
 
 @end

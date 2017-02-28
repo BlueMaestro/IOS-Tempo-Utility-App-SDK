@@ -13,7 +13,7 @@
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
 #import "TDHelper.h"
-#import "TDDefaultDevice.h"
+#import "TDSharedDevice.h"
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "Constants.h"
 #import "SCHelper.h"

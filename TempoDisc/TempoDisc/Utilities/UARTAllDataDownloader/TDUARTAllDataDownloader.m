@@ -137,8 +137,8 @@ typedef enum : NSInteger {
 			break;
 		case DataDownloadTypeDewPoint:
 			downloadType = DataDownloadTypeFinish;
-			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
-			[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;
@@ -169,13 +169,13 @@ typedef enum : NSInteger {
 	}
 	if (readingType) {
 		NSDate *timestamp = _downloadStartTimestamp;
-		for (ReadingType *type in [TDDefaultDevice sharedDevice].selectedDevice.readingTypes) {
+		for (ReadingType *type in [TDSharedDevice sharedDevice].selectedDevice.readingTypes) {
 			if ([type.type isEqualToString:readingType]) {
-				[[TDDefaultDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
+				[[TDSharedDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
 				break;
 			}
 		}
-		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+		[[TDSharedDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
 	}
 	
 }
@@ -208,16 +208,16 @@ typedef enum : NSInteger {
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
-			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
-				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
-				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+			if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
 					[timer invalidate];
 					timer = nil;
 					weakself.didDisconnect = NO;
 					if (!error) {
 						NSLog(@"Connected to device");
 						NSLog(@"Discovering device services...");
-						[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+						[[TDSharedDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
 							if (!error2) {
 								NSLog(@"Discovered services");
 								LGService *uartService;

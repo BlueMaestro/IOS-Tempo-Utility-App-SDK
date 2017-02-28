@@ -178,8 +178,8 @@
     
     if ([segue.destinationViewController isKindOfClass:[TDCommandViewController class]]) {
         TDCommandViewController *commandController = (TDCommandViewController*)segue.destinationViewController;
-        NSLog(@"In segue about to pass is %i", [[TDDefaultDevice sharedDevice].selectedDevice.version intValue]);
-        commandController.versionNumber = [[TDDefaultDevice sharedDevice].selectedDevice.version intValue];
+        NSLog(@"In segue about to pass is %i", [[TDSharedDevice sharedDevice].selectedDevice.version intValue]);
+        commandController.versionNumber = [[TDSharedDevice sharedDevice].selectedDevice.version intValue];
     }
 }
 
@@ -188,8 +188,8 @@
 
 - (void)fetchDevice {
 	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
-	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid == %@", [TDDefaultDevice sharedDevice].activeDevice.uuid];
-    NSLog(@"activeDevice is %@", [TDDefaultDevice sharedDevice].activeDevice.name);
+	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid == %@", [TDSharedDevice sharedDevice].activeDevice.uuid];
+    NSLog(@"activeDevice is %@", [TDSharedDevice sharedDevice].activeDevice.name);
 	NSError *error;
 	NSManagedObjectContext *context = [(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
 	NSArray *result = [context executeFetchRequest:request error:&error];
@@ -202,8 +202,8 @@
 			discDevice = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDiscDevice class]) inManagedObjectContext:context];
 		}
         
-		[discDevice fillDataForPersistentStore:[TDDefaultDevice sharedDevice].activeDevice];
-		[TDDefaultDevice sharedDevice].selectedDevice = discDevice;
+		[discDevice fillDataForPersistentStore:[TDSharedDevice sharedDevice].activeDevice];
+		[TDSharedDevice sharedDevice].selectedDevice = discDevice;
 	}
 	else {
 		NSLog(@"Error fetching device from storage: %@", error);
@@ -321,50 +321,50 @@
     
     
     //Capture version number
-    versionID = [TDDefaultDevice sharedDevice].selectedDevice.version;
+    versionID = [TDSharedDevice sharedDevice].selectedDevice.version;
     NSLog(@"Version is %@", versionID);
-    NSLog(@"Battery is %li", [TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue);
+    NSLog(@"Battery is %li", [TDSharedDevice sharedDevice].selectedDevice.battery.integerValue);
     
     
     //Set images depending on values
-    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue >= 85) {
+    if ([TDSharedDevice sharedDevice].selectedDevice.battery.integerValue >= 85) {
         [self.batteryImage setImage:highBattImage];
     }
-    if (([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue < 85) && ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue >= 70)) {
+    if (([TDSharedDevice sharedDevice].selectedDevice.battery.integerValue < 85) && ([TDSharedDevice sharedDevice].selectedDevice.battery.integerValue >= 70)) {
         [self.batteryImage setImage:mediumBattImage];
     }
-    if ([TDDefaultDevice sharedDevice].selectedDevice.battery.integerValue <= 70) {
+    if ([TDSharedDevice sharedDevice].selectedDevice.battery.integerValue <= 70) {
         [self.batteryImage setImage:lowBattImage];
     }
-    if ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI > -90) {
+    if ([TDSharedDevice sharedDevice].selectedDevice.peripheral.RSSI > -90) {
         [self.RSSIImage setImage:strongRSSIImage];
         
     }
-    if (([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI < -90) && ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI >-100)){
+    if (([TDSharedDevice sharedDevice].selectedDevice.peripheral.RSSI < -90) && ([TDSharedDevice sharedDevice].selectedDevice.peripheral.RSSI >-100)){
         [self.RSSIImage setImage:mediumRSSIImage];
         
     }
-    if ([TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI < -100){
+    if ([TDSharedDevice sharedDevice].selectedDevice.peripheral.RSSI < -100){
         [self.RSSIImage setImage:lowRSSIImage];
         
     }
     
     //Generic device info
-	if ([TDDefaultDevice sharedDevice].selectedDevice.lastDownload) {
-		_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:[TDDefaultDevice sharedDevice].selectedDevice.lastDownload];
+	if ([TDSharedDevice sharedDevice].selectedDevice.lastDownload) {
+		_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:[TDSharedDevice sharedDevice].selectedDevice.lastDownload];
 	} else {
 		_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 	}
-	_labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", [TDDefaultDevice sharedDevice].selectedDevice.peripheral.RSSI];
-	_labelDeviceUUID.text = [TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString;
+	_labelDeviceRSSIValue.text = [NSString stringWithFormat:@"%lddB", [TDSharedDevice sharedDevice].selectedDevice.peripheral.RSSI];
+	_labelDeviceUUID.text = [TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString;
     
     //Version Number not being showed at the moment
-	//_labelVersion.text = [TDDefaultDevice sharedDevice].selectedDevice.version;
+	//_labelVersion.text = [TDSharedDevice sharedDevice].selectedDevice.version;
     
     
     //Specific to Tempo Disc Devices
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
+	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		TempoDiscDevice *device = (TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice;
 		
 		if (device) {
 			Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
@@ -522,7 +522,7 @@
 						[data getBytes:&value length:1];
 						NSNumber *valueBattery = [NSNumber numberWithUnsignedShort:value];
 						//set battery level
-						[TDDefaultDevice sharedDevice].selectedDevice.battery = [NSDecimalNumber decimalNumberWithDecimal:valueBattery.decimalValue];
+						[TDSharedDevice sharedDevice].selectedDevice.battery = [NSDecimalNumber decimalNumberWithDecimal:valueBattery.decimalValue];
 						NSLog(@"Read battery data: %@, value: %@", data, valueBattery.stringValue);
 						
 						//finished downloading battery data. Continue.
@@ -555,7 +555,7 @@
 						//parse data
 						NSString *version = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 						NSLog(@"Read version data: %@", version);
-						[TDDefaultDevice sharedDevice].selectedDevice.version = version;
+						[TDSharedDevice sharedDevice].selectedDevice.version = version;
 						
 						//finished version download. Continue
 						if (_dataDownloadService) {
@@ -716,7 +716,7 @@
 	}
 	if (readingType) {
         
-        [[TDDefaultDevice sharedDevice].selectedDevice addDataFirst:collection forReadingType:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [[TDSharedDevice sharedDevice].selectedDevice addDataFirst:collection forReadingType:readingType context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
         
 	}
 }
@@ -734,7 +734,7 @@
   default:
 			//finished with humidity read, no more data. Finish sync.
 			if (collection.count > 0) {
-				[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+				[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
 				[self fillData];
 			}
 			[self abortConnectionWithErrorMessage:[NSString stringWithFormat:@"Downloaded %ld samples", (long)collection.count]];
@@ -748,12 +748,12 @@
  *	@param message Message to display after download stop.
  */
 - (void)abortConnectionWithErrorMessage:(NSString*)message  {
-	[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+	[[TDSharedDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
 	UIAlertController *controller = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download finished", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
 	[controller addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 	[self presentViewController:controller animated:YES completion:nil];
-	[TDDefaultDevice sharedDevice].selectedDevice.peripheral = nil;
+	[TDSharedDevice sharedDevice].selectedDevice.peripheral = nil;
 }
 
 #pragma mark - Actions
@@ -763,7 +763,7 @@
 
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];*/
 		
 		__weak typeof(self) weakself = self;
@@ -775,7 +775,7 @@
 			
 			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
 			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
-			[weakself.uartAllDataDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
+			[weakself.uartAllDataDownloader downloadDataForDevice:(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice withCompletion:^(BOOL succcess) {
 				[weakself.hudDownloadData hide:YES];
 				weakself.uartAllDataDownloader = nil;
 				if (!succcess) {
@@ -796,7 +796,7 @@
 			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
 				weakself.hudDownloadData.mode = MBProgressHUDModeDeterminateHorizontalBar;
 			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
-				[weakself.uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice withUpdate:^(float progress) {
+				[weakself.uartDownloader downloadDataForDevice:(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice withUpdate:^(float progress) {
 					//update block
 					dispatch_async(dispatch_get_main_queue(), ^{
 						weakself.hudDownloadData.progress = progress;
@@ -822,7 +822,7 @@
 	else {
 		_hudDownloadData = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 		_hudDownloadData.labelText = NSLocalizedString(@"Searching for device...", nil);
-		LGPeripheral *peripheral = [TDDefaultDevice sharedDevice].selectedDevice.peripheral;
+		LGPeripheral *peripheral = [TDSharedDevice sharedDevice].selectedDevice.peripheral;
 		if (peripheral) {
 			//peripheral is in range
 			[self downloadDataFromPeripheral:peripheral];
@@ -832,13 +832,13 @@
 			[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:2 completion:^(NSArray *peripherals) {
 				LGPeripheral *targetPeripheral;
 				for (LGPeripheral *peripheral in peripherals) {
-					if ([peripheral.cbPeripheral.identifier.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.uuid]) {
+					if ([peripheral.cbPeripheral.identifier.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.uuid]) {
 						targetPeripheral = peripheral;
 						break;
 					}
 				}
 				if (targetPeripheral) {
-					[TDDefaultDevice sharedDevice].selectedDevice.peripheral = targetPeripheral;
+					[TDSharedDevice sharedDevice].selectedDevice.peripheral = targetPeripheral;
 					[self downloadDataFromPeripheral:targetPeripheral];
 				}
 				else {
@@ -850,7 +850,7 @@
 }
 
 - (IBAction)buttonGraphClicked:(UIButton *)sender {
-    if (![[TDDefaultDevice sharedDevice].selectedDevice hasDataForType:@"Temperature"]) {
+    if (![[TDSharedDevice sharedDevice].selectedDevice hasDataForType:@"Temperature"]) {
         
         NSLog(@"Error in populating array for temperature");
             

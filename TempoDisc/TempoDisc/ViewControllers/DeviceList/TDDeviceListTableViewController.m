@@ -410,7 +410,7 @@ typedef enum : NSInteger {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	self.selectedDevice = _dataSource[indexPath.row];
-    [TDDefaultDevice sharedDevice].activeDevice = self.selectedDevice;
+    [TDSharedDevice sharedDevice].activeDevice = self.selectedDevice;
         
 		NSLog(@"Selected device: %@", self.selectedDevice.name);
 	if (self.selectedDevice.version.integerValue == 27) {

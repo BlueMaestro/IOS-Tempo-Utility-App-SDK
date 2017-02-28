@@ -69,9 +69,9 @@
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	__weak typeof(self) weakself = self;
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-		weakself.temperatureData = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-		weakself.humidityData = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
-		weakself.dewPointData = [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.temperatureData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.humidityData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.dewPointData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[weakself changeReadingType:TempoReadingTypeTemperature];
 			[MBProgressHUD hideHUDForView:weakself.view animated:NO];
@@ -116,7 +116,7 @@
 	switch (type) {
         case TempoReadingTypeTemperature:
             [_labelReadingType setText:NSLocalizedString(@"Temperature", nil)];
-            _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
+            _labelUnit.text = [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
 			_activeGraph = _graphTemperature;
 			_activeGraphView = _viewGraphTemperature;
 			break;
@@ -130,7 +130,7 @@
 		case TempoReadingTypeDewPoint:
             if (!_viewGraphDewPoint) _viewGraphDewPoint = _viewGraphTemperature;
 			[_labelReadingType setText:NSLocalizedString(@"Dew Point", nil)];
-			_labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
+			_labelUnit.text = [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT" : @"º CELSIUS";
 			_activeGraph = _graphDewPoint;
 			_activeGraphView = _viewGraphDewPoint;
 			break;
@@ -138,7 +138,7 @@
 			break;
 	}
     if (combinedGraph == true) {
-        _labelUnit.text = [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT AND % RELATIVE HUMIDITY" : @"º CELSIUS AND % RELATIVE HUMIDITY";
+        _labelUnit.text = [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"º FAHRENHEIT AND % RELATIVE HUMIDITY" : @"º CELSIUS AND % RELATIVE HUMIDITY";
         if (!_viewGraphCombinedTHD) _viewGraphCombinedTHD = _viewGraphTemperature;
         [_labelReadingType setText:NSLocalizedString(@"Combined Graph", nil)];
         _activeGraph = _graphCombinedTHD;
@@ -277,7 +277,7 @@
 		return;
 	}
     NSArray *readings = @[];
-	TempoDevice *device = [TDDefaultDevice sharedDevice].selectedDevice;
+	TempoDevice *device = [TDSharedDevice sharedDevice].selectedDevice;
 	/**
 	 *	Adjust range for plot so that all points fit in the view with one hour before and after
 	 **/
@@ -575,7 +575,7 @@
 {
 	if ([plot.identifier isEqual:@"Temperature"]) {
 		/*if (!_buttonAll.selected) {
-			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count, kInitialDataLoadCount);
+			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count, kInitialDataLoadCount);
 		}
 		else {*/
 			return _temperatureData.count;
@@ -583,7 +583,7 @@
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
 		/*if (!_buttonAll.selected) {
-			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count, kInitialDataLoadCount);
+			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count, kInitialDataLoadCount);
 		}
 		else { */
 			return _humidityData.count;
@@ -591,7 +591,7 @@
 	}
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
 		/*if (!_buttonAll.selected) {
-			return MIN([[TDDefaultDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
+			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
 		}
 		else { */
 			return _dewPointData.count;
@@ -632,7 +632,7 @@
 				return reading.avgValue;
 			}
 			else {
-				return [TDHelper temperature:reading.avgValue forDevice:[TDDefaultDevice sharedDevice].selectedDevice];
+				return [TDHelper temperature:reading.avgValue forDevice:[TDSharedDevice sharedDevice].selectedDevice];
 			}
 			
 			break;

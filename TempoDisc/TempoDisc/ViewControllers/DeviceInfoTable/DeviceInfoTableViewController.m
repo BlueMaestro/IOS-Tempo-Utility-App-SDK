@@ -284,7 +284,7 @@ typedef enum : NSInteger {
     
     // Configure the cell...
 	NSString *title = [self fieldTitleForItem:[_dataSource[indexPath.section][kKeySectionItems][indexPath.row] integerValue]];
-	NSString *value = [self valueForField:[_dataSource[indexPath.section][kKeySectionItems][indexPath.row] integerValue] device:(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice];
+	NSString *value = [self valueForField:[_dataSource[indexPath.section][kKeySectionItems][indexPath.row] integerValue] device:(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice];
 	
 	NSString *text = [NSString stringWithFormat:@"%@ %@", title, value];
 	NSMutableAttributedString *attributedTitle = [[NSMutableAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName : [UIFont regularFontWithSize:12.0], NSForegroundColorAttributeName : [UIColor botomBarSeparatorGrey]}];

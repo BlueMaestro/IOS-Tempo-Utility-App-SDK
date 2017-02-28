@@ -83,7 +83,7 @@
 	[formatter setDateFormat:@"HH:mm\tdd/MM/yyyy"];
 	
 	//write pre values data
-	TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
+	TempoDiscDevice *device = (TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice;
 	[writer writeField:@"Current Date and Time"];
 	[writer writeField:[formatter stringFromDate:[NSDate date]]];
 	[writer finishLine];
@@ -199,7 +199,7 @@
 		NSString *fileName = [self createFileNameWithAttachmentType:@"CSV" withPath:YES];
 		[self createCSVFile:fileName];
 		NSData * csvData=[NSData dataWithContentsOfFile:fileName];
-		[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDDefaultDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
+		[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDSharedDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
 		
 		[MBProgressHUD hideHUDForView:self.view animated:NO];
 		[self presentViewController:mailComposeVC animated:YES completion:nil];
