@@ -318,8 +318,9 @@ typedef enum : NSInteger {
         } else {
             [cell.lockImage setImage:unlockedImage];
         }
-        int breach_count = disc.numBreach.intValue;
+        int breach_count = device.numBreach.intValue;
         if (breach_count > 0) {
+            NSLog(@"Breach count is %d", device.numBreach.intValue);
             [cell.alertImage setImage:breachImage];
             cell.labelAlertCount.text = [NSString stringWithFormat:@"%d", breach_count];
         } else {

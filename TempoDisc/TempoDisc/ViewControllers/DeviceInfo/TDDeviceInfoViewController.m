@@ -379,6 +379,8 @@
 		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.longValue];
         
 		_labelDeviceID.text = @"CLASS ID";
+        
+        //Specific elements that relate to Version 23
         if (device.version.intValue == 23) {
 			
             _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
@@ -403,8 +405,21 @@
             [_labelDeviceIDValue setHidden:YES];
             [_classIDTagImage setHidden:YES];
             [_labelDeviceID setHidden:YES];
-			
         }
+        
+        //Specific elements that relate to Version 22
+        if (device.version.intValue == 22) {
+            if (device.numBreach.intValue > 0) {
+                _breachCount.text = [NSString stringWithFormat:@"%d", device.numBreach.intValue];
+                [_breachImage setImage:breachAlertImage];
+                [_breachCount setHidden:NO];
+                [_breachImage setHidden:NO];
+            } else {
+                [_breachCount setHidden:YES];
+                [_breachImage setHidden:YES];
+            }
+        }
+        
         
 		
 		
