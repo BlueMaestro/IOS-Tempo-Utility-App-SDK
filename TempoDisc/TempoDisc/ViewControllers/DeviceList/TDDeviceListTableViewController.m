@@ -124,14 +124,15 @@ typedef enum : NSInteger {
 }
 
 - (void)scanForDevices {
-    if (![LGCentralManager sharedInstance].scanning) {
+    if ([LGCentralManager sharedInstance].scanning) {
         [[LGCentralManager sharedInstance] stopScanForPeripherals];
     }
     
     NSSortDescriptor *sortDescriptor;
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    
+	
+	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance]
 	 scanForPeripheralsByInterval:kDeviceScanInterval
 	 services:nil
@@ -139,7 +140,6 @@ typedef enum : NSInteger {
 	 completion:^(NSArray *peripherals) {
          NSLog(@"Peripheral count is %lu", (unsigned long)[peripherals count]);
          NSMutableArray *devices = [NSMutableArray array];
-         NSArray *sorted = [NSMutableArray array];
 		 for (LGPeripheral *peripheral in peripherals) {
 			 TDTempoDisc *device = [self findOrCreateDeviceForPeripheral:peripheral];
 			 if (device) {
@@ -149,17 +149,21 @@ typedef enum : NSInteger {
                      NSLog(@"Scanning and device found");
                  }
 			 }
-             sorted = [devices sortedArrayUsingDescriptors:sortDescriptors];
-             
-             _dataSource = [sorted mutableCopy];
-             [self.tableView reloadData];
          }
-         if (_timerUpdateList) {
+		 NSArray *sorted = [devices sortedArrayUsingDescriptors:sortDescriptors];
+		 
+		 weakself.dataSource = [sorted mutableCopy];
+		 [weakself.tableView reloadData];
+		 
+		 /**
+		  *	Looks like it doesnt do anything other than reload table view
+		  **/
+         /*if (_timerUpdateList) {
              [_timerUpdateList invalidate];
              _timerUpdateList = nil;
          }
          _timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(handleUpdateTimer:) userInfo:nil repeats:YES];
-         [[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
+         [[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];*/
     		 
 	 }];
 }
@@ -238,9 +242,9 @@ typedef enum : NSInteger {
 #pragma mark - Actions
 
 - (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
-	__weak typeof(self) weakself = self;
+//	__weak typeof(self) weakself = self;
 	
-    [weakself scanForDevices];
+    [self scanForDevices];
     
     //Options for filtering, sorting, scanning.  Just activating scanning for the moment.
     /*
@@ -467,12 +471,16 @@ typedef enum : NSInteger {
 	return 190;
     
 }
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+/**
+ *	This is used if cell height calculation (above) is an expensive method that takes too long
+ **/
+/*- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
     return 190;
     
-}
+}*/
 
 
 
