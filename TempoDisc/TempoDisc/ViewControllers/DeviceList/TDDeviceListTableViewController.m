@@ -70,6 +70,10 @@ typedef enum : NSInteger {
 	if (!_ignoreScan) {
 		[self scanForDevices];
 	}
+    if (_timerUpdateList) {
+        [_timerUpdateList invalidate];
+        _timerUpdateList = nil;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -77,6 +81,10 @@ typedef enum : NSInteger {
 	if (self.scanning) {
 		[self stopScan];
 	}
+    if (_timerUpdateList) {
+        [_timerUpdateList invalidate];
+        _timerUpdateList = nil;
+    }
 }
 
 #pragma mark - KVO
@@ -106,7 +114,7 @@ typedef enum : NSInteger {
 
 - (void)handleUpdateTimer:(NSTimer*)timer {
     NSLog(@"In update timer for refresh scan");
-    [self.tableView reloadData];
+    [self scanForDevices];
 
 }
 
@@ -158,12 +166,12 @@ typedef enum : NSInteger {
 		 /**
 		  *	Looks like it doesnt do anything other than reload table view
 		  **/
-         /*if (_timerUpdateList) {
+         if (_timerUpdateList) {
              [_timerUpdateList invalidate];
              _timerUpdateList = nil;
          }
          _timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(handleUpdateTimer:) userInfo:nil repeats:YES];
-         [[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];*/
+         [[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
     		 
 	 }];
 }
@@ -198,6 +206,10 @@ typedef enum : NSInteger {
 	if (!_ignoreScan) {
 		[self stopScan];
 	}
+    if (_timerUpdateList) {
+        [_timerUpdateList invalidate];
+        _timerUpdateList = nil;
+    }
 }
 
 - (void)handleReturnToForeground:(NSNotification*)note {
