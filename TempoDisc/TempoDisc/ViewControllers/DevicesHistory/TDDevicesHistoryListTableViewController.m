@@ -68,7 +68,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	//Set history cell height
-	return 190;
+	return 70;
 }
 
 @end
