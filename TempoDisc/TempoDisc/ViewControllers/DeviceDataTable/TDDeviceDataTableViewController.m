@@ -120,6 +120,9 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+		return;
+	}
 	[self changeReadingType:_currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature];
 	[sender setTitle:(_currentReadingType == TempoReadingTypeTemperature) ? @"Temperature" : @"Humidity"];
 }
@@ -142,7 +145,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDiscData" forIndexPath:indexPath];
+		NSString *reuse = @"cellDiscData";
+		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+			reuse = @"cellDiscData13";
+		}
+		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 		
 		// Configure the cell...
 		Reading *readingTemperature = indexPath.row < _dataSourceTemperature.count ? _dataSourceTemperature[indexPath.row] : nil;
@@ -203,7 +210,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		return 104;
+		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+			return 70;
+		}
+		else {
+			return 104;
+		}
 	}
 	else {
 		return 44;

@@ -16,15 +16,17 @@
 		NSRange temperatureRange = [dataString rangeOfString:@"T"];
 		NSRange humidityRange = [dataString rangeOfString:@"H"];
 		NSRange dewpointRange = [dataString rangeOfString:@"D"];
-		if (temperatureRange.location != NSNotFound && humidityRange.location != NSNotFound && dewpointRange.location != NSNotFound) {
+		if (temperatureRange.location != NSNotFound) {
 			NSString* temperatureString = [dataString substringWithRange:NSMakeRange(temperatureRange.location+1, humidityRange.location-1)];
 			_temperature = @(temperatureString.floatValue);
 			
-			NSString* humidityString = [dataString substringWithRange:NSMakeRange(humidityRange.location+1, dewpointRange.location-humidityRange.location-1)];
-			_humidity = @(humidityString.floatValue);
-			
-			NSString* dewPointString = [dataString substringWithRange:NSMakeRange(dewpointRange.location+1, dataString.length-dewpointRange.location-1)];
-			_dewPoint = @(dewPointString.floatValue);
+			if (humidityRange.location != NSNotFound && dewpointRange.location != NSNotFound) {
+				NSString* humidityString = [dataString substringWithRange:NSMakeRange(humidityRange.location+1, dewpointRange.location-humidityRange.location-1)];
+				_humidity = @(humidityString.floatValue);
+				
+				NSString* dewPointString = [dataString substringWithRange:NSMakeRange(dewpointRange.location+1, dataString.length-dewpointRange.location-1)];
+				_dewPoint = @(dewPointString.floatValue);
+			}
 		}
 		else {
 			//test data

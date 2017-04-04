@@ -235,6 +235,10 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+		//no type change for version 13 as it is temperature only
+		return;
+	}
 	IBActionSheet *sheet = [[IBActionSheet alloc] initWithTitle:NSLocalizedString(@"Choose reading type", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Temperature", nil), NSLocalizedString(@"Humidity", nil), NSLocalizedString(@"Dew Point", nil), NSLocalizedString(@"Combined", nil), nil];
 	[sheet setTitleTextColor:[UIColor blueMaestroBlue]];
 	

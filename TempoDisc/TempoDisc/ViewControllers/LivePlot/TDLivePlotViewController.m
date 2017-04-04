@@ -265,13 +265,17 @@
 	
 	/*_hostViewHumidity = [self configureHost:_viewPlotContainer forGraph:_hostViewHumidity];
 	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewPlotContainer title:nil];*/
-	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graph identifier:@"Humidity"];
-	[self configureAxesForGraph:_graph plot:_plotHumidity lineColor:kColorLivePlotLineHumidty.CGColor];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue != 13) {
+		_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graph identifier:@"Humidity"];
+		[self configureAxesForGraph:_graph plot:_plotHumidity lineColor:kColorLivePlotLineHumidty.CGColor];
+	}
 	
 	/*_hostViewDewPoint = [self configureHost:_viewPlotContainer forGraph:_hostViewDewPoint];
 	_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostViewDewPoint graphView:_viewPlotContainer title:nil];*/
-	_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graph identifier:@"DewPoint"];
-	[self configureAxesForGraph:_graph plot:_plotDewPoint lineColor:kColorLivePlotLineDewPoint.CGColor];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue != 13) {
+		_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graph identifier:@"DewPoint"];
+		[self configureAxesForGraph:_graph plot:_plotDewPoint lineColor:kColorLivePlotLineDewPoint.CGColor];
+	}
 }
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host

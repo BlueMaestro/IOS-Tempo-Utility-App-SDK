@@ -55,6 +55,8 @@ typedef enum : NSInteger {
 
 @property (nonatomic, strong) NSDate *startingTimeStamp;
 
+@property (nonatomic, assign) NSInteger deviceVersion;
+
 @end
 
 @implementation TDUARTDownloader
@@ -159,7 +161,12 @@ typedef enum : NSInteger {
 			NSInteger value = [self getIntLsb:d[i+1] msb:d[i]];
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
-			[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+			if (_deviceVersion == 13) {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)];
+			}
+			else {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+			}
 		}
 	}
 	
@@ -174,6 +181,10 @@ typedef enum : NSInteger {
 	NSString* stringToWrite = @"";
 	switch (type) {
 		case DataDownloadTypeTemperature:
+			if (_deviceVersion == 13) {
+				downloadType = DataDownloadTypeFinish;
+				stringToWrite = kDataStringTransmitEnd;
+			}
 			downloadType = DataDownloadTypeHumidity;
             //Download all data, not just missing data
             stringToWrite = [NSString stringWithFormat:@"%@0", kDataStringHumidity];
@@ -290,6 +301,7 @@ typedef enum : NSInteger {
 	_currentDataSamples = [NSMutableArray array];
 	_downloadStartTimestamp = [NSDate date];
 	_completion = completion;
+	_deviceVersion = device.version.integerValue;
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];

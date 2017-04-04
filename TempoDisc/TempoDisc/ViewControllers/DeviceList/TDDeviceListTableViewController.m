@@ -156,6 +156,10 @@ typedef enum : NSInteger {
                      [devices addObject:device];
                      NSLog(@"Scanning and device found");
                  }
+				 else if (device.version.integerValue == 13) {
+					 [devices addObject:device];
+					 NSLog(@"Found v13 device");
+				 }
 			 }
          }
 		 NSArray *sorted = [devices sortedArrayUsingDescriptors:sortDescriptors];
@@ -373,7 +377,7 @@ typedef enum : NSInteger {
 	if (device.version) {
 		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version:", nil)];
 		cell.labelDeviceVersionValue.hidden = NO;
-		cell.labelDeviceVersionValue.text = device.version;
+		cell.labelDeviceVersionValue.text = device.version.stringValue;
 	}
 	else {
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
@@ -413,6 +417,9 @@ typedef enum : NSInteger {
             [cell.classID setHidden:YES];
             [cell.classIDHeadingLabel setHidden:YES];
 		}
+		else if (device.version.integerValue == 13) {
+			//TODO: setup cell for version 13
+		}
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";
 	}
@@ -441,6 +448,9 @@ typedef enum : NSInteger {
 	else if (self.selectedDevice.version.integerValue == 22 || self.selectedDevice.version.integerValue == 23) {
 			[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:self.selectedDevice];
 	}
+	else if (self.selectedDevice.version.integerValue == 13) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion13" sender:self.selectedDevice];
+	}
 	else {
 		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -460,6 +470,9 @@ typedef enum : NSInteger {
     NSString *reuse;
 	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
 		reuse = @"cellDevice22and23";
+	}
+	else if ([device version].integerValue == 13) {
+		reuse = @"cellDevice13";
 	}
 	else {
 		reuse = @"cellDeviceOther";

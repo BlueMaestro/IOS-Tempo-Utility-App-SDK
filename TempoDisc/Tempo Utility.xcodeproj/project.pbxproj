@@ -692,8 +692,8 @@
 				TargetAttributes = {
 					CB16BA311C82E67E00C99C41 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 3GCG7V8C8A;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = EL3G87RG88;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -944,14 +944,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Blue Maestro Ltd (3GCG7V8C8A)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 3GCG7V8C8A;
+				DEVELOPMENT_TEAM = EL3G87RG88;
 				GCC_PREFIX_HEADER = "TempoDisc/Tempo UtilityPCH.pch";
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "a5862ba0-bc4b-4cc4-8e3c-dbb7343c8ccc";
+				PROVISIONING_PROFILE_SPECIFIER = WildcardHTEC;
 			};
 			name = Debug;
 		};
@@ -962,7 +962,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Blue Maestro Ltd (3GCG7V8C8A)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 3GCG7V8C8A;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREFIX_HEADER = "TempoDisc/Tempo UtilityPCH.pch";
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

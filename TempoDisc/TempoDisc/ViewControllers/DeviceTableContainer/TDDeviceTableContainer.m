@@ -120,8 +120,10 @@
 	[writer writeField:@"Record number"];
 	[writer writeField:@"Timestamp"];
 	[writer writeField:@"Temperature"];
-	[writer writeField:@"Humidity"];
-	[writer writeField:@"Dew point"];
+	if (device.version.integerValue != 13) {
+		[writer writeField:@"Humidity"];
+		[writer writeField:@"Dew point"];
+	}
 	[writer finishLine];
 	
 	
@@ -138,8 +140,10 @@
 		[writer writeField:[NSString stringWithFormat:@"%lu", (unsigned long)index]];
 		[writer writeField:[NSString stringWithFormat:@"%@", [formatter stringFromDate:readingTemperature.timestamp]]];
 		[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingTemperature.avgValue forDevice:device]]];
-		[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
-		[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:device]]];
+		if (device.version.integerValue != 13) {
+			[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
+			[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:device]]];
+		}
 		[writer finishLine];
 	}
 	

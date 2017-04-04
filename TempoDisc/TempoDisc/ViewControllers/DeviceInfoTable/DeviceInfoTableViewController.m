@@ -196,7 +196,7 @@ typedef enum : NSInteger {
 			return device.uuid;
 			break;
 		case DevicePropertyVersion:
-			return device.version;
+			return device.version.stringValue;
 			break;
 		case DevicePropertyRSSI:
 			return [NSString stringWithFormat:@"%ld dBm", (long)device.peripheral.RSSI];
