@@ -669,6 +669,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     Reading *reading;
 	NSArray *dataSource = @[];
     NSString *valueSymbol;
+	NSNumber *value = @0;//reading value
 
 	UIView *viewGraph;
     if ([plot.identifier isEqual:@"Temperature"]) {
@@ -679,6 +680,8 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
         } else {
             viewGraph = _viewGraphTemperature;
         }
+		reading = [dataSource objectAtIndex:index];
+		value = [TDHelper temperature:reading.avgValue forDevice:[TDSharedDevice sharedDevice].selectedDevice];
 	}
     else if ([plot.identifier isEqual:@"Humidity"]) {
 		dataSource = _humidityData;
@@ -688,6 +691,8 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
         } else {
             viewGraph = _viewGraphHumidity;
         }
+		reading = [dataSource objectAtIndex:index];
+		value = reading.avgValue;
     }
     else if ([plot.identifier isEqual:@"DewPoint"]) {
 		dataSource = _dewPointData;
@@ -697,10 +702,12 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
         } else {
             viewGraph = _viewGraphDewPoint;
         }
+		reading = [dataSource objectAtIndex:index];
+		value = [TDHelper temperature:reading.avgValue forDevice:[TDSharedDevice sharedDevice].selectedDevice];
     }
 	
-	reading = [dataSource objectAtIndex:index];
-	NSDecimalNumber *value = reading.avgValue;//reading value
+	
+	
 	NSDate *timestamp = reading.timestamp;//reading date
 	
 	NSLog(@"Value at index %@ with timestamp of %@", value, timestamp);
