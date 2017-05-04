@@ -779,14 +779,16 @@
 
 - (IBAction)buttonDownloadClicked:(UIButton *)sender {
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];*/
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Download data", nil) message:NSLocalizedString(@"", nil) preferredStyle:UIAlertControllerStyleAlert];
 		
 		__weak typeof(self) weakself = self;
-        /*
-		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download All", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+		/*[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download All", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			if (!weakself.uartAllDataDownloader) {
 				weakself.uartAllDataDownloader = [[TDUARTAllDataDownloader alloc] init];
-			}
+			}*/
+        if (!weakself.uartAllDataDownloader) {
+            weakself.uartAllDataDownloader = [[TDUARTAllDataDownloader alloc] init];}
 			
 			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
 			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
@@ -799,13 +801,15 @@
 					[weakself presentViewController:alert animated:YES completion:nil];
 				}
 				[weakself refreshCurrentDevice];
+                [weakself fillData];
 			}];
-		}]];*/
+		
 		
 		/*[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Download New", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			if (!weakself.uartDownloader) {
 				weakself.uartDownloader = [[TDUARTDownloader alloc] init];
 			}*/
+        /*
             if (!weakself.uartDownloader) {
                 weakself.uartDownloader = [[TDUARTDownloader alloc] init];
 			weakself.hudDownloadData = [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
@@ -828,7 +832,7 @@
 					[weakself refreshCurrentDevice];
 					[weakself fillData];
 				}];
-		};
+		};*/
 		
 		//[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
 		
