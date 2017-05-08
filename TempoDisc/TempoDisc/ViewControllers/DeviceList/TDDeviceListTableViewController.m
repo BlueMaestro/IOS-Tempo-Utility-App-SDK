@@ -476,7 +476,6 @@ typedef enum : NSInteger {
 	TDTempoDisc *device = _dataSource[indexPath.row];
 	
     NSString *reuse;
-	device.version = @13;
 	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
 		reuse = @"cellDevice22and23";
 	}
@@ -505,7 +504,7 @@ typedef enum : NSInteger {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	TDTempoDisc *device = _dataSource[indexPath.row];
-	if (YES/*device.version.integerValue == 13*/) {
+	if (device.version.integerValue == 13) {
 		return 150;
 	}
 	else {
