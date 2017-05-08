@@ -16,6 +16,7 @@
 #import "TDDeviceInfoViewController.h"
 #import "AppDelegate.h"
 #import "TDTempoDisc.h"
+#import "TDTemperatureDevoceTableViewCell.h"
 
 #define kDeviceScanInterval 2.0
 
@@ -418,7 +419,7 @@ typedef enum : NSInteger {
             [cell.classIDHeadingLabel setHidden:YES];
 		}
 		else if (device.version.integerValue == 13) {
-			//TODO: setup cell for version 13
+			
 		}
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";
@@ -433,6 +434,14 @@ typedef enum : NSInteger {
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	cell.labelDeviceName.text = device.name;
+}
+
+- (void)fillTemperatureDeviceCell:(TDTemperatureDevoceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillPressureDeviceCell:cell model:device];
+	//TODO: Tempo device version 13 data fill
+	cell.labelUnitsValue.text = device.isFahrenheit.boolValue ? @"Fahrenheit (˚ K)" : @"Celsius (˚ C)";
+	cell.labelModeValue.text = device.mode.stringValue;
+	cell.labelThresholdBreachesValue.text = device.numBreach.stringValue;
 }
 
 #pragma mark - UITableViewDelegate
@@ -465,9 +474,9 @@ typedef enum : NSInteger {
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	TDTempoDisc *device = _dataSource[indexPath.row];
-    
-    
+	
     NSString *reuse;
+	device.version = @13;
 	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
 		reuse = @"cellDevice22and23";
 	}
@@ -480,6 +489,9 @@ typedef enum : NSInteger {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
+	if ([cell isKindOfClass:[TDTemperatureDevoceTableViewCell class]]) {
+		[self fillTemperatureDeviceCell:(TDTemperatureDevoceTableViewCell*)cell model:device];
+	}
 	if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
 	}
@@ -492,8 +504,13 @@ typedef enum : NSInteger {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	
-	return 190;
+	TDTempoDisc *device = _dataSource[indexPath.row];
+	if (YES/*device.version.integerValue == 13*/) {
+		return 150;
+	}
+	else {
+		return 190;
+	}
     
 }
 
