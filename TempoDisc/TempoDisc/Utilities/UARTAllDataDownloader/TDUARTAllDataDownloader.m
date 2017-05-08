@@ -107,7 +107,7 @@ typedef enum : NSInteger {
 	char * d = (char*)[data bytes];
 	for (NSInteger i=0; i<length; i+=2) {
 		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
-			(_currentDownloadType == DataDownloadTypeDewPoint && d[1] == kDataTerminationValue)) {
+			(_currentDownloadType == DataDownloadTypeDewPoint && d[i] == kDataTerminationValue)) {
 			//termination symbol found, abort data download and insert into database
 			NSLog(@"Termination symbol recognized.");
 			[self didFinishDownloadForType:_currentDownloadType];
@@ -164,7 +164,7 @@ typedef enum : NSInteger {
 			break;
 		case DataDownloadTypeDewPoint:
 			readingType = @"DewPoint";
-  default:
+        default:
 			break;
 	}
 	if (readingType) {
@@ -175,7 +175,9 @@ typedef enum : NSInteger {
 				break;
 			}
 		}
+        [NSThread sleepForTimeInterval: 1.0];
 		[[TDSharedDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [NSThread sleepForTimeInterval: 1.0];
 	}
 	
 }
