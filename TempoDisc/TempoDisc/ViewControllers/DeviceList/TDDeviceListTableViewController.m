@@ -430,6 +430,8 @@ typedef enum : NSInteger {
 - (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	[self fillTempoDiscCell:cell model:device];
 	//fill rest of the data
+	cell.labelPressureValue.text = device.pressure.stringValue;
+	cell.dewpointUnits.text = cell.temperatureUnits.text;
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
@@ -479,6 +481,9 @@ typedef enum : NSInteger {
 	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
 		reuse = @"cellDevice22and23";
 	}
+	else if ([device version].integerValue == 27) {
+		reuse = @"cellDeviceTempoDisc";
+	}
 	else if ([device version].integerValue == 13) {
 		reuse = @"cellDevice13";
 	}
@@ -506,6 +511,9 @@ typedef enum : NSInteger {
 	TDTempoDisc *device = _dataSource[indexPath.row];
 	if (device.version.integerValue == 13) {
 		return 150;
+	}
+	else if (device.version.integerValue == 27) {
+		return 265;
 	}
 	else {
 		return 190;
