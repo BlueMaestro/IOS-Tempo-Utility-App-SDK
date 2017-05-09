@@ -94,5 +94,6 @@
 
 - (IBAction)buttonConsoleClicked:(UIButton *)sender;
 
+- (void)fillData;
 
 @end
