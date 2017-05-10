@@ -153,13 +153,17 @@ typedef enum : NSInteger {
 			 TDTempoDisc *device = [self findOrCreateDeviceForPeripheral:peripheral];
 			 if (device) {
 				 device.peripheral = peripheral;
-                 if ((device.version.integerValue == 22) || (device.version.integerValue == 23)) {
+                 if ((device.version.integerValue == 22) || (device.version.integerValue == 23) || (device.version.integerValue == 32)) {
                      [devices addObject:device];
                      NSLog(@"Scanning and device found");
                  }
 				 else if (device.version.integerValue == 13) {
 					 [devices addObject:device];
 					 NSLog(@"Found v13 device");
+				 }
+				 else if (device.version.integerValue == 27) {
+					 [devices addObject:device];
+					  NSLog(@"Found v27 device");
 				 }
 			 }
          }
@@ -456,7 +460,7 @@ typedef enum : NSInteger {
 	if (self.selectedDevice.version.integerValue == 27) {
 		[self.parentViewController performSegueWithIdentifier:@"segueTempoDevicePressureInfo" sender:self.selectedDevice];
 	}
-	else if (self.selectedDevice.version.integerValue == 22 || self.selectedDevice.version.integerValue == 23) {
+	else if (self.selectedDevice.version.integerValue == 22 || self.selectedDevice.version.integerValue == 23 || self.selectedDevice.version.integerValue == 32) {
 			[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:self.selectedDevice];
 	}
 	else if (self.selectedDevice.version.integerValue == 13) {
@@ -478,7 +482,7 @@ typedef enum : NSInteger {
 	TDTempoDisc *device = _dataSource[indexPath.row];
 	
     NSString *reuse;
-	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
+	if (([device version].integerValue == 22) || ([device version].integerValue == 23) || [device version].integerValue == 32) {
 		reuse = @"cellDevice22and23";
 	}
 	else if ([device version].integerValue == 27) {

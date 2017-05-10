@@ -11,6 +11,7 @@
 #define BM_MODEL_DISC_22 0x16
 #define BM_MODEL_DISC_23 0x17
 #define BM_MODEL_DISC_27 0x1B
+#define BM_MODEL_DISC_32 0x20
 #define BM_MODEL_DISC_99 0x63
 
 @implementation TDTempoDisc
@@ -70,6 +71,10 @@
 			else if (d[2] == BM_MODEL_DISC_27) {
 				self.modelType = @"TEMPO_DISC_27";
                 self.version = [NSNumber numberWithInteger:27];
+			}
+			else if (d[2] == BM_MODEL_DISC_32) {
+				self.modelType = @"TEMPO_DISC_32";
+				self.version = [NSNumber numberWithInteger:32];
 			}
             else if (d[2] == BM_MODEL_DISC_99) {
                 self.modelType = @"PACIF-I V2";
@@ -226,7 +231,102 @@
 		}
 		NSLog(@"Parsed version 23 data");
 	}
-    
+	
+	/**
+	 *	Version 27
+	 *
+	 **/
+	
+	if (self.version.integerValue == 27) {
+		
+		//Variables not parsed
+		self.uuid = uuid;
+		self.name = advertisedData[@"kCBAdvDataLocalName"];
+		self.lastDetected = [NSDate date];
+		
+		//Advertisement packet
+		self.version = @(data[2]);
+		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+		self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+		self.mode = @(data[14]);
+		if (self.mode.integerValue > 100) {
+			self.isFahrenheit = @(1);
+		}
+		else {
+			self.isFahrenheit = @(0);
+		}
+		self.numBreach = @(data[15]);
+		
+		//Scan response packet
+		self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
+		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-23] msb:data[manufacturerDataLength-24]] / 10.f);
+		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-21] msb:data[manufacturerDataLength-22]] / 10.f);
+		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-19] msb:data[manufacturerDataLength-20]] / 10.f);
+		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-17] msb:data[manufacturerDataLength-18]] / 10.f);
+		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-15] msb:data[manufacturerDataLength-16]] / 10.f);
+		self.highestDayDew = @([self intValueLsb:data[manufacturerDataLength-13] msb:data[manufacturerDataLength-14]] / 10.f);
+		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-11] msb:data[manufacturerDataLength-12]] / 10.f);
+		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-9] msb:data[manufacturerDataLength-10]] / 10.f);
+		self.lowestDayDew = @([self intValueLsb:data[manufacturerDataLength-7] msb:data[manufacturerDataLength-8]] / 10.f);
+		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-5] msb:data[manufacturerDataLength-6]] / 10.f);
+		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-3] msb:data[manufacturerDataLength-4]] / 10.f);
+		self.averageDayDew = @([self intValueLsb:data[manufacturerDataLength-1] msb:data[manufacturerDataLength-2]] / 10.f);
+		if (self.mode.integerValue > 100) {
+			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
+			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
+			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
+		}
+	}
+	
+	if (self.version.integerValue == 32) {
+		
+		//Variables not parsed
+		self.uuid = uuid;
+		self.name = advertisedData[@"kCBAdvDataLocalName"];
+		self.lastDetected = [NSDate date];
+		
+		//Advertisement packet
+		self.version = @(data[2]);
+		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+		self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+		self.mode = @(data[14]);
+		if (self.mode.integerValue > 100) {
+			self.isFahrenheit = @(1);
+		}
+		else {
+			self.isFahrenheit = @(0);
+		}
+		self.numBreach = @(data[15]);
+		
+		//Scan response packet
+		self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
+		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-23] msb:data[manufacturerDataLength-24]] / 10.f);
+		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-21] msb:data[manufacturerDataLength-22]] / 10.f);
+		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-19] msb:data[manufacturerDataLength-20]] / 10.f);
+		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-17] msb:data[manufacturerDataLength-18]] / 10.f);
+		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-15] msb:data[manufacturerDataLength-16]] / 10.f);
+		self.highestDayDew = @([self intValueLsb:data[manufacturerDataLength-13] msb:data[manufacturerDataLength-14]] / 10.f);
+		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-11] msb:data[manufacturerDataLength-12]] / 10.f);
+		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-9] msb:data[manufacturerDataLength-10]] / 10.f);
+		self.lowestDayDew = @([self intValueLsb:data[manufacturerDataLength-7] msb:data[manufacturerDataLength-8]] / 10.f);
+		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-5] msb:data[manufacturerDataLength-6]] / 10.f);
+		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-3] msb:data[manufacturerDataLength-4]] / 10.f);
+		self.averageDayDew = @([self intValueLsb:data[manufacturerDataLength-1] msb:data[manufacturerDataLength-2]] / 10.f);
+		if (self.mode.integerValue > 100) {
+			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
+			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
+			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
+		}
+	}
+	
     /**
      *	Version 99 PACIF-I V2
      *
