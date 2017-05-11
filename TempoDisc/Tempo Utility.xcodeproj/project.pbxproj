@@ -55,6 +55,7 @@
 		CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C481D47E72A00EEBECD /* UIColor+Tempo.m */; };
 		CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */; };
 		CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */; };
+		CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */; };
 		CBD3574A1EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
 		CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF066511DA571D200210428 /* TDUARTDownloader.m */; };
@@ -153,6 +154,8 @@
 		CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceTableContainer.m; sourceTree = "<group>"; };
 		CBAB5C4F1D47FF0500EEBECD /* TDBaseDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDBaseDeviceViewController.h; sourceTree = "<group>"; };
 		CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseDeviceViewController.m; sourceTree = "<group>"; };
+		CBC11B201EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMovementDeviceTableViewCell.h; sourceTree = "<group>"; };
+		CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMovementDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CBD357481EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTemperatureDevoceTableViewCell.h; sourceTree = "<group>"; };
 		CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTemperatureDevoceTableViewCell.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
@@ -326,6 +329,7 @@
 		CB16BA561C82ECC600C99C41 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				CBC11B1F1EC4D9E80091BE2A /* MovementDevice */,
 				CBD357471EC0DF5F0057ABCF /* TemperatureDevice */,
 				CB34C3651E546D070008F214 /* PressureDevice */,
 				CB86F25A1E2F999200B4BCC8 /* Command */,
@@ -635,6 +639,15 @@
 			path = BaseDevice;
 			sourceTree = "<group>";
 		};
+		CBC11B1F1EC4D9E80091BE2A /* MovementDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CBC11B201EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.h */,
+				CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */,
+			);
+			path = MovementDevice;
+			sourceTree = "<group>";
+		};
 		CBD357471EC0DF5F0057ABCF /* TemperatureDevice */ = {
 			isa = PBXGroup;
 			children = (
@@ -834,6 +847,7 @@
 				CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */,
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,
 				CB8E7E7C1DE0B5E70084F3CC /* TDLivePlotViewController.m in Sources */,
+				CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,
 				CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */,
 				CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */,

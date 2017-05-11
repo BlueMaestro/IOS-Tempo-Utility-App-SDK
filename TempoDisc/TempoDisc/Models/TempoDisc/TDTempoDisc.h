@@ -60,6 +60,19 @@
 @property (nullable, nonatomic, strong) NSNumber *lowestDayPressure;
 @property (nullable, nonatomic, strong) NSNumber *lowestPressure;
 
+//device 32
+@property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *pestSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *force;
+@property (nullable, nonatomic, strong) NSNumber *movementMeasurePeriod;
+@property (nullable, nonatomic, strong) NSNumber *dateNumber;
+@property (nullable, nonatomic, strong) NSNumber *buttonPressControl;
+@property (nullable, nonatomic, strong) NSNumber *lastPestDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *lastHumDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *totalPestEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *totalHumEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *lastButtonDetected;
+
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid;
 
 - (TempoDeviceType)deviceType;
