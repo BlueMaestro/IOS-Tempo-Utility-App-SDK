@@ -477,11 +477,14 @@ typedef enum : NSInteger {
 	if (self.selectedDevice.version.integerValue == 27) {
 		[self.parentViewController performSegueWithIdentifier:@"segueTempoDevicePressureInfo" sender:self.selectedDevice];
 	}
-	else if (self.selectedDevice.version.integerValue == 22 || self.selectedDevice.version.integerValue == 23 || self.selectedDevice.version.integerValue == 32) {
+	else if (self.selectedDevice.version.integerValue == 22 || self.selectedDevice.version.integerValue == 23) {
 			[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:self.selectedDevice];
 	}
 	else if (self.selectedDevice.version.integerValue == 13) {
 		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion13" sender:self.selectedDevice];
+	}
+	else if (self.selectedDevice.version.integerValue == 32) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion32" sender:self.selectedDevice];
 	}
 	else {
 		//dont show detail for non tempo disc devices
@@ -537,13 +540,16 @@ typedef enum : NSInteger {
     
 	TDTempoDisc *device = _dataSource[indexPath.row];
 	if (device.version.integerValue == 13) {
-		return 150;
+		return 150.;
 	}
 	else if (device.version.integerValue == 27) {
-		return 265;
+		return 265.;
+	}
+	else if (device.version.integerValue == 32) {
+		return 134.;
 	}
 	else {
-		return 190;
+		return 190.;
 	}
     
 }

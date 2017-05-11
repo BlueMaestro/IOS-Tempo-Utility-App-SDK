@@ -56,6 +56,7 @@
 		CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */; };
 		CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */; };
 		CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */; };
+		CBC79BD31EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */; };
 		CBD3574A1EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
 		CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF066511DA571D200210428 /* TDUARTDownloader.m */; };
@@ -156,6 +157,8 @@
 		CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseDeviceViewController.m; sourceTree = "<group>"; };
 		CBC11B201EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMovementDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMovementDeviceTableViewCell.m; sourceTree = "<group>"; };
+		CBC79BD11EC4EBA80078D919 /* TDDeviceMovementInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMovementInfoViewController.h; sourceTree = "<group>"; };
+		CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMovementInfoViewController.m; sourceTree = "<group>"; };
 		CBD357481EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTemperatureDevoceTableViewCell.h; sourceTree = "<group>"; };
 		CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTemperatureDevoceTableViewCell.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
@@ -307,6 +310,7 @@
 				CB6895601C83353F00EB1A65 /* DeviceDataTable */,
 				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
 				CB34C3691E546F1D0008F214 /* DevicePressureInfo */,
+				CBC79BD01EC4EB900078D919 /* DeviceMovementInfo */,
 				CB16BA521C82E74200C99C41 /* DeviceList */,
 				CBAB5C3E1D47CA0F00EEBECD /* DevicesContainer */,
 				CBAB5C4A1D47F81400EEBECD /* DeviceTableContainer */,
@@ -648,6 +652,15 @@
 			path = MovementDevice;
 			sourceTree = "<group>";
 		};
+		CBC79BD01EC4EB900078D919 /* DeviceMovementInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CBC79BD11EC4EBA80078D919 /* TDDeviceMovementInfoViewController.h */,
+				CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */,
+			);
+			path = DeviceMovementInfo;
+			sourceTree = "<group>";
+		};
 		CBD357471EC0DF5F0057ABCF /* TemperatureDevice */ = {
 			isa = PBXGroup;
 			children = (
@@ -832,6 +845,7 @@
 				CBAB5C451D47CC9000EEBECD /* SCHelper.m in Sources */,
 				CB290B121DB000230012EEEC /* TDUARTAllDataDownloader.m in Sources */,
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
+				CBC79BD31EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m in Sources */,
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
 				CB14AD231D93211D0090AAA2 /* DeviceInfoTableViewController.m in Sources */,
