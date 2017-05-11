@@ -15,6 +15,7 @@
 #define BM_MODEL_DISC_22 0x16
 #define BM_MODEL_DISC_23 0x17
 #define BM_MODEL_DISC_27 0x1B
+#define BM_MODEL_DISC_32 0x20
 #define BM_MODEL_DISC_99 0x63
 
 int getInt(char lsb,char msb)
@@ -112,6 +113,24 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
++ (BOOL)isTempoDisc32WithAdvertisementDate:(NSDictionary*)data {
+	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+	//BlueMaestro device
+	if (custom != nil)
+	{
+		unsigned char * d = (unsigned char*)[custom bytes];
+		unsigned int manuf = d[1] << 8 | d[0];
+		
+		//Is this one of ours and is it version 27?
+		if (manuf == MANUF_ID_BLUE_MAESTRO) {
+			if (d[2] == BM_MODEL_DISC_32) {
+				return YES;
+			}
+		}
+	}
+	return NO;
+}
+
 + (BOOL)isTempoDisc99WithAdvertisementDate:(NSDictionary*)data {
     NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
     //BlueMaestro device
@@ -122,7 +141,7 @@ int getInt(char lsb,char msb)
         
         //Is this one of ours and is it version 99?
         if (manuf == MANUF_ID_BLUE_MAESTRO) {
-            if (d[2] == BM_MODEL_DISC_27) {
+			if (d[2] == BM_MODEL_DISC_99) {
                 return YES;
             }
         }

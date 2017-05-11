@@ -305,6 +305,18 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	self.lowestDayPressure = device.lowestDayPressure;
 	self.lowestPressure = device.lowestPressure;
 	
+	self.humSensitivityLevel = device.humSensitivityLevel;
+	self.pestSensitivityLevel = device.pestSensitivityLevel;
+	self.force = device.force;
+	self.movementMeasurePeriod = device.movementMeasurePeriod;
+	self.dateNumber = device.dateNumber;
+	self.buttonPressControl = device.buttonPressControl;
+	self.lastPestDetectRate = device.lastPestDetectRate;
+	self.lastHumDetectRate = device.lastHumDetectRate;
+	self.totalPestEventsDetects = device.totalPestEventsDetects;
+	self.totalHumEventsDetects = device.totalHumEventsDetects;
+	self.lastButtonDetected = device.lastButtonDetected;
+	
 }
 
 @end

@@ -262,7 +262,7 @@
 		self.numBreach = @(data[15]);
 		
 		//Scan response packet
-		self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
+		/*self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
 		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-23] msb:data[manufacturerDataLength-24]] / 10.f);
 		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-21] msb:data[manufacturerDataLength-22]] / 10.f);
 		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-19] msb:data[manufacturerDataLength-20]] / 10.f);
@@ -279,7 +279,8 @@
 			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
 			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
 			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
-		}
+		}*/
+		
 	}
 	
 	if (self.version.integerValue == 32) {
@@ -292,39 +293,19 @@
 		//Advertisement packet
 		self.version = @(data[2]);
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
-		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
-		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
-		self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
-		self.mode = @(data[14]);
-		if (self.mode.integerValue > 100) {
-			self.isFahrenheit = @(1);
-		}
-		else {
-			self.isFahrenheit = @(0);
-		}
-		self.numBreach = @(data[15]);
 		
-		//Scan response packet
-		self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
-		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-23] msb:data[manufacturerDataLength-24]] / 10.f);
-		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-21] msb:data[manufacturerDataLength-22]] / 10.f);
-		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-19] msb:data[manufacturerDataLength-20]] / 10.f);
-		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-17] msb:data[manufacturerDataLength-18]] / 10.f);
-		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-15] msb:data[manufacturerDataLength-16]] / 10.f);
-		self.highestDayDew = @([self intValueLsb:data[manufacturerDataLength-13] msb:data[manufacturerDataLength-14]] / 10.f);
-		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-11] msb:data[manufacturerDataLength-12]] / 10.f);
-		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-9] msb:data[manufacturerDataLength-10]] / 10.f);
-		self.lowestDayDew = @([self intValueLsb:data[manufacturerDataLength-7] msb:data[manufacturerDataLength-8]] / 10.f);
-		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-5] msb:data[manufacturerDataLength-6]] / 10.f);
-		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-3] msb:data[manufacturerDataLength-4]] / 10.f);
-		self.averageDayDew = @([self intValueLsb:data[manufacturerDataLength-1] msb:data[manufacturerDataLength-2]] / 10.f);
-		if (self.mode.integerValue > 100) {
-			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
-			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
-			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
-		}
+		//device 32
+		self.humSensitivityLevel = @(data[5]);
+		self.pestSensitivityLevel = @(data[6]);
+		self.force = @(data[7]);
+		self.movementMeasurePeriod = @([self intValueLsb:data[9] msb:data[8]]);
+		self.dateNumber = @((((int) data[13]) & 0xFF) | (((int) data[12]) << 8) | (((int) data[11]) << 16) | (((int) data[10]) << 24));
+		self.buttonPressControl = @(data[14]);
+		self.lastPestDetectRate = @([self intValueLsb:data[16] msb:data[15]]);
+		self.lastHumDetectRate = @([self intValueLsb:data[18] msb:data[17]]);
+		self.totalPestEventsDetects = @([self intValueLsb:data[20] msb:data[19]]);
+		self.totalHumEventsDetects = @([self intValueLsb:data[22] msb:data[21]]);
+		self.lastButtonDetected = @([self intValueLsb:data[24] msb:data[23]]);
 	}
 	
     /**
@@ -377,6 +358,7 @@
 	if  (self.version.integerValue == 22) return TempoDeviceType22;
     if  (self.version.integerValue == 23) return TempoDeviceType23;
     if  (self.version.integerValue == 27) return TempoDeviceType27;
+	if  (self.version.integerValue == 32) return TempoDeviceType32;
     if  (self.version.integerValue == 99) return TempoDeviceType99;
     return TempoDeviceTypeUnknown;
 }

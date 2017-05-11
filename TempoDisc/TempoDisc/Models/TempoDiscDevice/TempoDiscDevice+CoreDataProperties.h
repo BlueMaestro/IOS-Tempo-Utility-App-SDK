@@ -46,6 +46,19 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *lowestDayPressure;
 @property (nullable, nonatomic, copy) NSNumber *lowestPressure;
 
+//device 32
+@property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *pestSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *force;
+@property (nullable, nonatomic, strong) NSNumber *movementMeasurePeriod;
+@property (nullable, nonatomic, strong) NSNumber *dateNumber;
+@property (nullable, nonatomic, strong) NSNumber *buttonPressControl;
+@property (nullable, nonatomic, strong) NSNumber *lastPestDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *lastHumDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *totalPestEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *totalHumEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *lastButtonDetected;
+
 @end
 
 NS_ASSUME_NONNULL_END

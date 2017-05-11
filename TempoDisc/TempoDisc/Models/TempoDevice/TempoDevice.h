@@ -15,6 +15,7 @@ typedef enum : NSInteger {
 	TempoDeviceType22,
 	TempoDeviceType23,
 	TempoDeviceType27,
+	TempoDeviceType32,
     TempoDeviceType99
 	
 } TempoDeviceType ;
@@ -33,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)isTempoDisc22WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc27WithAdvertisementDate:(NSDictionary*)data;
++ (BOOL)isTempoDisc32WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc99WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)hasManufacturerData:(NSDictionary*)data;
 

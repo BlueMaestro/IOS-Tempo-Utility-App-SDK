@@ -16,7 +16,7 @@
 #import "TDDeviceInfoViewController.h"
 #import "AppDelegate.h"
 #import "TDTempoDisc.h"
-#import "TDTemperatureDevoceTableViewCell.h"
+#import "TDMovementDeviceTableViewCell.h"
 
 #define kDeviceScanInterval 2.0
 
@@ -153,7 +153,7 @@ typedef enum : NSInteger {
 			 TDTempoDisc *device = [self findOrCreateDeviceForPeripheral:peripheral];
 			 if (device) {
 				 device.peripheral = peripheral;
-                 if ((device.version.integerValue == 22) || (device.version.integerValue == 23) || (device.version.integerValue == 32)) {
+                 if ((device.version.integerValue == 22) || (device.version.integerValue == 23)) {
                      [devices addObject:device];
                      NSLog(@"Scanning and device found");
                  }
@@ -164,6 +164,10 @@ typedef enum : NSInteger {
 				 else if (device.version.integerValue == 27) {
 					 [devices addObject:device];
 					  NSLog(@"Found v27 device");
+				 }
+				 else if (device.version.integerValue == 32) {
+					 [devices addObject:device];
+					 NSLog(@"Found v32 device");
 				 }
 			 }
          }
@@ -195,11 +199,13 @@ typedef enum : NSInteger {
     BOOL isTempoDisc22 = [TempoDevice isTempoDisc22WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc23 = [TempoDevice isTempoDisc23WithAdvertisementDate:peripheral.advertisingData];
 	BOOL isTempoDisc27 = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
+	BOOL isTempoDisc32 = [TempoDevice isTempoDisc32WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc99 = [TempoDevice isTempoDisc99WithAdvertisementDate:peripheral.advertisingData];
 	
     if (isTempoDisc22) {NSLog(@"Found Tempo Disc 22");}
     if (isTempoDisc23) {NSLog(@"Found Tempo Disc 23");}
 	if (isTempoDisc27) {NSLog(@"Found Tempo Disc 27");}
+	if (isTempoDisc32) {NSLog(@"Found Tempo Disc 32");}
     if (isTempoDisc99) {NSLog(@"Found Pacif-i v2");}
 	
 	TDTempoDisc *device = [[TDTempoDisc alloc] init];
@@ -450,6 +456,17 @@ typedef enum : NSInteger {
 	cell.labelThresholdBreachesValue.text = device.numBreach.stringValue;
 }
 
+- (void)fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillPressureDeviceCell:cell model:device];
+	//TODO: Tempo device version 13 data fill
+	cell.labelChannelOneValue.text = device.humSensitivityLevel.stringValue;
+	cell.labelChannelTwoValue.text = device.pestSensitivityLevel.stringValue;
+	cell.labelPressCountValue.text = device.buttonPressControl.stringValue;
+	cell.labelLoggingIntervalValue.text = device.movementMeasurePeriod.stringValue;
+	cell.labelIntervalCountValue.text = device.intervalCounter.stringValue;
+}
+
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -482,7 +499,7 @@ typedef enum : NSInteger {
 	TDTempoDisc *device = _dataSource[indexPath.row];
 	
     NSString *reuse;
-	if (([device version].integerValue == 22) || ([device version].integerValue == 23) || [device version].integerValue == 32) {
+	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
 		reuse = @"cellDevice22and23";
 	}
 	else if ([device version].integerValue == 27) {
@@ -491,16 +508,22 @@ typedef enum : NSInteger {
 	else if ([device version].integerValue == 13) {
 		reuse = @"cellDevice13";
 	}
+	else if ([device version].integerValue == 32) {
+		reuse = @"cellDevice32";
+	}
 	else {
 		reuse = @"cellDeviceOther";
 	}
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
-	if ([cell isKindOfClass:[TDTemperatureDevoceTableViewCell class]]) {
+	if ([cell isKindOfClass:[TDMovementDeviceTableViewCell class]]) {
+		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isKindOfClass:[TDTemperatureDevoceTableViewCell class]]) {
 		[self fillTemperatureDeviceCell:(TDTemperatureDevoceTableViewCell*)cell model:device];
 	}
-	if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
+	else if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
 	}
 	else if ([cell isKindOfClass:[TDOtherDeviceTableViewCell class]]) {
