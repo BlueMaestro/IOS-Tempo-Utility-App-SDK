@@ -57,7 +57,7 @@
 		CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */; };
 		CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */; };
 		CBC79BD31EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */; };
-		CBD3574A1EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */; };
+		CBD3574A1EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD357491EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
 		CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF066511DA571D200210428 /* TDUARTDownloader.m */; };
 /* End PBXBuildFile section */
@@ -159,8 +159,8 @@
 		CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMovementDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CBC79BD11EC4EBA80078D919 /* TDDeviceMovementInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMovementInfoViewController.h; sourceTree = "<group>"; };
 		CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMovementInfoViewController.m; sourceTree = "<group>"; };
-		CBD357481EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTemperatureDevoceTableViewCell.h; sourceTree = "<group>"; };
-		CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTemperatureDevoceTableViewCell.m; sourceTree = "<group>"; };
+		CBD357481EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTemperatureDeviceTableViewCell.h; sourceTree = "<group>"; };
+		CBD357491EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTemperatureDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
 		CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUARTViewController.m; sourceTree = "<group>"; };
 		CBF066501DA571D200210428 /* TDUARTDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTDownloader.h; sourceTree = "<group>"; };
@@ -664,8 +664,8 @@
 		CBD357471EC0DF5F0057ABCF /* TemperatureDevice */ = {
 			isa = PBXGroup;
 			children = (
-				CBD357481EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.h */,
-				CBD357491EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m */,
+				CBD357481EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.h */,
+				CBD357491EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m */,
 			);
 			path = TemperatureDevice;
 			sourceTree = "<group>";
@@ -731,8 +731,8 @@
 				TargetAttributes = {
 					CB16BA311C82E67E00C99C41 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = EL3G87RG88;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 3GCG7V8C8A;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -834,7 +834,7 @@
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */,
 				CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */,
-				CBD3574A1EC0DF730057ABCF /* TDTemperatureDevoceTableViewCell.m in Sources */,
+				CBD3574A1EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m in Sources */,
 				CB8E7E801DE0B8680084F3CC /* TDLivePlotData.m in Sources */,
 				CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */,
 				CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */,
@@ -986,14 +986,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Blue Maestro Ltd (3GCG7V8C8A)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = EL3G87RG88;
+				DEVELOPMENT_TEAM = 3GCG7V8C8A;
 				GCC_PREFIX_HEADER = "TempoDisc/Tempo UtilityPCH.pch";
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bluemaestro.TempoDisc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a5862ba0-bc4b-4cc4-8e3c-dbb7343c8ccc";
-				PROVISIONING_PROFILE_SPECIFIER = WildcardHTEC;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -1004,7 +1004,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Blue Maestro Ltd (3GCG7V8C8A)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3GCG7V8C8A;
 				GCC_PREFIX_HEADER = "TempoDisc/Tempo UtilityPCH.pch";
 				INFOPLIST_FILE = TempoDisc/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

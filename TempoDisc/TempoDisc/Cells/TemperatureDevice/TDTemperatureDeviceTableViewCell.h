@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TDPressureDeviceTableViewCell.h"
 
-@interface TDTemperatureDevoceTableViewCell : TDPressureDeviceTableViewCell
+@interface TDTemperatureDeviceTableViewCell : TDPressureDeviceTableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *labelMode;
 @property (strong, nonatomic) IBOutlet UILabel *labelModeValue;

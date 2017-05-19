@@ -169,6 +169,15 @@ typedef enum : NSInteger {
 					 [devices addObject:device];
 					 NSLog(@"Found v32 device");
 				 }
+                 else if (device.version.integerValue == 99) {
+                     [devices addObject:device];
+                     NSLog(@"Found Pacifi V2 device");
+                 }
+                 else if (device.version.integerValue == 113) {
+                     [devices addObject:device];
+                     NSLog(@"Found v113 device");
+                 }
+                 
 			 }
          }
 		 NSArray *sorted = [devices sortedArrayUsingDescriptors:sortDescriptors];
@@ -196,17 +205,21 @@ typedef enum : NSInteger {
 	BOOL hasManufacturerData = [TempoDevice hasManufacturerData:peripheral.advertisingData];
 	
 	BOOL isBlueMaestroDevice = [TempoDevice isBlueMaestroDeviceWithAdvertisementData:peripheral.advertisingData];
+    BOOL isTempoDisc13 = [TempoDevice isTempoDisc13WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc22 = [TempoDevice isTempoDisc22WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc23 = [TempoDevice isTempoDisc23WithAdvertisementDate:peripheral.advertisingData];
 	BOOL isTempoDisc27 = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
 	BOOL isTempoDisc32 = [TempoDevice isTempoDisc32WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc99 = [TempoDevice isTempoDisc99WithAdvertisementDate:peripheral.advertisingData];
+    BOOL isTempoDisc113 = [TempoDevice isTempoDisc113WithAdvertisementDate:peripheral.advertisingData];
 	
+    if (isTempoDisc13) {NSLog(@"Found Tempo Disc 13");}
     if (isTempoDisc22) {NSLog(@"Found Tempo Disc 22");}
     if (isTempoDisc23) {NSLog(@"Found Tempo Disc 23");}
 	if (isTempoDisc27) {NSLog(@"Found Tempo Disc 27");}
 	if (isTempoDisc32) {NSLog(@"Found Tempo Disc 32");}
     if (isTempoDisc99) {NSLog(@"Found Pacif-i v2");}
+    if (isTempoDisc113) {NSLog(@"Found Tempo Disc 113");}
 	
 	TDTempoDisc *device = [[TDTempoDisc alloc] init];
 	if (isBlueMaestroDevice && hasManufacturerData) {
@@ -428,9 +441,25 @@ typedef enum : NSInteger {
             [cell.classID setHidden:YES];
             [cell.classIDHeadingLabel setHidden:YES];
 		}
+        else if (device.version.integerValue == 27) {
+            cell.labelDeviceIdentifierValue.text = @"PEBBLE v27";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
+        }
 		else if (device.version.integerValue == 13) {
-			
+            cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T v13";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
 		}
+        else if (device.version.integerValue == 113) {
+            cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T BEACON v113";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
+        }
+        
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";
 	}
@@ -438,17 +467,17 @@ typedef enum : NSInteger {
 }
 
 - (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
-	[self fillTempoDiscCell:cell model:device];
 	//fill rest of the data
-	cell.labelPressureValue.text = device.pressure.stringValue;
+	cell.labelPressureValue.text = device.currentPressure.stringValue;
 	cell.dewpointUnits.text = cell.temperatureUnits.text;
+    cell.labelCurrentDewPointValue.text = device.dewPoint.stringValue;
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	cell.labelDeviceName.text = device.name;
 }
 
-- (void)fillTemperatureDeviceCell:(TDTemperatureDevoceTableViewCell*)cell model:(TDTempoDisc*)device {
+- (void)fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	[self fillPressureDeviceCell:cell model:device];
 	//TODO: Tempo device version 13 data fill
 	cell.labelUnitsValue.text = device.isFahrenheit.boolValue ? @"Fahrenheit (˚ K)" : @"Celsius (˚ C)";
@@ -506,16 +535,16 @@ typedef enum : NSInteger {
 		reuse = @"cellDevice22and23";
 	}
 	else if ([device version].integerValue == 27) {
-		reuse = @"cellDeviceTempoDisc";
+		reuse = @"cellDeviceDisc27";
 	}
-	else if ([device version].integerValue == 13) {
+	else if (([device version].integerValue == 13) || ([device version].integerValue ==113)) {
 		reuse = @"cellDevice13";
 	}
 	else if ([device version].integerValue == 32) {
 		reuse = @"cellDevice32";
 	}
 	else {
-		reuse = @"cellDeviceOther";
+		//reuse = @"cellDeviceOther";
 	}
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
@@ -523,8 +552,8 @@ typedef enum : NSInteger {
 	if ([cell isKindOfClass:[TDMovementDeviceTableViewCell class]]) {
 		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
 	}
-	else if ([cell isKindOfClass:[TDTemperatureDevoceTableViewCell class]]) {
-		[self fillTemperatureDeviceCell:(TDTemperatureDevoceTableViewCell*)cell model:device];
+	else if ([cell isKindOfClass:[TDTemperatureDeviceTableViewCell class]]) {
+		[self fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
 	}
 	else if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
@@ -532,6 +561,9 @@ typedef enum : NSInteger {
 	else if ([cell isKindOfClass:[TDOtherDeviceTableViewCell class]]) {
 		[self fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:device];
 	}
+    else if ([cell isKindOfClass:[TDPressureDeviceTableViewCell class]]) {
+        [self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:device];
+    }
 	
 	return cell;
 }

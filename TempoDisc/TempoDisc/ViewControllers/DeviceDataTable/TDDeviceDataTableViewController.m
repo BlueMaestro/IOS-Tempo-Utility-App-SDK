@@ -146,7 +146,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		NSString *reuse = @"cellDiscData";
-		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) || ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113)) {
 			reuse = @"cellDiscData13";
 		}
 		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];

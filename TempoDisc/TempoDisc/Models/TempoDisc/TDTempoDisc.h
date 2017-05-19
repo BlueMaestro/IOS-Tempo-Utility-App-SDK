@@ -59,6 +59,7 @@
 @property (nullable, nonatomic, strong) NSNumber *highestPressure;
 @property (nullable, nonatomic, strong) NSNumber *lowestDayPressure;
 @property (nullable, nonatomic, strong) NSNumber *lowestPressure;
+@property (nullable, nonatomic, strong) NSNumber *altitude;
 
 //device 32
 @property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;

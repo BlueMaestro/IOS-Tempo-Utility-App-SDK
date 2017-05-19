@@ -6,9 +6,9 @@
 //  Copyright © 2017 BlueMaestro. All rights reserved.
 //
 
-#import "TDTemperatureDevoceTableViewCell.h"
+#import "TDTemperatureDeviceTableViewCell.h"
 
-@implementation TDTemperatureDevoceTableViewCell
+@implementation TDTemperatureDeviceTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TDTemperatureDevoceTableViewCell.h"
+#import "TDTemperatureDeviceTableViewCell.h"
 
-@interface TDMovementDeviceTableViewCell : TDTemperatureDevoceTableViewCell
+@interface TDMovementDeviceTableViewCell : TDTemperatureDeviceTableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *labelChannelOneTitle;
 @property (strong, nonatomic) IBOutlet UILabel *labelChannelOneValue;

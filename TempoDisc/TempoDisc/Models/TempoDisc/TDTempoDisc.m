@@ -251,7 +251,9 @@
 		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
 		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
 		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
-		self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+		self.currentPressure = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+        float currentDewPointCalculation = (float)([self.currentTemperature floatValue] - ((100 - [self.currentHumidity floatValue]) /5));
+        self.dewPoint = @(currentDewPointCalculation);
 		self.mode = @(data[14]);
 		if (self.mode.integerValue > 100) {
 			self.isFahrenheit = @(1);
@@ -261,25 +263,67 @@
 		}
 		self.numBreach = @(data[15]);
 		
-		//Scan response packet
-		/*self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-25] msb:data[manufacturerDataLength-26]] / 10.f);
-		self.highestHumidity = @([self intValueLsb:data[manufacturerDataLength-23] msb:data[manufacturerDataLength-24]] / 10.f);
-		self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-21] msb:data[manufacturerDataLength-22]] / 10.f);
-		self.lowestHumidity = @([self intValueLsb:data[manufacturerDataLength-19] msb:data[manufacturerDataLength-20]] / 10.f);
-		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-17] msb:data[manufacturerDataLength-18]] / 10.f);
-		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-15] msb:data[manufacturerDataLength-16]] / 10.f);
-		self.highestDayDew = @([self intValueLsb:data[manufacturerDataLength-13] msb:data[manufacturerDataLength-14]] / 10.f);
-		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-11] msb:data[manufacturerDataLength-12]] / 10.f);
-		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-9] msb:data[manufacturerDataLength-10]] / 10.f);
-		self.lowestDayDew = @([self intValueLsb:data[manufacturerDataLength-7] msb:data[manufacturerDataLength-8]] / 10.f);
-		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-5] msb:data[manufacturerDataLength-6]] / 10.f);
-		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-3] msb:data[manufacturerDataLength-4]] / 10.f);
-		self.averageDayDew = @([self intValueLsb:data[manufacturerDataLength-1] msb:data[manufacturerDataLength-2]] / 10.f);
-		if (self.mode.integerValue > 100) {
-			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
-			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
-			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
-		}*/
+        //Scan response packet
+        self.highestDayPressure = @([self intValueLsb:data[manufacturerDataLength-24] msb:data[manufacturerDataLength-25]] / 10.f);
+        self.averageDayPressure = @([self intValueLsb:data[manufacturerDataLength-22] msb:data[manufacturerDataLength-23]] / 10.f);
+        self.lowestDayPressure = @([self intValueLsb:data[manufacturerDataLength-20] msb:data[manufacturerDataLength-21]] / 10.f);
+        self.altitude = @([self intValueLsb:data[manufacturerDataLength-18] msb:data[manufacturerDataLength-19]] / 10.f);
+        self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-16] msb:data[manufacturerDataLength-17]] / 10.f);
+        self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-14] msb:data[manufacturerDataLength-15]] / 10.f);
+        float highDewPointCalculation = (float)([self.highestDayTemperature floatValue] - ((100 - [self.highestDayHumidity floatValue]) /5));
+        self.highestDayDew = @(highDewPointCalculation);
+        self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-12] msb:data[manufacturerDataLength-13]] / 10.f);
+        self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-10] msb:data[manufacturerDataLength-11]] / 10.f);
+        float lowDewPointCalculation = (float)([self.lowestDayTemperature floatValue] - ((100 - [self.lowestDayHumidity floatValue]) /5));
+        self.lowestDayDew = @(lowDewPointCalculation);
+        self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-8] msb:data[manufacturerDataLength-9]] / 10.f);
+        self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-6] msb:data[manufacturerDataLength-7]] / 10.f);
+        float avgDewPointCalculation = (float)([self.averageDayTemperature floatValue] - ((100 - [self.averageDayHumidity floatValue]) /5));
+        self.averageDayDew = @(avgDewPointCalculation);
+        if (self.mode.integerValue > 100) {
+            self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
+            self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
+            self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
+        }
+        
+        self.globalIdentifier = @(data[manufacturerDataLength-5]);
+        NSLog(@"Global identifier is %@", self.globalIdentifier);
+        
+        const unsigned char dateBytes[] = {data[manufacturerDataLength-4], data[manufacturerDataLength-3], data[manufacturerDataLength-2], data[manufacturerDataLength-1]};
+        NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
+        //date digits, should be reverse from what is written, not sure about indexes
+        unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+        NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
+        
+        NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+        self.referenceDateRawNumber = fullValue;
+        long lowDate = 1700000000; //1 January 2017
+        long highDate = 1900000000; //1 January 2019
+        if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
+            NSInteger minutes = fullValue.integerValue % 100;
+            NSInteger hours = (fullValue.integerValue/100) % 100;
+            NSInteger days = (fullValue.integerValue/10000) % 100;
+            NSInteger months = (fullValue.integerValue/1000000) % 100;
+            NSInteger years = (fullValue.integerValue/100000000) % 100;
+            
+            NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+            NSDateComponents *components = [[NSDateComponents alloc] init];
+            //MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+            components.minute = MIN(minutes, 60);
+            components.hour = MIN(hours, 24);
+            components.day = MIN(days, 31);
+            components.month = MIN(months, 12);
+            components.year = years+2000;//add century as its only last 2 digits
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+            NSDate *date = [calendar dateFromComponents:components];
+            
+            self.startTimestamp = [calendar dateFromComponents:components];
+            NSLog(@"%@", [dateFormatter stringFromDate:date]);
+            
+        }
+        NSLog(@"Parsed version 27 data");
+        
 		
 	}
 	
@@ -355,11 +399,13 @@
 }
 
 - (TempoDeviceType)deviceType {
+    if  (self.version.integerValue == 13) return TempoDeviceType13;
 	if  (self.version.integerValue == 22) return TempoDeviceType22;
     if  (self.version.integerValue == 23) return TempoDeviceType23;
     if  (self.version.integerValue == 27) return TempoDeviceType27;
 	if  (self.version.integerValue == 32) return TempoDeviceType32;
     if  (self.version.integerValue == 99) return TempoDeviceType99;
+    if  (self.version.integerValue == 113) return TempoDeviceType113;
     return TempoDeviceTypeUnknown;
 }
 

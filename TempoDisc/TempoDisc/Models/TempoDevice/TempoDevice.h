@@ -12,11 +12,13 @@
 
 typedef enum : NSInteger {
 	TempoDeviceTypeUnknown = 0,
+    TempoDeviceType13,
 	TempoDeviceType22,
 	TempoDeviceType23,
 	TempoDeviceType27,
 	TempoDeviceType32,
-    TempoDeviceType99
+    TempoDeviceType99,
+    TempoDeviceType113
 	
 } TempoDeviceType ;
 
@@ -31,11 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)classID;
 
 + (BOOL)isBlueMaestroDeviceWithAdvertisementData:(NSDictionary*)data;
++ (BOOL)isTempoDisc13WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc22WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc27WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc32WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)isTempoDisc99WithAdvertisementDate:(NSDictionary*)data;
++ (BOOL)isTempoDisc113WithAdvertisementDate:(NSDictionary*)data;
 + (BOOL)hasManufacturerData:(NSDictionary*)data;
 
 + (TempoDevice*)deviceWithName:(NSString*)name data:(NSDictionary*)data uuid:(NSString*)uuid context:(NSManagedObjectContext*)context;
