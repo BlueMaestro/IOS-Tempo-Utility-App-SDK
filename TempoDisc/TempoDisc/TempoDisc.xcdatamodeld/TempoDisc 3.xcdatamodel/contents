@@ -35,6 +35,7 @@
         <relationship name="readingTypes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ReadingType" inverseName="device" inverseEntity="ReadingType" syncable="YES"/>
     </entity>
     <entity name="TempoDiscDevice" representedClassName="TempoDiscDevice" parentEntity="TempoDevice" syncable="YES">
+        <attribute name="altitude" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="averageDayDew" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="averageDayHumidity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="averageDayPressure" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
@@ -80,6 +81,6 @@
         <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
         <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="330"/>
-        <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="645"/>
+        <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="660"/>
     </elements>
 </model>

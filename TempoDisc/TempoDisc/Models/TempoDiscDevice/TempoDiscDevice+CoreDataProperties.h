@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSNumber *timerInterval;
 @property (nullable, nonatomic, copy) NSNumber *intervalCounter;
-@property (nullable, nonatomic, copy) NSDecimalNumber *dewPoint;
+@property (nullable, nonatomic, copy) NSNumber *dewPoint;
 @property (nullable, nonatomic, copy) NSNumber *mode;
 @property (nullable, nonatomic, copy) NSNumber *version;
 @property (nullable, nonatomic, copy) NSNumber *numBreach;
@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *highestPressure;
 @property (nullable, nonatomic, copy) NSNumber *lowestDayPressure;
 @property (nullable, nonatomic, copy) NSNumber *lowestPressure;
+@property (nullable, nonatomic, copy) NSNumber *altitude;
 
 //device 32
 @property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;

@@ -43,5 +43,6 @@
 @dynamic highestPressure;
 @dynamic lowestDayPressure;
 @dynamic lowestPressure;
+@dynamic altitude;
 
 @end
