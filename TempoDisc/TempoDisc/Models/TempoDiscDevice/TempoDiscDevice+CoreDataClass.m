@@ -37,6 +37,11 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid {
 	[super fillWithData:advertisedData name:name uuid:uuid];
+	TDTempoDisc *disc = [[TDTempoDisc alloc] init];
+	[disc fillWithData:advertisedData name:name uuid:uuid];
+	[self fillDataForPersistentStore:disc];
+	return;
+	
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	unsigned char * data = (unsigned char*)[custom bytes];
     NSUInteger dataLength = custom.length;
