@@ -39,6 +39,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	[super fillWithData:advertisedData name:name uuid:uuid];
 	TDTempoDisc *disc = [[TDTempoDisc alloc] init];
 	[disc fillWithData:advertisedData name:name uuid:uuid];
+	disc.peripheral = self.peripheral;
 	[self fillDataForPersistentStore:disc];
 	return;
 	
