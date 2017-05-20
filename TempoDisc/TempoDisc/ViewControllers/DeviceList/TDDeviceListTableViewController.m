@@ -549,21 +549,21 @@ typedef enum : NSInteger {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
-	if ([cell isKindOfClass:[TDMovementDeviceTableViewCell class]]) {
+	if ([cell isMemberOfClass:[TDMovementDeviceTableViewCell class]]) {
 		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
 	}
-	else if ([cell isKindOfClass:[TDTemperatureDeviceTableViewCell class]]) {
+	else if ([cell isMemberOfClass:[TDTemperatureDeviceTableViewCell class]]) {
 		[self fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
 	}
-	else if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
+	if ([cell isMemberOfClass:[TDPressureDeviceTableViewCell class]]) {
+		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isMemberOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
 	}
-	else if ([cell isKindOfClass:[TDOtherDeviceTableViewCell class]]) {
+	else if ([cell isMemberOfClass:[TDOtherDeviceTableViewCell class]]) {
 		[self fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:device];
 	}
-    else if ([cell isKindOfClass:[TDPressureDeviceTableViewCell class]]) {
-        [self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:device];
-    }
 	
 	return cell;
 }
