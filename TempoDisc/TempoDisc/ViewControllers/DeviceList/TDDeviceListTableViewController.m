@@ -525,6 +525,9 @@ typedef enum : NSInteger {
 	else if (self.selectedDevice.version.integerValue == 32) {
 		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion32" sender:self.selectedDevice];
 	}
+	else if (self.selectedDevice.version.integerValue == 42) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion42" sender:self.selectedDevice];
+	}
 	else {
 		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
