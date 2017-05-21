@@ -55,6 +55,23 @@ typedef enum : NSInteger {
 
 #pragma mark - Private methods
 
+- (void)fillDewpointsDataForDevice:(TempoDevice*)device {
+	NSArray *temperatureReadings = [device readingsForType:@"Temperature"];
+	NSArray *humidityReadings = [device readingsForType:@"Humidity"];
+	NSMutableArray *dewPointsValues = [NSMutableArray array];
+	for (NSInteger i=0; i<MIN(temperatureReadings.count, humidityReadings.count); i++) {
+		Reading *temperatureReading = temperatureReadings[i];
+		Reading *humidityReading = humidityReadings[i];
+		
+		//min, avg, max
+		[dewPointsValues addObject:@[@(temperatureReading.minValue.floatValue-((100.-humidityReading.minValue.floatValue)/5.)),
+									 @(temperatureReading.avgValue.floatValue-((100.-humidityReading.avgValue.floatValue)/5.)),
+									 @(temperatureReading.maxValue.floatValue-((100.-humidityReading.maxValue.floatValue)/5.))]];
+	}
+	
+	[[TDSharedDevice sharedDevice].selectedDevice addData:dewPointsValues forReadingType:@"DewPoint" startTimestamp:[(Reading*)[temperatureReadings firstObject] timestamp] interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+}
+
 - (int)getIntLsb:(char)lsb msb:(char)msb {
 	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
 }
@@ -139,6 +156,9 @@ typedef enum : NSInteger {
 			downloadType = DataDownloadTypeFinish;
 			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
 			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+				[self fillDewpointsDataForDevice:[TDSharedDevice sharedDevice].selectedDevice];
+			}
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;
