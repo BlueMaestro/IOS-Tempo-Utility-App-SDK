@@ -49,6 +49,10 @@ typedef enum : NSInteger {
 
 @property (nonatomic, strong) NSNumber *logCounter;
 
+@property (nonatomic, assign) NSInteger deviceVersion;
+
+@property (nonatomic, assign) NSInteger totalCurrentSample;
+
 @end
 
 @implementation TDUARTAllDataDownloader
@@ -117,9 +121,26 @@ typedef enum : NSInteger {
 			//header data, parse next point and dont impor
 			NSInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
 			_logCounter = @(nextCounter);
+			_totalCurrentSample = sendGlobalLogCount;
+			
+			switch (_currentDownloadType) {
+				case DataDownloadTypeTemperature:
+					[self notifyUpdateForProgress:0.0];
+					break;
+				case DataDownloadTypeHumidity:
+					[self notifyUpdateForProgress:1/3.0];
+					break;
+				case DataDownloadTypeDewPoint:
+					[self notifyUpdateForProgress:2/3.0];
+					
+				default:
+					break;
+			}
+			
 			return;
 		}
 	}
+	float baseProgress = 0.0;
 	NSInteger length = data.length;
 	char * d = (char*)[data bytes];
 	for (NSInteger i=0; i<length; i+=2) {
@@ -131,10 +152,33 @@ typedef enum : NSInteger {
 			break;
 		}
 		else {
-			NSLog(@"sample raw value: %@", [data subdataWithRange:NSMakeRange(i, 2)]);
+			NSString *type = @"UNKNOWN";
+			
+			switch (_currentDownloadType) {
+				case DataDownloadTypeTemperature:
+					type = @"T";
+					break;
+				case DataDownloadTypeHumidity:
+					baseProgress = 1/3.0;
+					type = @"H";
+					break;
+				case DataDownloadTypeDewPoint:
+					type = @"D";
+					baseProgress = 2/3.0;
+					break;
+				default:
+					break;
+			}
+			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
 			NSInteger value = [self getIntLsb:d[i+1] msb:d[i]];
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
+			if (_deviceVersion == 13) {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)];
+			}
+			else {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+			}
 		}
 	}
 }
@@ -224,6 +268,7 @@ typedef enum : NSInteger {
 	_currentDataSamples = [NSMutableArray array];
 	_downloadStartTimestamp = [NSDate date];
 	_completion = completion;
+	_deviceVersion = device.version.integerValue;
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
