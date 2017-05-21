@@ -169,6 +169,10 @@ typedef enum : NSInteger {
 					 [devices addObject:device];
 					 NSLog(@"Found v32 device");
 				 }
+				 else if (device.version.integerValue == 42) {
+					 [devices addObject:device];
+					 NSLog(@"Found v42 device");
+				 }
                  else if (device.version.integerValue == 99) {
                      [devices addObject:device];
                      NSLog(@"Found Pacifi V2 device");
@@ -495,6 +499,12 @@ typedef enum : NSInteger {
 	cell.labelIntervalCountValue.text = device.intervalCounter.stringValue;
 }
 
+- (void)fillButtonDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillPressureDeviceCell:cell model:device];
+	//TODO: Tempo device version 42 data fill
+	cell.labelTemperatureValue.text = device.buttonPressControl.stringValue;
+}
+
 
 #pragma mark - UITableViewDelegate
 
@@ -543,6 +553,9 @@ typedef enum : NSInteger {
 	else if ([device version].integerValue == 32) {
 		reuse = @"cellDevice32";
 	}
+	else if ([device version].integerValue == 42) {
+		reuse = @"cellDevice42";
+	}
 	else {
 		//reuse = @"cellDeviceOther";
 	}
@@ -553,7 +566,12 @@ typedef enum : NSInteger {
 		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
 	}
 	else if ([cell isMemberOfClass:[TDTemperatureDeviceTableViewCell class]]) {
-		[self fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
+		if (device.version.integerValue == 42) {
+			[self fillButtonDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
+		}
+		else {
+			[self fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
+		}
 	}
 	if ([cell isMemberOfClass:[TDPressureDeviceTableViewCell class]]) {
 		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:device];
@@ -579,6 +597,9 @@ typedef enum : NSInteger {
 	}
 	else if (device.version.integerValue == 32) {
 		return 134.;
+	}
+	else if (device.version.integerValue == 42) {
+		return 120.;
 	}
 	else {
 		return 190.;
