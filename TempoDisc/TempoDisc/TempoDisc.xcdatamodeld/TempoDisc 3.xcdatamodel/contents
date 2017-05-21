@@ -74,6 +74,7 @@
         <attribute name="pressure" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="referenceDateRawNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="timerInterval" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="totalButtonEvents" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="totalHumEventsDetects" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="totalPestEventsDetects" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
@@ -81,6 +82,6 @@
         <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
         <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="330"/>
-        <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="660"/>
+        <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="675"/>
     </elements>
 </model>

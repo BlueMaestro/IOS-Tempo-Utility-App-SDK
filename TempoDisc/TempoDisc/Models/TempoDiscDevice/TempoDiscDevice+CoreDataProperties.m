@@ -44,5 +44,6 @@
 @dynamic lowestDayPressure;
 @dynamic lowestPressure;
 @dynamic altitude;
+@dynamic totalButtonEvents;
 
 @end

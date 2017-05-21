@@ -339,6 +339,8 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	self.totalHumEventsDetects = device.totalHumEventsDetects;
 	self.lastButtonDetected = device.lastButtonDetected;
 	
+	self.totalButtonEvents = device.totalButtonEvents;
+	
 }
 
 @end

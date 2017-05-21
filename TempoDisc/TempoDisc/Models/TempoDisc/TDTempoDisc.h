@@ -67,12 +67,15 @@
 @property (nullable, nonatomic, strong) NSNumber *force;
 @property (nullable, nonatomic, strong) NSNumber *movementMeasurePeriod;
 @property (nullable, nonatomic, strong) NSNumber *dateNumber;
-@property (nullable, nonatomic, strong) NSNumber *buttonPressControl;
+@property (nullable, nonatomic, strong) NSNumber *buttonPressControl;//also for version 42
 @property (nullable, nonatomic, strong) NSNumber *lastPestDetectRate;
 @property (nullable, nonatomic, strong) NSNumber *lastHumDetectRate;
 @property (nullable, nonatomic, strong) NSNumber *totalPestEventsDetects;
 @property (nullable, nonatomic, strong) NSNumber *totalHumEventsDetects;
 @property (nullable, nonatomic, strong) NSNumber *lastButtonDetected;
+
+//version 42
+@property (nullable, nonatomic, strong) NSNumber *totalButtonEvents;
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid;
 

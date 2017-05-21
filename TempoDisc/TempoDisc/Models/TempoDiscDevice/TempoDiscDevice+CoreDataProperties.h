@@ -60,6 +60,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) NSNumber *totalHumEventsDetects;
 @property (nullable, nonatomic, strong) NSNumber *lastButtonDetected;
 
+//device 42
+@property (nullable, nonatomic, strong) NSNumber *totalButtonEvents;
+
 @end
 
 NS_ASSUME_NONNULL_END

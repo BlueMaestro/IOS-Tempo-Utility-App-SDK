@@ -352,6 +352,56 @@
 		self.lastButtonDetected = @([self intValueLsb:data[24] msb:data[23]]);
 	}
 	
+	/**
+	 *	Version 42
+	 *
+	 **/
+	
+	if (self.version.integerValue == 42) {
+		self.uuid = uuid;
+		self.name = advertisedData[@"kCBAdvDataLocalName"];
+		self.lastDetected = [NSDate date];
+		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		const unsigned char dateBytes[] = {data[8], data[9], data[10], data[11]};
+		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
+		//date digits, should be reverse from what is written, not sure about indexes
+		unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+		NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
+		
+		NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+		self.referenceDateRawNumber = fullValue;
+		long lowDate = 1700000000; //1 January 2017
+		long highDate = 1900000000; //1 January 2019
+		if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
+			NSInteger minutes = fullValue.integerValue % 100;
+			NSInteger hours = (fullValue.integerValue/100) % 100;
+			NSInteger days = (fullValue.integerValue/10000) % 100;
+			NSInteger months = (fullValue.integerValue/1000000) % 100;
+			NSInteger years = (fullValue.integerValue/100000000) % 100;
+			
+			NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+			NSDateComponents *components = [[NSDateComponents alloc] init];
+			//MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+			components.minute = MIN(minutes, 60);
+			components.hour = MIN(hours, 24);
+			components.day = MIN(days, 31);
+			components.month = MIN(months, 12);
+			components.year = years+2000;//add century as its only last 2 digits
+			NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+			dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+			NSDate *date = [calendar dateFromComponents:components];
+			
+			self.startTimestamp = [calendar dateFromComponents:components];
+			NSLog(@"%@", [dateFormatter stringFromDate:date]);
+		}
+		self.buttonPressControl = @(data[12]);
+		self.lastButtonDetected = @([self intValueLsb:data[14] msb:data[13]]);
+		self.totalButtonEvents = @([self intValueLsb:data[16] msb:data[15]]);
+		
+	}
+	
     /**
      *	Version 99 PACIF-I V2
      *
