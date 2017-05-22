@@ -134,7 +134,7 @@ typedef enum : NSInteger {
 				case DataDownloadTypePressure:
 				case DataDownloadTypeDewPoint:
 					[self notifyUpdateForProgress:2/3.0];
-					
+					break;
 				default:
 					break;
 			}
