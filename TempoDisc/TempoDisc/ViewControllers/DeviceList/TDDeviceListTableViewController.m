@@ -471,6 +471,7 @@ typedef enum : NSInteger {
 }
 
 - (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillTempoDiscCell:cell model:device];
 	//fill rest of the data
 	cell.labelPressureValue.text = device.currentPressure.stringValue;
 	cell.dewpointUnits.text = cell.temperatureUnits.text;
