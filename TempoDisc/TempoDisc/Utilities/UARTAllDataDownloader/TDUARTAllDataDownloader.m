@@ -28,6 +28,7 @@ typedef enum : NSInteger {
 	DataDownloadTypeTemperature,
 	DataDownloadTypeHumidity,
 	DataDownloadTypeDewPoint,
+	DataDownloadTypePressure,
 	DataDownloadTypeFinish
 } DataDownloadType;
 
@@ -130,6 +131,7 @@ typedef enum : NSInteger {
 				case DataDownloadTypeHumidity:
 					[self notifyUpdateForProgress:1/3.0];
 					break;
+				case DataDownloadTypePressure:
 				case DataDownloadTypeDewPoint:
 					[self notifyUpdateForProgress:2/3.0];
 					
@@ -145,7 +147,7 @@ typedef enum : NSInteger {
 	char * d = (char*)[data bytes];
 	for (NSInteger i=0; i<length; i+=2) {
 		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
-			(_currentDownloadType == DataDownloadTypeDewPoint && d[i] == kDataTerminationValue)) {
+			((_currentDownloadType == DataDownloadTypeDewPoint || _currentDownloadType == DataDownloadTypePressure) && d[i] == kDataTerminationValue)) {
 			//termination symbol found, abort data download and insert into database
 			NSLog(@"Termination symbol recognized.");
 			[self didFinishDownloadForType:_currentDownloadType];
@@ -161,6 +163,10 @@ typedef enum : NSInteger {
 				case DataDownloadTypeHumidity:
 					baseProgress = 1/3.0;
 					type = @"H";
+					break;
+				case DataDownloadTypePressure:
+					type = @"P";
+					baseProgress = 2/3.0;
 					break;
 				case DataDownloadTypeDewPoint:
 					type = @"D";
@@ -194,9 +200,15 @@ typedef enum : NSInteger {
 			downloadType = DataDownloadTypeHumidity;
 			break;
 		case  DataDownloadTypeHumidity:
-			downloadType = DataDownloadTypeDewPoint;
+			if (_deviceVersion == 27) {
+				downloadType = DataDownloadTypePressure;
+			}
+			else {
+				downloadType = DataDownloadTypeDewPoint;
+			}
 			break;
 		case DataDownloadTypeDewPoint:
+		case DataDownloadTypePressure:
 			downloadType = DataDownloadTypeFinish;
 			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
 			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
@@ -228,6 +240,10 @@ typedef enum : NSInteger {
 			break;
 		case DataDownloadTypeDewPoint:
 			readingType = @"DewPoint";
+			break;
+		case DataDownloadTypePressure:
+			readingType = @"Pressure";
+			break;
         default:
 			break;
 	}
