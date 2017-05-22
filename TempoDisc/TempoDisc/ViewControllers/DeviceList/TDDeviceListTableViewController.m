@@ -593,7 +593,7 @@ typedef enum : NSInteger {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
 	TDTempoDisc *device = _dataSource[indexPath.row];
-	if (device.version.integerValue == 13) {
+	if (device.version.integerValue == 13 || device.version.integerValue == 113) {
 		return 150.;
 	}
 	else if (device.version.integerValue == 27) {
