@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) NSArray *dataSourceTemperature;
 @property (nonatomic, strong) NSArray *dataSourceHumidity;
+@property (nonatomic, strong) NSArray *dataSourcePressure;
 @property (nonatomic, strong) NSArray *dataSourceDewPoint;
 
 @end
@@ -78,6 +79,7 @@
 - (void)loadDiscData {
 	_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
 	_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
+	_dataSourcePressure = [self dataForType:TempoReadingTypePressure];
 	_dataSourceDewPoint = [self dataForType:TempoReadingTypeDewPoint];
 }
 
@@ -90,6 +92,9 @@
 		case TempoReadingTypeHumidity:
 			readingType = @"Humidity";
 		break;
+		case TempoReadingTypePressure:
+			readingType = @"Pressure";
+			break;
 		case TempoReadingTypeDewPoint:
 			readingType = @"DewPoint";
 		break;
@@ -149,11 +154,15 @@
 		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) || ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113)) {
 			reuse = @"cellDiscData13";
 		}
+		else if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27)) {
+			reuse = @"cellDiscDataPressure";
+		}
 		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 		
 		// Configure the cell...
 		Reading *readingTemperature = indexPath.row < _dataSourceTemperature.count ? _dataSourceTemperature[indexPath.row] : nil;
 		Reading *readingHumidity = indexPath.row < _dataSourceHumidity.count ? _dataSourceHumidity[indexPath.row] : nil;
+		Reading *readingPressure = indexPath.row < _dataSourcePressure.count ? _dataSourcePressure[indexPath.row] : nil;
 		Reading *readingDewPoint = indexPath.row < _dataSourceDewPoint.count ? _dataSourceDewPoint[indexPath.row] : nil;
 		
 		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
@@ -172,6 +181,12 @@
 		}
 		else {
 			cell.labelHumidityValue.text = @"";
+		}
+		if (readingPressure) {
+			cell.labelPressureValue.text = [NSString stringWithFormat:@"%@ hPa", readingPressure.avgValue];
+		}
+		else {
+			cell.labelPressureValue.text = @"";
 		}
 		if (readingDewPoint) {
 			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%.1f%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
@@ -212,6 +227,9 @@
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
 			return 70;
+		}
+		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+			return 120;
 		}
 		else {
 			return 104;
