@@ -380,11 +380,10 @@
         lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
         firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
         plotSpaceHumidity.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-        plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
+        plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(120)];
 		
 		CPTXYPlotSpace *plotSpacePressure = (CPTXYPlotSpace *)_graphCombinedTHD.defaultPlotSpace;
 		readings = _pressureData;
-		//TODO: remove if when we have pressure data parse
 		if (readings.count > 0) {
 			if (!_buttonAll.selected) {
 				readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
@@ -392,7 +391,7 @@
 			lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
 			firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 			plotSpacePressure.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-			plotSpacePressure.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
+			plotSpacePressure.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(120)];
 		}
 		
 		
@@ -609,7 +608,7 @@
     minrangeLineStyle.lineColor = kColorGraphAverage;
     temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphAverage];
     
-    if (combinedGraph == true) {
+//    if (combinedGraph == true) {
         if (plot == _plotTemperature) {
             newSymbolLineStyle.lineColor=kColorGraphTemperature;
             minrangeLineStyle.lineColor=kColorGraphTemperature;
@@ -620,7 +619,12 @@
             minrangeLineStyle.lineColor=kColorGraphDewPoint;
             temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphDewPoint];
         }
-    }
+		if (plot == _plotPressure) {
+			newSymbolLineStyle.lineColor=kColorGraphPressure;
+			minrangeLineStyle.lineColor=kColorGraphPressure;
+			temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphPressure];
+		}
+//    }
     newSymbolLineStyle.lineWidth = kGraphLineWidth;
     minrangeLineStyle.lineWidth = kGraphLineWidth;
     
@@ -714,6 +718,9 @@
 			break;
 			
 		case CPTScatterPlotFieldY:
+			if ([plot.identifier isEqual:@"Pressure"] && combinedGraph == true) {
+				return @(reading.avgValue.floatValue/10.);
+			}
 			if ([plot.identifier isEqual:@"Humidity"]) {
 				return reading.avgValue;
 			}
@@ -733,14 +740,17 @@
     CPTMutableLineStyle *minrangeLineStyle = [plot.dataLineStyle mutableCopy];
     minrangeLineStyle.lineWidth = kGraphLineWidth;
     minrangeLineStyle.lineColor = kColorGraphAverage;
-    if (combinedGraph == true){
+//    if (combinedGraph == true){
         if (plot == _plotDewPoint) {
             minrangeLineStyle.lineColor = kColorGraphDewPoint;
         }
         if (plot == _plotTemperature) {
             minrangeLineStyle.lineColor = kColorGraphTemperature;
         }
-    }
+		if (plot == _plotPressure) {
+			minrangeLineStyle.lineColor = kColorGraphPressure;
+		}
+//    }
     temperatureSymbol.size=kGraphSymbolSize;
     temperatureSymbol.fill=[CPTFill fillWithColor:[CPTColor whiteColor]];
     temperatureSymbol.lineStyle = minrangeLineStyle;
@@ -857,15 +867,18 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     viewHostLabel.layer.cornerRadius = 8.0;
     viewHostLabel.clipsToBounds = true;
 	viewHostLabel.backgroundColor = [UIColor blueMaestroBlue];
-    if (combinedGraph) {
+//    if (combinedGraph) {
         if ([plot.identifier isEqual:@"DewPoint"]) {
             viewHostLabel.backgroundColor = [UIColor graphDewPoint];
         }
         if ([plot.identifier isEqual:@"Temperature"]) {
             viewHostLabel.backgroundColor = [UIColor graphTemperature];
         }
-    }
-    
+		if ([plot.identifier isEqual:@"Pressure"]) {
+			viewHostLabel.backgroundColor = [UIColor graphPressure];
+		}
+//    }
+	
 	
 	//add label withing the host view
 	UILabel *labelAnnotation = [[UILabel alloc] initWithFrame:viewHostLabel.bounds];
