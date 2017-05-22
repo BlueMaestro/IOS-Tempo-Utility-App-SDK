@@ -419,7 +419,11 @@
                 [_breachImage setHidden:YES];
             }
         }
-        
+		else {
+			[_breachCount setHidden:YES];
+			[_breachImage setHidden:YES];
+		}
+		
         
 		
 		
