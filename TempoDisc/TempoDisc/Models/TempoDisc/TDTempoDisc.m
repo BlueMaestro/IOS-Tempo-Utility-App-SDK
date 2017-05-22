@@ -8,6 +8,7 @@
 
 #import "TDTempoDisc.h"
 #define MANUF_ID_BLUE_MAESTRO 0x0133
+#define BM_MODEL_DISC_13 0xD
 #define BM_MODEL_DISC_22 0x16
 #define BM_MODEL_DISC_23 0x17
 #define BM_MODEL_DISC_27 0x1B
@@ -85,6 +86,10 @@
 				self.modelType = @"TEMPO_DISC_113";
 				self.version = [NSNumber numberWithInteger:113];
 			}
+			else if (d[2] == BM_MODEL_DISC_13) {
+				self.modelType = @"TEMPO_DISC_13";
+				self.version = [NSNumber numberWithInteger:13];
+			}
 		} else {
 			
             //Not a supported model
@@ -95,11 +100,25 @@
 		self.isBlueMaestroDevice = @(NO);
 		return;
 	}
-    
+	
+	if (self.version.integerValue == 13 || self.version.integerValue == 113) {
+		//Variables not parsed
+		self.uuid = uuid;
+		self.name = advertisedData[@"kCBAdvDataLocalName"];
+		self.lastDetected = [NSDate date];
+		
+		//Advertisement packet
+		self.version = @(data[2]);
+		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+	}
+	
     /**
     *	Version 22
     *
-    **/	
+    **/
 	if (self.version.integerValue == 22) {
         
         //Variables not parsed
