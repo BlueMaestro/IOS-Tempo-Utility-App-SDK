@@ -291,7 +291,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	self.currentHumidity = device.currentHumidity;
 	self.currentPressure = device.currentPressure;
 	self.currentPressureData = device.currentPressureData;
-	self.lastDownload = device.lastDownload;
+//	self.lastDownload = device.lastDownload;
 	self.isBlueMaestroDevice = device.isBlueMaestroDevice;
 	self.isFahrenheit = device.isFahrenheit;
 	self.inRange = device.inRange;
