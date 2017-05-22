@@ -305,23 +305,33 @@
 	 **/
 	CPTXYPlotSpace *plotSpaceTemperature = (CPTXYPlotSpace *)_graphTemperature.defaultPlotSpace;
 	readings = _temperatureData;
-	if (!_buttonAll.selected) {
-		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+	double lastReading = 0;
+	double firstReading = 0;
+	if (readings.count > 0) {
+		if (!_buttonAll.selected) {
+			readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+		}
+		double lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
+		double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+		plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
+		float maxValue = [[readings valueForKeyPath:@"@max.avgValue"] floatValue];
+		float minValue = [[readings valueForKeyPath:@"@min.avgValue"] floatValue];
+		plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
 	}
-	double lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
-	double firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
-	plotSpaceTemperature.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceTemperature.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
         
 	CPTXYPlotSpace *plotSpaceHumidity = (CPTXYPlotSpace *)_graphHumidity.defaultPlotSpace;
 	readings = _humidityData;
-	if (!_buttonAll.selected) {
-		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+	if (readings.count > 0) {
+		if (!_buttonAll.selected) {
+			readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+		}
+		lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
+		firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+		plotSpaceHumidity.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
+		float maxValue = [[readings valueForKeyPath:@"@max.avgValue"] floatValue];
+		float minValue = [[readings valueForKeyPath:@"@min.avgValue"] floatValue];
+		plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
 	}
-	lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
-	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
-	plotSpaceHumidity.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceHumidity.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
 	
 	CPTXYPlotSpace *plotSpacePressure = (CPTXYPlotSpace *)_graphPressure.defaultPlotSpace;
 	readings = _pressureData;
@@ -333,18 +343,24 @@
 		lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
 		firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
 		plotSpacePressure.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-		plotSpacePressure.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(0.0) lengthDecimal:CPTDecimalFromFloat(100)];
+		float maxValue = [[readings valueForKeyPath:@"@max.avgValue"] floatValue];
+		float minValue = [[readings valueForKeyPath:@"@min.avgValue"] floatValue];
+		plotSpacePressure.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
 	}
 	
 	CPTXYPlotSpace *plotSpaceDewPoint = (CPTXYPlotSpace *)_graphDewPoint.defaultPlotSpace;
 	readings = _dewPointData;
-	if (!_buttonAll.selected) {
-		readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+	if (readings.count > 0) {
+		if (!_buttonAll.selected) {
+			readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+		}
+		lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
+		firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+		plotSpaceDewPoint.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
+		float maxValue = [[readings valueForKeyPath:@"@max.avgValue"] floatValue];
+		float minValue = [[readings valueForKeyPath:@"@min.avgValue"] floatValue];
+		plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
 	}
-	lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
-	firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
-	plotSpaceDewPoint.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
-	plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat([TDHelper temperature:@(0.0) forDevice:device].floatValue) lengthDecimal:CPTDecimalFromFloat([TDHelper temperature:@(35.0) forDevice:device].floatValue)];
     
     if (combinedGraph == true){
         
