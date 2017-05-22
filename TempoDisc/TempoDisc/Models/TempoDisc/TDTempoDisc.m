@@ -13,6 +13,7 @@
 #define BM_MODEL_DISC_27 0x1B
 #define BM_MODEL_DISC_32 0x20
 #define BM_MODEL_DISC_99 0x63
+#define BM_MODEL_DISC_113 0x71
 
 @implementation TDTempoDisc
 
@@ -80,8 +81,12 @@
                 self.modelType = @"PACIF-I V2";
                 self.version = [NSNumber numberWithInteger:99];
             }
+			else if (d[2] == BM_MODEL_DISC_113) {
+				self.modelType = @"TEMPO_DISC_113";
+				self.version = [NSNumber numberWithInteger:113];
+			}
 		} else {
-            
+			
             //Not a supported model
 			return;
 		}
