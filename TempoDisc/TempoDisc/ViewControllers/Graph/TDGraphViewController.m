@@ -135,7 +135,7 @@
 		case TempoReadingTypePressure:
 			if (!_viewGraphPressure) _viewGraphPressure = _viewGraphTemperature;
 			[_labelReadingType setText:NSLocalizedString(@"Pressure", nil)];
-			_labelUnit.text = @"PRESSURE pHa";
+			_labelUnit.text = @"PRESSURE hPa";
 			_activeGraph = _graphPressure;
 			_activeGraphView = _viewGraphPressure;
 			break;
@@ -792,7 +792,7 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     }
 	else if ([plot.identifier isEqual:@"Pressure"]) {
 		dataSource = _pressureData;
-		valueSymbol = @"pHa";
+		valueSymbol = @"hPa";
 		if (combinedGraph) {
 			viewGraph = _viewGraphCombinedTHD;
 		} else {
