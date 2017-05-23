@@ -594,16 +594,16 @@ typedef enum : NSInteger {
     
 	TDTempoDisc *device = _dataSource[indexPath.row];
 	if (device.version.integerValue == 13 || device.version.integerValue == 113) {
-		return 150.;
+		return 190.;
 	}
 	else if (device.version.integerValue == 27) {
 		return 265.;
 	}
 	else if (device.version.integerValue == 32) {
-		return 134.;
+		return 210.;
 	}
 	else if (device.version.integerValue == 42) {
-		return 120.;
+		return 190.;
 	}
 	else {
 		return 190.;

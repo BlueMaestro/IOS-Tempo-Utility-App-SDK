@@ -39,6 +39,7 @@
 		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
 		CB34C3681E546D310008F214 /* TDPressureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */; };
 		CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */; };
+		CB364D971ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */; };
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
 		CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
@@ -123,6 +124,8 @@
 		CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPressureDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CB34C36A1E546F340008F214 /* TDDevicePressureInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicePressureInfoViewController.h; sourceTree = "<group>"; };
 		CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicePressureInfoViewController.m; sourceTree = "<group>"; };
+		CB364D951ED1CE2800AE6FC7 /* TDDeviceButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceButtonViewController.h; sourceTree = "<group>"; };
+		CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceButtonViewController.m; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
 		CB4954F71D91BDAF00C4AAAF /* LogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogMessage.m; sourceTree = "<group>"; };
 		CB4954FA1D91C5A900C4AAAF /* IBActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBActionSheet.h; sourceTree = "<group>"; };
@@ -301,6 +304,7 @@
 		CB16BA511C82E70C00C99C41 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				CB364D941ED1CE0600AE6FC7 /* DeviceButton */,
 				CB86F2561E2F98CE00B4BCC8 /* Command */,
 				CB8E7E791DE0B5C80084F3CC /* LivePlot */,
 				CB290B0B1DAFEE1A0012EEEC /* DevicesHistory */,
@@ -496,6 +500,15 @@
 				CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */,
 			);
 			path = DevicePressureInfo;
+			sourceTree = "<group>";
+		};
+		CB364D941ED1CE0600AE6FC7 /* DeviceButton */ = {
+			isa = PBXGroup;
+			children = (
+				CB364D951ED1CE2800AE6FC7 /* TDDeviceButtonViewController.h */,
+				CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */,
+			);
+			path = DeviceButton;
 			sourceTree = "<group>";
 		};
 		CB4954F51D91BD9B00C4AAAF /* LogMessage */ = {
@@ -850,6 +863,7 @@
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
 				CB14AD231D93211D0090AAA2 /* DeviceInfoTableViewController.m in Sources */,
 				CB89850B1E5E0C7F008F12CB /* TDTempoDisc.m in Sources */,
+				CB364D971ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m in Sources */,
 				CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */,
 				CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,
