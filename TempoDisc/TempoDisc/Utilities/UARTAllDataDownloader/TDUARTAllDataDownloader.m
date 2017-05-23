@@ -147,7 +147,8 @@ typedef enum : NSInteger {
 	char * d = (char*)[data bytes];
 	for (NSInteger i=0; i<length; i+=2) {
 		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
-			((_currentDownloadType == DataDownloadTypeDewPoint || _currentDownloadType == DataDownloadTypePressure) && d[i] == kDataTerminationValue)) {
+			((_currentDownloadType == DataDownloadTypeDewPoint || _currentDownloadType == DataDownloadTypePressure) && d[i] == kDataTerminationValue) ||
+			(_deviceVersion == 13 && d[i] == kDataTerminationValue)) {
 			//termination symbol found, abort data download and insert into database
 			NSLog(@"Termination symbol recognized.");
 			[self didFinishDownloadForType:_currentDownloadType];
@@ -197,6 +198,15 @@ typedef enum : NSInteger {
 	DataDownloadType downloadType = DataDownloadTypeTemperature;
 	switch (type) {
 		case DataDownloadTypeTemperature:
+			if (_deviceVersion == 13) {
+				downloadType = DataDownloadTypeFinish;
+				[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+				[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+				if (_completion) {
+					_completion(YES);
+					_completion = nil;
+				}
+			}
 			downloadType = DataDownloadTypeHumidity;
 			break;
 		case  DataDownloadTypeHumidity:
