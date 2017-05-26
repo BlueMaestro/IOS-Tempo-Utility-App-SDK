@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "TDTempoDisc.h"
 #import "TDMovementDeviceTableViewCell.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
 
 #define kDeviceScanInterval 2.0
 
@@ -360,7 +361,7 @@ typedef enum : NSInteger {
     UIImage *breachImage = [UIImage imageNamed:@"alert_icon"];
     
     
-    if ([device isKindOfClass:[TDTempoDisc class]]) {
+    if ([device isKindOfClass:[TDTempoDisc class]] || [device isKindOfClass:[TempoDiscDevice class]]) {
         TDTempoDisc* disc = (TDTempoDisc*)device;
         int mode = disc.mode.intValue;
         int remainder = mode % 100;
@@ -427,7 +428,7 @@ typedef enum : NSInteger {
     }
     
 	
-	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
+	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral ? device.peripheral.UUIDString : device.uuid];
 	
 	cell.labelDeviceIdentifierValue.text = @"OTHER TEMPO DISC";
 	if ([device isKindOfClass:[TDTempoDisc class]]) {
