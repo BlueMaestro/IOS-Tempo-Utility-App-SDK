@@ -18,6 +18,7 @@
 #import "TDTempoDisc.h"
 #import "TDMovementDeviceTableViewCell.h"
 #import "TempoDiscDevice+CoreDataProperties.h"
+#import "TDUARTAllDataDownloader.h"
 
 #define kDeviceScanInterval 2.0
 
@@ -40,6 +41,8 @@ typedef enum : NSInteger {
 @property (nonatomic, strong) NSNumber* deviceFilterId;
 @property (nonatomic, strong) NSArray* sortedDeviceList;
 @property (nonatomic, strong) TDTempoDisc *selectedDevice;
+@property (nonatomic, strong) TDUARTAllDataDownloader *downloader;
+@property (nonatomic, assign) BOOL sendingData;
 
 @end
 
@@ -534,6 +537,26 @@ typedef enum : NSInteger {
 		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
+}
+
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+	__weak typeof(self) weakself = self;
+	return @[[UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:NSLocalizedString(@"Blink", nil) handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (!weakself.sendingData) {
+				[weakself.timerUpdateList invalidate];
+				weakself.downloader = [[TDUARTAllDataDownloader alloc] init];
+				weakself.sendingData = YES;
+				[weakself.downloader writeData:@"*blink" toDevice:_dataSource[indexPath.row] withCompletion:^(BOOL sucess) {
+					dispatch_async(dispatch_get_main_queue(), ^{
+						weakself.sendingData = NO;
+						[weakself.tableView endEditing:YES];
+						[weakself scanForDevices];
+					});
+				}];
+			}
+		});
+	}]];
 }
 
 #pragma mark - UITableViewDataSource
