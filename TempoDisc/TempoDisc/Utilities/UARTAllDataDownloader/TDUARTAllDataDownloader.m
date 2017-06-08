@@ -21,6 +21,7 @@
 
 #define kDeviceConnectTimeout			10.0
 #define kDeviceReConnectTimeout			2.0
+#define kDeviceDataParseTimeout			20.
 
 #define kDataDownloadString				@"*logall"
 
@@ -53,6 +54,8 @@ typedef enum : NSInteger {
 @property (nonatomic, assign) NSInteger deviceVersion;
 
 @property (nonatomic, assign) NSInteger totalCurrentSample;
+
+@property (nonatomic, strong) NSTimer *timerDataParseTimeout;
 
 @end
 
@@ -96,6 +99,10 @@ typedef enum : NSInteger {
 }
 
 - (void)parseData:(NSData*)data {
+	[_timerDataParseTimeout invalidate];
+	_timerDataParseTimeout = nil;
+	_timerDataParseTimeout = [NSTimer timerWithTimeInterval:kDeviceDataParseTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_timerDataParseTimeout forMode:NSDefaultRunLoopMode];
 	NSLog(@"data received: %@", data);
 	if (data.length == 15 ) {
 		NSLog(@"Header data received: %@", data);
