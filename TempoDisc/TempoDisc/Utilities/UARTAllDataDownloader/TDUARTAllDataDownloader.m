@@ -212,6 +212,8 @@ typedef enum : NSInteger {
 				if (_completion) {
 					_completion(YES);
 					_completion = nil;
+					[_timerDataParseTimeout invalidate];
+					_timerDataParseTimeout = nil;
 				}
 			}
 			downloadType = DataDownloadTypeHumidity;
@@ -235,6 +237,8 @@ typedef enum : NSInteger {
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;
+				[_timerDataParseTimeout invalidate];
+				_timerDataParseTimeout = nil;
 			}
 			break;
 		case DataDownloadTypeFinish:
