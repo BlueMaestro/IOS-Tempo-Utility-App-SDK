@@ -361,19 +361,21 @@
 		//Advertisement packet
 		self.version = @(data[2]);
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
 		
 		//device 32
-		self.humSensitivityLevel = @(data[5]);
-		self.pestSensitivityLevel = @(data[6]);
-		self.force = @(data[7]);
-		self.movementMeasurePeriod = @([self intValueLsb:data[9] msb:data[8]]);
-		self.dateNumber = @((((int) data[13]) & 0xFF) | (((int) data[12]) << 8) | (((int) data[11]) << 16) | (((int) data[10]) << 24));
-		self.buttonPressControl = @(data[14]);
-		self.lastPestDetectRate = @([self intValueLsb:data[16] msb:data[15]]);
-		self.lastHumDetectRate = @([self intValueLsb:data[18] msb:data[17]]);
-		self.totalPestEventsDetects = @([self intValueLsb:data[20] msb:data[19]]);
-		self.totalHumEventsDetects = @([self intValueLsb:data[22] msb:data[21]]);
-		self.lastButtonDetected = @([self intValueLsb:data[24] msb:data[23]]);
+		self.humSensitivityLevel = @(data[8]);
+		self.pestSensitivityLevel = @(data[9]);
+		self.force = @(data[10]);
+		self.movementMeasurePeriod = @([self intValueLsb:data[12] msb:data[11]]);
+		self.dateNumber = @((((int) data[16]) & 0xFF) | (((int) data[15]) << 8) | (((int) data[14]) << 16) | (((int) data[13]) << 24));
+		self.buttonPressControl = @(data[17]);
+		self.lastPestDetectRate = @([self intValueLsb:data[19] msb:data[18]]);
+		self.lastHumDetectRate = @([self intValueLsb:data[21] msb:data[20]]);
+		self.totalPestEventsDetects = @([self intValueLsb:data[23] msb:data[22]]);
+		self.totalHumEventsDetects = @([self intValueLsb:data[25] msb:data[24]]);
+		self.lastButtonDetected = @([self intValueLsb:data[27] msb:data[26]]);
 	}
 	
 	/**

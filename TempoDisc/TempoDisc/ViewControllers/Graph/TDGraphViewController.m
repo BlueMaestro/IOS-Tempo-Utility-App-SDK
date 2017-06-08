@@ -23,18 +23,24 @@
 @property (nonatomic, strong) CPTGraphHostingView *hostViewPressure;
 @property (nonatomic, strong) CPTGraphHostingView *hostViewDewPoint;
 @property (nonatomic, strong) CPTGraphHostingView *hostViewCombinedTHD;
+@property (nonatomic, strong) CPTGraphHostingView *hostViewFirstMovement;
+//@property (nonatomic, strong) CPTGraphHostingView *hostViewSecondMovement;
 
 @property (nonatomic, strong) CPTGraph *graphTemperature;
 @property (nonatomic, strong) CPTGraph *graphHumidity;
 @property (nonatomic, strong) CPTGraph *graphPressure;
 @property (nonatomic, strong) CPTGraph *graphDewPoint;
 @property (nonatomic, strong) CPTGraph *graphCombinedTHD;
+@property (nonatomic, strong) CPTGraph *graphFirstMovement;
+//@property (nonatomic, strong) CPTGraph *graphSecondMovement;
 
 @property (nonatomic, strong) CPTScatterPlot *plotTemperature;
 @property (nonatomic, strong) CPTScatterPlot *plotHumidity;
 @property (nonatomic, strong) CPTScatterPlot *plotPressure;
 @property (nonatomic, strong) CPTScatterPlot *plotDewPoint;
 @property (nonatomic, strong) CPTScatterPlot *plotCombinedTHD;
+@property (nonatomic, strong) CPTScatterPlot *plotFirstMovement;
+@property (nonatomic, strong) CPTScatterPlot *plotSecondMovement;
 
 @property (nonatomic, assign) TempoReadingType currentReadingType;
 @property (strong, nonatomic) IBOutlet UIButton *buttonAll;
@@ -55,6 +61,8 @@
 @property (nonatomic, strong) NSArray *humidityData;
 @property (nonatomic, strong) NSArray *pressureData;
 @property (nonatomic, strong) NSArray *dewPointData;
+@property (nonatomic, strong) NSArray *firstMovementData;
+@property (nonatomic, strong) NSArray *secondMovementData;
 
 @end
 
@@ -68,7 +76,12 @@
     // Do any additional setup after loading the view.
 	
 	combinedGraph = false;
-	[self changeReadingType:TempoReadingTypeTemperature];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		[self changeReadingType:TempoReadingTypeFirstMovement];
+	}
+	else {
+		[self changeReadingType:TempoReadingTypeTemperature];
+	}
 	
 	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	__weak typeof(self) weakself = self;
@@ -77,8 +90,15 @@
 		weakself.humidityData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 		weakself.pressureData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Pressure"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 		weakself.dewPointData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.firstMovementData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"FirstMovement"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		weakself.secondMovementData = [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"SecondMovement"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[weakself changeReadingType:TempoReadingTypeTemperature];
+			if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+				[weakself changeReadingType:TempoReadingTypeFirstMovement];
+			}
+			else {
+				[weakself changeReadingType:TempoReadingTypeTemperature];
+			}
 			[MBProgressHUD hideHUDForView:weakself.view animated:NO];
 		});
 	});
@@ -88,23 +108,7 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self setupView];
-    
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 #pragma mark - Private methods
 
@@ -146,6 +150,12 @@
 			_activeGraph = _graphDewPoint;
 			_activeGraphView = _viewGraphDewPoint;
 			break;
+		case TempoReadingTypeFirstMovement:
+			if (!_viewGraphFirstMovement) _viewGraphFirstMovement = _viewGraphTemperature;
+			[_labelReadingType setText:NSLocalizedString(@"Movement", nil)];
+			_labelUnit.text = @"";
+			_activeGraph = _graphFirstMovement;
+			_activeGraphView = _viewGraphFirstMovement;
         default:
 			break;
 	}
@@ -177,6 +187,10 @@
 		case TempoReadingTypeDewPoint:
 			plotView = _viewGraphDewPoint;
 			graph = _graphDewPoint;
+			break;
+		case TempoReadingTypeFirstMovement:
+			plotView = _viewGraphFirstMovement;
+			graph = _graphFirstMovement;
 			break;
         default:
 			break;
@@ -247,8 +261,10 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIButton *)sender {
-	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
+		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
 		//no type change for version 13 as it is temperature only
+		//no type change for version 32 as its both displayed
 		return;
 	}
 	IBActionSheet *sheet;
@@ -266,16 +282,6 @@
 	[sheet setTitleFont:[UIFont regularFontWithSize:15.0]];
 	
 	[sheet showInView:self.parentViewController.view];
-	/*UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"READING TYPE", nil) message:NSLocalizedString(@"Choose reading type", nil) preferredStyle:UIAlertControllerStyleActionSheet];
-	__weak typeof(self) weakself = self;
-	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Temperature", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		[weakself changeReadingType:TempoReadingTypeTemperature];
-	}]];
-	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Humidity", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-		[weakself changeReadingType:TempoReadingTypeHumidity];
-	}]];
-	[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]];
-	[self presentViewController:alert animated:YES completion:nil];*/
 }
 
 - (IBAction)buttonDayClicked:(UIButton *)sender {
@@ -361,6 +367,40 @@
 		float minValue = [[readings valueForKeyPath:@"@min.avgValue"] floatValue];
 		plotSpaceDewPoint.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
 	}
+	
+	CPTXYPlotSpace *plotSpaceFirstMovement = (CPTXYPlotSpace *)_graphFirstMovement.defaultPlotSpace;
+	readings = _firstMovementData;
+	if (readings.count > 0) {
+		if (!_buttonAll.selected) {
+			readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+		}
+		lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
+		firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+		plotSpaceFirstMovement.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
+		float maxValue = [[readings valueForKeyPath:@"@max.avgValue"] floatValue];
+		if (maxValue < 10) {
+			maxValue = 10;
+		}
+		float minValue = -10;//[[readings valueForKeyPath:@"@min.avgValue"] floatValue];
+		plotSpaceFirstMovement.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
+	}
+	
+	CPTXYPlotSpace *plotSpaceSecondMovement = (CPTXYPlotSpace *)_graphFirstMovement.defaultPlotSpace;
+	readings = _secondMovementData;
+	if (readings.count > 0) {
+		if (!_buttonAll.selected) {
+			readings = [readings subarrayWithRange:NSMakeRange(0, MIN(readings.count, kInitialDataLoadCount))];
+		}
+		lastReading = [[(Reading*)readings[readings.count - MIN(readings.count, kInitialReadingsLoad)] timestamp] timeIntervalSince1970];
+		firstReading = [[(Reading*)[readings lastObject] timestamp] timeIntervalSince1970];
+		plotSpaceSecondMovement.xRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(firstReading-60*60) lengthDecimal:CPTDecimalFromFloat(MAX(60*60*2, lastReading-firstReading+60*60*2))];
+		float maxValue = [[readings valueForKeyPath:@"@max.avgValue"] floatValue];
+		float minValue = -10;//[[readings valueForKeyPath:@"@min.avgValue"] floatValue];
+		if (maxValue < 10) {
+			maxValue = 10;
+		}
+		plotSpaceSecondMovement.yRange = [[CPTPlotRange alloc] initWithLocationDecimal:CPTDecimalFromFloat(minValue*0.9) lengthDecimal:CPTDecimalFromFloat(((maxValue-minValue)+minValue*0.1)*1.5)];
+	}
     
     if (combinedGraph == true){
         
@@ -415,7 +455,10 @@
     if (_graphCombinedTHD.superlayer) {
         [_graphCombinedTHD removeFromSuperlayer];
     }
-    
+	if (_graphFirstMovement.superlayer) {
+		[_graphFirstMovement removeFromSuperlayer];
+	}
+	
     if (combinedGraph == true) {
         _hostViewCombinedTHD = [self configureHost:_viewGraphCombinedTHD forGraph:_hostViewCombinedTHD];
         _graphCombinedTHD = [self configureGraph:_graphCombinedTHD hostView:_hostViewCombinedTHD graphView:_viewGraphCombinedTHD title:nil];
@@ -454,7 +497,15 @@
 		_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graphDewPoint identifier:@"DewPoint"];
 		[self configureAxesForGraph:_graphDewPoint plot:_plotDewPoint];
     }
-    
+	else if (_currentReadingType == TempoReadingTypeFirstMovement) {
+		_hostViewFirstMovement = [self configureHost:_viewGraphFirstMovement forGraph:_hostViewFirstMovement];
+		_graphFirstMovement = [self configureGraph:_graphFirstMovement hostView:_hostViewFirstMovement graphView:_viewGraphFirstMovement title:nil];
+		_plotFirstMovement = [self configurePlot:_plotFirstMovement forGraph:_graphFirstMovement identifier:@"FirstMovement"];
+		[self configureAxesForGraph:_graphFirstMovement plot:_plotFirstMovement];
+		
+		_plotSecondMovement = [self configurePlot:_plotSecondMovement forGraph:_graphFirstMovement identifier:@"SecondMovement"];
+		[self configureAxesForGraph:_graphFirstMovement plot:_plotSecondMovement];
+	}
 }
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host
@@ -522,11 +573,6 @@
 	
 	// Set up the plot, including the look of the plot itself.
 	plot = [self plotWithIdentifier:identifier];
-    /*
-	for (id plot in graph.allPlots) {
-		//[graph removePlot:plot];
-	}
-     */
 
     [graph addPlot:plot toPlotSpace:plotSpace];
 
@@ -551,7 +597,6 @@
 	[(CPTXYAxisSet *)graph.axisSet xAxis].labelFormatter = timeFormatter;
 	
 	axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
-	//    axisSet.yAxis.preferredNumberOfMajorTicks = 6;
 	CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];
 	majorGridLineStyle.lineColor = [CPTColor colorWithGenericGray:0.7];
 	majorGridLineStyle.lineWidth = 0.8;
@@ -607,24 +652,33 @@
     newSymbolLineStyle.lineColor = kColorGraphAverage;
     minrangeLineStyle.lineColor = kColorGraphAverage;
     temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphAverage];
-    
-//    if (combinedGraph == true) {
-        if (plot == _plotTemperature) {
-            newSymbolLineStyle.lineColor=kColorGraphTemperature;
-            minrangeLineStyle.lineColor=kColorGraphTemperature;
-            temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphTemperature];
-        }
-        if (plot == _plotDewPoint) {
-            newSymbolLineStyle.lineColor=kColorGraphDewPoint;
-            minrangeLineStyle.lineColor=kColorGraphDewPoint;
-            temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphDewPoint];
-        }
-		if (plot == _plotPressure) {
-			newSymbolLineStyle.lineColor=kColorGraphPressure;
-			minrangeLineStyle.lineColor=kColorGraphPressure;
-			temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphPressure];
-		}
-//    }
+	
+	if (plot == _plotTemperature) {
+		newSymbolLineStyle.lineColor=kColorGraphTemperature;
+		minrangeLineStyle.lineColor=kColorGraphTemperature;
+		temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphTemperature];
+	}
+	else if (plot == _plotDewPoint) {
+		newSymbolLineStyle.lineColor=kColorGraphDewPoint;
+		minrangeLineStyle.lineColor=kColorGraphDewPoint;
+		temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphDewPoint];
+	}
+	else if (plot == _plotPressure) {
+		newSymbolLineStyle.lineColor=kColorGraphPressure;
+		minrangeLineStyle.lineColor=kColorGraphPressure;
+		temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphPressure];
+	}
+	else if (plot == _plotFirstMovement) {
+		newSymbolLineStyle.lineColor=kColorGraphFirstMovement;
+		minrangeLineStyle.lineColor=kColorGraphFirstMovement;
+		temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphFirstMovement];
+	}
+	else if (plot == _plotSecondMovement) {
+		newSymbolLineStyle.lineColor=kColorGraphSecondMovement;
+		minrangeLineStyle.lineColor=kColorGraphSecondMovement;
+		temperatureSymbol.fill = [CPTFill fillWithColor:kColorGraphSecondMovement];
+	}
+	
     newSymbolLineStyle.lineWidth = kGraphLineWidth;
     minrangeLineStyle.lineWidth = kGraphLineWidth;
     
@@ -653,36 +707,22 @@
 - (NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
 	if ([plot.identifier isEqual:@"Temperature"]) {
-		/*if (!_buttonAll.selected) {
-			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Temperature"].count, kInitialDataLoadCount);
-		}
-		else {*/
 			return _temperatureData.count;
-		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
-		/*if (!_buttonAll.selected) {
-			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"Humidity"].count, kInitialDataLoadCount);
-		}
-		else { */
 			return _humidityData.count;
-		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"Pressure"]) {
-		/*if (!_buttonAll.selected) {
-			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
-		 }
-		 else { */
 		return _pressureData.count;
-		/*}*/
 	}
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
-		/*if (!_buttonAll.selected) {
-			return MIN([[TDSharedDevice sharedDevice].selectedDevice readingsForType:@"DewPoint"].count, kInitialDataLoadCount);
-		}
-		else { */
 			return _dewPointData.count;
-		/*}*/
+	}
+	else if ([plot.identifier isEqual:@"FirstMovement"]) {
+		return _firstMovementData.count;
+	}
+	else if ([plot.identifier isEqual:@"SecondMovement"]) {
+		return _secondMovementData.count;
 	}
 	else {
 		return 0;
@@ -705,6 +745,12 @@
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
 		dataSource = _dewPointData;
 	}
+	else if ([plot.identifier isEqual:@"FirstMovement"]) {
+		dataSource =  _firstMovementData;
+	}
+	else if ([plot.identifier isEqual:@"SecondMovement"]) {
+		dataSource =  _secondMovementData;
+	}
     
     reading = [dataSource objectAtIndex:index];
     
@@ -724,6 +770,9 @@
 			if ([plot.identifier isEqual:@"Humidity"]) {
 				return reading.avgValue;
 			}
+			if ([plot.identifier isEqual:@"FirstMovement"] || [plot.identifier isEqual:@"SecondMovement"]) {
+				return reading.avgValue;
+			}
 			else {
 				return [TDHelper temperature:reading.avgValue forDevice:[TDSharedDevice sharedDevice].selectedDevice];
 			}
@@ -740,17 +789,23 @@
     CPTMutableLineStyle *minrangeLineStyle = [plot.dataLineStyle mutableCopy];
     minrangeLineStyle.lineWidth = kGraphLineWidth;
     minrangeLineStyle.lineColor = kColorGraphAverage;
-//    if (combinedGraph == true){
-        if (plot == _plotDewPoint) {
-            minrangeLineStyle.lineColor = kColorGraphDewPoint;
-        }
-        if (plot == _plotTemperature) {
-            minrangeLineStyle.lineColor = kColorGraphTemperature;
-        }
-		if (plot == _plotPressure) {
-			minrangeLineStyle.lineColor = kColorGraphPressure;
-		}
-//    }
+	
+	if (plot == _plotDewPoint) {
+		minrangeLineStyle.lineColor = kColorGraphDewPoint;
+	}
+	else if (plot == _plotTemperature) {
+		minrangeLineStyle.lineColor = kColorGraphTemperature;
+	}
+	else if (plot == _plotPressure) {
+		minrangeLineStyle.lineColor = kColorGraphPressure;
+	}
+	else if (plot == _plotFirstMovement) {
+		minrangeLineStyle.lineColor = kColorGraphFirstMovement;
+	}
+	else if (plot == _plotSecondMovement) {
+		minrangeLineStyle.lineColor = kColorGraphSecondMovement;
+	}
+	
     temperatureSymbol.size=kGraphSymbolSize;
     temperatureSymbol.fill=[CPTFill fillWithColor:[CPTColor whiteColor]];
     temperatureSymbol.lineStyle = minrangeLineStyle;
@@ -812,8 +867,20 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 		reading = [dataSource objectAtIndex:index];
 		value = [TDHelper temperature:reading.avgValue forDevice:[TDSharedDevice sharedDevice].selectedDevice];
     }
-	
-	
+	else if ([plot.identifier isEqual:@"FirstMovement"]) {
+		dataSource = _firstMovementData;
+		valueSymbol = @"";
+		viewGraph = _viewGraphFirstMovement;
+		reading = [dataSource objectAtIndex:index];
+		value = reading.avgValue;
+	}
+	else if ([plot.identifier isEqual:@"DewPoint"]) {
+		dataSource = _secondMovementData;
+		valueSymbol = @"";
+		viewGraph = _viewGraphFirstMovement;
+		reading = [dataSource objectAtIndex:index];
+		value = reading.avgValue;
+	}
 	
 	NSDate *timestamp = reading.timestamp;//reading date
 	
@@ -867,17 +934,21 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
     viewHostLabel.layer.cornerRadius = 8.0;
     viewHostLabel.clipsToBounds = true;
 	viewHostLabel.backgroundColor = [UIColor blueMaestroBlue];
-//    if (combinedGraph) {
-        if ([plot.identifier isEqual:@"DewPoint"]) {
-            viewHostLabel.backgroundColor = [UIColor graphDewPoint];
-        }
-        if ([plot.identifier isEqual:@"Temperature"]) {
-            viewHostLabel.backgroundColor = [UIColor graphTemperature];
-        }
-		if ([plot.identifier isEqual:@"Pressure"]) {
-			viewHostLabel.backgroundColor = [UIColor graphPressure];
-		}
-//    }
+	if ([plot.identifier isEqual:@"DewPoint"]) {
+		viewHostLabel.backgroundColor = [UIColor graphDewPoint];
+	}
+	else if ([plot.identifier isEqual:@"Temperature"]) {
+		viewHostLabel.backgroundColor = [UIColor graphTemperature];
+	}
+	else if ([plot.identifier isEqual:@"Pressure"]) {
+		viewHostLabel.backgroundColor = [UIColor graphPressure];
+	}
+	else if ([plot.identifier isEqual:@"FirstMovement"]) {
+		viewHostLabel.backgroundColor = kColorGraphFirstMovement.uiColor;
+	}
+	else if ([plot.identifier isEqual:@"FirstMovement"]) {
+		viewHostLabel.backgroundColor = kColorGraphSecondMovement.uiColor;
+	}
 	
 	
 	//add label withing the host view
@@ -900,8 +971,6 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 
 - (void)plotSpace:(CPTPlotSpace *)space didChangePlotRangeForCoordinate:(CPTCoordinate)coordinate {
 	[_viewAnnotationShowed removeFromSuperview];
-//    [graph.plotAreaFrame.plotArea addAnnotation:symbolTextAnnotation];
-	
 }
     
 
@@ -935,7 +1004,6 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 				combinedGraph = true;
 				[self changeReadingType:TempoReadingTypeTemperature];
 			}
-			
         }
 		else {
 			//version 27 combined data
