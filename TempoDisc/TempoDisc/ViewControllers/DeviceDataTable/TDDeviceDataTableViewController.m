@@ -21,6 +21,8 @@
 @property (nonatomic, strong) NSArray *dataSourceHumidity;
 @property (nonatomic, strong) NSArray *dataSourcePressure;
 @property (nonatomic, strong) NSArray *dataSourceDewPoint;
+@property (nonatomic, strong) NSArray *dataSourceFirstMovement;
+@property (nonatomic, strong) NSArray *dataSourceSecondMovement;
 
 @end
 
@@ -35,7 +37,12 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self setupView];
-	_currentReadingType = TempoReadingTypeTemperature;
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		_currentReadingType = TempoReadingTypeFirstMovement;
+	}
+	else {
+		_currentReadingType = TempoReadingTypeTemperature;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -77,10 +84,16 @@
 }
 
 - (void)loadDiscData {
-	_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
-	_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
-	_dataSourcePressure = [self dataForType:TempoReadingTypePressure];
-	_dataSourceDewPoint = [self dataForType:TempoReadingTypeDewPoint];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		_dataSourceFirstMovement= [self dataForType:TempoReadingTypeFirstMovement];
+		_dataSourceSecondMovement = [self dataForType:TempoReadingTypeSecondMovement];
+	}
+	else {
+		_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
+		_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
+		_dataSourcePressure = [self dataForType:TempoReadingTypePressure];
+		_dataSourceDewPoint = [self dataForType:TempoReadingTypeDewPoint];
+	}
 }
 
 - (NSArray*)dataForType:(TempoReadingType)type {
@@ -98,7 +111,12 @@
 		case TempoReadingTypeDewPoint:
 			readingType = @"DewPoint";
 		break;
-			
+		case TempoReadingTypeFirstMovement:
+			readingType = @"FirstMovement";
+			break;
+		case TempoReadingTypeSecondMovement:
+			readingType = @"SecondMovement";
+			break;
   default:
 			break;
 	}
@@ -139,7 +157,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		return _dataSourceFirstMovement.count;
+	}
+	else if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		return _dataSourceTemperature.count;
 	}
 	else {
@@ -157,6 +178,10 @@
 		else if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27)) {
 			reuse = @"cellDiscDataPressure";
 		}
+		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32)) {
+			reuse = @"cellDiscData32";
+		}
+		
 		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 		
 		// Configure the cell...
@@ -164,16 +189,16 @@
 		Reading *readingHumidity = indexPath.row < _dataSourceHumidity.count ? _dataSourceHumidity[indexPath.row] : nil;
 		Reading *readingPressure = indexPath.row < _dataSourcePressure.count ? _dataSourcePressure[indexPath.row] : nil;
 		Reading *readingDewPoint = indexPath.row < _dataSourceDewPoint.count ? _dataSourceDewPoint[indexPath.row] : nil;
+		Reading *readingFirstMovement = indexPath.row < _dataSourceFirstMovement.count ? _dataSourceFirstMovement[indexPath.row] : nil;
+		Reading *readingSecondMovement = indexPath.row < _dataSourceSecondMovement.count ? _dataSourceSecondMovement[indexPath.row] : nil;
 		
 		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 		TempoDevice *selectedDevice = [TDSharedDevice sharedDevice].selectedDevice;
 		
-		//should't really matter which object
 		if (readingTemperature) {
 			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingTemperature.timestamp];
-			cell.labelRecordNumberValue.text = @(_dataSourceTemperature.count - indexPath.row).stringValue;
-			
 			cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f%@", [TDHelper temperature:readingTemperature.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
+			cell.labelRecordNumberValue.text = @(_dataSourceTemperature.count - indexPath.row).stringValue;
 		}
 		
 		if (readingHumidity) {
@@ -193,6 +218,20 @@
 		}
 		else {
 			cell.labelDewPointValue.text = @"";
+		}
+		if (readingFirstMovement) {
+			cell.labelChannelOneValue.text = readingFirstMovement.avgValue.stringValue;
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingFirstMovement.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceFirstMovement.count - indexPath.row).stringValue;
+		}
+		else {
+			cell.labelChannelOneValue.text = @"";
+		}
+		if (readingSecondMovement) {
+			cell.labelChannelTwoValue.text = readingSecondMovement.avgValue.stringValue;
+		}
+		else {
+			cell.labelChannelTwoValue.text = @"";
 		}
 		
 		return cell;
@@ -228,8 +267,11 @@
 		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
 			return 70;
 		}
-		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
 			return 120;
+		}
+		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+			return 88;
 		}
 		else {
 			return 104;
