@@ -19,6 +19,7 @@
 #import "TDMovementDeviceTableViewCell.h"
 #import "TempoDiscDevice+CoreDataProperties.h"
 #import "TDUARTAllDataDownloader.h"
+#import "TDMagnetometerDeviceTableViewCell.h"
 
 #define kDeviceScanInterval 2.0
 
@@ -461,6 +462,12 @@ typedef enum : NSInteger {
             [cell.classID setHidden:YES];
             [cell.classIDHeadingLabel setHidden:YES];
 		}
+		else if (device.version.integerValue == 52) {
+			cell.labelDeviceIdentifierValue.text = @"OPEN SENSOR DISC v13";
+			[cell.classTagImageView setHidden:YES];
+			[cell.classID setHidden:YES];
+			[cell.classIDHeadingLabel setHidden:YES];
+		}
         else if (device.version.integerValue == 113) {
             cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T BEACON v113";
             [cell.classTagImageView setHidden:YES];
@@ -508,6 +515,12 @@ typedef enum : NSInteger {
 	[self fillPressureDeviceCell:cell model:device];
 	//TODO: Tempo device version 42 data fill
 	cell.labelTemperatureValue.text = device.buttonPressControl.stringValue;
+}
+
+- (void)fillMagnetometerCell:(TDMagnetometerDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillTemperatureDeviceCell:cell model:device];
+	cell.labelStatusValue.text = device.openCloseStatus ? @"OPEN" : @"CLOSED";
+	cell.imageViewStatusBox.image = [UIImage imageNamed:device.openCloseStatus ? @"Green Box" : @"red box"];
 }
 
 
@@ -567,7 +580,6 @@ typedef enum : NSInteger {
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	TDTempoDisc *device = _dataSource[indexPath.row];
-	
     NSString *reuse;
 	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
 		reuse = @"cellDevice22and23";
@@ -583,6 +595,9 @@ typedef enum : NSInteger {
 	}
 	else if ([device version].integerValue == 42) {
 		reuse = @"cellDevice42";
+	}
+	else if ([device version].integerValue == 52) {
+		reuse = @"cellDevice52";
 	}
 	else {
 		//reuse = @"cellDeviceOther";
@@ -606,6 +621,9 @@ typedef enum : NSInteger {
 	}
 	else if ([cell isMemberOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isMemberOfClass:[TDMagnetometerDeviceTableViewCell class]]) {
+		[self fillMagnetometerCell:(TDMagnetometerDeviceTableViewCell*)cell model:device];
 	}
 	else if ([cell isMemberOfClass:[TDOtherDeviceTableViewCell class]]) {
 		[self fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:device];

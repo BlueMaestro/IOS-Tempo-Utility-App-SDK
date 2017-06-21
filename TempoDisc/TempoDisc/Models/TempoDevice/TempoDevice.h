@@ -17,6 +17,7 @@ typedef enum : NSInteger {
 	TempoDeviceType23,
 	TempoDeviceType27,
 	TempoDeviceType32,
+	TempoDeviceType52,
     TempoDeviceType99,
     TempoDeviceType113
 	

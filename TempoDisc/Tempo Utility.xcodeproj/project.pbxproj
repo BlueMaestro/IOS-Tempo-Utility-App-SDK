@@ -40,6 +40,7 @@
 		CB34C3681E546D310008F214 /* TDPressureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */; };
 		CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */; };
 		CB364D971ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */; };
+		CB41D2A21EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */; };
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
 		CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
@@ -126,6 +127,8 @@
 		CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicePressureInfoViewController.m; sourceTree = "<group>"; };
 		CB364D951ED1CE2800AE6FC7 /* TDDeviceButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceButtonViewController.h; sourceTree = "<group>"; };
 		CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceButtonViewController.m; sourceTree = "<group>"; };
+		CB41D2A01EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMagnetometerDeviceTableViewCell.h; sourceTree = "<group>"; };
+		CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMagnetometerDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
 		CB4954F71D91BDAF00C4AAAF /* LogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogMessage.m; sourceTree = "<group>"; };
 		CB4954FA1D91C5A900C4AAAF /* IBActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBActionSheet.h; sourceTree = "<group>"; };
@@ -337,6 +340,7 @@
 		CB16BA561C82ECC600C99C41 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				CB41D29F1EFAD95100FD8BD1 /* MagnetometerDevice */,
 				CBC11B1F1EC4D9E80091BE2A /* MovementDevice */,
 				CBD357471EC0DF5F0057ABCF /* TemperatureDevice */,
 				CB34C3651E546D070008F214 /* PressureDevice */,
@@ -509,6 +513,15 @@
 				CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */,
 			);
 			path = DeviceButton;
+			sourceTree = "<group>";
+		};
+		CB41D29F1EFAD95100FD8BD1 /* MagnetometerDevice */ = {
+			isa = PBXGroup;
+			children = (
+				CB41D2A01EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.h */,
+				CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */,
+			);
+			path = MagnetometerDevice;
 			sourceTree = "<group>";
 		};
 		CB4954F51D91BD9B00C4AAAF /* LogMessage */ = {
@@ -844,6 +857,7 @@
 				CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */,
 				CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */,
 				CB1674151DB7E2E900BC938A /* CHCSVParser.m in Sources */,
+				CB41D2A21EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */,
 				CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */,

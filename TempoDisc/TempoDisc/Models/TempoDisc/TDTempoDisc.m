@@ -490,6 +490,7 @@
     if  (self.version.integerValue == 23) return TempoDeviceType23;
     if  (self.version.integerValue == 27) return TempoDeviceType27;
 	if  (self.version.integerValue == 32) return TempoDeviceType32;
+	if  (self.version.integerValue == 52) return TempoDeviceType52;
     if  (self.version.integerValue == 99) return TempoDeviceType99;
     if  (self.version.integerValue == 113) return TempoDeviceType113;
     return TempoDeviceTypeUnknown;
