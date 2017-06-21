@@ -41,6 +41,7 @@
 		CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */; };
 		CB364D971ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */; };
 		CB41D2A21EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */; };
+		CB41D2A71EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB41D2A61EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m */; };
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
 		CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
@@ -129,6 +130,8 @@
 		CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceButtonViewController.m; sourceTree = "<group>"; };
 		CB41D2A01EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMagnetometerDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMagnetometerDeviceTableViewCell.m; sourceTree = "<group>"; };
+		CB41D2A51EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMagnetometerViewController.h; sourceTree = "<group>"; };
+		CB41D2A61EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMagnetometerViewController.m; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
 		CB4954F71D91BDAF00C4AAAF /* LogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogMessage.m; sourceTree = "<group>"; };
 		CB4954FA1D91C5A900C4AAAF /* IBActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBActionSheet.h; sourceTree = "<group>"; };
@@ -318,6 +321,7 @@
 				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
 				CB34C3691E546F1D0008F214 /* DevicePressureInfo */,
 				CBC79BD01EC4EB900078D919 /* DeviceMovementInfo */,
+				CB41D2A41EFAE19500FD8BD1 /* DeviceMagnetometerInfo */,
 				CB16BA521C82E74200C99C41 /* DeviceList */,
 				CBAB5C3E1D47CA0F00EEBECD /* DevicesContainer */,
 				CBAB5C4A1D47F81400EEBECD /* DeviceTableContainer */,
@@ -522,6 +526,15 @@
 				CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */,
 			);
 			path = MagnetometerDevice;
+			sourceTree = "<group>";
+		};
+		CB41D2A41EFAE19500FD8BD1 /* DeviceMagnetometerInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB41D2A51EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.h */,
+				CB41D2A61EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m */,
+			);
+			path = DeviceMagnetometerInfo;
 			sourceTree = "<group>";
 		};
 		CB4954F51D91BD9B00C4AAAF /* LogMessage */ = {
@@ -891,6 +904,7 @@
 				CB8E7E7C1DE0B5E70084F3CC /* TDLivePlotViewController.m in Sources */,
 				CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,
+				CB41D2A71EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m in Sources */,
 				CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */,
 				CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */,
 				CB16BA7F1C83126600C99C41 /* TDSharedDevice.m in Sources */,
