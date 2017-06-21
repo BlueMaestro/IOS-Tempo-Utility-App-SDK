@@ -60,6 +60,7 @@
 @property (nullable, nonatomic, strong) NSNumber *lowestDayPressure;
 @property (nullable, nonatomic, strong) NSNumber *lowestPressure;
 @property (nullable, nonatomic, strong) NSNumber *altitude;
+@property (nullable, nonatomic, strong) NSNumber *logPointer;
 
 //device 32
 @property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;
@@ -76,6 +77,13 @@
 
 //version 42
 @property (nullable, nonatomic, strong) NSNumber *totalButtonEvents;
+
+//version 52
+@property (nonatomic, assign) BOOL openCloseStatus;
+@property (nullable, nonatomic, strong) NSNumber *openEventsCount;
+@property (nullable, nonatomic, strong) NSNumber *lastOpenInterval;
+@property (nullable, nonatomic, strong) NSNumber *totalEventsCount;
+
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid;
 

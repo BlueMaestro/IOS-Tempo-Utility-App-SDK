@@ -341,6 +341,13 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	
 	self.totalButtonEvents = device.totalButtonEvents;
 	
+	self.logPointer = device.logPointer;
+	
+	self.openCloseStatus = @(device.openCloseStatus);
+	self.openEventsCount = device.openEventsCount;
+	self.lastOpenInterval = device.lastOpenInterval;
+	self.totalEventsCount = device.totalEventsCount;
+	
 }
 
 @end

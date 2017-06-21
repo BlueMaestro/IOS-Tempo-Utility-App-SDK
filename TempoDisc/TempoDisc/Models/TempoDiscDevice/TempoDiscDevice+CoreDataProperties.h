@@ -46,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *lowestDayPressure;
 @property (nullable, nonatomic, copy) NSNumber *lowestPressure;
 @property (nullable, nonatomic, copy) NSNumber *altitude;
+@property (nullable, nonatomic, strong) NSNumber *logPointer;
 
 //device 32
 @property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;
@@ -62,6 +63,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 //device 42
 @property (nullable, nonatomic, strong) NSNumber *totalButtonEvents;
+
+//version 52
+@property (nullable, nonatomic, strong) NSNumber *openCloseStatus;
+@property (nullable, nonatomic, strong) NSNumber *openEventsCount;
+@property (nullable, nonatomic, strong) NSNumber *lastOpenInterval;
+@property (nullable, nonatomic, strong) NSNumber *totalEventsCount;
 
 @end
 

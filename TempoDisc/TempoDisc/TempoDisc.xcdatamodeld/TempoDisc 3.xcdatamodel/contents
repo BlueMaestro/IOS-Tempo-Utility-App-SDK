@@ -57,8 +57,10 @@
         <attribute name="intervalCounter" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastButtonDetected" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastHumDetectRate" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastOpenInterval" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastPestDetectRate" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="logCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="logPointer" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lowestDayDew" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lowestDayHumidity" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lowestDayPressure" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
@@ -70,11 +72,14 @@
         <attribute name="mode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="movementMeasurePeriod" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="numBreach" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="openCloseStatus" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="openEventsCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="pestSensitivityLevel" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="pressure" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="referenceDateRawNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="timerInterval" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="totalButtonEvents" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="totalEventsCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="totalHumEventsDetects" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="totalPestEventsDetects" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
@@ -82,6 +87,6 @@
         <element name="Reading" positionX="115" positionY="132" width="128" height="120"/>
         <element name="ReadingType" positionX="-90" positionY="75" width="128" height="105"/>
         <element name="TempoDevice" positionX="-290" positionY="-30" width="128" height="330"/>
-        <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="675"/>
+        <element name="TempoDiscDevice" positionX="-90" positionY="99" width="128" height="750"/>
     </elements>
 </model>

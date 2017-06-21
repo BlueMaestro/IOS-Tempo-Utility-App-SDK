@@ -101,6 +101,8 @@
 		return;
 	}
 	
+#pragma mark - Version 13 and 113
+	
 	if (self.version.integerValue == 13 || self.version.integerValue == 113) {
 		//Variables not parsed
 		self.uuid = uuid;
@@ -115,10 +117,8 @@
 		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
 	}
 	
-    /**
-    *	Version 22
-    *
-    **/
+#pragma mark - Version 22
+	
 	if (self.version.integerValue == 22) {
         
         //Variables not parsed
@@ -164,10 +164,7 @@
 		}
 	}
     
-    /**
-     *	Version 23
-     *
-     **/
+#pragma mark - Version 23
 	
 	if (self.version.integerValue == 23) {
         
@@ -256,10 +253,7 @@
 		NSLog(@"Parsed version 23 data");
 	}
 	
-	/**
-	 *	Version 27
-	 *
-	 **/
+#pragma mark - Version 27
 	
 	if (self.version.integerValue == 27) {
 		
@@ -351,6 +345,8 @@
 		
 	}
 	
+#pragma mark - Version 32
+	
 	if (self.version.integerValue == 32) {
 		
 		//Variables not parsed
@@ -378,10 +374,7 @@
 		self.lastButtonDetected = @([self intValueLsb:data[27] msb:data[26]]);
 	}
 	
-	/**
-	 *	Version 42
-	 *
-	 **/
+#pragma mark - Version 42
 	
 	if (self.version.integerValue == 42) {
 		self.uuid = uuid;
@@ -428,10 +421,7 @@
 		
 	}
 	
-    /**
-     *	Version 99 PACIF-I V2
-     *
-     **/
+#pragma mark - Version 99 PACIF-I V2
 	
     if (self.version.integerValue == 99) {
         self.uuid = uuid;
@@ -444,34 +434,54 @@
         
     }
 	
-	/*NSLog(@"---------------------------------------------------------------");
-	 NSLog(@"PARSING TEMPO DISC DEVICE DATA:");
-	 NSLog(@"Raw data: %@", custom);
-	 NSLog(@"Version: %f", version);
-	 NSLog(@"Battery: %f", battery);
-	 NSLog(@"Timer interval: %f", timerInterval);
-	 NSLog(@"Interval Counter: %f", intervalCounter);
-	 NSLog(@"Temperature: %f", temperature);
-	 NSLog(@"Humidity: %f", humidity);
-	 NSLog(@"Dew Point: %f", dewPoint);
-	 NSLog(@"Mode: %f", mode);
-	 NSLog(@"Number of breaches: %f", numBreach);
-	 NSLog(@"Time at last breach: %f", timeAtLastBreach);
-	 NSLog(@"Name length: %f", nameLength);
-	 NSLog(@"Highest Temperature: %f", highestTemp);
-	 NSLog(@"Highest Humidity: %f", highestHumidity);
-	 NSLog(@"Lowest Temperature: %f", lowestTemperature);
-	 NSLog(@"Lowest Humidity: %f", lowestHumidity);
-	 NSLog(@"Highest 24h Temperature: %f", highDayTemp);
-	 NSLog(@"Highest 24h Humidity: %f", highDayHumidity);
-	 NSLog(@"Highest 24h Dew: %f", highDayDew);
-	 NSLog(@"Lowest 24h Temperature: %f", lowDayTemp);
-	 NSLog(@"Lowest 24h Humidity: %f", lowDayHumidity);
-	 NSLog(@"Lowest 24h Dew: %f", lowDayDew);
-	 NSLog(@"Average 24h Temperature: %f", avgDayTemperature);
-	 NSLog(@"Average 24h Humidity: %f", avgDayHumidity);
-	 NSLog(@"Average 24h Dew: %f", avgDayDew);
-	 NSLog(@"---------------------------------------------------------------");*/
+#pragma mark - Version 52
+	
+	if (self.version.integerValue == 52) {
+		self.uuid = uuid;
+		self.name = advertisedData[@"kCBAdvDataLocalName"];
+		self.lastDetected = [NSDate date];
+		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.logPointer = @([self intValueLsb:data[9] msb:data[8]]);
+		self.openCloseStatus = @(data[10]).boolValue;
+		self.mode = @(data[11]);
+		const unsigned char dateBytes[] = {data[12], data[13], data[14], data[15]};
+		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
+		//date digits, should be reverse from what is written, not sure about indexes
+		unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+		NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
+		
+		NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+		self.referenceDateRawNumber = fullValue;
+		long lowDate = 1700000000; //1 January 2017
+		long highDate = 1900000000; //1 January 2019
+		if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
+			NSInteger minutes = fullValue.integerValue % 100;
+			NSInteger hours = (fullValue.integerValue/100) % 100;
+			NSInteger days = (fullValue.integerValue/10000) % 100;
+			NSInteger months = (fullValue.integerValue/1000000) % 100;
+			NSInteger years = (fullValue.integerValue/100000000) % 100;
+			
+			NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+			NSDateComponents *components = [[NSDateComponents alloc] init];
+			//MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+			components.minute = MIN(minutes, 60);
+			components.hour = MIN(hours, 24);
+			components.day = MIN(days, 31);
+			components.month = MIN(months, 12);
+			components.year = years+2000;//add century as its only last 2 digits
+			NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+			dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+			NSDate *date = [calendar dateFromComponents:components];
+			
+			self.startTimestamp = [calendar dateFromComponents:components];
+			NSLog(@"%@", [dateFormatter stringFromDate:date]);
+		}
+		self.openEventsCount = @([self intValueLsb:data[17] msb:data[16]]);
+		self.lastOpenInterval = @([self intValueLsb:data[19] msb:data[18]]);
+		self.totalEventsCount = @([self intValueLsb:data[21] msb:data[20]]);
+	}
 }
 
 - (TempoDeviceType)deviceType {
