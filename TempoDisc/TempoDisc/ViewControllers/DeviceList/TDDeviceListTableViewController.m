@@ -178,6 +178,10 @@ typedef enum : NSInteger {
 					 [devices addObject:device];
 					 NSLog(@"Found v42 device");
 				 }
+				 else if (device.version.integerValue == 52) {
+					 [devices addObject:device];
+					 NSLog(@"Found v52 device");
+				 }
                  else if (device.version.integerValue == 99) {
                      [devices addObject:device];
                      NSLog(@"Found Pacifi V2 device");
