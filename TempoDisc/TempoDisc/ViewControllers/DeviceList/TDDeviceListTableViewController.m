@@ -51,6 +51,7 @@ typedef enum : NSInteger {
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	_dataSource = [@[] mutableCopy];
 	[self setupView];
 	/**
 	 *	Wait until ready to perform scan
@@ -193,9 +194,20 @@ typedef enum : NSInteger {
                  
 			 }
          }
-		 NSArray *sorted = [devices sortedArrayUsingDescriptors:sortDescriptors];
 		 
-		 weakself.dataSource = [sorted mutableCopy];
+		 NSArray *udid = [weakself.dataSource valueForKey:@"uuid"];
+		 for (TDTempoDisc *device in devices) {
+			 NSUInteger index = [udid indexOfObject:device.uuid];
+			 if (index != NSNotFound) {
+				 [weakself.dataSource replaceObjectAtIndex:index withObject:device];
+			 }
+			 else {
+				 [weakself.dataSource addObject:device];
+			 }
+		 }
+		 
+		 weakself.dataSource = [[weakself.dataSource sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
+		 
 		 [weakself.tableView reloadData];
 		 
 		 /**
@@ -296,6 +308,8 @@ typedef enum : NSInteger {
 
 - (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
 //	__weak typeof(self) weakself = self;
+	_dataSource = [@[] mutableCopy];
+	[self.tableView reloadData];
 	
     [self scanForDevices];
     
