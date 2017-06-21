@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSArray *dataSourceDewPoint;
 @property (nonatomic, strong) NSArray *dataSourceFirstMovement;
 @property (nonatomic, strong) NSArray *dataSourceSecondMovement;
+@property (nonatomic, strong) NSArray *dataSourceOpenClose;
 
 @end
 
@@ -40,6 +41,9 @@
 	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
 		_currentReadingType = TempoReadingTypeFirstMovement;
 	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+		_currentReadingType = TempoReadingTypeOpenClose;
+	}
 	else {
 		_currentReadingType = TempoReadingTypeTemperature;
 	}
@@ -48,17 +52,11 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self loadData];
-//	self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Temperature" style:UIBarButtonItemStyleDone target:self action:@selector(buttonChangeReadingTypeClicked:)];
 	[self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	self.parentViewController.navigationItem.rightBarButtonItem = nil;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Private methods
@@ -87,6 +85,9 @@
 	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
 		_dataSourceFirstMovement= [self dataForType:TempoReadingTypeFirstMovement];
 		_dataSourceSecondMovement = [self dataForType:TempoReadingTypeSecondMovement];
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+		_dataSourceOpenClose = [self dataForType:TempoReadingTypeOpenClose];
 	}
 	else {
 		_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
@@ -117,7 +118,8 @@
 		case TempoReadingTypeSecondMovement:
 			readingType = @"SecondMovement";
 			break;
-  default:
+		case TempoReadingTypeOpenClose:
+			readingType = @"OpenClose";
 			break;
 	}
 	if (readingType) {
@@ -143,7 +145,8 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
-	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
+		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
 		return;
 	}
 	[self changeReadingType:_currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature];
@@ -160,6 +163,9 @@
 	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
 		return _dataSourceFirstMovement.count;
 	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+		return _dataSourceOpenClose.count;
+	}
 	else if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		return _dataSourceTemperature.count;
 	}
@@ -172,7 +178,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		NSString *reuse = @"cellDiscData";
-		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) || ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113)) {
+		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) ||
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113) ||
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52)) {
 			reuse = @"cellDiscData13";
 		}
 		else if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27)) {
@@ -191,6 +199,7 @@
 		Reading *readingDewPoint = indexPath.row < _dataSourceDewPoint.count ? _dataSourceDewPoint[indexPath.row] : nil;
 		Reading *readingFirstMovement = indexPath.row < _dataSourceFirstMovement.count ? _dataSourceFirstMovement[indexPath.row] : nil;
 		Reading *readingSecondMovement = indexPath.row < _dataSourceSecondMovement.count ? _dataSourceSecondMovement[indexPath.row] : nil;
+		Reading *readingOpenClose = indexPath.row < _dataSourceOpenClose.count ? _dataSourceOpenClose[indexPath.row] : nil;
 		
 		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 		TempoDevice *selectedDevice = [TDSharedDevice sharedDevice].selectedDevice;
@@ -233,6 +242,16 @@
 		else {
 			cell.labelChannelTwoValue.text = @"";
 		}
+		if (readingOpenClose) {
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingOpenClose.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceOpenClose.count - indexPath.row).stringValue;
+			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
+		}
+		else {
+			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
+		}
 		
 		return cell;
 	}
@@ -264,7 +283,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113 ||
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
 			return 70;
 		}
 		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
@@ -281,50 +302,5 @@
 		return 44;
 	}
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

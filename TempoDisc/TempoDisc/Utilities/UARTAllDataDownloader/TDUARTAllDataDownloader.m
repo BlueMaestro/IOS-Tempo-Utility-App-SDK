@@ -32,6 +32,7 @@ typedef enum : NSInteger {
 	DataDownloadTypePressure,
 	DataDownloadTypeFirstMovement,
 	DataDownloadTypeSecondMovement,
+	DataDownloadTypeOpenClose,
 	DataDownloadTypeFinish
 } DataDownloadType;
 
@@ -156,7 +157,11 @@ typedef enum : NSInteger {
 					break;
 				case DataDownloadTypeSecondMovement:
 					[self notifyUpdateForProgress:1.0];
-				default:
+					break;
+				case DataDownloadTypeOpenClose:
+					[self notifyUpdateForProgress:1.0];
+					break;
+				case DataDownloadTypeFinish:
 					break;
 			}
 			
@@ -170,7 +175,8 @@ typedef enum : NSInteger {
 		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
 			((_currentDownloadType == DataDownloadTypeDewPoint || _currentDownloadType == DataDownloadTypePressure) && d[i] == kDataTerminationValue) ||
 			(_deviceVersion == 13 && d[i] == kDataTerminationValue) ||
-			(_deviceVersion == 32 && d[i] == kDataTerminationValue)) {
+			(_deviceVersion == 32 && d[i] == kDataTerminationValue) ||
+			(_deviceVersion == 52 && d[i] == kDataTerminationValue)) {
 			//termination symbol found, abort data download and insert into database
 			NSLog(@"Termination symbol recognized.");
 			[self didFinishDownloadForType:_currentDownloadType];
@@ -203,7 +209,11 @@ typedef enum : NSInteger {
 					type = @"SM";
 					baseProgress = 0.5;
 					break;
-				default:
+				case DataDownloadTypeOpenClose:
+					type = @"OC";
+					baseProgress = 0.0;
+					break;
+				case DataDownloadTypeFinish:
 					break;
 			}
 			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
@@ -286,6 +296,18 @@ typedef enum : NSInteger {
 				_timerDataParseTimeout = nil;
 			}
 			break;
+		case DataDownloadTypeOpenClose:
+			//version 52 only
+			downloadType = DataDownloadTypeFinish;
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			if (_completion) {
+				_completion(YES);
+				_completion = nil;
+				[_timerDataParseTimeout invalidate];
+				_timerDataParseTimeout = nil;
+			}
+			break;
 		case DataDownloadTypeFinish:
 			downloadType = DataDownloadTypeTemperature;
 			break;
@@ -315,6 +337,9 @@ typedef enum : NSInteger {
 			break;
 		case DataDownloadTypeSecondMovement:
 			readingType = @"SecondMovement";
+			break;
+		case DataDownloadTypeOpenClose:
+			readingType = @"OpenClose";
 			break;
 		case DataDownloadTypeFinish:
 			break;
@@ -359,6 +384,9 @@ typedef enum : NSInteger {
 	_deviceVersion = device.version.integerValue;
 	if (_deviceVersion == 32) {
 		_currentDownloadType = DataDownloadTypeFirstMovement;
+	}
+	else if (_deviceVersion == 52) {
+		_currentDownloadType = DataDownloadTypeOpenClose;
 	}
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
