@@ -35,6 +35,7 @@
 #define kColorGraphFirstMovement [CPTColor colorWithComponentRed:1/255.0f green:101/255.0f blue:189/255.0f alpha:1]
 #define kColorGraphSecondMovement [CPTColor colorWithComponentRed:171/255.0f green:49/255.0f blue:170/255.0f alpha:1]
 #define kColorGraphOpenClose [CPTColor colorWithComponentRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]
+#define kColorGraphLight [CPTColor colorWithComponentRed:1/255.0f green:101/255.0f blue:189/255.0f alpha:1]
 #define kFontGraphAxis @"Montserrat-Regular"
 #define kGraphLineWidth 2
 #define kGraphiPhoneFontSize 14
