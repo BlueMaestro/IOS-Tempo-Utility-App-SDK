@@ -70,6 +70,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) NSNumber *lastOpenInterval;
 @property (nullable, nonatomic, strong) NSNumber *totalEventsCount;
 
+//version 62
+@property (nullable, nonatomic, strong) NSNumber *currentLightLevel;
+@property (nullable, nonatomic, strong) NSNumber *lightStatus;
+@property (nullable, nonatomic, strong) NSNumber *lightThreshold;
+
 @end
 
 NS_ASSUME_NONNULL_END

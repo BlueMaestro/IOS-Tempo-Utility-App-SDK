@@ -45,5 +45,14 @@
 @dynamic lowestPressure;
 @dynamic altitude;
 @dynamic totalButtonEvents;
+@dynamic lastOpenInterval;
+@dynamic totalEventsCount;
+@dynamic openEventsCount;
+@dynamic referenceDateRawNumber;
+@dynamic openCloseStatus;
+@dynamic logPointer;
+@dynamic lightThreshold;
+@dynamic lightStatus;
+@dynamic currentLightLevel;
 
 @end

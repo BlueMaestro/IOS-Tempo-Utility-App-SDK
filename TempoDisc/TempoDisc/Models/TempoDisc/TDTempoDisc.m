@@ -482,6 +482,67 @@
 		self.lastOpenInterval = @([self intValueLsb:data[19] msb:data[18]]);
 		self.totalEventsCount = @([self intValueLsb:data[21] msb:data[20]]);
 	}
+	
+#pragma mark - Version 62
+	
+	if (self.version.integerValue == 62) {
+		self.uuid = uuid;
+		self.name = advertisedData[@"kCBAdvDataLocalName"];
+		self.lastDetected = [NSDate date];
+		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
+		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.logPointer = @([self intValueLsb:data[9] msb:data[8]]);
+		
+		const unsigned char levelBytes[] = {data[10], data[11], data[12], data[13]};
+		NSData *levelValues = [NSData dataWithBytes:levelBytes length:4];
+		unsigned levelValueRawValue = CFSwapInt32BigToHost(*(int*)([levelValues bytes]));
+		NSNumber *fullLightValue = [NSNumber numberWithUnsignedInt:levelValueRawValue];
+		self.currentLightLevel = fullLightValue;
+		
+		self.lightStatus = @(data[14]);
+		self.mode = @(data[15]);
+		
+		const unsigned char dateBytes[] = {data[16], data[17], data[18], data[19]};
+		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
+		//date digits, should be reverse from what is written, not sure about indexes
+		unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+		NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
+		
+		NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+		self.referenceDateRawNumber = fullValue;
+		long lowDate = 1700000000; //1 January 2017
+		long highDate = 1900000000; //1 January 2019
+		if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
+			NSInteger minutes = fullValue.integerValue % 100;
+			NSInteger hours = (fullValue.integerValue/100) % 100;
+			NSInteger days = (fullValue.integerValue/10000) % 100;
+			NSInteger months = (fullValue.integerValue/1000000) % 100;
+			NSInteger years = (fullValue.integerValue/100000000) % 100;
+			
+			NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+			NSDateComponents *components = [[NSDateComponents alloc] init];
+			//MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+			components.minute = MIN(minutes, 60);
+			components.hour = MIN(hours, 24);
+			components.day = MIN(days, 31);
+			components.month = MIN(months, 12);
+			components.year = years+2000;//add century as its only last 2 digits
+			NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+			dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+			NSDate *date = [calendar dateFromComponents:components];
+			
+			self.startTimestamp = [calendar dateFromComponents:components];
+			NSLog(@"%@", [dateFormatter stringFromDate:date]);
+		}
+		
+		
+		const unsigned char lightBytes[] = {data[10], data[11], data[12], data[13]};
+		NSData *lightValues = [NSData dataWithBytes:lightBytes length:4];
+		unsigned lightValueRawValue = CFSwapInt32BigToHost(*(int*)([lightValues bytes]));
+		NSNumber *fullLightLevelValue = [NSNumber numberWithUnsignedInt:lightValueRawValue];
+		self.lightThreshold = fullLightLevelValue;
+	}
 }
 
 - (TempoDeviceType)deviceType {
@@ -491,6 +552,7 @@
     if  (self.version.integerValue == 27) return TempoDeviceType27;
 	if  (self.version.integerValue == 32) return TempoDeviceType32;
 	if  (self.version.integerValue == 52) return TempoDeviceType52;
+	if  (self.version.integerValue == 62) return TempoDeviceType62;
     if  (self.version.integerValue == 99) return TempoDeviceType99;
     if  (self.version.integerValue == 113) return TempoDeviceType113;
     return TempoDeviceTypeUnknown;

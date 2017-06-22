@@ -84,6 +84,11 @@
 @property (nullable, nonatomic, strong) NSNumber *lastOpenInterval;
 @property (nullable, nonatomic, strong) NSNumber *totalEventsCount;
 
+//version 62
+@property (nullable, nonatomic, strong) NSNumber *currentLightLevel;
+@property (nullable, nonatomic, strong) NSNumber *lightStatus;
+@property (nullable, nonatomic, strong) NSNumber *lightThreshold;
+
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid;
 
