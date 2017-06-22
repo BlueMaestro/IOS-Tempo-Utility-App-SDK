@@ -29,7 +29,6 @@
 		CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA711C83007B00C99C41 /* TempoDevice.m */; };
 		CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7A1C83123A00C99C41 /* TDHelper.m */; };
 		CB16BA7F1C83126600C99C41 /* TDSharedDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA7E1C83126600C99C41 /* TDSharedDevice.m */; };
-		CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */; };
 		CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB242C291C974A0800757AEC /* TDSettingsViewController.m */; };
 		CB256CF31DABFD8400293D81 /* TDDiscDataTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB256CF21DABFD8400293D81 /* TDDiscDataTableViewCell.m */; };
 		CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB290B0D1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m */; };
@@ -38,13 +37,16 @@
 		CB2B639F1D8B308F00B705CB /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBF3AC501D8B270800AFDDA2 /* Montserrat-Regular.ttf */; };
 		CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */ = {isa = PBXBuildFile; fileRef = CB2B63A21D8B31B300B705CB /* UIFont+Tempo.m */; };
 		CB34C3681E546D310008F214 /* TDPressureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */; };
-		CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */; };
-		CB364D971ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */; };
 		CB41D2A21EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */; };
-		CB41D2A71EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB41D2A61EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m */; };
 		CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954F71D91BDAF00C4AAAF /* LogMessage.m */; };
 		CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */; };
 		CB5C621B1EFC1E8800E43A68 /* TDLuminosityDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C621A1EFC1E8800E43A68 /* TDLuminosityDeviceTableViewCell.m */; };
+		CB5C622D1EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C62231EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.m */; };
+		CB5C622E1EFC22F400E43A68 /* TDDeviceMagnetometerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C62261EFC22F400E43A68 /* TDDeviceMagnetometerViewController.m */; };
+		CB5C622F1EFC22F400E43A68 /* TDDeviceMovementInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C62291EFC22F400E43A68 /* TDDeviceMovementInfoViewController.m */; };
+		CB5C62301EFC22F400E43A68 /* TDDevicePressureInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C622C1EFC22F400E43A68 /* TDDevicePressureInfoViewController.m */; };
+		CB5C62341EFC232500E43A68 /* TDDeviceButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C62331EFC232500E43A68 /* TDDeviceButtonViewController.m */; };
+		CB5C62381EFC233900E43A68 /* TDDeviceInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5C62371EFC233900E43A68 /* TDDeviceInfoViewController.m */; };
 		CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */; };
 		CB73F9351DA6B9D50012C4D0 /* TDHistoryContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB73F9341DA6B9D50012C4D0 /* TDHistoryContainerViewController.m */; };
 		CB86F2591E2F98E500B4BCC8 /* TDCommandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB86F2581E2F98E500B4BCC8 /* TDCommandViewController.m */; };
@@ -60,7 +62,6 @@
 		CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C4C1D47F82300EEBECD /* TDDeviceTableContainer.m */; };
 		CBAB5C511D47FF0500EEBECD /* TDBaseDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */; };
 		CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */; };
-		CBC79BD31EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */; };
 		CBD3574A1EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD357491EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m */; };
 		CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBD84AE61D2ED5B1004B0191 /* TDUARTViewController.m */; };
 		CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF066511DA571D200210428 /* TDUARTDownloader.m */; };
@@ -109,8 +110,6 @@
 		CB16BA7A1C83123A00C99C41 /* TDHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHelper.m; sourceTree = "<group>"; };
 		CB16BA7D1C83126600C99C41 /* TDSharedDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSharedDevice.h; sourceTree = "<group>"; };
 		CB16BA7E1C83126600C99C41 /* TDSharedDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSharedDevice.m; sourceTree = "<group>"; };
-		CB16BA811C8313ED00C99C41 /* TDDeviceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceInfoViewController.h; sourceTree = "<group>"; };
-		CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceInfoViewController.m; sourceTree = "<group>"; };
 		CB242C281C974A0800757AEC /* TDSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDSettingsViewController.h; sourceTree = "<group>"; };
 		CB242C291C974A0800757AEC /* TDSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSettingsViewController.m; sourceTree = "<group>"; };
 		CB242C2B1C97637600757AEC /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -125,20 +124,26 @@
 		CB34C35D1E54679A0008F214 /* TempoDisc 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TempoDisc 3.xcdatamodel"; sourceTree = "<group>"; };
 		CB34C3661E546D310008F214 /* TDPressureDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDPressureDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB34C3671E546D310008F214 /* TDPressureDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDPressureDeviceTableViewCell.m; sourceTree = "<group>"; };
-		CB34C36A1E546F340008F214 /* TDDevicePressureInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicePressureInfoViewController.h; sourceTree = "<group>"; };
-		CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicePressureInfoViewController.m; sourceTree = "<group>"; };
-		CB364D951ED1CE2800AE6FC7 /* TDDeviceButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceButtonViewController.h; sourceTree = "<group>"; };
-		CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceButtonViewController.m; sourceTree = "<group>"; };
 		CB41D2A01EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMagnetometerDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMagnetometerDeviceTableViewCell.m; sourceTree = "<group>"; };
-		CB41D2A51EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMagnetometerViewController.h; sourceTree = "<group>"; };
-		CB41D2A61EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMagnetometerViewController.m; sourceTree = "<group>"; };
 		CB4954F61D91BDAF00C4AAAF /* LogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogMessage.h; sourceTree = "<group>"; };
 		CB4954F71D91BDAF00C4AAAF /* LogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogMessage.m; sourceTree = "<group>"; };
 		CB4954FA1D91C5A900C4AAAF /* IBActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IBActionSheet.h; sourceTree = "<group>"; };
 		CB4954FB1D91C5A900C4AAAF /* IBActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IBActionSheet.m; sourceTree = "<group>"; };
 		CB5C62191EFC1E8800E43A68 /* TDLuminosityDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDLuminosityDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CB5C621A1EFC1E8800E43A68 /* TDLuminosityDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDLuminosityDeviceTableViewCell.m; sourceTree = "<group>"; };
+		CB5C62221EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceLuminosityInfoViewController.h; sourceTree = "<group>"; };
+		CB5C62231EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceLuminosityInfoViewController.m; sourceTree = "<group>"; };
+		CB5C62251EFC22F400E43A68 /* TDDeviceMagnetometerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMagnetometerViewController.h; sourceTree = "<group>"; };
+		CB5C62261EFC22F400E43A68 /* TDDeviceMagnetometerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMagnetometerViewController.m; sourceTree = "<group>"; };
+		CB5C62281EFC22F400E43A68 /* TDDeviceMovementInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMovementInfoViewController.h; sourceTree = "<group>"; };
+		CB5C62291EFC22F400E43A68 /* TDDeviceMovementInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMovementInfoViewController.m; sourceTree = "<group>"; };
+		CB5C622B1EFC22F400E43A68 /* TDDevicePressureInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDevicePressureInfoViewController.h; sourceTree = "<group>"; };
+		CB5C622C1EFC22F400E43A68 /* TDDevicePressureInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDevicePressureInfoViewController.m; sourceTree = "<group>"; };
+		CB5C62321EFC232500E43A68 /* TDDeviceButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceButtonViewController.h; sourceTree = "<group>"; };
+		CB5C62331EFC232500E43A68 /* TDDeviceButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceButtonViewController.m; sourceTree = "<group>"; };
+		CB5C62361EFC233900E43A68 /* TDDeviceInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceInfoViewController.h; sourceTree = "<group>"; };
+		CB5C62371EFC233900E43A68 /* TDDeviceInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceInfoViewController.m; sourceTree = "<group>"; };
 		CB6895611C83355700EB1A65 /* TDDeviceDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceDataTableViewController.h; sourceTree = "<group>"; };
 		CB6895621C83355700EB1A65 /* TDDeviceDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceDataTableViewController.m; sourceTree = "<group>"; };
 		CB73F9331DA6B9D50012C4D0 /* TDHistoryContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHistoryContainerViewController.h; sourceTree = "<group>"; };
@@ -169,8 +174,6 @@
 		CBAB5C501D47FF0500EEBECD /* TDBaseDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDBaseDeviceViewController.m; sourceTree = "<group>"; };
 		CBC11B201EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDMovementDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDMovementDeviceTableViewCell.m; sourceTree = "<group>"; };
-		CBC79BD11EC4EBA80078D919 /* TDDeviceMovementInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDDeviceMovementInfoViewController.h; sourceTree = "<group>"; };
-		CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDDeviceMovementInfoViewController.m; sourceTree = "<group>"; };
 		CBD357481EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDTemperatureDeviceTableViewCell.h; sourceTree = "<group>"; };
 		CBD357491EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDTemperatureDeviceTableViewCell.m; sourceTree = "<group>"; };
 		CBD84AE51D2ED5B1004B0191 /* TDUARTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDUARTViewController.h; sourceTree = "<group>"; };
@@ -313,7 +316,7 @@
 		CB16BA511C82E70C00C99C41 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				CB364D941ED1CE0600AE6FC7 /* DeviceButton */,
+				CB5C62201EFC22F400E43A68 /* DeviceInfoScreens */,
 				CB86F2561E2F98CE00B4BCC8 /* Command */,
 				CB8E7E791DE0B5C80084F3CC /* LivePlot */,
 				CB290B0B1DAFEE1A0012EEEC /* DevicesHistory */,
@@ -322,10 +325,6 @@
 				CBAB5C4E1D47FEFA00EEBECD /* BaseDevice */,
 				CBAB5C4A1D47F81400EEBECD /* DeviceTableContainer */,
 				CB6895601C83353F00EB1A65 /* DeviceDataTable */,
-				CB16BA801C8313CD00C99C41 /* DeviceInfo */,
-				CB34C3691E546F1D0008F214 /* DevicePressureInfo */,
-				CBC79BD01EC4EB900078D919 /* DeviceMovementInfo */,
-				CB41D2A41EFAE19500FD8BD1 /* DeviceMagnetometerInfo */,
 				CB16BA521C82E74200C99C41 /* DeviceList */,
 				CBAB5C3E1D47CA0F00EEBECD /* DevicesContainer */,
 				CB9421EB1C9200A5000724B5 /* Graph */,
@@ -442,15 +441,6 @@
 			path = DefaultDevice;
 			sourceTree = "<group>";
 		};
-		CB16BA801C8313CD00C99C41 /* DeviceInfo */ = {
-			isa = PBXGroup;
-			children = (
-				CB16BA811C8313ED00C99C41 /* TDDeviceInfoViewController.h */,
-				CB16BA821C8313ED00C99C41 /* TDDeviceInfoViewController.m */,
-			);
-			path = DeviceInfo;
-			sourceTree = "<group>";
-		};
 		CB242C271C9749F800757AEC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -505,24 +495,6 @@
 			path = PressureDevice;
 			sourceTree = "<group>";
 		};
-		CB34C3691E546F1D0008F214 /* DevicePressureInfo */ = {
-			isa = PBXGroup;
-			children = (
-				CB34C36A1E546F340008F214 /* TDDevicePressureInfoViewController.h */,
-				CB34C36B1E546F340008F214 /* TDDevicePressureInfoViewController.m */,
-			);
-			path = DevicePressureInfo;
-			sourceTree = "<group>";
-		};
-		CB364D941ED1CE0600AE6FC7 /* DeviceButton */ = {
-			isa = PBXGroup;
-			children = (
-				CB364D951ED1CE2800AE6FC7 /* TDDeviceButtonViewController.h */,
-				CB364D961ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m */,
-			);
-			path = DeviceButton;
-			sourceTree = "<group>";
-		};
 		CB41D29F1EFAD95100FD8BD1 /* MagnetometerDevice */ = {
 			isa = PBXGroup;
 			children = (
@@ -530,15 +502,6 @@
 				CB41D2A11EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m */,
 			);
 			path = MagnetometerDevice;
-			sourceTree = "<group>";
-		};
-		CB41D2A41EFAE19500FD8BD1 /* DeviceMagnetometerInfo */ = {
-			isa = PBXGroup;
-			children = (
-				CB41D2A51EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.h */,
-				CB41D2A61EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m */,
-			);
-			path = DeviceMagnetometerInfo;
 			sourceTree = "<group>";
 		};
 		CB4954F51D91BD9B00C4AAAF /* LogMessage */ = {
@@ -566,6 +529,73 @@
 				CB5C621A1EFC1E8800E43A68 /* TDLuminosityDeviceTableViewCell.m */,
 			);
 			path = LuminosityDevice;
+			sourceTree = "<group>";
+		};
+		CB5C62201EFC22F400E43A68 /* DeviceInfoScreens */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C62351EFC233900E43A68 /* DeviceInfo */,
+				CB5C62311EFC232500E43A68 /* DeviceButtonInfo */,
+				CB5C62211EFC22F400E43A68 /* DeviceLuminosityInfo */,
+				CB5C62241EFC22F400E43A68 /* DeviceMagnetometerInfo */,
+				CB5C62271EFC22F400E43A68 /* DeviceMovementInfo */,
+				CB5C622A1EFC22F400E43A68 /* DevicePressureInfo */,
+			);
+			path = DeviceInfoScreens;
+			sourceTree = "<group>";
+		};
+		CB5C62211EFC22F400E43A68 /* DeviceLuminosityInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C62221EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.h */,
+				CB5C62231EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.m */,
+			);
+			path = DeviceLuminosityInfo;
+			sourceTree = "<group>";
+		};
+		CB5C62241EFC22F400E43A68 /* DeviceMagnetometerInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C62251EFC22F400E43A68 /* TDDeviceMagnetometerViewController.h */,
+				CB5C62261EFC22F400E43A68 /* TDDeviceMagnetometerViewController.m */,
+			);
+			path = DeviceMagnetometerInfo;
+			sourceTree = "<group>";
+		};
+		CB5C62271EFC22F400E43A68 /* DeviceMovementInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C62281EFC22F400E43A68 /* TDDeviceMovementInfoViewController.h */,
+				CB5C62291EFC22F400E43A68 /* TDDeviceMovementInfoViewController.m */,
+			);
+			path = DeviceMovementInfo;
+			sourceTree = "<group>";
+		};
+		CB5C622A1EFC22F400E43A68 /* DevicePressureInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C622B1EFC22F400E43A68 /* TDDevicePressureInfoViewController.h */,
+				CB5C622C1EFC22F400E43A68 /* TDDevicePressureInfoViewController.m */,
+			);
+			path = DevicePressureInfo;
+			sourceTree = "<group>";
+		};
+		CB5C62311EFC232500E43A68 /* DeviceButtonInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C62321EFC232500E43A68 /* TDDeviceButtonViewController.h */,
+				CB5C62331EFC232500E43A68 /* TDDeviceButtonViewController.m */,
+			);
+			path = DeviceButtonInfo;
+			sourceTree = "<group>";
+		};
+		CB5C62351EFC233900E43A68 /* DeviceInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CB5C62361EFC233900E43A68 /* TDDeviceInfoViewController.h */,
+				CB5C62371EFC233900E43A68 /* TDDeviceInfoViewController.m */,
+			);
+			path = DeviceInfo;
 			sourceTree = "<group>";
 		};
 		CB6895601C83353F00EB1A65 /* DeviceDataTable */ = {
@@ -702,15 +732,6 @@
 				CBC11B211EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m */,
 			);
 			path = MovementDevice;
-			sourceTree = "<group>";
-		};
-		CBC79BD01EC4EB900078D919 /* DeviceMovementInfo */ = {
-			isa = PBXGroup;
-			children = (
-				CBC79BD11EC4EBA80078D919 /* TDDeviceMovementInfoViewController.h */,
-				CBC79BD21EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m */,
-			);
-			path = DeviceMovementInfo;
 			sourceTree = "<group>";
 		};
 		CBD357471EC0DF5F0057ABCF /* TemperatureDevice */ = {
@@ -879,18 +900,18 @@
 				CB16BA3A1C82E67E00C99C41 /* AppDelegate.m in Sources */,
 				CB16BA551C82E75F00C99C41 /* TDDeviceListTableViewController.m in Sources */,
 				CB14AD1F1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataProperties.m in Sources */,
-				CB16BA831C8313ED00C99C41 /* TDDeviceInfoViewController.m in Sources */,
 				CB290B0E1DAFEE3F0012EEEC /* TDDevicesHistoryListTableViewController.m in Sources */,
 				CBD84AE71D2ED5B1004B0191 /* TDUARTViewController.m in Sources */,
 				CB1674151DB7E2E900BC938A /* CHCSVParser.m in Sources */,
+				CB5C622D1EFC22F400E43A68 /* TDDeviceLuminosityInfoViewController.m in Sources */,
 				CB41D2A21EFAD96800FD8BD1 /* TDMagnetometerDeviceTableViewCell.m in Sources */,
 				CB16BA431C82E67E00C99C41 /* TempoDisc.xcdatamodeld in Sources */,
 				CB4954FC1D91C5A900C4AAAF /* IBActionSheet.m in Sources */,
 				CB9421EA1C91E6D5000724B5 /* TDOtherDeviceTableViewCell.m in Sources */,
 				CBD3574A1EC0DF730057ABCF /* TDTemperatureDeviceTableViewCell.m in Sources */,
+				CB5C622E1EFC22F400E43A68 /* TDDeviceMagnetometerViewController.m in Sources */,
 				CB8E7E801DE0B8680084F3CC /* TDLivePlotData.m in Sources */,
 				CB6895631C83355700EB1A65 /* TDDeviceDataTableViewController.m in Sources */,
-				CB34C36C1E546F340008F214 /* TDDevicePressureInfoViewController.m in Sources */,
 				CB86F25D1E2F99A600B4BCC8 /* TDCommandCollectionViewCell.m in Sources */,
 				CB242C2A1C974A0800757AEC /* TDSettingsViewController.m in Sources */,
 				CB4954F81D91BDAF00C4AAAF /* LogMessage.m in Sources */,
@@ -898,15 +919,14 @@
 				CBAB5C451D47CC9000EEBECD /* SCHelper.m in Sources */,
 				CB290B121DB000230012EEEC /* TDUARTAllDataDownloader.m in Sources */,
 				CB16BA721C83007B00C99C41 /* Reading+CoreDataProperties.m in Sources */,
-				CBC79BD31EC4EBA80078D919 /* TDDeviceMovementInfoViewController.m in Sources */,
 				CBAB5C411D47CA2200EEBECD /* TDDevicesContainerViewController.m in Sources */,
 				CB16BA5B1C82ECFE00C99C41 /* TDDeviceTableViewCell.m in Sources */,
 				CB14AD231D93211D0090AAA2 /* DeviceInfoTableViewController.m in Sources */,
 				CB89850B1E5E0C7F008F12CB /* TDTempoDisc.m in Sources */,
-				CB364D971ED1CE2800AE6FC7 /* TDDeviceButtonViewController.m in Sources */,
 				CBAB5C491D47E72A00EEBECD /* UIColor+Tempo.m in Sources */,
 				CB16BA7B1C83123A00C99C41 /* TDHelper.m in Sources */,
 				CB16BA371C82E67E00C99C41 /* main.m in Sources */,
+				CB5C622F1EFC22F400E43A68 /* TDDeviceMovementInfoViewController.m in Sources */,
 				CB16BA731C83007B00C99C41 /* Reading.m in Sources */,
 				CB5C621B1EFC1E8800E43A68 /* TDLuminosityDeviceTableViewCell.m in Sources */,
 				CB16BA741C83007B00C99C41 /* ReadingType+CoreDataProperties.m in Sources */,
@@ -915,10 +935,12 @@
 				CBF066521DA571D200210428 /* TDUARTDownloader.m in Sources */,
 				CBAB5C4D1D47F82300EEBECD /* TDDeviceTableContainer.m in Sources */,
 				CB16BA771C83007B00C99C41 /* TempoDevice.m in Sources */,
+				CB5C62341EFC232500E43A68 /* TDDeviceButtonViewController.m in Sources */,
+				CB5C62301EFC22F400E43A68 /* TDDevicePressureInfoViewController.m in Sources */,
+				CB5C62381EFC233900E43A68 /* TDDeviceInfoViewController.m in Sources */,
 				CB8E7E7C1DE0B5E70084F3CC /* TDLivePlotViewController.m in Sources */,
 				CBC11B221EC4D9F90091BE2A /* TDMovementDeviceTableViewCell.m in Sources */,
 				CB16BA751C83007B00C99C41 /* ReadingType.m in Sources */,
-				CB41D2A71EFAE1B300FD8BD1 /* TDDeviceMagnetometerViewController.m in Sources */,
 				CB2B63A31D8B31B300B705CB /* UIFont+Tempo.m in Sources */,
 				CB14AD1E1D9316CA0090AAA2 /* TempoDiscDevice+CoreDataClass.m in Sources */,
 				CB16BA7F1C83126600C99C41 /* TDSharedDevice.m in Sources */,

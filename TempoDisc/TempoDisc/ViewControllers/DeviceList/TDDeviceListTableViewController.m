@@ -583,7 +583,7 @@ typedef enum : NSInteger {
 	else if (self.selectedDevice.version.integerValue == 52) {
 		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion52" sender:self.selectedDevice];
 	}
-	else if (self.selectedDevice.version.integerValue == 52) {
+	else if (self.selectedDevice.version.integerValue == 62) {
 		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion62" sender:self.selectedDevice];
 	}
 	else {
