@@ -162,6 +162,9 @@ typedef enum : NSInteger {
 				case DataDownloadTypeOpenClose:
 					[self notifyUpdateForProgress:1.0];
 					break;
+				case DataDownloadTypeLux:
+					[self notifyUpdateForProgress:1.0];
+					break;
 				case DataDownloadTypeFinish:
 					break;
 			}
@@ -172,7 +175,7 @@ typedef enum : NSInteger {
 	float baseProgress = 0.0;
 	NSInteger length = data.length;
 	char * d = (char*)[data bytes];
-	for (NSInteger i=0; i<length; i+=2) {
+	for (NSInteger i=0; i<length; i+= (_deviceVersion == 62 ? 4 : 2)) {
 		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
 			((_currentDownloadType == DataDownloadTypeDewPoint || _currentDownloadType == DataDownloadTypePressure) && d[i] == kDataTerminationValue) ||
 			(_deviceVersion == 13 && d[i] == kDataTerminationValue) ||
@@ -222,7 +225,16 @@ typedef enum : NSInteger {
 					break;
 			}
 			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
-			NSInteger value = [self getIntLsb:d[i+1] msb:d[i]];
+			NSInteger value = 0;
+			if (_deviceVersion == 62) {
+				const unsigned char levelBytes[] = {d[i], d[i+1], d[i+2], d[i+3]};
+				NSData *levelValues = [NSData dataWithBytes:levelBytes length:4];
+				unsigned levelValueRawValue = CFSwapInt32BigToHost(*(int*)([levelValues bytes]));
+				value = [NSNumber numberWithUnsignedInt:levelValueRawValue].integerValue;
+			}
+			else {
+				value = [self getIntLsb:d[i+1] msb:d[i]];
+			}
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
 			if (_deviceVersion == 13 || _deviceVersion == 52 || _deviceVersion == 62) {
