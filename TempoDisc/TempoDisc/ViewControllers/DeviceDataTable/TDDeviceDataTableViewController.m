@@ -24,6 +24,7 @@
 @property (nonatomic, strong) NSArray *dataSourceFirstMovement;
 @property (nonatomic, strong) NSArray *dataSourceSecondMovement;
 @property (nonatomic, strong) NSArray *dataSourceOpenClose;
+@property (nonatomic, strong) NSArray *dataSourceLight;
 
 @end
 
@@ -31,7 +32,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -43,6 +43,9 @@
 	}
 	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
 		_currentReadingType = TempoReadingTypeOpenClose;
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		_currentReadingType = TempoReadingTypeLight;
 	}
 	else {
 		_currentReadingType = TempoReadingTypeTemperature;
@@ -89,6 +92,9 @@
 	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
 		_dataSourceOpenClose = [self dataForType:TempoReadingTypeOpenClose];
 	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		_dataSourceLight = [self dataForType:TempoReadingTypeLight];
+	}
 	else {
 		_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
 		_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
@@ -121,6 +127,9 @@
 		case TempoReadingTypeOpenClose:
 			readingType = @"OpenClose";
 			break;
+		case TempoReadingTypeLight:
+			readingType = @"Light";
+			break;
 	}
 	if (readingType) {
 		return [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:readingType] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
@@ -146,7 +155,8 @@
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
 	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
-		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) {
+		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52 ||
+		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
 		return;
 	}
 	[self changeReadingType:_currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature];
@@ -166,6 +176,9 @@
 	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
 		return _dataSourceOpenClose.count;
 	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		return _dataSourceLight.count;
+	}
 	else if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		return _dataSourceTemperature.count;
 	}
@@ -180,7 +193,8 @@
 		NSString *reuse = @"cellDiscData";
 		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) ||
 			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113) ||
-			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52)) {
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) ||
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62)) {
 			reuse = @"cellDiscData13";
 		}
 		else if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27)) {
@@ -200,6 +214,7 @@
 		Reading *readingFirstMovement = indexPath.row < _dataSourceFirstMovement.count ? _dataSourceFirstMovement[indexPath.row] : nil;
 		Reading *readingSecondMovement = indexPath.row < _dataSourceSecondMovement.count ? _dataSourceSecondMovement[indexPath.row] : nil;
 		Reading *readingOpenClose = indexPath.row < _dataSourceOpenClose.count ? _dataSourceOpenClose[indexPath.row] : nil;
+		Reading *readingLight = indexPath.row < _dataSourceLight.count ? _dataSourceLight[indexPath.row] : nil;
 		
 		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
 		TempoDevice *selectedDevice = [TDSharedDevice sharedDevice].selectedDevice;
@@ -252,6 +267,16 @@
 			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
 			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
 		}
+		if (readingLight) {
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingLight.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceLight.count - indexPath.row).stringValue;
+			cell.labelTemperature.text = [@"Lux Level:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingLight.avgValue.integerValue).stringValue;
+		}
+		else {
+			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingLight.avgValue.integerValue).stringValue;
+		}
 		
 		return cell;
 	}
@@ -285,7 +310,8 @@
 	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
 			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113 ||
-			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52 ||
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
 			return 70;
 		}
 		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {

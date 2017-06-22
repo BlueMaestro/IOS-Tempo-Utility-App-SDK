@@ -17,6 +17,7 @@ typedef enum : NSInteger {
 	TempoReadingTypeDewPoint,
 	TempoReadingTypeFirstMovement,
 	TempoReadingTypeSecondMovement,
+	TempoReadingTypeLight,
 	TempoReadingTypeOpenClose
 } TempoReadingType;
 
