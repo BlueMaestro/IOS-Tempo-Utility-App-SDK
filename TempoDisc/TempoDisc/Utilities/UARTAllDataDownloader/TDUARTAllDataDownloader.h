@@ -7,7 +7,10 @@
 //
 
 #import "TDUARTDownloader.h"
+#import "TDTempoDisc.h"
 
 @interface TDUARTAllDataDownloader : TDUARTDownloader
+
+- (void)writeData:(NSString*)data toDevice:(TDTempoDisc*)device withCompletion:(DataDownloadCompletion)completion;
 
 @end

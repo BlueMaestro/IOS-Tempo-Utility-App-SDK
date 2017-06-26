@@ -20,7 +20,8 @@
 #define kDataTerminationBetweenValue 44
 
 #define kDeviceConnectTimeout			10.0
-#define kDeviceReConnectTimeout			1.0
+#define kDeviceReConnectTimeout			2.0
+#define kDeviceDataParseTimeout			20.
 
 #define kDataDownloadString				@"*logall"
 
@@ -28,6 +29,11 @@ typedef enum : NSInteger {
 	DataDownloadTypeTemperature,
 	DataDownloadTypeHumidity,
 	DataDownloadTypeDewPoint,
+	DataDownloadTypePressure,
+	DataDownloadTypeFirstMovement,
+	DataDownloadTypeSecondMovement,
+	DataDownloadTypeOpenClose,
+	DataDownloadTypeLux,
 	DataDownloadTypeFinish
 } DataDownloadType;
 
@@ -46,14 +52,38 @@ typedef enum : NSInteger {
 @property (nonatomic, assign) NSInteger dataDownloadInterval;
 
 @property (nonatomic, copy) DataDownloadCompletion completion;
+@property (nonatomic, copy) DataDownloadCompletion finish;
 
 @property (nonatomic, strong) NSNumber *logCounter;
+
+@property (nonatomic, assign) NSInteger deviceVersion;
+
+@property (nonatomic, assign) NSInteger totalCurrentSample;
+
+@property (nonatomic, strong) NSTimer *timerDataParseTimeout;
 
 @end
 
 @implementation TDUARTAllDataDownloader
 
 #pragma mark - Private methods
+
+- (void)fillDewpointsDataForDevice:(TempoDevice*)device {
+	NSArray *temperatureReadings = [device readingsForType:@"Temperature"];
+	NSArray *humidityReadings = [device readingsForType:@"Humidity"];
+	NSMutableArray *dewPointsValues = [NSMutableArray array];
+	for (NSInteger i=0; i<MIN(temperatureReadings.count, humidityReadings.count); i++) {
+		Reading *temperatureReading = temperatureReadings[i];
+		Reading *humidityReading = humidityReadings[i];
+		
+		//min, avg, max
+		[dewPointsValues addObject:@[@(temperatureReading.minValue.floatValue-((100.-humidityReading.minValue.floatValue)/5.)),
+									 @(temperatureReading.avgValue.floatValue-((100.-humidityReading.avgValue.floatValue)/5.)),
+									 @(temperatureReading.maxValue.floatValue-((100.-humidityReading.maxValue.floatValue)/5.))]];
+	}
+	
+	[[TDSharedDevice sharedDevice].selectedDevice addData:dewPointsValues forReadingType:@"DewPoint" startTimestamp:[(Reading*)[temperatureReadings firstObject] timestamp] interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+}
 
 - (int)getIntLsb:(char)lsb msb:(char)msb {
 	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
@@ -66,14 +96,24 @@ typedef enum : NSInteger {
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
 			NSLog(@"Sucessefully wrote \"%@\" data to write characteristic", data);
+			if (_finish) {
+				_finish(YES);
+			}
 		}
 		else {
 			NSLog(@"Error writing data to characteristic: %@", error);
+			if (_finish) {
+				_finish(NO);
+			}
 		}
 	}];
 }
 
 - (void)parseData:(NSData*)data {
+	[_timerDataParseTimeout invalidate];
+	_timerDataParseTimeout = nil;
+	_timerDataParseTimeout = [NSTimer timerWithTimeInterval:kDeviceDataParseTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_timerDataParseTimeout forMode:NSDefaultRunLoopMode];
 	NSLog(@"data received: %@", data);
 	if (data.length == 15 ) {
 		NSLog(@"Header data received: %@", data);
@@ -100,24 +140,112 @@ typedef enum : NSInteger {
 			//header data, parse next point and dont impor
 			NSInteger nextCounter = [self getIntLsb:d[5] msb:d[4]];
 			_logCounter = @(nextCounter);
+			_totalCurrentSample = sendGlobalLogCount;
+			
+			switch (_currentDownloadType) {
+				case DataDownloadTypeTemperature:
+					[self notifyUpdateForProgress:0.0];
+					break;
+				case DataDownloadTypeHumidity:
+					[self notifyUpdateForProgress:1/3.0];
+					break;
+				case DataDownloadTypePressure:
+				case DataDownloadTypeDewPoint:
+					[self notifyUpdateForProgress:2/3.0];
+					break;
+				case DataDownloadTypeFirstMovement:
+					[self notifyUpdateForProgress:0.5];
+					break;
+				case DataDownloadTypeSecondMovement:
+					[self notifyUpdateForProgress:1.0];
+					break;
+				case DataDownloadTypeOpenClose:
+					[self notifyUpdateForProgress:1.0];
+					break;
+				case DataDownloadTypeLux:
+					[self notifyUpdateForProgress:1.0];
+					break;
+				case DataDownloadTypeFinish:
+					break;
+			}
+			
 			return;
 		}
 	}
+	float baseProgress = 0.0;
 	NSInteger length = data.length;
 	char * d = (char*)[data bytes];
-	for (NSInteger i=0; i<length; i+=2) {
+	for (NSInteger i=0; i<length; i+= (_deviceVersion == 62 ? 4 : 2)) {
 		if ((d[i] == kDataTerminationBetweenValue && d[i+1] == kDataTerminationBetweenValue) ||
-			(_currentDownloadType == DataDownloadTypeDewPoint && d[1] == kDataTerminationValue)) {
+			((_currentDownloadType == DataDownloadTypeDewPoint || _currentDownloadType == DataDownloadTypePressure) && d[i] == kDataTerminationValue) ||
+			(_deviceVersion == 13 && d[i] == kDataTerminationValue) ||
+			(_deviceVersion == 32 && d[i] == kDataTerminationValue) ||
+			(_deviceVersion == 52 && d[i] == kDataTerminationValue)||
+			(_deviceVersion == 62 && d[i] == kDataTerminationValue)) {
 			//termination symbol found, abort data download and insert into database
 			NSLog(@"Termination symbol recognized.");
 			[self didFinishDownloadForType:_currentDownloadType];
 			break;
 		}
 		else {
-			NSLog(@"sample raw value: %@", [data subdataWithRange:NSMakeRange(i, 2)]);
-			NSInteger value = [self getIntLsb:d[i+1] msb:d[i]];
+			NSString *type = @"UNKNOWN";
+			
+			switch (_currentDownloadType) {
+				case DataDownloadTypeTemperature:
+					type = @"T";
+					break;
+				case DataDownloadTypeHumidity:
+					baseProgress = 1/3.0;
+					type = @"H";
+					break;
+				case DataDownloadTypePressure:
+					type = @"P";
+					baseProgress = 2/3.0;
+					break;
+				case DataDownloadTypeDewPoint:
+					type = @"D";
+					baseProgress = 2/3.0;
+					break;
+				case DataDownloadTypeFirstMovement:
+					type = @"FM";
+					baseProgress = 0;
+					break;
+				case DataDownloadTypeSecondMovement:
+					type = @"SM";
+					baseProgress = 0.5;
+					break;
+				case DataDownloadTypeOpenClose:
+					type = @"OC";
+					baseProgress = 0.0;
+					break;
+				case DataDownloadTypeLux:
+					type = @"LX";
+					baseProgress = 0.0;
+				case DataDownloadTypeFinish:
+					break;
+			}
+			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
+			NSInteger value = 0;
+			if (_deviceVersion == 62) {
+				const unsigned char levelBytes[] = {d[i], d[i+1], d[i+2], d[i+3]};
+				NSData *levelValues = [NSData dataWithBytes:levelBytes length:4];
+				unsigned levelValueRawValue = CFSwapInt32BigToHost(*(int*)([levelValues bytes]));
+				value = [NSNumber numberWithUnsignedInt:levelValueRawValue].integerValue;
+			}
+			else {
+				value = [self getIntLsb:d[i+1] msb:d[i]];
+			}
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
+			if (_deviceVersion == 13 || _deviceVersion == 52 || _deviceVersion == 62) {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)];
+			}
+			else if (_deviceVersion == 32) {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5];
+			}
+			else {
+				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+			}
 		}
 	}
 }
@@ -130,18 +258,83 @@ typedef enum : NSInteger {
 	DataDownloadType downloadType = DataDownloadTypeTemperature;
 	switch (type) {
 		case DataDownloadTypeTemperature:
+			if (_deviceVersion == 13) {
+				downloadType = DataDownloadTypeFinish;
+				[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+				[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+				if (_completion) {
+					_completion(YES);
+					_completion = nil;
+					[_timerDataParseTimeout invalidate];
+					_timerDataParseTimeout = nil;
+				}
+			}
 			downloadType = DataDownloadTypeHumidity;
 			break;
 		case  DataDownloadTypeHumidity:
-			downloadType = DataDownloadTypeDewPoint;
+			if (_deviceVersion == 27) {
+				downloadType = DataDownloadTypePressure;
+			}
+			else {
+				downloadType = DataDownloadTypeDewPoint;
+			}
 			break;
 		case DataDownloadTypeDewPoint:
+		case DataDownloadTypePressure:
 			downloadType = DataDownloadTypeFinish;
-			[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice setLogCount:_logCounter];
-			[TDDefaultDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+				[self fillDewpointsDataForDevice:[TDSharedDevice sharedDevice].selectedDevice];
+			}
 			if (_completion) {
 				_completion(YES);
 				_completion = nil;
+				[_timerDataParseTimeout invalidate];
+				_timerDataParseTimeout = nil;
+			}
+			break;
+		case DataDownloadTypeFirstMovement:
+			//version 32 only
+			downloadType = DataDownloadTypeSecondMovement;
+			break;
+		case DataDownloadTypeSecondMovement:
+			//version 32 only
+			downloadType = DataDownloadTypeFinish;
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+				[self fillDewpointsDataForDevice:[TDSharedDevice sharedDevice].selectedDevice];
+			}
+			if (_completion) {
+				_completion(YES);
+				_completion = nil;
+				[_timerDataParseTimeout invalidate];
+				_timerDataParseTimeout = nil;
+			}
+			break;
+		case DataDownloadTypeOpenClose:
+			//version 52 only
+			downloadType = DataDownloadTypeFinish;
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			if (_completion) {
+				_completion(YES);
+				_completion = nil;
+				[_timerDataParseTimeout invalidate];
+				_timerDataParseTimeout = nil;
+			}
+			break;
+		case DataDownloadTypeLux:
+			//version 62 only
+			downloadType = DataDownloadTypeFinish;
+			[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice setLogCount:_logCounter];
+			[TDSharedDevice sharedDevice].selectedDevice.lastDownload = [NSDate date];
+			if (_completion) {
+				_completion(YES);
+				_completion = nil;
+				[_timerDataParseTimeout invalidate];
+				_timerDataParseTimeout = nil;
 			}
 			break;
 		case DataDownloadTypeFinish:
@@ -164,18 +357,36 @@ typedef enum : NSInteger {
 			break;
 		case DataDownloadTypeDewPoint:
 			readingType = @"DewPoint";
-  default:
+			break;
+		case DataDownloadTypePressure:
+			readingType = @"Pressure";
+			break;
+		case DataDownloadTypeFirstMovement:
+			readingType = @"FirstMovement";
+			break;
+		case DataDownloadTypeSecondMovement:
+			readingType = @"SecondMovement";
+			break;
+		case DataDownloadTypeOpenClose:
+			readingType = @"OpenClose";
+			break;
+		case DataDownloadTypeLux:
+			readingType = @"Light";
+			break;
+		case DataDownloadTypeFinish:
 			break;
 	}
 	if (readingType) {
 		NSDate *timestamp = _downloadStartTimestamp;
-		for (ReadingType *type in [TDDefaultDevice sharedDevice].selectedDevice.readingTypes) {
+		for (ReadingType *type in [TDSharedDevice sharedDevice].selectedDevice.readingTypes) {
 			if ([type.type isEqualToString:readingType]) {
-				[[TDDefaultDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
+				[[TDSharedDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
 				break;
 			}
 		}
-		[[TDDefaultDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [NSThread sleepForTimeInterval: 1.0];
+		[[TDSharedDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+        [NSThread sleepForTimeInterval: 1.0];
 	}
 	
 }
@@ -202,22 +413,32 @@ typedef enum : NSInteger {
 	_currentDataSamples = [NSMutableArray array];
 	_downloadStartTimestamp = [NSDate date];
 	_completion = completion;
+	_deviceVersion = device.version.integerValue;
+	if (_deviceVersion == 32) {
+		_currentDownloadType = DataDownloadTypeFirstMovement;
+	}
+	else if (_deviceVersion == 52) {
+		_currentDownloadType = DataDownloadTypeOpenClose;
+	}
+	else if (_deviceVersion == 52) {
+		_currentDownloadType = DataDownloadTypeLux;
+	}
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
-			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
-				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
-				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+			if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
 					[timer invalidate];
 					timer = nil;
 					weakself.didDisconnect = NO;
 					if (!error) {
 						NSLog(@"Connected to device");
 						NSLog(@"Discovering device services...");
-						[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+						[[TDSharedDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
 							if (!error2) {
 								NSLog(@"Discovered services");
 								LGService *uartService;
@@ -294,6 +515,109 @@ typedef enum : NSInteger {
 					else {
 						NSLog(@"Error connecting to device: %@", error);
 						completion(NO);
+					}
+				}];
+				break;
+			}
+		}
+	}];
+}
+
+- (void)writeData:(NSString *)data toDevice:(TDTempoDisc *)device withCompletion:(DataDownloadCompletion)completion {
+	_currentDataSamples = [NSMutableArray array];
+	_downloadStartTimestamp = [NSDate date];
+	_deviceVersion = device.version.integerValue;
+	_finish = completion;
+	if (_deviceVersion == 32) {
+		_currentDownloadType = DataDownloadTypeFirstMovement;
+	}
+	NSLog(@"Connecting to device...");
+	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+	__weak typeof(self) weakself = self;
+	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
+		for (LGPeripheral *peripheral in peripherals) {
+			if ([peripheral.UUIDString isEqualToString:device.peripheral.UUIDString]) {
+				[peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+					[timer invalidate];
+					timer = nil;
+					weakself.didDisconnect = NO;
+					if (!error) {
+						NSLog(@"Connected to device");
+						NSLog(@"Discovering device services...");
+						[peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+							if (!error2) {
+								NSLog(@"Discovered services");
+								LGService *uartService;
+								for (LGService* service in services) {
+									if ([[service.UUIDString uppercaseString] isEqualToString:uartServiceUUIDString]) {
+										uartService = service;
+										NSLog(@"Found UART service: %@", service.UUIDString);
+										NSLog(@"Discovering characteristics...");
+										[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error3) {
+											if (!error3) {
+												NSLog(@"Discovered characteristics");
+												LGCharacteristic *readCharacteristic;
+												for (LGCharacteristic *characteristic in characteristics) {
+													if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
+														NSLog(@"Found TX characteristic %@", characteristic.UUIDString);
+														readCharacteristic = characteristic;
+														NSLog(@"Subscribing for TX characteristic notifications");
+														[characteristic setNotifyValue:YES completion:^(NSError *error4) {
+															if (!error4) {
+																NSLog(@"Subscribed for TX characteristic notifications");
+															}
+															else {
+																NSLog(@"Error subscribing for TX characteristic: %@", error4);
+															}
+														} onUpdate:^(NSData *data, NSError *error5) {
+															if (!error5) {
+															}
+															else {
+																NSLog(@"Error on updating TX data: %@", error5);
+															}
+														}];
+													}
+													else if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartRXCharacteristicUUIDString]) {
+														NSLog(@"Found RX characteristic %@", characteristic.UUIDString);
+														weakself.writeCharacteristic = characteristic;
+													}
+												}
+												if (!readCharacteristic) {
+													NSLog(@"Could not find TX characteristic");
+													_finish(NO);
+												}
+												if (!weakself.writeCharacteristic) {
+													NSLog(@"Could not find RX characteristic");
+													_finish(NO);
+												}
+												if (weakself.writeCharacteristic) {
+													[weakself writeData:data toCharacteristic:weakself.writeCharacteristic];
+													weakself.dataToSend = nil;
+												}
+											}
+											else {
+												NSLog(@"Error discovering device characteristics: %@", error3);
+												_finish(NO);
+											}
+										}];
+										break;
+									}
+								}
+								if (!uartService) {
+									NSLog(@"Failed to found UART service");
+									_finish(NO);
+								}
+							}
+							else {
+								NSLog(@"Error discovering device services: %@", error2);
+								_finish(NO);
+							}
+						}];
+					}
+					else {
+						NSLog(@"Error connecting to device: %@", error);
+						_finish(NO);
 					}
 				}];
 				break;

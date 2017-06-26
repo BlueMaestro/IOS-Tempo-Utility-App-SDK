@@ -17,8 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSNumber *timerInterval;
 @property (nullable, nonatomic, copy) NSNumber *intervalCounter;
-@property (nullable, nonatomic, copy) NSDecimalNumber *dewPoint;
+@property (nullable, nonatomic, copy) NSNumber *dewPoint;
 @property (nullable, nonatomic, copy) NSNumber *mode;
+@property (nullable, nonatomic, copy) NSNumber *version;
 @property (nullable, nonatomic, copy) NSNumber *numBreach;
 @property (nullable, nonatomic, copy) NSNumber *highestTemperature;
 @property (nullable, nonatomic, copy) NSNumber *highestHumidity;
@@ -38,6 +39,41 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) NSNumber *logCount;
 @property (nullable, nonatomic, copy) NSNumber *referenceDateRawNumber;
 @property (nullable, nonatomic, retain) NSNumber *globalIdentifier;
+@property (nullable, nonatomic, copy) NSNumber *averageDayPressure;
+@property (nullable, nonatomic, copy) NSNumber *pressure;
+@property (nullable, nonatomic, copy) NSNumber *highestDayPressure;
+@property (nullable, nonatomic, copy) NSNumber *highestPressure;
+@property (nullable, nonatomic, copy) NSNumber *lowestDayPressure;
+@property (nullable, nonatomic, copy) NSNumber *lowestPressure;
+@property (nullable, nonatomic, copy) NSNumber *altitude;
+@property (nullable, nonatomic, strong) NSNumber *logPointer;
+
+//device 32
+@property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *pestSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *force;
+@property (nullable, nonatomic, strong) NSNumber *movementMeasurePeriod;
+@property (nullable, nonatomic, strong) NSNumber *dateNumber;
+@property (nullable, nonatomic, strong) NSNumber *buttonPressControl;
+@property (nullable, nonatomic, strong) NSNumber *lastPestDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *lastHumDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *totalPestEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *totalHumEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *lastButtonDetected;
+
+//device 42
+@property (nullable, nonatomic, strong) NSNumber *totalButtonEvents;
+
+//version 52
+@property (nullable, nonatomic, strong) NSNumber *openCloseStatus;
+@property (nullable, nonatomic, strong) NSNumber *openEventsCount;
+@property (nullable, nonatomic, strong) NSNumber *lastOpenInterval;
+@property (nullable, nonatomic, strong) NSNumber *totalEventsCount;
+
+//version 62
+@property (nullable, nonatomic, strong) NSNumber *currentLightLevel;
+@property (nullable, nonatomic, strong) NSNumber *lightStatus;
+@property (nullable, nonatomic, strong) NSNumber *lightThreshold;
 
 @end
 

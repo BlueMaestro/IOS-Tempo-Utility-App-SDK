@@ -23,7 +23,7 @@
 @dynamic currentMinTemperature;
 @dynamic currentHumidity;
 @dynamic currentPressure;
-@dynamic currentPressureDelta;
+@dynamic currentPressureData;
 @dynamic lastDownload;
 @dynamic readingTypes;
 @dynamic isBlueMaestroDevice;

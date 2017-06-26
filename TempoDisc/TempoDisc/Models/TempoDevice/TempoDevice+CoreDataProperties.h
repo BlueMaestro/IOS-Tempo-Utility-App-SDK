@@ -20,19 +20,32 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) NSString *name;
 @property (nullable, nonatomic, retain) NSDecimalNumber *battery;
 @property (nullable, nonatomic, retain) NSString *modelType;
-@property (nullable, nonatomic, retain) NSString *version;
+@property (nullable, nonatomic, retain) NSNumber *version;
 @property (nullable, nonatomic, retain) NSNumber *currentTemperature;
 @property (nullable, nonatomic, retain) NSNumber *currentMinTemperature;
 @property (nullable, nonatomic, retain) NSNumber *currentMaxTemperature;
 @property (nullable, nonatomic, retain) NSNumber *currentHumidity;
-@property (nullable, nonatomic, retain) NSNumber *currentPressure;
-@property (nullable, nonatomic, retain) NSNumber *currentPressureDelta;
+@property (nullable, nonatomic, retain) NSNumber *currentPressure; 
+@property (nullable, nonatomic, retain) NSNumber *currentPressureData;
 @property (nullable, nonatomic, retain) NSDate *lastDownload;
 @property (nullable, nonatomic, retain) NSNumber *isBlueMaestroDevice;
 @property (nullable, nonatomic, retain) NSNumber *isFahrenheit;//BOOL
 @property (nullable, nonatomic, retain) NSNumber *inRange;//BOOL, transient
 @property (nullable, nonatomic, retain) NSDate *startTimestamp;
 @property (nullable, nonatomic, retain) NSDate *lastDetected;//transient
+
+//device 32
+@property (nullable, nonatomic, strong) NSNumber *humSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *pestSensitivityLevel;
+@property (nullable, nonatomic, strong) NSNumber *force;
+@property (nullable, nonatomic, strong) NSNumber *movementMeasurePeriod;
+@property (nullable, nonatomic, strong) NSNumber *dateNumber;
+@property (nullable, nonatomic, strong) NSNumber *buttonPressControl;
+@property (nullable, nonatomic, strong) NSNumber *lastPestDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *lastHumDetectRate;
+@property (nullable, nonatomic, strong) NSNumber *totalPestEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *totalHumEventsDetects;
+@property (nullable, nonatomic, strong) NSNumber *lastButtonDetected;
 
 
 @property (nullable, nonatomic, retain) NSSet<ReadingType *> *readingTypes;

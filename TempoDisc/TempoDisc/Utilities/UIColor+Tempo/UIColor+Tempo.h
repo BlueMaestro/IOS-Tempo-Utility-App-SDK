@@ -12,6 +12,7 @@
 
 +(UIColor *)blueMaestroBlue;
 +(UIColor *)graphTemperature;
++(UIColor *)graphPressure;
 +(UIColor *)graphDewPoint;
 +(UIColor *)botomBarSeparatorGrey;
 +(UIColor *)buttonDarkGrey;

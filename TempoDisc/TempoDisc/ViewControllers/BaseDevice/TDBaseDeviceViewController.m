@@ -8,7 +8,7 @@
 
 #import "TDBaseDeviceViewController.h"
 #import <LGCentralManager.h>
-#import "TDDefaultDevice.h"
+#import "TDSharedDevice.h"
 
 @implementation TDBaseDeviceViewController
 
@@ -23,7 +23,7 @@
 }
 
 - (void)handlePeripheralUpdateNotification:(NSNotification*)note {
-	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
+	_labelDeviceName.text = [TDSharedDevice sharedDevice].selectedDevice.name;
 }
 
 - (void)setupView {
@@ -43,7 +43,7 @@
 		button.titleLabel.textAlignment = NSTextAlignmentCenter;
 	}
 	
-	_labelDeviceName.text = [TDDefaultDevice sharedDevice].selectedDevice.name;
+	_labelDeviceName.text = [TDSharedDevice sharedDevice].selectedDevice.name;
 	
 	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:nil action:nil];
 }
@@ -51,9 +51,9 @@
 - (void)refreshCurrentDevice {
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:1 completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
-			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
-				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
-				[[TDDefaultDevice sharedDevice].selectedDevice fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.UUIDString];
+			if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDSharedDevice sharedDevice].selectedDevice fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.UUIDString];
 				NSLog(@"Rescanned for device: %@", peripheral.UUIDString);
 				[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPeripheralUpdated object:nil userInfo:@{kKeyNotificationPeripheralUpdatedPeripheral : peripheral}];
 				break;

@@ -23,4 +23,5 @@ typedef void(^DataProgressUpdate)(float progress);
 
 - (void)setNewTimeStamp: (NSInteger)sendRecordsNeeded;
 
+- (void)notifyUpdateForProgress:(float)progress;
 @end

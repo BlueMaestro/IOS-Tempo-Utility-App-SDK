@@ -18,6 +18,7 @@
 @dynamic intervalCounter;
 @dynamic dewPoint;
 @dynamic mode;
+@dynamic version;
 @dynamic numBreach;
 @dynamic highestTemperature;
 @dynamic highestHumidity;
@@ -36,5 +37,22 @@
 @dynamic averageDayDew;
 @dynamic logCount;
 @dynamic globalIdentifier;
+@dynamic averageDayPressure;
+@dynamic pressure;
+@dynamic highestDayPressure;
+@dynamic highestPressure;
+@dynamic lowestDayPressure;
+@dynamic lowestPressure;
+@dynamic altitude;
+@dynamic totalButtonEvents;
+@dynamic lastOpenInterval;
+@dynamic totalEventsCount;
+@dynamic openEventsCount;
+@dynamic referenceDateRawNumber;
+@dynamic openCloseStatus;
+@dynamic logPointer;
+@dynamic lightThreshold;
+@dynamic lightStatus;
+@dynamic currentLightLevel;
 
 @end

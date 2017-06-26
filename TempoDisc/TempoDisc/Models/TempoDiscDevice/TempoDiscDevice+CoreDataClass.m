@@ -21,6 +21,10 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 
 @implementation TempoDiscDevice
 
+- (int)intValueLsb:(char)lsb msb:(char)msb {
+	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
+}
+
 - (NSInteger)classID {
 	return self.globalIdentifier.integerValue;
 }
@@ -33,6 +37,12 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(NSString *)uuid {
 	[super fillWithData:advertisedData name:name uuid:uuid];
+	TDTempoDisc *disc = [[TDTempoDisc alloc] init];
+	[disc fillWithData:advertisedData name:name uuid:uuid];
+	disc.peripheral = self.peripheral;
+	[self fillDataForPersistentStore:disc];
+	return;
+	
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	unsigned char * data = (unsigned char*)[custom bytes];
     NSUInteger dataLength = custom.length;
@@ -48,13 +58,12 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	 *	Not sure about data read
 	 **/
     NSInteger version = byte;
-    self.version = [NSString stringWithFormat:@"%ld", (long)version];
+    self.version = [NSNumber numberWithInt:version];
 	self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
 	self.timerInterval = @(intValue(data[5], data[4]));
 	self.intervalCounter = @(intValue(data[7], data[6]));
 	self.currentTemperature = @(intValue(data[9], data[8]) / 10.f);
 	self.currentHumidity = @(intValue(data[11], data[10]) / 10.f);
-	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
 	self.mode = @(data[14]);
 	if (self.mode.integerValue > 100) {
 		self.isFahrenheit = @(1);
@@ -63,15 +72,10 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 		self.isFahrenheit = @(0);
 	}
 	self.numBreach = @(data[15]);
-	
-	//looks like there's no data for this in the broadcast
-	float timeAtLastBreach = intValue(data[17], data[16]);
-	float nameLength = data[18];
-	
-	
+
 	
 	if (self.version.integerValue == 22) {
-        
+        self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
         self.highestTemperature = @(intValue(data[custom.length-25], data[custom.length-26]) / 10.f);
         self.highestHumidity = @(intValue(data[custom.length-23], data[custom.length-24]) / 10.f);
         self.lowestTemperature = @(intValue(data[custom.length-21], data[custom.length-22]) / 10.f);
@@ -93,8 +97,7 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 	}
     
     if (self.version.integerValue == 23) {
-		//verson 23 parse
-        
+        self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:@(intValue(data[13], data[12]) / 10.f).decimalValue];
         self.highestTemperature = @(intValue(data[custom.length-24], data[custom.length-25]) / 10.f);
         self.highestHumidity = @(intValue(data[custom.length-22], data[custom.length-23]) / 10.f);
         self.lowestTemperature = @(intValue(data[custom.length-20], data[custom.length-21]) / 10.f);
@@ -127,9 +130,9 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
         
         NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
         self.referenceDateRawNumber = fullValue;
-    
-        if (([fullValue intValue] != 0) || ([fullValue longValue] > 170000000000) || ([fullValue longValue] < 1900000000)) {
-        
+        long lowDate = 1700000000; //1 January 2017
+        long highDate = 1900000000; //1 January 2019
+        if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
 		NSInteger minutes = fullValue.integerValue % 100;
 		NSInteger hours = (fullValue.integerValue/100) % 100;
 		NSInteger days = (fullValue.integerValue/10000) % 100;
@@ -155,8 +158,86 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
 		
 		NSLog(@"Parsed version 23 data");
 	}
-    
-   
+	
+	if (self.version.integerValue == 27) {
+		NSUInteger manufacturerDataLength = custom.length;
+		//Device version 27 data parse
+		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+		self.currentPressure = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
+		float currentDewPointCalculation = (float)([self.currentTemperature floatValue] - ((100 - [self.currentHumidity floatValue]) /5));
+		self.dewPoint = @(currentDewPointCalculation);
+		self.mode = @(data[14]);
+		if (self.mode.integerValue > 100) {
+			self.isFahrenheit = @(1);
+		}
+		else {
+			self.isFahrenheit = @(0);
+		}
+		self.numBreach = @(data[15]);
+		
+		//Scan response packet
+		self.highestDayPressure = @([self intValueLsb:data[manufacturerDataLength-24] msb:data[manufacturerDataLength-25]] / 10.f);
+		self.averageDayPressure = @([self intValueLsb:data[manufacturerDataLength-22] msb:data[manufacturerDataLength-23]] / 10.f);
+		self.lowestDayPressure = @([self intValueLsb:data[manufacturerDataLength-20] msb:data[manufacturerDataLength-21]] / 10.f);
+		self.altitude = @([self intValueLsb:data[manufacturerDataLength-18] msb:data[manufacturerDataLength-19]] / 10.f);
+		self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-16] msb:data[manufacturerDataLength-17]] / 10.f);
+		self.highestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-14] msb:data[manufacturerDataLength-15]] / 10.f);
+		float highDewPointCalculation = (float)([self.highestDayTemperature floatValue] - ((100 - [self.highestDayHumidity floatValue]) /5));
+		self.highestDayDew = @(highDewPointCalculation);
+		self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-12] msb:data[manufacturerDataLength-13]] / 10.f);
+		self.lowestDayHumidity = @([self intValueLsb:data[manufacturerDataLength-10] msb:data[manufacturerDataLength-11]] / 10.f);
+		float lowDewPointCalculation = (float)([self.lowestDayTemperature floatValue] - ((100 - [self.lowestDayHumidity floatValue]) /5));
+		self.lowestDayDew = @(lowDewPointCalculation);
+		self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-8] msb:data[manufacturerDataLength-9]] / 10.f);
+		self.averageDayHumidity = @([self intValueLsb:data[manufacturerDataLength-6] msb:data[manufacturerDataLength-7]] / 10.f);
+		float avgDewPointCalculation = (float)([self.averageDayTemperature floatValue] - ((100 - [self.averageDayHumidity floatValue]) /5));
+		self.averageDayDew = @(avgDewPointCalculation);
+		if (self.mode.integerValue > 100) {
+			self.highestDayDew = @([self convertedValue:[self.highestDayDew floatValue]]);
+			self.lowestDayDew = @([self convertedValue:[self.lowestDayDew floatValue]]);
+			self.averageDayDew = @([self convertedValue:[self.averageDayDew floatValue]]);
+		}
+		
+		self.globalIdentifier = @(data[manufacturerDataLength-5]);
+		NSLog(@"Global identifier is %@", self.globalIdentifier);
+		
+		const unsigned char dateBytes[] = {data[manufacturerDataLength-4], data[manufacturerDataLength-3], data[manufacturerDataLength-2], data[manufacturerDataLength-1]};
+		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
+		//date digits, should be reverse from what is written, not sure about indexes
+		unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+		NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
+		
+		NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+		self.referenceDateRawNumber = fullValue;
+		long lowDate = 1700000000; //1 January 2017
+		long highDate = 1900000000; //1 January 2019
+		if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
+			NSInteger minutes = fullValue.integerValue % 100;
+			NSInteger hours = (fullValue.integerValue/100) % 100;
+			NSInteger days = (fullValue.integerValue/10000) % 100;
+			NSInteger months = (fullValue.integerValue/1000000) % 100;
+			NSInteger years = (fullValue.integerValue/100000000) % 100;
+			
+			NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+			NSDateComponents *components = [[NSDateComponents alloc] init];
+			//MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+			components.minute = MIN(minutes, 60);
+			components.hour = MIN(hours, 24);
+			components.day = MIN(days, 31);
+			components.month = MIN(months, 12);
+			components.year = years+2000;//add century as its only last 2 digits
+			NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+			dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+			NSDate *date = [calendar dateFromComponents:components];
+			
+			self.startTimestamp = [calendar dateFromComponents:components];
+			NSLog(@"%@", [dateFormatter stringFromDate:date]);
+			
+		}
+		NSLog(@"Parsed version 27 data");
+	}
+	
 	
 	/*NSLog(@"---------------------------------------------------------------");
 	 NSLog(@"PARSING TEMPO DISC DEVICE DATA:");
@@ -194,6 +275,79 @@ int largeIntValue(char lsb, char b3, char b2, char msb)
     
 }
 
-
+//This simply takes the devices current readings and populates structure ready for a persistent store
+- (void)fillDataForPersistentStore :(TDTempoDisc *)device {
+	self.peripheral = device.peripheral;
+	
+	self.uuid = device.uuid;
+	self.name = device.name;
+	self.battery = [NSDecimalNumber decimalNumberWithDecimal:device.battery.decimalValue];
+	self.modelType = device.modelType;
+    NSLog(@"Version is %@", device.version);
+    self.version = device.version;
+	self.currentTemperature = device.currentTemperature;
+	self.currentMinTemperature = device.currentMinTemperature;
+	self.currentMaxTemperature = device.currentMaxTemperature;
+	self.currentHumidity = device.currentHumidity;
+	self.currentPressure = device.currentPressure;
+	self.currentPressureData = device.currentPressureData;
+//	self.lastDownload = device.lastDownload;
+	self.isBlueMaestroDevice = device.isBlueMaestroDevice;
+	self.isFahrenheit = device.isFahrenheit;
+	self.inRange = device.inRange;
+	self.startTimestamp = device.startTimestamp;
+	self.lastDetected = device.lastDetected;
+	self.timerInterval = device.timerInterval;
+	self.intervalCounter = device.intervalCounter;
+	self.dewPoint = [NSDecimalNumber decimalNumberWithDecimal:device.dewPoint.decimalValue];
+	self.mode = device.mode;
+	self.numBreach = device.numBreach;
+	self.highestTemperature = device.highestTemperature;
+	self.highestHumidity = device.highestHumidity;
+	self.highestDew = device.highestDew;
+	self.lowestTemperature = device.lowestTemperature;
+	self.lowestHumidity = device.lowestHumidity;
+	self.lowestDew = device.lowestDew;
+	self.highestDayTemperature = device.highestDayTemperature;
+	self.highestDayHumidity = device.highestDayHumidity;
+	self.highestDayDew = device.highestDayDew;
+	self.lowestDayTemperature = device.lowestDayTemperature;
+	self.lowestDayHumidity = device.lowestDayHumidity;
+	self.lowestDayDew = device.lowestDayDew;
+	self.averageDayTemperature = device.averageDayTemperature;
+	self.averageDayHumidity = device.averageDayHumidity;
+	self.averageDayDew = device.averageDayDew;
+	self.logCount = device.logCount;
+	self.referenceDateRawNumber = device.referenceDateRawNumber;
+	self.globalIdentifier = device.globalIdentifier;
+	self.averageDayPressure = device.averageDayPressure;
+	self.pressure = device.pressure;
+	self.highestDayPressure = device.highestDayPressure;
+	self.highestPressure = device.highestPressure;
+	self.lowestDayPressure = device.lowestDayPressure;
+	self.lowestPressure = device.lowestPressure;
+	
+	self.humSensitivityLevel = device.humSensitivityLevel;
+	self.pestSensitivityLevel = device.pestSensitivityLevel;
+	self.force = device.force;
+	self.movementMeasurePeriod = device.movementMeasurePeriod;
+	self.dateNumber = device.dateNumber;
+	self.buttonPressControl = device.buttonPressControl;
+	self.lastPestDetectRate = device.lastPestDetectRate;
+	self.lastHumDetectRate = device.lastHumDetectRate;
+	self.totalPestEventsDetects = device.totalPestEventsDetects;
+	self.totalHumEventsDetects = device.totalHumEventsDetects;
+	self.lastButtonDetected = device.lastButtonDetected;
+	
+	self.totalButtonEvents = device.totalButtonEvents;
+	
+	self.logPointer = device.logPointer;
+	
+	self.openCloseStatus = @(device.openCloseStatus);
+	self.openEventsCount = device.openEventsCount;
+	self.lastOpenInterval = device.lastOpenInterval;
+	self.totalEventsCount = device.totalEventsCount;
+	
+}
 
 @end

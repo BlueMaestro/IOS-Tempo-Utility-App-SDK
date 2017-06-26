@@ -10,7 +10,7 @@
 #import <CorePlot/ios/CorePlot.h>
 #import "TDLivePlotData.h"
 #import <LGBluetooth/LGBluetooth.h>
-#import "TDDefaultDevice.h"
+#import "TDSharedDevice.h"
 #import "TempoDiscDevice+CoreDataProperties.h"
 
 #define kDeviceConnectTimeout			10.0
@@ -47,7 +47,7 @@
 	_dataSource = [NSMutableArray array];
 	//initial data point
 	TDLivePlotData *initialData = [[TDLivePlotData alloc] init];
-	TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
+	TempoDiscDevice *device = (TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice;
 	if ([device isKindOfClass:[TempoDiscDevice class]]) {
 		initialData.temperature = device.currentTemperature;
 		initialData.humidity = device.currentHumidity;
@@ -72,11 +72,11 @@
 	[super viewWillDisappear:animated];
 	if (_readCharacteristic) {
 		[_readCharacteristic setNotifyValue:NO completion:^(NSError *error) {
-			[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+			[[TDSharedDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 		}];
 	}
 	else {
-		[[TDDefaultDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
+		[[TDSharedDevice sharedDevice].selectedDevice.peripheral disconnectWithCompletion:nil];
 	}
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:kLGPeripheralDidDisconnect object:nil];
 }
@@ -134,16 +134,16 @@
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
-			if ([peripheral.UUIDString isEqualToString:[TDDefaultDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
-				[TDDefaultDevice sharedDevice].selectedDevice.peripheral = peripheral;
-				[[TDDefaultDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+			if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
+				[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
+				[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
 					[timer invalidate];
 					timer = nil;
 //					weakself.didDisconnect = NO;
 					if (!error) {
 						NSLog(@"Connected to device");
 						NSLog(@"Discovering device services...");
-						[[TDDefaultDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
+						[[TDSharedDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
 							if (!error2) {
 								NSLog(@"Discovered services");
 								LGService *uartService;
@@ -240,7 +240,7 @@
 #pragma mark - Graph setup
 
 - (void)adjustPlotsRange {
-//	TempoDevice *device = [TDDefaultDevice sharedDevice].selectedDevice;
+//	TempoDevice *device = [TDSharedDevice sharedDevice].selectedDevice;
 	/**
 	 *	Adjust range for plot so that the last point is in the center with a few seconds to the left and right of the x axis
 	 **/
@@ -265,13 +265,17 @@
 	
 	/*_hostViewHumidity = [self configureHost:_viewPlotContainer forGraph:_hostViewHumidity];
 	_graphHumidity = [self configureGraph:_graphHumidity hostView:_hostViewHumidity graphView:_viewPlotContainer title:nil];*/
-	_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graph identifier:@"Humidity"];
-	[self configureAxesForGraph:_graph plot:_plotHumidity lineColor:kColorLivePlotLineHumidty.CGColor];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue != 13) {
+		_plotHumidity = [self configurePlot:_plotHumidity forGraph:_graph identifier:@"Humidity"];
+		[self configureAxesForGraph:_graph plot:_plotHumidity lineColor:kColorLivePlotLineHumidty.CGColor];
+	}
 	
 	/*_hostViewDewPoint = [self configureHost:_viewPlotContainer forGraph:_hostViewDewPoint];
 	_graphDewPoint = [self configureGraph:_graphDewPoint hostView:_hostViewDewPoint graphView:_viewPlotContainer title:nil];*/
-	_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graph identifier:@"DewPoint"];
-	[self configureAxesForGraph:_graph plot:_plotDewPoint lineColor:kColorLivePlotLineDewPoint.CGColor];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue != 13) {
+		_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graph identifier:@"DewPoint"];
+		[self configureAxesForGraph:_graph plot:_plotDewPoint lineColor:kColorLivePlotLineDewPoint.CGColor];
+	}
 }
 
 -(CPTGraphHostingView*)configureHost:(UIView*)graphView forGraph:(CPTGraphHostingView*)host

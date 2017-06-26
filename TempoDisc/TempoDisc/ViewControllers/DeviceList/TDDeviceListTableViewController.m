@@ -13,16 +13,21 @@
 #import "TDOtherDeviceTableViewCell.h"
 #import "TDPressureDeviceTableViewCell.h"
 #import <MBProgressHUD/MBProgressHUD.h>
-#import "TempoDiscDevice+CoreDataProperties.h"
-#import "TempoDiscPressureDevice+CoreDataClass.h"
+#import "TDDeviceInfoViewController.h"
 #import "AppDelegate.h"
+#import "TDTempoDisc.h"
+#import "TDMovementDeviceTableViewCell.h"
+#import "TempoDiscDevice+CoreDataProperties.h"
+#import "TDUARTAllDataDownloader.h"
+#import "TDMagnetometerDeviceTableViewCell.h"
+#import "TDLuminosityDeviceTableViewCell.h"
 
-#define kDeviceScanInterval 1.0
+#define kDeviceScanInterval 2.0
 
-#define kDeviceListUpdateInterval 2.0
+#define kDeviceListUpdateInterval 3.0
 #define kDeviceListUpdateScanInterval 1.0
 
-#define kDeviceOutOfRangeTimer 60.0
+#define kDeviceOutOfRangeTimer 20.0
 
 typedef enum : NSInteger {
 	DeviceSortTypeNone = 0,
@@ -34,9 +39,12 @@ typedef enum : NSInteger {
 @interface TDDeviceListTableViewController()
 
 @property (nonatomic, strong) NSTimer *timerUpdateList;
-
 @property (nonatomic, assign) DeviceSortType sortType;
 @property (nonatomic, strong) NSNumber* deviceFilterId;
+@property (nonatomic, strong) NSArray* sortedDeviceList;
+@property (nonatomic, strong) TDTempoDisc *selectedDevice;
+@property (nonatomic, strong) TDUARTAllDataDownloader *downloader;
+@property (nonatomic, assign) BOOL sendingData;
 
 @end
 
@@ -44,6 +52,7 @@ typedef enum : NSInteger {
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	_dataSource = [@[] mutableCopy];
 	[self setupView];
 	/**
 	 *	Wait until ready to perform scan
@@ -67,15 +76,23 @@ typedef enum : NSInteger {
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	if (!_ignoreScan) {
-		[self startScan];
+		[self scanForDevices];
 	}
+    if (_timerUpdateList) {
+        [_timerUpdateList invalidate];
+        _timerUpdateList = nil;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
-	if (!_ignoreScan) {
+	if (self.scanning) {
 		[self stopScan];
 	}
+    if (_timerUpdateList) {
+        [_timerUpdateList invalidate];
+        _timerUpdateList = nil;
+    }
 }
 
 #pragma mark - KVO
@@ -88,7 +105,6 @@ typedef enum : NSInteger {
 				//Bluetooth is ready. Start scan.
 				[weakself scanForDevices];
 				weakself.ignoreScan = NO;
-//				[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]] options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
 				
 				//we dont need to listen to changes anymore since everything is set up
 				[[LGCentralManager sharedInstance] removeObserver:self forKeyPath:@"centralReady"];
@@ -104,26 +120,10 @@ typedef enum : NSInteger {
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Scan" style:UIBarButtonItemStyleDone target:self action:@selector(buttonScanClicked:)];
 }
 
-- (void)startScan {
-	if ([self isMemberOfClass:[TDDeviceListTableViewController class]]) {
-		if (![LGCentralManager sharedInstance].scanning) {
-			[[LGCentralManager sharedInstance] scanForPeripheralsWithServices:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/ options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
-		}
-		if (_timerUpdateList) {
-			[_timerUpdateList invalidate];
-			_timerUpdateList = nil;
-		}
-		_timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(handleUpdateTimer:) userInfo:nil repeats:YES];
-		[[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
-	}
-	
-}
-
 - (void)handleUpdateTimer:(NSTimer*)timer {
-	__weak typeof(self) weakself = self;
-	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceListUpdateScanInterval services:nil options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES} completion:^(NSArray *peripherals) {
-		[weakself updateDeviceList];
-	}];
+    NSLog(@"In update timer for refresh scan");
+    [self scanForDevices];
+
 }
 
 - (void)stopScan {
@@ -132,189 +132,142 @@ typedef enum : NSInteger {
 		[_timerUpdateList invalidate];
 		_timerUpdateList = nil;
 	}
+    self.scanning = NO;
 }
 
 - (void)updateDeviceList {
-	if (!_dataSource) {
-		_dataSource = [NSMutableArray array];
-	}
-	else if (_deviceFilterId) {
-		NSMutableArray *nonClassSIdDevices = [NSMutableArray array];
-		for (TempoDevice* device in _dataSource) {
-			if ([device classID] != _deviceFilterId.integerValue) {
-				[nonClassSIdDevices addObject:device];
-			}
-		}
-		[_dataSource removeObjectsInArray:nonClassSIdDevices];
-	}
-	NSMutableArray *uuids = [_dataSource valueForKey:@"uuid"];
-	for (LGPeripheral *peripheral in [LGCentralManager sharedInstance].peripherals) {
-		TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
-		if (device) {
-			device.peripheral = peripheral;
-			device.inRange = @(YES);
-			if (![uuids containsObject:device.uuid]) {
-				if (_deviceFilterId) {
-					if ([device classID] == _deviceFilterId.integerValue) {
-						[_dataSource addObject:device];
-					}
-				}
-				else {
-					[_dataSource addObject:device];
-				}
-			}
-		}
-	}
-	
-	/*NSFetchRequest *allDeviceFetch = [NSFetchRequest fetchRequestWithEntityName:@"TempoDevice"];
-	NSArray *result = [[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext] executeFetchRequest:allDeviceFetch error:nil];
-	
-	for (TempoDevice *device in result) {
-		device.inRange = @(NO);
-		if (device.lastDetected && fabs(device.lastDetected.timeIntervalSinceNow) < kDeviceOutOfRangeTimer) {
-			if (_deviceFilterId) {
-				//filter by class id enabled
-				if ([device classID] == _deviceFilterId.integerValue) {
-					device.inRange = @(YES);
-					[_dataSource addObject:device];
-				}
-			}
-			else {
-				device.inRange = @(YES);
-				[_dataSource addObject:device];
-			}
-		}
-	}*/
-	
-	//default is by name
-	switch (_sortType) {
-		case DeviceSortTypeSignalStrength:
-			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"peripheral.RSSI" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"uuid" ascending:YES]]];
-			break;
-		case DeviceSortTypeClassID:
-			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"classID" ascending:YES], [NSSortDescriptor sortDescriptorWithKey:@"uuid" ascending:YES]]];
-			break;
-		default:
-			[_dataSource sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)], [NSSortDescriptor sortDescriptorWithKey:@"uuid" ascending:YES]]];
-			break;
-	}
 	[self.tableView reloadData];
 }
 
 - (void)scanForDevices {
-	//prevent double scan
-	if (self.scanning) {
-		return;
-	}
-	//self.scanning = YES;
-	//[self stopScan];
-	
-	//show progress indicator
-	/*MBProgressHUD* hud = [MBProgressHUD showHUDAddedTo:self.parentViewController.view animated:YES];
-	hud.labelText = NSLocalizedString(@"Scanning...", nil);*/
+    if ([LGCentralManager sharedInstance].scanning) {
+        [[LGCentralManager sharedInstance] stopScanForPeripherals];
+    }
+    
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
 	
 	__weak typeof(self) weakself = self;
-	//start scan
 	[[LGCentralManager sharedInstance]
 	 scanForPeripheralsByInterval:kDeviceScanInterval
-	 services:nil/*@[[CBUUID UUIDWithString:@"180A"], [CBUUID UUIDWithString:@"180F"]]*/
+	 services:nil
 	 options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}
 	 completion:^(NSArray *peripherals) {
-		 //handle scan result
-		 
-		 //create list of devices
-		 /*NSMutableArray *devices = [NSMutableArray array];
+         NSLog(@"Peripheral count is %lu", (unsigned long)[peripherals count]);
+         NSMutableArray *devices = [NSMutableArray array];
 		 for (LGPeripheral *peripheral in peripherals) {
-			 TempoDevice *device = [self findOrCreateDeviceForPeripheral:peripheral];
+			 TDTempoDisc *device = [self findOrCreateDeviceForPeripheral:peripheral];
 			 if (device) {
 				 device.peripheral = peripheral;
-				 [devices addObject:device];
+                 if ((device.version.integerValue == 22) || (device.version.integerValue == 23)) {
+                     [devices addObject:device];
+                     NSLog(@"Scanning and device found");
+                 }
+				 else if (device.version.integerValue == 13) {
+					 [devices addObject:device];
+					 NSLog(@"Found v13 device");
+				 }
+				 else if (device.version.integerValue == 27) {
+					 [devices addObject:device];
+					  NSLog(@"Found v27 device");
+				 }
+				 else if (device.version.integerValue == 32) {
+					 [devices addObject:device];
+					 NSLog(@"Found v32 device");
+				 }
+				 else if (device.version.integerValue == 42) {
+					 [devices addObject:device];
+					 NSLog(@"Found v42 device");
+				 }
+				 else if (device.version.integerValue == 52) {
+					 [devices addObject:device];
+					 NSLog(@"Found v52 device");
+				 }
+				 else if (device.version.integerValue == 62) {
+					 [devices addObject:device];
+					 NSLog(@"Found v62 device");
+				 }
+                 else if (device.version.integerValue == 99) {
+                     [devices addObject:device];
+                     NSLog(@"Found Pacifi V2 device");
+                 }
+                 else if (device.version.integerValue == 113) {
+                     [devices addObject:device];
+                     NSLog(@"Found v113 device");
+                 }
+                 
+			 }
+         }
+		 
+		 NSArray *udid = [weakself.dataSource valueForKey:@"uuid"];
+		 for (TDTempoDisc *device in devices) {
+			 NSUInteger index = [udid indexOfObject:device.uuid];
+			 if (index != NSNotFound) {
+				 [weakself.dataSource replaceObjectAtIndex:index withObject:device];
+			 }
+			 else {
+				 [weakself.dataSource addObject:device];
 			 }
 		 }
 		 
-		 _dataSource = devices;
-		 [self.tableView reloadData];*/
-		 [self updateDeviceList];
+		 weakself.dataSource = [[weakself.dataSource sortedArrayUsingDescriptors:sortDescriptors] mutableCopy];
 		 
-		 //cleanup
-		 [MBProgressHUD hideAllHUDsForView:self.parentViewController.view animated:NO];
-		 weakself.scanning = NO;
-		 [self startScan];
+		 [weakself.tableView reloadData];
+		 
+		 /**
+		  *	Looks like it doesnt do anything other than reload table view
+		  **/
+         if (_timerUpdateList) {
+             [_timerUpdateList invalidate];
+             _timerUpdateList = nil;
+         }
+         _timerUpdateList = [NSTimer timerWithTimeInterval:kDeviceListUpdateInterval target:self selector:@selector(handleUpdateTimer:) userInfo:nil repeats:YES];
+         [[NSRunLoop mainRunLoop] addTimer:_timerUpdateList forMode:NSRunLoopCommonModes];
+    		 
 	 }];
 }
 
-- (TempoDevice*)findOrCreateDeviceForPeripheral:(LGPeripheral*)peripheral {
+- (TDTempoDisc*)findOrCreateDeviceForPeripheral:(LGPeripheral*)peripheral {
 	/**
 	 *	If there is no manufacturer data see if the device is already inserted and return that device.
 	 **/
 	BOOL hasManufacturerData = [TempoDevice hasManufacturerData:peripheral.advertisingData];
 	
-	/**
-	 *	TDT-2 Non Tempo Disc devices should still be visible, with limited data
-	 **/
-	BOOL isTempoDiscDevice = [TempoDevice isTempoDiscDeviceWithAdvertisementData:peripheral.advertisingData];
 	BOOL isBlueMaestroDevice = [TempoDevice isBlueMaestroDeviceWithAdvertisementData:peripheral.advertisingData];
+    BOOL isTempoDisc13 = [TempoDevice isTempoDisc13WithAdvertisementDate:peripheral.advertisingData];
+    BOOL isTempoDisc22 = [TempoDevice isTempoDisc22WithAdvertisementDate:peripheral.advertisingData];
     BOOL isTempoDisc23 = [TempoDevice isTempoDisc23WithAdvertisementDate:peripheral.advertisingData];
-	BOOL isTempoPressure = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
+	BOOL isTempoDisc27 = [TempoDevice isTempoDisc27WithAdvertisementDate:peripheral.advertisingData];
+	BOOL isTempoDisc32 = [TempoDevice isTempoDisc32WithAdvertisementDate:peripheral.advertisingData];
+    BOOL isTempoDisc99 = [TempoDevice isTempoDisc99WithAdvertisementDate:peripheral.advertisingData];
+    BOOL isTempoDisc113 = [TempoDevice isTempoDisc113WithAdvertisementDate:peripheral.advertisingData];
 	
+    if (isTempoDisc13) {NSLog(@"Found Tempo Disc 13");}
+    if (isTempoDisc22) {NSLog(@"Found Tempo Disc 22");}
     if (isTempoDisc23) {NSLog(@"Found Tempo Disc 23");}
-	if (isTempoPressure) {NSLog(@"Found Tempo Disc 27");}
-    
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([TempoDevice class])];
-	request.predicate = [NSPredicate predicateWithFormat:@"self.uuid = %@", peripheral.cbPeripheral.identifier.UUIDString];
-	NSError *fetchError;
-	NSManagedObjectContext *context = [(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext];
-	NSArray *result = [context executeFetchRequest:request error:&fetchError];
+	if (isTempoDisc27) {NSLog(@"Found Tempo Disc 27");}
+	if (isTempoDisc32) {NSLog(@"Found Tempo Disc 32");}
+    if (isTempoDisc99) {NSLog(@"Found Pacif-i v2");}
+    if (isTempoDisc113) {NSLog(@"Found Tempo Disc 113");}
 	
-	TempoDevice *device;
-	if (!fetchError && result.count > 0) {
-		//found existing device
-		device = [result firstObject];
-		if (isBlueMaestroDevice && hasManufacturerData) {
-			[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
-		}
-		else {
-			device.name = peripheral.name;
-			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
-		}
-		if (hasManufacturerData) {
-			device.isBlueMaestroDevice = @(isBlueMaestroDevice);
-		}
+	TDTempoDisc *device = [[TDTempoDisc alloc] init];
+	if (isBlueMaestroDevice && hasManufacturerData) {
+		[device fillWithData:peripheral.advertisingData name:peripheral.name uuid:peripheral.cbPeripheral.identifier.UUIDString];
+        NSLog(@"Refreshing with data");
+		return device;
 	}
-	else if (!fetchError && hasManufacturerData) {
-		//detected new device
-		if ((isTempoDiscDevice) || (isTempoDisc23)) {
-			if (isTempoPressure) {
-				device = [TempoDiscPressureDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
-			}
-			else {
-				device = [TempoDiscDevice deviceWithName:peripheral.name data:peripheral.advertisingData uuid:peripheral.cbPeripheral.identifier.UUIDString context:context];
-			}
-		}
-		else {
-			device = [NSEntityDescription insertNewObjectForEntityForName:NSStringFromClass([TempoDevice class]) inManagedObjectContext:context];
-			device.name = peripheral.name;
-			device.uuid = peripheral.cbPeripheral.identifier.UUIDString;
-		}
-		device.isBlueMaestroDevice = @(isBlueMaestroDevice);
-	}
-	else if (hasManufacturerData || fetchError) {
-		NSLog(@"Error fetching devices: %@", fetchError.localizedDescription);
-	}
-	
-	NSError *saveError;
-	[context save:&saveError];
-	if (saveError) {
-		NSLog(@"Error saving device named %@: %@", peripheral.name, saveError.localizedDescription);
-	}
-	
-	return device;
+	return nil;
 }
 
 - (void)handleGoToBackgroundNotifications:(NSNotification*)note {
 	if (!_ignoreScan) {
 		[self stopScan];
 	}
+    if (_timerUpdateList) {
+        [_timerUpdateList invalidate];
+        _timerUpdateList = nil;
+    }
 }
 
 - (void)handleReturnToForeground:(NSNotification*)note {
@@ -325,7 +278,7 @@ typedef enum : NSInteger {
 	
 	//resume scanning
 	if (!_ignoreScan) {
-		[self startScan];
+		[self scanForDevices];
 	}
 }
 
@@ -341,7 +294,10 @@ typedef enum : NSInteger {
 		}
 		if (deviceToChange) {
 			deviceToChange.peripheral = peripheral;
-			[self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        
 		}
 	}
 }
@@ -356,8 +312,14 @@ typedef enum : NSInteger {
 #pragma mark - Actions
 
 - (IBAction)buttonScanClicked:(UIBarButtonItem*)sender {
-	__weak typeof(self) weakself = self;
+//	__weak typeof(self) weakself = self;
+	_dataSource = [@[] mutableCopy];
+	[self.tableView reloadData];
 	
+    [self scanForDevices];
+    
+    //Options for filtering, sorting, scanning.  Just activating scanning for the moment.
+    /*
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Please select from the following scan options" message:nil preferredStyle:UIAlertControllerStyleAlert];
 	
 	[alert addAction:[UIAlertAction actionWithTitle:@"Sort Device" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -409,11 +371,12 @@ typedef enum : NSInteger {
 	[alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
 	
 	[self presentViewController:alert animated:YES completion:nil];
+     */
 }
 
 #pragma mark - Cell fill
 
-- (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TempoDevice*)device {
+- (void)fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
     UIImage *lowBattImage = [UIImage imageNamed:@"battery_low"];
     UIImage *mediumBattImage = [UIImage imageNamed:@"battery_medium"];
     UIImage *highBattImage = [UIImage imageNamed:@"battery_high"];
@@ -424,8 +387,9 @@ typedef enum : NSInteger {
     UIImage *lockedImage = [UIImage imageNamed:@"padlockclosed"];
     UIImage *breachImage = [UIImage imageNamed:@"alert_icon"];
     
-    if ([device isKindOfClass:[TempoDiscDevice class]]) {
-        TempoDiscDevice* disc = (TempoDiscDevice*)device;
+    
+    if ([device isKindOfClass:[TDTempoDisc class]] || [device isKindOfClass:[TempoDiscDevice class]]) {
+        TDTempoDisc* disc = (TDTempoDisc*)device;
         int mode = disc.mode.intValue;
         int remainder = mode % 100;
         remainder = remainder / 10;
@@ -435,18 +399,17 @@ typedef enum : NSInteger {
         } else {
             [cell.lockImage setImage:unlockedImage];
         }
-        int breach_count = disc.numBreach.intValue;
+        int breach_count = device.numBreach.intValue;
         if (breach_count > 0) {
+            NSLog(@"Breach count is %d", device.numBreach.intValue);
             [cell.alertImage setImage:breachImage];
             cell.labelAlertCount.text = [NSString stringWithFormat:@"%d", breach_count];
         } else {
             [cell.alertImage setHidden:YES];
             [cell.labelAlertCount setHidden:YES];
         }
-        cell.classID.text = [NSString stringWithFormat:@"%d", (int)disc.classID];
-    
+        cell.classID.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
     }
-    
 
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
@@ -454,7 +417,7 @@ typedef enum : NSInteger {
 
     cell.dewpointUnits.text = unit;
     cell.temperatureUnits.text = unit;
-	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
+	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDiscDevice:device].floatValue];
 	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
     if (device.battery.integerValue >= 85) {
@@ -470,7 +433,7 @@ typedef enum : NSInteger {
 	if (device.version) {
 		cell.labelDeviceVersion.text = [NSString stringWithFormat:NSLocalizedString(@"Version:", nil)];
 		cell.labelDeviceVersionValue.hidden = NO;
-		cell.labelDeviceVersionValue.text = device.version;
+		cell.labelDeviceVersionValue.text = device.version.stringValue;
 	}
 	else {
 		cell.labelDeviceVersion.text = NSLocalizedString(@"No version info", nil);
@@ -492,12 +455,12 @@ typedef enum : NSInteger {
     }
     
 	
-	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral.UUIDString];
+	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral ? device.peripheral.UUIDString : device.uuid];
 	
 	cell.labelDeviceIdentifierValue.text = @"OTHER TEMPO DISC";
-	if ([device isKindOfClass:[TempoDiscDevice class]]) {
-		TempoDiscDevice* disc = (TempoDiscDevice*)device;
-		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDevice:device].floatValue];
+	if ([device isKindOfClass:[TDTempoDisc class]]) {
+		TDTempoDisc* disc = (TDTempoDisc*)device;
+		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDiscDevice:device].floatValue];
 		if (device.version.integerValue == 23) {
 			cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T/H/D v23";
             [cell.classTagImageView setHidden:NO];
@@ -510,48 +473,143 @@ typedef enum : NSInteger {
             [cell.classID setHidden:YES];
             [cell.classIDHeadingLabel setHidden:YES];
 		}
+        else if (device.version.integerValue == 27) {
+            cell.labelDeviceIdentifierValue.text = @"PEBBLE v27";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
+        }
+		else if (device.version.integerValue == 13) {
+            cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T v13";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
+		}
+		else if (device.version.integerValue == 52) {
+			cell.labelDeviceIdentifierValue.text = @"OPEN SENSOR DISC v13";
+			[cell.classTagImageView setHidden:YES];
+			[cell.classID setHidden:YES];
+			[cell.classIDHeadingLabel setHidden:YES];
+		}
+		else if (device.version.integerValue == 62) {
+			cell.labelDeviceIdentifierValue.text = @"LIGHT SENSOR v62";
+			[cell.classTagImageView setHidden:YES];
+			[cell.classID setHidden:YES];
+			[cell.classIDHeadingLabel setHidden:YES];
+		}
+        else if (device.version.integerValue == 113) {
+            cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T BEACON v113";
+            [cell.classTagImageView setHidden:YES];
+            [cell.classID setHidden:YES];
+            [cell.classIDHeadingLabel setHidden:YES];
+        }
+        
 	} else {
 		cell.labelCurrentDewPointValue.text = @"0";
 	}
     
 }
 
-- (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscPressureDevice*)device {
+- (void)fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	[self fillTempoDiscCell:cell model:device];
 	//fill rest of the data
+	cell.labelPressureValue.text = device.currentPressure.stringValue;
+	cell.dewpointUnits.text = cell.temperatureUnits.text;
+    cell.labelCurrentDewPointValue.text = device.dewPoint.stringValue;
 }
 
-- (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TempoDevice*)device {
+- (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	cell.labelDeviceName.text = device.name;
 }
+
+- (void)fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillPressureDeviceCell:cell model:device];
+	//TODO: Tempo device version 13 data fill
+	cell.labelUnitsValue.text = device.isFahrenheit.boolValue ? @"Fahrenheit (˚ K)" : @"Celsius (˚ C)";
+	cell.labelModeValue.text = device.mode.stringValue;
+	cell.labelThresholdBreachesValue.text = device.numBreach.stringValue;
+}
+
+- (void)fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillPressureDeviceCell:cell model:device];
+	//TODO: Tempo device version 13 data fill
+	cell.labelChannelOneValue.text = device.humSensitivityLevel.stringValue;
+	cell.labelChannelTwoValue.text = device.pestSensitivityLevel.stringValue;
+	cell.labelPressCountValue.text = device.buttonPressControl.stringValue;
+	cell.labelLoggingIntervalValue.text = device.movementMeasurePeriod.stringValue;
+	cell.labelIntervalCountValue.text = device.intervalCounter.stringValue;
+}
+
+- (void)fillButtonDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillPressureDeviceCell:cell model:device];
+	//TODO: Tempo device version 42 data fill
+	cell.labelTemperatureValue.text = device.buttonPressControl.stringValue;
+}
+
+- (void)fillMagnetometerCell:(TDMagnetometerDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillTemperatureDeviceCell:cell model:device];
+	cell.labelStatusValue.text = device.openCloseStatus ? @"OPEN" : @"CLOSED";
+	cell.imageViewStatusBox.image = [UIImage imageNamed:device.openCloseStatus ? @"Green Box" : @"red box"];
+}
+
+- (void)fillLuminosityCell:(TDLuminosityDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
+	[self fillTemperatureDeviceCell:cell model:device];
+	cell.labelLuminosityValue.text = @(device.currentLightLevel.integerValue).stringValue;
+}
+
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	TempoDevice *selectedDevice = _dataSource[indexPath.row];
-//	if (selectedDevice.isTempoDiscDevice.boolValue) {
-	//Selected device is tempo disc. Set global singleton reference and go to details
-		NSLog(@"Selected device: %@", selectedDevice.name);
-	if ([selectedDevice isKindOfClass:[TempoDiscPressureDevice class]]) {
-		[self.parentViewController performSegueWithIdentifier:@"segueTempoDevicePressureInfo" sender:selectedDevice];
+	self.selectedDevice = _dataSource[indexPath.row];
+    [TDSharedDevice sharedDevice].activeDevice = self.selectedDevice;
+        
+		NSLog(@"Selected device: %@", self.selectedDevice.name);
+	if (self.selectedDevice.version.integerValue == 27) {
+		[self.parentViewController performSegueWithIdentifier:@"segueTempoDevicePressureInfo" sender:self.selectedDevice];
 	}
-	else if ([selectedDevice isKindOfClass:[TempoDiscDevice class]] && (selectedDevice.version.integerValue == 22 || selectedDevice.version.integerValue == 23)) {
-		[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
-		if (!selectedDevice.inRange.boolValue) {
-			[self.parentViewController.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"viewControllerGraph"] animated:YES];
-		}
-		else {
-			[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:selectedDevice];
-		}
+	else if (self.selectedDevice.version.integerValue == 22 || self.selectedDevice.version.integerValue == 23) {
+			[self.parentViewController performSegueWithIdentifier:@"segueTempoDiscDeviceInfo" sender:self.selectedDevice];
+	}
+	else if (self.selectedDevice.version.integerValue == 13) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion13" sender:self.selectedDevice];
+	}
+	else if (self.selectedDevice.version.integerValue == 32) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion32" sender:self.selectedDevice];
+	}
+	else if (self.selectedDevice.version.integerValue == 42) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion42" sender:self.selectedDevice];
+	}
+	else if (self.selectedDevice.version.integerValue == 52) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion52" sender:self.selectedDevice];
+	}
+	else if (self.selectedDevice.version.integerValue == 62) {
+		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfoVersion62" sender:self.selectedDevice];
 	}
 	else {
 		//dont show detail for non tempo disc devices
 		[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	}
-	
-	/*else {
-		[self.parentViewController performSegueWithIdentifier:@"segueDeviceInfo" sender:selectedDevice];
-	}*/
+}
+
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath {
+	__weak typeof(self) weakself = self;
+	return @[[UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:NSLocalizedString(@"Blink", nil) handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (!weakself.sendingData) {
+				[weakself.timerUpdateList invalidate];
+				weakself.downloader = [[TDUARTAllDataDownloader alloc] init];
+				weakself.sendingData = YES;
+				[weakself.downloader writeData:@"*blink" toDevice:_dataSource[indexPath.row] withCompletion:^(BOOL sucess) {
+					dispatch_async(dispatch_get_main_queue(), ^{
+						weakself.sendingData = NO;
+						[weakself.tableView endEditing:YES];
+						[weakself scanForDevices];
+					});
+				}];
+			}
+		});
+	}]];
 }
 
 #pragma mark - UITableViewDataSource
@@ -561,28 +619,59 @@ typedef enum : NSInteger {
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	TempoDevice *device = _dataSource[indexPath.row];
-	
-	NSString *reuse = @"";
-	if ([device isKindOfClass:[TempoDiscPressureDevice class]]) {
-		reuse = @"cellDeviceTempoDiscPressure";
+	TDTempoDisc *device = _dataSource[indexPath.row];
+    NSString *reuse;
+	if (([device version].integerValue == 22) || ([device version].integerValue == 23)) {
+		reuse = @"cellDevice22and23";
 	}
-	else if (device.isBlueMaestroDevice.boolValue) {
-		reuse = @"cellDeviceTempoDisc";
+	else if ([device version].integerValue == 27) {
+		reuse = @"cellDeviceDisc27";
+	}
+	else if (([device version].integerValue == 13) || ([device version].integerValue ==113)) {
+		reuse = @"cellDevice13";
+	}
+	else if ([device version].integerValue == 32) {
+		reuse = @"cellDevice32";
+	}
+	else if ([device version].integerValue == 42) {
+		reuse = @"cellDevice42";
+	}
+	else if ([device version].integerValue == 52) {
+		reuse = @"cellDevice52";
+	}
+	else if ([device version].integerValue == 62) {
+		reuse = @"cellDevice62";
 	}
 	else {
-		reuse = @"cellDeviceOther";
+		//reuse = @"cellDeviceOther";
 	}
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
-	if ([cell isKindOfClass:[TDPressureDeviceTableViewCell class]]) {
-		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:(TempoDiscPressureDevice*)device];
+	if ([cell isMemberOfClass:[TDMovementDeviceTableViewCell class]]) {
+		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
 	}
-	if ([cell isKindOfClass:[TDDeviceTableViewCell class]]) {
+	else if ([cell isMemberOfClass:[TDTemperatureDeviceTableViewCell class]]) {
+		if (device.version.integerValue == 42) {
+			[self fillButtonDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
+		}
+		else {
+			[self fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:device];
+		}
+	}
+	if ([cell isMemberOfClass:[TDPressureDeviceTableViewCell class]]) {
+		[self fillPressureDeviceCell:(TDPressureDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isMemberOfClass:[TDDeviceTableViewCell class]]) {
 		[self fillTempoDiscCell:(TDDeviceTableViewCell*)cell model:device];
 	}
-	else if ([cell isKindOfClass:[TDOtherDeviceTableViewCell class]]) {
+	else if ([cell isMemberOfClass:[TDMagnetometerDeviceTableViewCell class]]) {
+		[self fillMagnetometerCell:(TDMagnetometerDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isMemberOfClass:[TDLuminosityDeviceTableViewCell class]]) {
+		[self fillLuminosityCell:(TDLuminosityDeviceTableViewCell*)cell model:device];
+	}
+	else if ([cell isMemberOfClass:[TDOtherDeviceTableViewCell class]]) {
 		[self fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:device];
 	}
 	
@@ -590,9 +679,37 @@ typedef enum : NSInteger {
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	TempoDevice *device = _dataSource[indexPath.row];
-	
-	return device.isBlueMaestroDevice.boolValue ? 180 : 97;
+    
+	TDTempoDisc *device = _dataSource[indexPath.row];
+	if (device.version.integerValue == 13 || device.version.integerValue == 113) {
+		return 190.;
+	}
+	else if (device.version.integerValue == 27) {
+		return 265.;
+	}
+	else if (device.version.integerValue == 32) {
+		return 210.;
+	}
+	else if (device.version.integerValue == 42) {
+		return 190.;
+	}
+	else {
+		return 190.;
+	}
+    
 }
+
+/**
+ *	This is used if cell height calculation (above) is an expensive method that takes too long
+ **/
+/*- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
+    return 190;
+    
+}*/
+
+
+
 
 @end

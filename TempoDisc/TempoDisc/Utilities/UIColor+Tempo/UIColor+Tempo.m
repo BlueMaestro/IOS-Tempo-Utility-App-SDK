@@ -18,6 +18,10 @@
     return ([UIColor colorWithRed:208/255.0f green:3/255.0f blue:3/255.0f alpha:1]);
 }
 
++(UIColor *)graphPressure {
+	return ([UIColor colorWithRed:181/255.0f green:59/255.0f blue:178/255.0f alpha:1]);
+}
+
 +(UIColor *)graphDewPoint {
     return ([UIColor colorWithRed:13/255.0f green:204/255.0f blue:80/255.0f alpha:1]);
 }

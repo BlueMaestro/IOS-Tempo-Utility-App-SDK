@@ -10,4 +10,7 @@
 
 @interface TDPressureDeviceTableViewCell : TDDeviceTableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *labelPressureTitle;
+@property (strong, nonatomic) IBOutlet UILabel *labelPressureUnit;
+@property (strong, nonatomic) IBOutlet UILabel *labelPressureValue;
 @end

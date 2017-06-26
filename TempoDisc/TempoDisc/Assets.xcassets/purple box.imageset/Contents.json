@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Asset 10.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Asset 10@2x.png",
+      "filename" : "purple box@2x.png",
       "scale" : "2x"
     },
     {

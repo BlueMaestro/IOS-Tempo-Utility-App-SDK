@@ -30,7 +30,12 @@
 #define kColorGraphAxis [CPTColor colorWithComponentRed:17.0f/255.0f green:90.0f/255.0f blue:140.0f/255.0f alpha:1]
 #define kColorGraphHumidity [CPTColor colorWithComponentRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]
 #define kColorGraphTemperature [CPTColor colorWithComponentRed:208/255.0f green:3/255.0f blue:3/255.0f alpha:1]
+#define kColorGraphPressure [CPTColor colorWithComponentRed:181/255.0f green:59/255.0f blue:178/255.0f alpha:1]
 #define kColorGraphDewPoint [CPTColor colorWithComponentRed:13/255.0f green:204/255.0f blue:80/255.0f alpha:1]
+#define kColorGraphFirstMovement [CPTColor colorWithComponentRed:1/255.0f green:101/255.0f blue:189/255.0f alpha:1]
+#define kColorGraphSecondMovement [CPTColor colorWithComponentRed:171/255.0f green:49/255.0f blue:170/255.0f alpha:1]
+#define kColorGraphOpenClose [CPTColor colorWithComponentRed:7/255.0f green:119/255.0f blue:190/255.0f alpha:1]
+#define kColorGraphLight [CPTColor colorWithComponentRed:1/255.0f green:101/255.0f blue:189/255.0f alpha:1]
 #define kFontGraphAxis @"Montserrat-Regular"
 #define kGraphLineWidth 2
 #define kGraphiPhoneFontSize 14

@@ -12,9 +12,13 @@
 #define MANUF_ID_BLUE_MAESTRO 0x0133
 #define BM_MODEL_T30 0
 #define BM_MODEL_THP 1
-#define BM_MODEL_DISC '\x16'
-#define BM_MODEL_DISC_23 '\x17'
-#define BM_MODEL_DISC_27 '\x1B'
+#define BM_MODEL_DISC_13 0xD
+#define BM_MODEL_DISC_22 0x16
+#define BM_MODEL_DISC_23 0x17
+#define BM_MODEL_DISC_27 0x1B
+#define BM_MODEL_DISC_32 0x20
+#define BM_MODEL_DISC_99 0x63
+#define BM_MODEL_DISC_113 0x71
 
 int getInt(char lsb,char msb)
 {
@@ -38,26 +42,6 @@ int getInt(char lsb,char msb)
 	return device;
 }
 
-+ (BOOL)isTempoDiscDeviceWithAdvertisementData:(NSDictionary*)data {
-	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
-	//BlueMaestro device
-	if (custom != nil)
-	{
-		unsigned char * d = (unsigned char*)[custom bytes];
-		unsigned int manuf = d[1] << 8 | d[0];
-		
-		//Is this one of ours?
-		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_DISC /*||
-				d[2] == BM_MODEL_THP ||
-				d[2] == BM_MODEL_T30*/) {
-				return YES;
-			}
-		}
-	}
-	return NO;
-}
-
 
 + (BOOL)isBlueMaestroDeviceWithAdvertisementData:(NSDictionary*)data {
 	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
@@ -75,6 +59,46 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
++ (BOOL)isTempoDisc13WithAdvertisementDate:(NSDictionary*)data {
+    NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+    //BlueMaestro device
+    if (custom != nil)
+    {
+        unsigned char * d = (unsigned char*)[custom bytes];
+        unsigned int manuf = d[1] << 8 | d[0];
+        
+        //Is this one of ours and is it version 13?
+        if (manuf == MANUF_ID_BLUE_MAESTRO) {
+            if (d[2] == BM_MODEL_DISC_13) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+
+
+
++ (BOOL)isTempoDisc22WithAdvertisementDate:(NSDictionary*)data {
+    NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+    //BlueMaestro device
+    if (custom != nil)
+    {
+        unsigned char * d = (unsigned char*)[custom bytes];
+        unsigned int manuf = d[1] << 8 | d[0];
+        
+        //Is this one of ours and is it version 22?
+        if (manuf == MANUF_ID_BLUE_MAESTRO) {
+            if (d[2] == BM_MODEL_DISC_22) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+
 + (BOOL)isTempoDisc23WithAdvertisementDate:(NSDictionary*)data {
     NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
     //BlueMaestro device
@@ -83,16 +107,15 @@ int getInt(char lsb,char msb)
         unsigned char * d = (unsigned char*)[custom bytes];
         unsigned int manuf = d[1] << 8 | d[0];
         
-        //Is this one of ours?
+        //Is this one of ours and is it version 23?
         if (manuf == MANUF_ID_BLUE_MAESTRO) {
             if (d[2] == BM_MODEL_DISC_23) {
-            return YES;
+                return YES;
             }
         }
     }
     return NO;
 }
-
 
 + (BOOL)isTempoDisc27WithAdvertisementDate:(NSDictionary*)data {
 	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
@@ -102,9 +125,27 @@ int getInt(char lsb,char msb)
 		unsigned char * d = (unsigned char*)[custom bytes];
 		unsigned int manuf = d[1] << 8 | d[0];
 		
-		//Is this one of ours?
+		//Is this one of ours and is it version 27?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
 			if (d[2] == BM_MODEL_DISC_27) {
+                return YES;
+			}
+		}
+	}
+	return NO;
+}
+
++ (BOOL)isTempoDisc32WithAdvertisementDate:(NSDictionary*)data {
+	NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+	//BlueMaestro device
+	if (custom != nil)
+	{
+		unsigned char * d = (unsigned char*)[custom bytes];
+		unsigned int manuf = d[1] << 8 | d[0];
+		
+		//Is this one of ours and is it version 27?
+		if (manuf == MANUF_ID_BLUE_MAESTRO) {
+			if (d[2] == BM_MODEL_DISC_32) {
 				return YES;
 			}
 		}
@@ -112,6 +153,41 @@ int getInt(char lsb,char msb)
 	return NO;
 }
 
++ (BOOL)isTempoDisc99WithAdvertisementDate:(NSDictionary*)data {
+    NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+    //BlueMaestro device
+    if (custom != nil)
+    {
+        unsigned char * d = (unsigned char*)[custom bytes];
+        unsigned int manuf = d[1] << 8 | d[0];
+        
+        //Is this one of ours and is it version 99?
+        if (manuf == MANUF_ID_BLUE_MAESTRO) {
+			if (d[2] == BM_MODEL_DISC_99) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
++ (BOOL)isTempoDisc113WithAdvertisementDate:(NSDictionary*)data {
+    NSData *custom = [data objectForKey:@"kCBAdvDataManufacturerData"];
+    //BlueMaestro device
+    if (custom != nil)
+    {
+        unsigned char * d = (unsigned char*)[custom bytes];
+        unsigned int manuf = d[1] << 8 | d[0];
+        
+        //Is this one of ours and is it version 113?
+        if (manuf == MANUF_ID_BLUE_MAESTRO) {
+            if (d[2] == BM_MODEL_DISC_113) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
 
 + (BOOL)hasManufacturerData:(NSDictionary*)data {
 	if (data[@"kCBAdvDataManufacturerData"]) {
@@ -122,7 +198,6 @@ int getInt(char lsb,char msb)
 	}
 }
 
-
 - (void)fillWithData:(NSDictionary *)advertisedData name:(NSString *)name uuid:(nonnull NSString *)uuid {
 	
 	self.uuid = uuid;
@@ -131,11 +206,12 @@ int getInt(char lsb,char msb)
 	
 	NSData *custom = [advertisedData objectForKey:@"kCBAdvDataManufacturerData"];
 	
-	bool isTempoLegacy =  (custom == nil && [name isEqualToString:@"Tempo "]);
-	bool isTempoT30 = false;
-	bool isTempoTHP = false;
-	bool isTempoDisc = false;
+    bool isTempoDisc13 = false;
+	bool isTempoDisc22 = false;
     bool isTempoDisc23 = false;
+    bool isTempoDisc27 = false;
+    bool isTempoDisc99 = false;
+    bool isTempoDisc113 = false;
 	NSString *deviceType = nil;
 	
 	//BlueMaestro device
@@ -145,84 +221,53 @@ int getInt(char lsb,char msb)
 		
 		//Is this one of ours?
 		if (manuf == MANUF_ID_BLUE_MAESTRO) {
-			if (d[2] == BM_MODEL_T30) {
-				deviceType = @"TEMPO_T30";
-				isTempoT30 = true;
-			} else if (d[2] == BM_MODEL_THP) {
-				deviceType = @"TEMPO_THP";
-				isTempoTHP = true;
-			}
-			else if (d[2] == BM_MODEL_DISC) {
-				deviceType = @"TEMPO_DISC";
-				isTempoDisc = true;
+            
+            if (d[2] == BM_MODEL_DISC_13) {
+                deviceType = @"TEMPO_DISC_13";
+                isTempoDisc13 = true;
+            }
+            else if (d[2] == BM_MODEL_DISC_22) {
+				deviceType = @"TEMPO_DISC_22";
+				isTempoDisc22 = true;
 			}
             else if (d[2] == BM_MODEL_DISC_23) {
                 deviceType = @"TEMPO_DISC_23";
                 isTempoDisc23 = true;
             }
-		}
-	} else {
-		//device is legacy
-		self.modelType = @"TEMPO_LEGACY";
-	}
-    
-	if (!isTempoLegacy) {
-		self.modelType = deviceType;
-		char * data = (char*)[custom bytes];
-		if (isTempoDisc) {
-			
-		}
-        
-		else {
-			float min = getInt(data[3],data[4]) / 10.0f;
-			float avg = getInt(data[5],data[6]) / 10.0f;
-			float max = getInt(data[7],data[8]) / 10.0f;
-			
-			self.currentMinTemperature = [NSNumber numberWithFloat:min];
-			self.currentMaxTemperature = [NSNumber numberWithFloat:max];
-			self.currentTemperature = [NSNumber numberWithFloat:avg];
-			
-			if (!isTempoT30) {
-				int humidity = data[9];
-				self.currentHumidity = [NSNumber numberWithInt:humidity];
-				
-				if (isTempoTHP) {
-					int pressure = getInt(data[10],data[11]);
-					int pressureDelta = getInt(data[12],data[13]);
-					
-					self.currentPressure = [NSNumber numberWithInt:pressure];
-					self.currentPressureDelta = [NSNumber numberWithInt:pressureDelta];
-				}
-			}
+            else if (d[2] == BM_MODEL_DISC_27) {
+                deviceType = @"TEMPO_DISC_27";
+                isTempoDisc27 = true;
+            }
+            else if (d[2] == BM_MODEL_DISC_99) {
+                deviceType = @"PACIF-I V2";
+                isTempoDisc99 = true;
+            }
+            else if (d[2] == BM_MODEL_DISC_113) {
+                deviceType = @"TEMPO_DISC_113";
+                isTempoDisc113 = true;
+            }
 		}
 	}
+    self.modelType = deviceType;
 }
 
 - (TempoDeviceType)deviceType {
-	if ([self.modelType isEqualToString:@"TEMPO_LEGACY"]) {
-		return TempoDeviceTypeLegacy;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_T30"]) {
-		return TempoDeviceTypeT30;
-	}
-	else if ([self.modelType isEqualToString:@"TEMPO_THP"]) {
-		return TempoDeviceTypeT30;
-	}
-    else if ([self.modelType isEqualToString:@"TEMPO_DISC_23"]) {
-        return TempoDeviceType23;
-    }
-	else {
-		return TempoDeviceTypeUnknown;
-	}
+    if  (self.version.integerValue == 13) return TempoDeviceType13;
+    if  (self.version.integerValue == 22) return TempoDeviceType22;
+    if  (self.version.integerValue == 23) return TempoDeviceType23;
+    if  (self.version.integerValue == 27) return TempoDeviceType27;
+    if  (self.version.integerValue == 99) return TempoDeviceType99;
+    if  (self.version.integerValue == 113) return TempoDeviceType113;
+    return TempoDeviceTypeUnknown;
 }
 
 - (void)deleteOldData:(NSString *)type context:(NSManagedObjectContext *)context {
     
     NSString *readingType;
     readingType = type;
-    for (ReadingType *type in [TDDefaultDevice sharedDevice].selectedDevice.readingTypes) {
+    for (ReadingType *type in [TDSharedDevice sharedDevice].selectedDevice.readingTypes) {
         if ([type.type isEqualToString:readingType]) {
-            [[TDDefaultDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
+            [[TDSharedDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
             break;
         }
     }
@@ -254,7 +299,6 @@ int getInt(char lsb,char msb)
     NSError *saveError = nil;
     [context save:&saveError];
     */
-    
 }
 
 
@@ -299,13 +343,6 @@ int getInt(char lsb,char msb)
 		NSLog(@"Error saving data import: %@", saveError);
 	}
 }
-
-//Not used
-- (void)addData:(NSArray *)data forReadingType:(NSString *)type context:(NSManagedObjectContext *)context {
-    NSLog(@"In spare method for addData for TempoDevice");
-	//[self addData:data forReadingType:type startTimestamp:timeStamp interval:interval context:context];
-}
-
 
 - (NSArray *)readingsForType:(NSString *)typeOfReading {
 	for (ReadingType *readingType in self.readingTypes) {

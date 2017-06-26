@@ -83,7 +83,7 @@
 	[formatter setDateFormat:@"HH:mm\tdd/MM/yyyy"];
 	
 	//write pre values data
-	TempoDiscDevice *device = (TempoDiscDevice*)[TDDefaultDevice sharedDevice].selectedDevice;
+	TempoDiscDevice *device = (TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice;
 	[writer writeField:@"Current Date and Time"];
 	[writer writeField:[formatter stringFromDate:[NSDate date]]];
 	[writer finishLine];
@@ -120,26 +120,38 @@
 	[writer writeField:@"Record number"];
 	[writer writeField:@"Timestamp"];
 	[writer writeField:@"Temperature"];
-	[writer writeField:@"Humidity"];
-	[writer writeField:@"Dew point"];
+	if (device.version.integerValue != 13) {
+		[writer writeField:@"Humidity"];
+		if (device.version.integerValue == 27) {
+			[writer writeField:@"Pressure"];
+		}
+		[writer writeField:@"Dew point"];
+	}
 	[writer finishLine];
 	
 	
 	//[formatter setDateFormat:@"dd/MM/yyyy\tHH:mm"];
 	NSArray *temperature = [[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	NSArray *humidity = [[device readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+	NSArray *pressure = [[device readingsForType:@"Pressure"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	NSArray *dewPoint = [[device readingsForType:@"DewPoint"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
     
     for (NSInteger index = (temperature.count - 1); index >= 0; index--) {
-		Reading *readingTemperature = index >= 0 ? temperature[index] : nil;
-		Reading *readingHumidity = index >= 0 ? humidity[index] : nil;
-		Reading *readingDewPoint = index >= 0 ? dewPoint[index] : nil;
+		Reading *readingTemperature = index >= 0 && index < temperature.count ? temperature[index] : nil;
+		Reading *readingHumidity = index >= 0 && index < humidity.count ? humidity[index] : nil;
+		Reading *readingPressure = index >= 0 && index < pressure.count ? pressure[index] : nil;
+		Reading *readingDewPoint = index >= 0 && index < dewPoint.count ? dewPoint[index] : nil;
 		
 		[writer writeField:[NSString stringWithFormat:@"%lu", (unsigned long)index]];
 		[writer writeField:[NSString stringWithFormat:@"%@", [formatter stringFromDate:readingTemperature.timestamp]]];
 		[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingTemperature.avgValue forDevice:device]]];
-		[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
-		[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:device]]];
+		if (device.version.integerValue != 13) {
+			[writer writeField:[NSString stringWithFormat:@"%@", readingHumidity.avgValue]];
+			if (device.version.integerValue == 27) {
+				[writer writeField:[NSString stringWithFormat:@"%@", readingPressure.avgValue]];
+			}
+			[writer writeField:[NSString stringWithFormat:@"%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:device]]];
+		}
 		[writer finishLine];
 	}
 	
@@ -199,7 +211,7 @@
 		NSString *fileName = [self createFileNameWithAttachmentType:@"CSV" withPath:YES];
 		[self createCSVFile:fileName];
 		NSData * csvData=[NSData dataWithContentsOfFile:fileName];
-		[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDDefaultDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
+		[mailComposeVC addAttachmentData:csvData mimeType:@"text/csv" fileName:[NSString stringWithFormat:@"%@-%@", [TDSharedDevice sharedDevice].selectedDevice.name, [formatter stringFromDate:[NSDate date]]]];
 		
 		[MBProgressHUD hideHUDForView:self.view animated:NO];
 		[self presentViewController:mailComposeVC animated:YES completion:nil];

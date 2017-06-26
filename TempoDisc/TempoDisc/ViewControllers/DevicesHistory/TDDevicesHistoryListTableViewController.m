@@ -37,7 +37,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	TempoDevice *selectedDevice = self.dataSource[indexPath.row];
-	[TDDefaultDevice sharedDevice].selectedDevice = selectedDevice;
+	[TDSharedDevice sharedDevice].selectedDevice = selectedDevice;
 	[self.parentViewController.navigationController pushViewController:[self.storyboard instantiateViewControllerWithIdentifier:@"viewControllerGraph"] animated:YES];
 }
 
@@ -65,5 +65,10 @@
 		
 	}]];
 }
+
+/*- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	//Set history cell height
+	return 70;
+}*/
 
 @end

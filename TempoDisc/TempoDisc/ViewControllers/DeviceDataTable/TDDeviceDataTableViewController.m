@@ -19,7 +19,12 @@
 
 @property (nonatomic, strong) NSArray *dataSourceTemperature;
 @property (nonatomic, strong) NSArray *dataSourceHumidity;
+@property (nonatomic, strong) NSArray *dataSourcePressure;
 @property (nonatomic, strong) NSArray *dataSourceDewPoint;
+@property (nonatomic, strong) NSArray *dataSourceFirstMovement;
+@property (nonatomic, strong) NSArray *dataSourceSecondMovement;
+@property (nonatomic, strong) NSArray *dataSourceOpenClose;
+@property (nonatomic, strong) NSArray *dataSourceLight;
 
 @end
 
@@ -27,20 +32,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 	[self setupView];
-	_currentReadingType = TempoReadingTypeTemperature;
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		_currentReadingType = TempoReadingTypeFirstMovement;
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+		_currentReadingType = TempoReadingTypeOpenClose;
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		_currentReadingType = TempoReadingTypeLight;
+	}
+	else {
+		_currentReadingType = TempoReadingTypeTemperature;
+	}
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	[self loadData];
-//	self.parentViewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Temperature" style:UIBarButtonItemStyleDone target:self action:@selector(buttonChangeReadingTypeClicked:)];
 	[self.tableView reloadData];
 }
 
@@ -48,17 +62,12 @@
 	self.parentViewController.navigationItem.rightBarButtonItem = nil;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Private methods
 
 - (void)setupView {
 	self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 	_formatterTimestamp = [[NSDateFormatter alloc] init];
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		_formatterTimestamp.dateFormat = @"yyyy MMMM dd : hh.mma";
 	}
 	else {
@@ -67,7 +76,7 @@
 }
 
 - (void)loadData {
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		[self loadDiscData];
 	}
 	else {
@@ -76,9 +85,22 @@
 }
 
 - (void)loadDiscData {
-	_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
-	_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
-	_dataSourceDewPoint = [self dataForType:TempoReadingTypeDewPoint];
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		_dataSourceFirstMovement= [self dataForType:TempoReadingTypeFirstMovement];
+		_dataSourceSecondMovement = [self dataForType:TempoReadingTypeSecondMovement];
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+		_dataSourceOpenClose = [self dataForType:TempoReadingTypeOpenClose];
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		_dataSourceLight = [self dataForType:TempoReadingTypeLight];
+	}
+	else {
+		_dataSourceTemperature = [self dataForType:TempoReadingTypeTemperature];
+		_dataSourceHumidity = [self dataForType:TempoReadingTypeHumidity];
+		_dataSourcePressure = [self dataForType:TempoReadingTypePressure];
+		_dataSourceDewPoint = [self dataForType:TempoReadingTypeDewPoint];
+	}
 }
 
 - (NSArray*)dataForType:(TempoReadingType)type {
@@ -90,15 +112,27 @@
 		case TempoReadingTypeHumidity:
 			readingType = @"Humidity";
 		break;
+		case TempoReadingTypePressure:
+			readingType = @"Pressure";
+			break;
 		case TempoReadingTypeDewPoint:
 			readingType = @"DewPoint";
 		break;
-			
-  default:
+		case TempoReadingTypeFirstMovement:
+			readingType = @"FirstMovement";
+			break;
+		case TempoReadingTypeSecondMovement:
+			readingType = @"SecondMovement";
+			break;
+		case TempoReadingTypeOpenClose:
+			readingType = @"OpenClose";
+			break;
+		case TempoReadingTypeLight:
+			readingType = @"Light";
 			break;
 	}
 	if (readingType) {
-		return [[[TDDefaultDevice sharedDevice].selectedDevice readingsForType:readingType] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
+		return [[[TDSharedDevice sharedDevice].selectedDevice readingsForType:readingType] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO]]];
 	}
 	else {
 		return @[];
@@ -120,6 +154,11 @@
 #pragma mark - Actions
 
 - (IBAction)buttonChangeReadingTypeClicked:(UIBarButtonItem*)sender {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
+		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52 ||
+		[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		return;
+	}
 	[self changeReadingType:_currentReadingType == TempoReadingTypeTemperature ? TempoReadingTypeHumidity : TempoReadingTypeTemperature];
 	[sender setTitle:(_currentReadingType == TempoReadingTypeTemperature) ? @"Temperature" : @"Humidity"];
 }
@@ -131,7 +170,16 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+		return _dataSourceFirstMovement.count;
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) {
+		return _dataSourceOpenClose.count;
+	}
+	else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+		return _dataSourceLight.count;
+	}
+	else if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
 		return _dataSourceTemperature.count;
 	}
 	else {
@@ -141,23 +189,40 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellDiscData" forIndexPath:indexPath];
+	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		NSString *reuse = @"cellDiscData";
+		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13) ||
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113) ||
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52) ||
+			([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62)) {
+			reuse = @"cellDiscData13";
+		}
+		else if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27)) {
+			reuse = @"cellDiscDataPressure";
+		}
+		if (([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32)) {
+			reuse = @"cellDiscData32";
+		}
+		
+		TDDiscDataTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 		
 		// Configure the cell...
 		Reading *readingTemperature = indexPath.row < _dataSourceTemperature.count ? _dataSourceTemperature[indexPath.row] : nil;
 		Reading *readingHumidity = indexPath.row < _dataSourceHumidity.count ? _dataSourceHumidity[indexPath.row] : nil;
+		Reading *readingPressure = indexPath.row < _dataSourcePressure.count ? _dataSourcePressure[indexPath.row] : nil;
 		Reading *readingDewPoint = indexPath.row < _dataSourceDewPoint.count ? _dataSourceDewPoint[indexPath.row] : nil;
+		Reading *readingFirstMovement = indexPath.row < _dataSourceFirstMovement.count ? _dataSourceFirstMovement[indexPath.row] : nil;
+		Reading *readingSecondMovement = indexPath.row < _dataSourceSecondMovement.count ? _dataSourceSecondMovement[indexPath.row] : nil;
+		Reading *readingOpenClose = indexPath.row < _dataSourceOpenClose.count ? _dataSourceOpenClose[indexPath.row] : nil;
+		Reading *readingLight = indexPath.row < _dataSourceLight.count ? _dataSourceLight[indexPath.row] : nil;
 		
-		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
-		TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
+		NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
+		TempoDevice *selectedDevice = [TDSharedDevice sharedDevice].selectedDevice;
 		
-		//should't really matter which object
 		if (readingTemperature) {
 			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingTemperature.timestamp];
-			cell.labelRecordNumberValue.text = @(_dataSourceTemperature.count - indexPath.row).stringValue;
-			
 			cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1f%@", [TDHelper temperature:readingTemperature.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
+			cell.labelRecordNumberValue.text = @(_dataSourceTemperature.count - indexPath.row).stringValue;
 		}
 		
 		if (readingHumidity) {
@@ -166,11 +231,51 @@
 		else {
 			cell.labelHumidityValue.text = @"";
 		}
+		if (readingPressure) {
+			cell.labelPressureValue.text = [NSString stringWithFormat:@"%@ hPa", readingPressure.avgValue];
+		}
+		else {
+			cell.labelPressureValue.text = @"";
+		}
 		if (readingDewPoint) {
 			cell.labelDewPointValue.text = [NSString stringWithFormat:@"%.1f%@", [TDHelper temperature:readingDewPoint.avgValue forDevice:selectedDevice].floatValue, unitSymbol];
 		}
 		else {
 			cell.labelDewPointValue.text = @"";
+		}
+		if (readingFirstMovement) {
+			cell.labelChannelOneValue.text = readingFirstMovement.avgValue.stringValue;
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingFirstMovement.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceFirstMovement.count - indexPath.row).stringValue;
+		}
+		else {
+			cell.labelChannelOneValue.text = @"";
+		}
+		if (readingSecondMovement) {
+			cell.labelChannelTwoValue.text = readingSecondMovement.avgValue.stringValue;
+		}
+		else {
+			cell.labelChannelTwoValue.text = @"";
+		}
+		if (readingOpenClose) {
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingOpenClose.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceOpenClose.count - indexPath.row).stringValue;
+			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
+		}
+		else {
+			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
+		}
+		if (readingLight) {
+			cell.labelDateValue.text = [_formatterTimestamp stringFromDate:readingLight.timestamp];
+			cell.labelRecordNumberValue.text = @(_dataSourceLight.count - indexPath.row).stringValue;
+			cell.labelTemperature.text = [@"Lux Level:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingLight.avgValue.integerValue).stringValue;
+		}
+		else {
+			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
+			cell.labelTemperatureValue.text = @(readingLight.avgValue.integerValue).stringValue;
 		}
 		
 		return cell;
@@ -183,8 +288,8 @@
 		
 		if (reading.minValue || reading.maxValue) {
 			if (_currentReadingType == TempoReadingTypeTemperature) {
-				NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDDefaultDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
-				TempoDevice *selectedDevice = [TDDefaultDevice sharedDevice].selectedDevice;
+				NSString *unitSymbol = [NSString stringWithFormat:@"˚%@", [TDSharedDevice sharedDevice].selectedDevice.isFahrenheit.boolValue ? @"F" : @"C"];
+				TempoDevice *selectedDevice = [TDSharedDevice sharedDevice].selectedDevice;
 				cell.textLabel.text = [NSString stringWithFormat:@"avg: %@%@, min: %@%@, max: %@%@", [TDHelper temperature:reading.avgValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.minValue forDevice:selectedDevice].stringValue, unitSymbol, [TDHelper temperature:reading.maxValue forDevice:selectedDevice].stringValue, unitSymbol];
 			}
 			else {
@@ -202,57 +307,26 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	if ([[TDDefaultDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
-		return 104;
+	if ([[TDSharedDevice sharedDevice].selectedDevice isKindOfClass:[TempoDiscDevice class]]) {
+		if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 13 ||
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 113 ||
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 52 ||
+			[TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 62) {
+			return 70;
+		}
+		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+			return 120;
+		}
+		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 32) {
+			return 88;
+		}
+		else {
+			return 104;
+		}
 	}
 	else {
 		return 44;
 	}
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
