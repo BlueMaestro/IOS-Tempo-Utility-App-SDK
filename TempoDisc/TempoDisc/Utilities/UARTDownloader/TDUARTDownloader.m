@@ -18,7 +18,8 @@
 #define kDataTerminationValue 46
 
 #define kDeviceConnectTimeout			10.0
-#define kDeviceReConnectTimeout			1.0
+#define kDeviceConnectDownloadTimeout   30.0
+#define kDeviceReConnectTimeout			10.0
 
 #define kDataStringTemperature			@"*logntemp"
 #define kDataStringHumidity				@"*lognhumi"
@@ -303,15 +304,15 @@ typedef enum : NSInteger {
 	_completion = completion;
 	_deviceVersion = device.version.integerValue;
 	NSLog(@"Connecting to device...");
-	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
+	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectDownloadTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
 			if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
 				[TDSharedDevice sharedDevice].selectedDevice.peripheral = peripheral;
-				[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
+				[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithCompletion:^(NSError *error) {
 					[timer invalidate];
 					timer = nil;
 					weakself.didDisconnect = NO;

@@ -19,9 +19,9 @@
 #define kDataTerminationValue 46
 #define kDataTerminationBetweenValue 44
 
-#define kDeviceConnectTimeout			10.0
-#define kDeviceReConnectTimeout			2.0
-#define kDeviceDataParseTimeout			20.
+#define kDeviceConnectTimeout			20.0
+#define kDeviceReConnectTimeout			8.0
+#define kDeviceDataParseTimeout			20.0
 
 #define kDataDownloadString				@"*logall"
 

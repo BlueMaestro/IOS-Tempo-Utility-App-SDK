@@ -13,7 +13,7 @@
 #define CHAR_ID @"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define SERVICE_ID @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 
-#define kResponseTimeout 10
+#define kResponseTimeout 30
 
 typedef enum : NSInteger {
 	DeviceCommandChangeName = 0,
@@ -735,7 +735,7 @@ typedef enum : NSInteger {
 	
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (!error) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:[NSString stringWithFormat:@"Device Response:\n%@", message] preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success", nil) message:[NSString stringWithFormat:@"Device Response:\n%@", message] preferredStyle:UIAlertControllerStyleAlert];
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 		[self presentViewController:alert animated:YES completion:nil];
 	}

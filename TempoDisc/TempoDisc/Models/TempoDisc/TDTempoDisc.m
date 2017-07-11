@@ -13,6 +13,8 @@
 #define BM_MODEL_DISC_23 0x17
 #define BM_MODEL_DISC_27 0x1B
 #define BM_MODEL_DISC_32 0x20
+#define BM_MODEL_DISC_52 0x34
+#define BM_MODEL_DISC_62 0x3E
 #define BM_MODEL_DISC_99 0x63
 #define BM_MODEL_DISC_113 0x71
 
@@ -78,6 +80,14 @@
 				self.modelType = @"TEMPO_DISC_32";
 				self.version = [NSNumber numberWithInteger:32];
 			}
+            else if (d[2] == BM_MODEL_DISC_52) {
+                self.modelType = @"TEMPO_DISC_52";
+                self.version = [NSNumber numberWithInteger:52];
+            }
+            else if (d[2] == BM_MODEL_DISC_62) {
+                self.modelType = @"TEMPO_DISC_62";
+                self.version = [NSNumber numberWithInteger:62];
+            }
             else if (d[2] == BM_MODEL_DISC_99) {
                 self.modelType = @"PACIF-I V2";
                 self.version = [NSNumber numberWithInteger:99];
@@ -497,6 +507,7 @@
 		const unsigned char levelBytes[] = {data[10], data[11], data[12], data[13]};
 		NSData *levelValues = [NSData dataWithBytes:levelBytes length:4];
 		unsigned levelValueRawValue = CFSwapInt32BigToHost(*(int*)([levelValues bytes]));
+        NSLog(@"Trying to reverse endian, value is %u", levelValueRawValue);
 		NSNumber *fullLightValue = [NSNumber numberWithUnsignedInt:levelValueRawValue];
 		self.currentLightLevel = fullLightValue;
 		

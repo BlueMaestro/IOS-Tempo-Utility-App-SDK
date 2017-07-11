@@ -21,7 +21,7 @@
 #define uartRXCharacteristicUUIDString	@"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define uartTXCharacteristicUUIDString	@"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
-#define kDeviceReconnectTimeout			2.0
+#define kDeviceReconnectTimeout			8.0
 
 #define kDeviceConnectTimeout			10.0
 
@@ -164,39 +164,27 @@
 - (void)setupDevice {
 	[self addLogMessage:@"Connecting to device..." type:LogMessageTypeOutbound];
 	__weak typeof(self) weakself = self;
-	[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithTimeout:kDeviceConnectTimeout completion:^(NSError *error) {
-		weakself.didDisconnect = NO;
-		if (!error) {
-			[weakself addLogMessage:@"Connected to device" type:LogMessageTypeInbound];
-			[weakself addLogMessage:@"Discovering device services..." type:LogMessageTypeOutbound];
+	[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithCompletion:^(NSError *error) {
+		//weakself.didDisconnect = NO;
 			[[TDSharedDevice sharedDevice].selectedDevice.peripheral discoverServicesWithCompletion:^(NSArray *services, NSError *error2) {
-				if (!error2) {
-					[weakself addLogMessage:@"Discovered services" type:LogMessageTypeInbound];
 					LGService *uartService;
 					for (LGService* service in services) {
 						if ([[service.UUIDString uppercaseString] isEqualToString:uartServiceUUIDString]) {
 							uartService = service;
-							[weakself addLogMessage:[NSString stringWithFormat:@"Found UART service: %@", service.UUIDString] type:LogMessageTypeInbound];
-							[weakself addLogMessage:@"Discovering characteristics..." type:LogMessageTypeOutbound];
 							[service discoverCharacteristicsWithCompletion:^(NSArray *characteristics, NSError *error3) {
-								if (!error3) {
-									[weakself addLogMessage:@"Discovered characteristics" type:LogMessageTypeOutbound];
 									LGCharacteristic *readCharacteristic;
 									for (LGCharacteristic *characteristic in characteristics) {
 										if ([[characteristic.UUIDString uppercaseString] isEqualToString:uartTXCharacteristicUUIDString]) {
-											[weakself addLogMessage:[NSString stringWithFormat:@"Found TX characteristic %@", characteristic.UUIDString] type:LogMessageTypeInbound];
 											readCharacteristic = characteristic;
 											weakself.readCharacteristic = characteristic;
 											/*CBMutableCharacteristic *noteCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:readCharacteristic.UUIDString] properties:CBCharacteristicPropertyNotify+CBCharacteristicPropertyRead
 																														  value:nil permissions:CBAttributePermissionsReadable|CBAttributePermissionsWriteable];
 											LGCharacteristic *characteristicForNotification = [[LGCharacteristic alloc] initWithCharacteristic:noteCharacteristic];*/
-											[weakself addLogMessage:@"Subscribing for TX characteristic notifications" type:LogMessageTypeOutbound];
 											[characteristic setNotifyValue:YES completion:^(NSError *error4) {
 												if (!error4) {
-//													[weakself addLogMessage:@"Subscribed for TX characteristic notifications" type:LogMessageTypeInbound];
 												}
 												else {
-													[weakself addLogMessage:[NSString stringWithFormat:@"Error subscribing for TX characteristic: %@", error4] type:LogMessageTypeInbound];
+													
 												}
 											} onUpdate:^(NSData *data, NSError *error5) {
 												[weakself handleDeviceDataReceive:data error:error5];
@@ -217,10 +205,6 @@
 										[weakself writeData:weakself.dataToSend toCharacteristic:weakself.writeCharacteristic];
 										weakself.dataToSend = nil;
 									}
-								}
-								else {
-									[weakself addLogMessage:[NSString stringWithFormat:@"Error discovering device characteristics: %@", error3] type:LogMessageTypeInbound];
-								}
 							}];
 							break;
 						}
@@ -228,16 +212,8 @@
 					if (!uartService) {
 						[weakself addLogMessage:@"Failed to found UART service" type:LogMessageTypeInbound];
 					}
-				}
-				else {
-					[weakself addLogMessage:[NSString stringWithFormat:@"Error discovering device services: %@", error2] type:LogMessageTypeInbound];
-				}
-			}];
-		}
-		else {
-			[weakself addLogMessage:[NSString stringWithFormat:@"Error connecting to device: %@", error] type:LogMessageTypeInbound];
-		}
-	}];
+				}];
+		}];
 }
 
 - (void)writeData:(NSString*)data toCharacteristic:(LGCharacteristic*)characteristic {
@@ -286,13 +262,13 @@
 		[self writeData:data toCharacteristic:_writeCharacteristic];
 	}
 	else {
-		[self addLogMessage:@"Write characteristic not found. Recconnecting..." type:LogMessageTypeInbound];
+		[self addLogMessage:@"Write characteristic not found. Reconnecting..." type:LogMessageTypeInbound];
 		_dataToSend = data;
-		
+		//[self setupDevice];
 		/**
-		 *	 If there was a disconnect the device will need ot be scanned for again.
+		 *	 If there was a disconnect the device will need to be scanned for again.
 		 **/
-		if (_didDisconnect) {
+        
 			[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReconnectTimeout completion:^(NSArray *peripherals) {
 				for (LGPeripheral *peripheral in peripherals) {
 					if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {
@@ -302,10 +278,6 @@
 					}
 				}
 			}];
-		}
-		else {
-			[self setupDevice];
-		}
 		
 	}
 }

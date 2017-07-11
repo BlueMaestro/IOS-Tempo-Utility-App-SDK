@@ -14,7 +14,7 @@
 #import "TempoDiscDevice+CoreDataProperties.h"
 
 #define kDeviceConnectTimeout			10.0
-#define kDeviceReConnectTimeout			1.0
+#define kDeviceReConnectTimeout			2.0
 
 #define uartServiceUUIDString			@"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define uartRXCharacteristicUUIDString	@"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
