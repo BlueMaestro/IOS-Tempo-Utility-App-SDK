@@ -100,7 +100,7 @@ typedef enum : NSInteger {
 	/**
 	 *	To reorder command list just adjust this list
 	 **/
-    if ((int)self.versionNumber == 23) {
+    if ((int)self.versionNumber == 23 || (int)self.versionNumber == 13) {
 	_dataSourceCommands = @[
 							@(DeviceCommandChangeName),
 							@(DeviceCommandLogginInterval),
