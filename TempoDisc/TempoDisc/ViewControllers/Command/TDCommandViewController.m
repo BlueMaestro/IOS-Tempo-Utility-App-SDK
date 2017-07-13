@@ -760,6 +760,8 @@ typedef enum : NSInteger {
 
 - (void)connectAndWrite:(NSString *)data withCompletion:(WriteCompletion)completion {
 	[self startTimeout];
+	self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	[self.hud setLabelText:@"Connecting..."];
 	[super connectAndWrite:data withCompletion:completion];
 }
 
@@ -825,7 +827,6 @@ typedef enum : NSInteger {
 	 *	showAlertForAction:error: shows the alert that reports if the action was a success and does the cleanup (e.g. removes the MBProgressHUD)
 	 **/
 	__weak typeof(self) weakself = self;
-	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 	[self connectAndWrite:[NSString stringWithFormat:@"*nam%@", name] withCompletion:^(BOOL success, NSError *error) {
 //		[weakself showAlertForAction:success error:error];
 	}];
@@ -849,7 +850,6 @@ typedef enum : NSInteger {
         
     } else {
         __weak typeof(self) weakself = self;
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*d%ld", (long)number] withCompletion:^(BOOL success, NSError *error) {
 //		[weakself showAlertForAction:success error:error];
         }];
@@ -858,7 +858,6 @@ typedef enum : NSInteger {
 
 -(void)changeLoggingInterval:(NSInteger)seconds {
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSLog(@"The seconds coming through are %d", seconds);
     [self connectAndWrite:[NSString stringWithFormat:@"*lint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
@@ -867,7 +866,6 @@ typedef enum : NSInteger {
 
 -(void)changeSensorInterval:(NSInteger)seconds {
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*sint%ld", (long)seconds] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
     }];
@@ -876,7 +874,6 @@ typedef enum : NSInteger {
 -(void)changeUnits:(NSInteger)which {
     //if which==1 then change to celsius if which !=1 then change to fahrenheit
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if (which == 1) {
         [self connectAndWrite:[NSString stringWithFormat:@"*unitsc"] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
@@ -892,7 +889,6 @@ typedef enum : NSInteger {
 -(void)turnAirplaneMode:(int)which {
     //if which==1 then change then turn airplane on if which 0 then turn airplane off
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if (which == 1) {
         [self connectAndWrite:[NSString stringWithFormat:@"*airon"] withCompletion:^(BOOL success, NSError *error) {
 //            [weakself showAlertForAction:success error:error];
@@ -906,7 +902,6 @@ typedef enum : NSInteger {
 
 -(void)setTransmissionPower:(int)level {
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString* command = [NSString stringWithFormat:@"*txp%d", level];
     [self connectAndWrite:command withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
@@ -918,7 +913,6 @@ typedef enum : NSInteger {
 -(void)alarmOnOff:(int)which {
     //if which==1 then change then turn alarm 2 off if which 0 then turn alarm 1 off
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if (which == 1) {
         [self connectAndWrite:[NSString stringWithFormat:@"*alrm2t-"] withCompletion:^(BOOL success, NSError *error) {
 //            [weakself showAlertForAction:success error:error];
@@ -933,7 +927,6 @@ typedef enum : NSInteger {
 
 -(void)setAlarm:(int)alarmNumber valueToSet:(NSString *)alarmValue whetherHumiOrTemp:(NSString *)whichMetric withThreshold:(NSString *)threshold {
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSString *alarmNumberIntoString = [NSString stringWithFormat:@"%d", alarmNumber];
     NSString *commandPrefix = @("*alrm");
     NSString *symbol;
@@ -954,7 +947,6 @@ typedef enum : NSInteger {
 
 -(void)clearAlarms{
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*alrmclr"] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
     }];
@@ -963,7 +955,6 @@ typedef enum : NSInteger {
 
 -(void)clearStoredData {
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*clr"] withCompletion:^(BOOL success, NSError *error) {
 //            [weakself showAlertForAction:success error:error];
         }];
@@ -973,7 +964,6 @@ typedef enum : NSInteger {
 -(void)rebootDevice{
 
     __weak typeof(self) weakself = self;
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*rboot"] withCompletion:^(BOOL success, NSError *error) {
 //            [weakself showAlertForAction:success error:error];
         }];
@@ -982,7 +972,6 @@ typedef enum : NSInteger {
 -(void)setPassword:(NSString *)password{
     __weak typeof(self) weakself = self;
      __block UIAlertController *alert_input_issue = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     int checkNumber = [password intValue];
     NSNumberFormatter *checkIsNumeric = [[NSNumberFormatter alloc] init];
     BOOL isDecimal = [checkIsNumeric numberFromString:password];
@@ -1006,7 +995,6 @@ typedef enum : NSInteger {
 -(void)calibrateHumidity:(NSString *)newValue {
     __weak typeof(self) weakself = self;
     __block UIAlertController *alert_input_issue = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSNumberFormatter *checkIsNumeric = [[NSNumberFormatter alloc] init];
     BOOL isDecimal = [checkIsNumeric numberFromString:newValue];
     if (!isDecimal) {
@@ -1027,7 +1015,6 @@ typedef enum : NSInteger {
 -(void)calibrateTemperature:(NSString *)newValue {
     __weak typeof(self) weakself = self;
     __block UIAlertController *alert_input_issue = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSNumberFormatter *checkIsNumeric = [[NSNumberFormatter alloc] init];
     BOOL isDecimal = [checkIsNumeric numberFromString:newValue];
     if (!isDecimal) {
@@ -1047,7 +1034,6 @@ typedef enum : NSInteger {
 
 -(void)toggleButton{
     __weak typeof(self) weakself = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*bd"] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
     }];
@@ -1056,8 +1042,6 @@ typedef enum : NSInteger {
 
 -(void)setDeviceID:(NSString *)enteredValue {
     __weak typeof(self) weakself = self;
-    
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self connectAndWrite:[NSString stringWithFormat:@"*id%@",enteredValue] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
     }];
@@ -1072,7 +1056,6 @@ typedef enum : NSInteger {
     {
         case 100:
         {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv100"] withCompletion:^(BOOL success, NSError *error) {
 //                [weakself showAlertForAction:success error:error];
             }];
@@ -1080,7 +1063,6 @@ typedef enum : NSInteger {
         }
         case 300:
         {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv300"] withCompletion:^(BOOL success, NSError *error) {
 //                [weakself showAlertForAction:success error:error];
             }];
@@ -1088,7 +1070,6 @@ typedef enum : NSInteger {
         }
         case 600:
         {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv600"] withCompletion:^(BOOL success, NSError *error) {
 //                [weakself showAlertForAction:success error:error];
             }];
@@ -1096,7 +1077,6 @@ typedef enum : NSInteger {
         }
         case 1000:
         {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [self connectAndWrite:[NSString stringWithFormat:@"*sadv1000"] withCompletion:^(BOOL success, NSError *error) {
 //                [weakself showAlertForAction:success error:error];
             }];
@@ -1110,7 +1090,6 @@ typedef enum : NSInteger {
 
 -(void)enterDFU {
         __weak typeof(self) weakself = self;
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [self connectAndWrite:[NSString stringWithFormat:@"*dfu"] withCompletion:^(BOOL success, NSError *error) {
 //            [weakself showAlertForAction:success error:error];
         }];

@@ -163,6 +163,7 @@
 
 - (void)setupDevice {
 	[self addLogMessage:@"Connecting to device..." type:LogMessageTypeOutbound];
+	[self.hud setLabelText:@"Connecting to device..."];
 	__weak typeof(self) weakself = self;
 	[[TDSharedDevice sharedDevice].selectedDevice.peripheral connectWithCompletion:^(NSError *error) {
 		//weakself.didDisconnect = NO;
@@ -218,12 +219,15 @@
 
 - (void)writeData:(NSString*)data toCharacteristic:(LGCharacteristic*)characteristic {
 	[self addLogMessage:[NSString stringWithFormat:@"Writing data: %@ to characteristic: %@", data, characteristic.UUIDString] type:LogMessageTypeOutbound];
+	[self.hud setLabelText:@"Writing..."];
 	__weak typeof(self) weakself = self;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
 			if (weakself.writeCompletion) {
 				weakself.writeCompletion(YES, nil);
 				weakself.writeCompletion = nil;
+				[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPeripheralUpdated object:nil];
 			}
 //			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
@@ -268,7 +272,7 @@
 		/**
 		 *	 If there was a disconnect the device will need to be scanned for again.
 		 **/
-        
+			[self.hud setLabelText:@"Rescanning for device..."];
 			[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReconnectTimeout completion:^(NSArray *peripherals) {
 				for (LGPeripheral *peripheral in peripherals) {
 					if ([peripheral.UUIDString isEqualToString:[TDSharedDevice sharedDevice].selectedDevice.peripheral.UUIDString]) {

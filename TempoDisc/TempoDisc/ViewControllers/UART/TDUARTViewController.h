@@ -28,6 +28,8 @@ typedef void(^WriteCompletion)(BOOL success, NSError* error);
 
 @property (strong, nonatomic) NSString *option;//option with which the screen was opened
 
+@property (weak, nonatomic) MBProgressHUD *hud;
+
 - (IBAction)buttonSendMessageClicked:(UIButton *)sender;
 - (IBAction)buttonConnectClicked:(UIButton *)sender;
 - (IBAction)buttonHelperClicked:(UIButton *)sender;
