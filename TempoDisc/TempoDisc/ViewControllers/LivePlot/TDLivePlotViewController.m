@@ -31,6 +31,7 @@
 @property (nonatomic, strong) CPTScatterPlot *plotTemperature;
 @property (nonatomic, strong) CPTScatterPlot *plotHumidity;
 @property (nonatomic, strong) CPTScatterPlot *plotDewPoint;
+@property (nonatomic, strong) CPTScatterPlot *plotPressure;
 
 @property (nonatomic, strong) LGCharacteristic *writeCharacteristic;
 @property (nonatomic, strong) LGCharacteristic *readCharacteristic;
@@ -52,6 +53,9 @@
 		initialData.temperature = device.currentTemperature;
 		initialData.humidity = device.currentHumidity;
 		initialData.dewPoint = device.dewPoint;
+		if (device.version.integerValue == 27) {
+			initialData.dewPoint = device.pressure;
+		}
 		initialData.timestamp = [NSDate date];
 		[_dataSource addObject:initialData];
 	}
@@ -100,19 +104,26 @@
 
 - (void)parseData:(NSData*)data {
 	NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	if ([TDLivePlotData isValidData:dataString]) {
-		TDLivePlotData *dataPoint = [[TDLivePlotData alloc] initWithString:dataString timestamp:[NSDate date]];
+	if ([TDLivePlotData isValidData:dataString device:[TDSharedDevice sharedDevice].selectedDevice]) {
+		TDLivePlotData *dataPoint = [[TDLivePlotData alloc] initWithString:dataString timestamp:[NSDate date] device:[TDSharedDevice sharedDevice].selectedDevice];
 		[_dataSource addObject:dataPoint];
 		[self adjustPlotsRange];
 		
-		[_plotTemperature insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
-//		[_plotTemperature reloadData];
+		if (dataPoint.temperature) {
+			[_plotTemperature insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		}
 		
-		[_plotHumidity insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
-//		[_plotHumidity reloadData];
+		if (dataPoint.humidity) {
+			[_plotHumidity insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		}
 		
-		[_plotDewPoint insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
-//		[_plotDewPoint reloadData];
+		if (dataPoint.dewPoint) {
+			[_plotDewPoint insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		}
+		
+		if (dataPoint.pressure) {
+			[_plotPressure insertDataAtIndex:_dataSource.count-1 numberOfRecords:1];
+		}
 	}
 }
 
@@ -275,6 +286,11 @@
 	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue != 13) {
 		_plotDewPoint = [self configurePlot:_plotDewPoint forGraph:_graph identifier:@"DewPoint"];
 		[self configureAxesForGraph:_graph plot:_plotDewPoint lineColor:kColorLivePlotLineDewPoint.CGColor];
+	}
+	
+	if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue == 27) {
+		_plotPressure = [self configurePlot:_plotPressure forGraph:_graph identifier:@"Pressure"];
+		[self configureAxesForGraph:_graph plot:_plotPressure lineColor:kColorLivePlotLinePressure.CGColor];
 	}
 }
 
@@ -471,6 +487,9 @@
 			else if ([plot.identifier isEqual:@"DewPoint"]) {
 				return dataPoint.dewPoint;
 			}
+			else if ([plot.identifier isEqual:@"Pressure"]) {
+				return dataPoint.pressure;
+			}
 			
 			break;
 	}
@@ -488,6 +507,9 @@
 	}
 	else if ([plot.identifier isEqual:@"Humidity"]) {
 		minrangeLineStyle.lineColor = kColorGraphAverage;
+	}
+	else if ([plot.identifier isEqual:@"Pressure"]) {
+		minrangeLineStyle.lineColor = kColorGraphPressure;
 	}
 	else if ([plot.identifier isEqual:@"DewPoint"]) {
 		minrangeLineStyle.lineColor = kColorGraphDewPoint;

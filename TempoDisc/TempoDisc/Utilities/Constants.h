@@ -22,6 +22,7 @@
 #define kColorLivePlotLineTemperature [UIColor redColor]
 #define kColorLivePlotLineHumidty [UIColor blueColor]
 #define kColorLivePlotLineDewPoint [UIColor greenColor]
+#define kColorLivePlotLinePressure [UIColor blueColor]
 
 #define kGraphSymbolSize CGSizeMake(4,4)
 #define kGraphSymbolSelectedSize 15

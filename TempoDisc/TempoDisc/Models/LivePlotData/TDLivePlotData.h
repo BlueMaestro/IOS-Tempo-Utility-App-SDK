@@ -13,11 +13,12 @@
 @property (nonatomic, strong) NSNumber *temperature;
 @property (nonatomic, strong) NSNumber *humidity;
 @property (nonatomic, strong) NSNumber *dewPoint;
+@property (nonatomic, strong) NSNumber *pressure;
 @property (nonatomic, strong) NSDate* timestamp;
 
-- (id)initWithString:(NSString*)dataString;
+- (id)initWithString:(NSString*)dataString device:(TempoDevice*)device;
 
-- (id)initWithString:(NSString *)dataString timestamp:(NSDate*)pointDate;
+- (id)initWithString:(NSString *)dataString timestamp:(NSDate*)pointDate device:(TempoDevice*)device;
 
-+ (BOOL)isValidData:(NSString*)dataString;
++ (BOOL)isValidData:(NSString*)dataString device:(TempoDevice*)device;
 @end
