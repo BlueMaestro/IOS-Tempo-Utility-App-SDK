@@ -54,7 +54,7 @@
 		initialData.humidity = device.currentHumidity;
 		initialData.dewPoint = device.dewPoint;
 		if (device.version.integerValue == 27) {
-			initialData.dewPoint = device.pressure;
+			initialData.pressure = @(device.currentPressure.floatValue/10);
 		}
 		initialData.timestamp = [NSDate date];
 		[_dataSource addObject:initialData];
