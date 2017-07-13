@@ -193,6 +193,7 @@ typedef enum : NSInteger {
 			switch (_currentDownloadType) {
 				case DataDownloadTypeTemperature:
 					type = @"T";
+					baseProgress = 0.0;
 					break;
 				case DataDownloadTypeHumidity:
 					baseProgress = 1/3.0;
@@ -238,13 +239,13 @@ typedef enum : NSInteger {
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
 			if (_deviceVersion == 13 || _deviceVersion == 52 || _deviceVersion == 62) {
-				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)];
+				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)];
 			}
 			else if (_deviceVersion == 32) {
-				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5];
+				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5];
 			}
 			else {
-				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
 			}
 		}
 	}
