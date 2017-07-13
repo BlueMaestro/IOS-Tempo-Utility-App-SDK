@@ -263,7 +263,7 @@
 			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
 			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
 		}
-		else {
+		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue > 30) {
 			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
 			cell.labelTemperatureValue.text = @(readingOpenClose.avgValue.integerValue).stringValue;
 		}
@@ -273,7 +273,7 @@
 			cell.labelTemperature.text = [@"Lux Level:" uppercaseString];
 			cell.labelTemperatureValue.text = @(readingLight.avgValue.integerValue).stringValue;
 		}
-		else {
+		else if ([TDSharedDevice sharedDevice].selectedDevice.version.integerValue > 30) {
 			cell.labelTemperature.text = [@"Number of Open Events:" uppercaseString];
 			cell.labelTemperatureValue.text = @(readingLight.avgValue.integerValue).stringValue;
 		}
