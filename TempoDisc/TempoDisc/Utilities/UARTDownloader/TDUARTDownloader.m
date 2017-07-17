@@ -78,7 +78,7 @@ typedef enum : NSInteger {
 //	__weak typeof(self) weakself = self;
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
-			NSLog(@"Sucessefully wrote \"%@\" data to write characteristic", data);
+			NSLog(@"Successefully wrote \"%@\" data to write characteristic", data);
 		}
 		else {
 			NSLog(@"Error writing data to characteristic: %@", error);

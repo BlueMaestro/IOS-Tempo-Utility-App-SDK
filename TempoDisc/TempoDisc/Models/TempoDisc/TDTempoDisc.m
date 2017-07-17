@@ -454,7 +454,9 @@
 		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
 		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
 		self.logPointer = @([self intValueLsb:data[9] msb:data[8]]);
-		self.openCloseStatus = @(data[10]).boolValue;
+        int openClose = data[10];
+        if (openClose == 1) self.openCloseStatus = false;
+        if (openClose == 0) self.openCloseStatus = true;
 		self.mode = @(data[11]);
 		const unsigned char dateBytes[] = {data[12], data[13], data[14], data[15]};
 		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];

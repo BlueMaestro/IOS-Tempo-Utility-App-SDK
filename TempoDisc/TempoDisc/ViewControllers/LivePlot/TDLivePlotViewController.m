@@ -14,7 +14,7 @@
 #import "TempoDiscDevice+CoreDataProperties.h"
 
 #define kDeviceConnectTimeout			10.0
-#define kDeviceReConnectTimeout			2.0
+#define kDeviceReConnectTimeout			10.0
 
 #define uartServiceUUIDString			@"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 #define uartRXCharacteristicUUIDString	@"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
@@ -229,7 +229,7 @@
 	//	__weak typeof(self) weakself = self;
 	[characteristic writeValue:[data dataUsingEncoding:NSUTF8StringEncoding] completion:^(NSError *error) {
 		if (!error) {
-			NSLog(@"Sucessefully wrote \"%@\" data to write characteristic", data);
+			NSLog(@"Successefully wrote \"%@\" data to write characteristic", data);
 		}
 		else {
 			NSLog(@"Error writing data to characteristic: %@", error);

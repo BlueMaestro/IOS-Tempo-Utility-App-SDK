@@ -132,6 +132,7 @@ typedef enum : NSInteger {
                                 @(DeviceCommandChangeName),
                                 @(DeviceCommandLogginInterval),
                                 @(DeviceCommandSensorInterval),
+                                @(DeviceCommandReferenceDateAndTime),
                                 @(DeviceCommandAlarm1),
                                 @(DeviceCommandAlarm2),
                                 @(DeviceCommandClearAlarms),
@@ -141,6 +142,21 @@ typedef enum : NSInteger {
                                 @(DeviceCommandClearStoredData),
                                 @(DeviceCommandResetDevice),
                                 @(DeviceCommandUnits),
+                                @(DeviceCommandLock),
+                                @(DeviceCommandCommandConsole)
+                                ];
+    [_collectionViewCommands reloadData];
+    }
+    
+    if ((int)self.versionNumber == 52) {
+        _dataSourceCommands = @[
+                                @(DeviceCommandChangeName),
+                                @(DeviceCommandLogginInterval),
+                                @(DeviceCommandReferenceDateAndTime),
+                                @(DeviceCommandAirplaneModeOnOff),
+                                @(DeviceCommandTransmitPower),
+                                @(DeviceCommandClearStoredData),
+                                @(DeviceCommandResetDevice),
                                 @(DeviceCommandLock),
                                 @(DeviceCommandCommandConsole)
                                 ];
@@ -667,7 +683,7 @@ typedef enum : NSInteger {
 - (void)showAlertForAction:(BOOL)success error:(NSError*)error {
 	[MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 	if (success) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
 		[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 		[self presentViewController:alert animated:YES completion:nil];
 	}

@@ -21,7 +21,7 @@
 #define uartRXCharacteristicUUIDString	@"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 #define uartTXCharacteristicUUIDString	@"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 
-#define kDeviceReconnectTimeout			8.0
+#define kDeviceReconnectTimeout			10.0
 
 #define kDeviceConnectTimeout			10.0
 
@@ -225,7 +225,7 @@
 				weakself.writeCompletion(YES, nil);
 				weakself.writeCompletion = nil;
 			}
-//			[weakself addLogMessage:@"Sucessefully wrote data to write characteristic" type:LogMessageTypeInbound];
+//			[weakself addLogMessage:@"Successefully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
 		else {
 			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error] type:LogMessageTypeInbound];

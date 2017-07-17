@@ -68,7 +68,7 @@
 			[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
 			sender.selected = NO;
 			if (!error) {
-				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:NSLocalizedString(@"Wrote to find me characteristic", nil) preferredStyle:UIAlertControllerStyleAlert];
+				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success", nil) message:NSLocalizedString(@"Wrote to find me characteristic", nil) preferredStyle:UIAlertControllerStyleAlert];
 				[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 				[self presentViewController:alert animated:YES completion:nil];
 			}
@@ -103,7 +103,7 @@
 	[LGUtils writeData:[NSData dataWithBytes:&data length:sizeof(data)] charactUUID:@"20653010-02F3-4F75-848F-323AC2A6AF8A" serviceUUID:@"20652000-02F3-4F75-848F-323AC2A6AF8A" peripheral:[TDSharedDevice sharedDevice].selectedDevice.peripheral completion:^(NSError *error) {
 		[MBProgressHUD hideAllHUDsForView:self.view animated:NO];
 		if (!error) {
-			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Sucess", nil) message:NSLocalizedString(@"Wrote to time sync me characteristic", nil) preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success", nil) message:NSLocalizedString(@"Wrote to time sync me characteristic", nil) preferredStyle:UIAlertControllerStyleAlert];
 			[alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel handler:nil]];
 			[self presentViewController:alert animated:YES completion:nil];
 		}
