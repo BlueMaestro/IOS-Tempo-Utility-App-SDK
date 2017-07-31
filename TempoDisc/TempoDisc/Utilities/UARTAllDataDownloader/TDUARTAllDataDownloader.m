@@ -431,7 +431,7 @@ typedef enum : NSInteger {
 	else if (_deviceVersion == 52) {
 		_currentDownloadType = DataDownloadTypeOpenClose;
 	}
-	else if (_deviceVersion == 52) {
+	else if (_deviceVersion == 62) {
 		_currentDownloadType = DataDownloadTypeLux;
 	}
 	NSLog(@"Connecting to device...");
