@@ -429,7 +429,7 @@
 		
         //Sets labels with current temperature, humidity and dew point
         _labelCurrentDeviceTemperatureValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.currentTemperature forDevice:device].floatValue];
-        _labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.1f˚", device.currentHumidity.floatValue];
+        _labelCurrentDeviceHumidityValue.text = [NSString stringWithFormat:@"%.1f%%", device.currentHumidity.floatValue];
         _labelCurrentDeviceDewPointValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.dewPoint forDevice:device].floatValue];
 		
         
