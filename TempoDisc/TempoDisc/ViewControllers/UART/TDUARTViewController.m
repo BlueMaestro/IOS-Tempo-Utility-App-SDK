@@ -340,7 +340,7 @@
 	else if ([sender isEqual:_buttonAlarmInfo]) {
 		/*title = @"Alarm info";
 		message = @"Alarm info message";
-		action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+		UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 			[weakself connectAndWrite:@"*alrmi"];
 		}];
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -349,6 +349,7 @@
 		}
 		
 		[self presentViewController:alert animated:YES completion:nil];*/
+		[weakself connectAndWrite:@"*alrmi"];
 	}
 	else if ([sender isEqual:_buttonStreamData]) {
 		if (sender.selected) {

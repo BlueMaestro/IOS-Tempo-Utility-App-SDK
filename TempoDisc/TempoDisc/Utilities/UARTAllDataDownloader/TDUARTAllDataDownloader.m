@@ -69,13 +69,14 @@ typedef enum : NSInteger {
 #pragma mark - Private methods
 
 - (void)fillDewpointsDataForDevice:(TempoDevice*)device {
-	NSArray *temperatureReadings = [device readingsForType:@"Temperature"];
-	NSArray *humidityReadings = [device readingsForType:@"Humidity"];
+	NSArray *temperatureReadings = [[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
+	NSArray *humidityReadings = [[device readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
 	NSMutableArray *dewPointsValues = [NSMutableArray array];
 	for (NSInteger i=0; i<MIN(temperatureReadings.count, humidityReadings.count); i++) {
 		Reading *temperatureReading = temperatureReadings[i];
 		Reading *humidityReading = humidityReadings[i];
 		
+		NSNumber *avg = @(temperatureReading.avgValue.floatValue-((100.-humidityReading.avgValue.floatValue)/5.));
 		//min, avg, max
 		[dewPointsValues addObject:@[@(temperatureReading.minValue.floatValue-((100.-humidityReading.minValue.floatValue)/5.)),
 									 @(temperatureReading.avgValue.floatValue-((100.-humidityReading.avgValue.floatValue)/5.)),
@@ -431,7 +432,7 @@ typedef enum : NSInteger {
 	else if (_deviceVersion == 52) {
 		_currentDownloadType = DataDownloadTypeOpenClose;
 	}
-	else if (_deviceVersion == 52) {
+	else if (_deviceVersion == 62) {
 		_currentDownloadType = DataDownloadTypeLux;
 	}
 	NSLog(@"Connecting to device...");
