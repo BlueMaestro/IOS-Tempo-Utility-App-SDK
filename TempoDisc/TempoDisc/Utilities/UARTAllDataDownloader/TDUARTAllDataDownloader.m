@@ -193,6 +193,7 @@ typedef enum : NSInteger {
 			switch (_currentDownloadType) {
 				case DataDownloadTypeTemperature:
 					type = @"T";
+					baseProgress = 0.0;
 					break;
 				case DataDownloadTypeHumidity:
 					baseProgress = 1/3.0;
@@ -238,13 +239,13 @@ typedef enum : NSInteger {
 			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
 			if (_deviceVersion == 13 || _deviceVersion == 52 || _deviceVersion == 62) {
-				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)];
+				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)];
 			}
 			else if (_deviceVersion == 32) {
-				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5];
+				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5];
 			}
 			else {
-				[self notifyUpdateForProgress:baseProgress+((float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
 			}
 		}
 	}
@@ -398,6 +399,16 @@ typedef enum : NSInteger {
 	}
 }
 
+- (void)handleDisconnectNotification:(NSNotification*)note {
+	NSLog(@"Device disconnected");
+	if (_completion) {
+		_completion(NO);
+		_completion = nil;
+		[_timerDataParseTimeout invalidate];
+		_timerDataParseTimeout = nil;
+	}
+}
+
 #pragma mark - Public methods
 
 + (TDUARTDownloader *)shared {
@@ -426,6 +437,7 @@ typedef enum : NSInteger {
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
@@ -534,6 +546,7 @@ typedef enum : NSInteger {
 	NSLog(@"Connecting to device...");
 	__block NSTimer *timer = [NSTimer timerWithTimeInterval:kDeviceConnectTimeout target:self selector:@selector(handleTimeout:) userInfo:nil repeats:NO];
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDisconnectNotification:) name:kLGPeripheralDidDisconnect object:nil];
 	__weak typeof(self) weakself = self;
 	[[LGCentralManager sharedInstance] scanForPeripheralsByInterval:kDeviceReConnectTimeout completion:^(NSArray *peripherals) {
 		for (LGPeripheral *peripheral in peripherals) {
