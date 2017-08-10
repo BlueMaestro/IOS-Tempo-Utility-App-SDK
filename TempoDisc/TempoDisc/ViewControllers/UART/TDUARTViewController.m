@@ -229,7 +229,7 @@
 				weakself.writeCompletion = nil;
 				[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPeripheralUpdated object:nil];
 			}
-//			[weakself addLogMessage:@"Successefully wrote data to write characteristic" type:LogMessageTypeInbound];
+//			[weakself addLogMessage:@"Successfully wrote data to write characteristic" type:LogMessageTypeInbound];
 		}
 		else {
 			[weakself addLogMessage:[NSString stringWithFormat:@"Error writing data to characteristic: %@", error] type:LogMessageTypeInbound];
