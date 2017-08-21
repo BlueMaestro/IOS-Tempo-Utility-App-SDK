@@ -39,6 +39,10 @@ typedef enum : NSInteger {
 @property (strong, nonatomic) IBOutlet UILabel *labelAlertCount;
 @property (strong, nonatomic) IBOutlet UIImageView *classTagImageView;
 @property (strong, nonatomic) IBOutlet UILabel *classIDHeadingLabel;
+@property (strong, nonatomic) IBOutlet UILabel *labelLogInterval;
+@property (strong, nonatomic) IBOutlet UILabel *labelLogIntervalValue;
+@property (strong, nonatomic) IBOutlet UILabel *labelLogCount;
+@property (strong, nonatomic) IBOutlet UILabel *labelLogCountValue;
 
 - (void)setupBatteryStatus:(TempoBatteryStatus)status;
 

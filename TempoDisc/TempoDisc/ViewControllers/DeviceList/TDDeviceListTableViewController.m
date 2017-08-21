@@ -413,7 +413,9 @@ typedef enum : NSInteger {
 
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
-    
+	
+	cell.labelLogCountValue.text = device.intervalCounter.stringValue;
+	cell.labelLogIntervalValue.text = device.timerInterval.stringValue;
 
     cell.dewpointUnits.text = unit;
     cell.temperatureUnits.text = unit;
