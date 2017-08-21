@@ -26,5 +26,6 @@
 - (IBAction)buttonWeekClicked:(UIButton *)sender;
 - (IBAction)buttonMonthClicked:(UIButton *)sender;
 - (IBAction)buttonAllClicked:(UIButton *)sender;
+- (IBAction)buttonExportPDFClicked:(UIButton *)sender;
 
 @end

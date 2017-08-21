@@ -9,6 +9,7 @@
 #import "TDGraphViewController.h"
 #import <CorePlot/ios/CorePlot.h>
 #import "IBActionSheet.h"
+#import <MessageUI/MFMailComposeViewController.h>
 
 #define kTresholdZoomAngle 30
 
@@ -348,6 +349,79 @@
 - (IBAction)buttonAllClicked:(UIButton *)sender {
 	sender.selected = !sender.selected;
 	[self changeReadingType:_currentReadingType];
+}
+
+- (IBAction)buttonExportPDFClicked:(UIButton *)sender {
+	if ([MFMailComposeViewController canSendMail])
+	{
+		MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+		mailComposeVC.mailComposeDelegate = self;
+		mailComposeVC.modalPresentationStyle = UIModalPresentationPageSheet;
+		
+		[mailComposeVC.navigationBar setTintColor:[UIColor whiteColor]];
+		[mailComposeVC.navigationBar setTitleTextAttributes:
+		 [NSDictionary dictionaryWithObjectsAndKeys:
+		  [UIColor whiteColor],
+		  UITextAttributeTextColor,
+		  nil]];
+		[mailComposeVC setNeedsStatusBarAppearanceUpdate];
+		
+		// Set the subject of email
+		NSString* subjectName = @"Graph export";
+		[mailComposeVC setSubject:subjectName];
+		[mailComposeVC setToRecipients:nil];
+		NSString *emailBody = @"Please find the attached the historical plot graph.";
+		[mailComposeVC setMessageBody:emailBody isHTML:NO];
+		
+		NSString *readingTypeString;
+		NSData * pdfData;
+		if (combinedGraph == true) {
+			pdfData = [_graphCombinedTHD dataForPDFRepresentationOfLayer];
+			readingTypeString = @"combined";
+		}
+		else if (_currentReadingType == TempoReadingTypeTemperature) {
+			pdfData = [_graphTemperature dataForPDFRepresentationOfLayer];
+			readingTypeString = @"temperature";
+		}
+		else if (_currentReadingType == TempoReadingTypeHumidity) {
+			pdfData = [_graphHumidity dataForPDFRepresentationOfLayer];
+			readingTypeString = @"humidity";
+		}
+		else if (_currentReadingType == TempoReadingTypePressure) {
+			pdfData = [_graphPressure dataForPDFRepresentationOfLayer];
+			readingTypeString = @"pressure";
+		}
+		else if (_currentReadingType == TempoReadingTypeDewPoint) {
+			pdfData = [_graphDewPoint dataForPDFRepresentationOfLayer];
+			readingTypeString = @"dewpoint";
+		}
+		else if (_currentReadingType == TempoReadingTypeFirstMovement) {
+			pdfData = [_graphFirstMovement dataForPDFRepresentationOfLayer];
+			readingTypeString = @"movement";
+		}
+		else if (_currentReadingType == TempoReadingTypeOpenClose) {
+			pdfData = [_graphOpenClose dataForPDFRepresentationOfLayer];
+			readingTypeString = @"openclose";
+		}
+		else if (_currentReadingType == TempoReadingTypeLight) {
+			pdfData = [_graphLight dataForPDFRepresentationOfLayer];
+			readingTypeString = @"luminosity";
+		}
+		NSDateFormatter *formatterFileName = [[NSDateFormatter alloc] init];
+		[formatterFileName setDateFormat:@"yyyyMMdd"];
+		NSString* fileName = [NSString stringWithFormat:@"%@_%@_%@.pdf", [formatterFileName stringFromDate:[NSDate date]], [[TDSharedDevice sharedDevice].selectedDevice.name stringByReplacingOccurrencesOfString:@" " withString:@"_"], readingTypeString];
+		[mailComposeVC addAttachmentData:pdfData mimeType:@"application/pdf" fileName:fileName];
+		
+		[self presentViewController:mailComposeVC animated:YES completion:^{
+//			[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+		}];
+	}
+	else
+	{
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Failure" message:@"Please configure your mail-account and retry!" preferredStyle:UIAlertControllerStyleAlert];
+		[alert addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil]];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
 }
 
 #pragma mark - Graph setup
@@ -1163,6 +1237,13 @@ plotSymbolWasSelectedAtRecordIndex:(NSUInteger)index withEvent:(nonnull CPTNativ
 			[self changeReadingType:TempoReadingTypeTemperature];
 		}
 	}
+}
+
+#pragma mark - MFMail delegate
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+	[controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
