@@ -19,6 +19,7 @@
 
 
 #define kDeviceConnectTimeout 10.0
+#define kDeviceRefreshInterval 2.0
 
 //independent tasks
 #define TEMPO_CUSTOM @"20652000-02F3-4F75-848F-323AC2A6AF8A"
@@ -77,7 +78,7 @@
 @property (nonatomic, strong) TDUARTDownloader *uartDownloader;
 @property (nonatomic, strong) TDUARTAllDataDownloader *uartAllDataDownloader;
 
-
+@property (nonatomic, strong) NSTimer *timerRefresh;
 
 @end
 
@@ -154,6 +155,14 @@
 	[super viewWillAppear:animated];
 	//refresh device
 	[self refreshCurrentDevice];
+	_timerRefresh = [NSTimer timerWithTimeInterval:kDeviceRefreshInterval target:self selector:@selector(refreshCurrentDevice) userInfo:nil repeats:YES];
+	[[NSRunLoop mainRunLoop] addTimer:_timerRefresh forMode:NSDefaultRunLoopMode];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+	[super viewWillDisappear:animated];
+	[_timerRefresh invalidate];
+	_timerRefresh = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -821,6 +830,8 @@
 			if (!weakself.uartAllDataDownloader) {
 				weakself.uartAllDataDownloader = [[TDUARTAllDataDownloader alloc] init];
 			}*/
+		[_timerRefresh invalidate];
+		_timerRefresh = nil;
         if (!weakself.uartAllDataDownloader) {
             weakself.uartAllDataDownloader = [[TDUARTAllDataDownloader alloc] init];
 		}
@@ -842,6 +853,8 @@
 			}
 			[weakself refreshCurrentDevice];
 			[weakself fillData];
+			weakself.timerRefresh = [NSTimer timerWithTimeInterval:kDeviceRefreshInterval target:weakself selector:@selector(refreshCurrentDevice) userInfo:nil repeats:YES];
+			[[NSRunLoop mainRunLoop] addTimer:weakself.timerRefresh forMode:NSDefaultRunLoopMode];
 		}];
 		
 		
