@@ -650,6 +650,8 @@ typedef enum : NSInteger {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
+	cell.backgroundColor = device.globalIdentifier.integerValue == 255 ? [UIColor colorWithWhite:200./255.0 alpha:1.0] : [UIColor whiteColor];
+	
 	if ([cell isMemberOfClass:[TDMovementDeviceTableViewCell class]]) {
 		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
 	}
