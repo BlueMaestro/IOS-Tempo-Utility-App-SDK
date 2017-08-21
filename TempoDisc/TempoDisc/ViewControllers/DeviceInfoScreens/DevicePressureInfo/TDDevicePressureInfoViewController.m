@@ -32,10 +32,10 @@
 - (void)fillData {
 	[super fillData];
 	TempoDiscDevice *device = (TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice;
-	_labelPressureCurrentValue.text = [NSString stringWithFormat:@"%@ hPa", device.currentPressure.stringValue];
-	_labelPressureHighestDayLogged.text = [device.highestDayPressure.stringValue stringByAppendingString:@" hPa"];
-	_labelPressureAverageDayLogged.text = [device.averageDayPressure.stringValue stringByAppendingString:@" hPa"];
-	_labelPressureLowestDayLogged.text = [device.lowestDayPressure.stringValue stringByAppendingString:@" hPa"];
+	_labelPressureCurrentValue.text = [NSString stringWithFormat:@"%.1f hPa", device.currentPressure.floatValue];
+    _labelPressureHighestDayLogged.text = [NSString stringWithFormat:@"%.1f hPa", device.highestDayPressure.floatValue];
+    _labelPressureAverageDayLogged.text = [NSString stringWithFormat:@"%.1f hPa", device.averageDayPressure.floatValue];
+    _labelPressureLowestDayLogged.text = [NSString stringWithFormat:@"%.1f hPa", device.lowestDayPressure.floatValue];
 }
 
 @end

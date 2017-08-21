@@ -418,7 +418,7 @@ typedef enum : NSInteger {
     cell.dewpointUnits.text = unit;
     cell.temperatureUnits.text = unit;
 	cell.labelTemperatureValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.currentTemperature forDiscDevice:device].floatValue];
-	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%ld%%", (long)device.currentHumidity.integerValue];
+	cell.labelHumidityValue.text = [NSString stringWithFormat:@"%.1f%%", device.currentHumidity.floatValue];
 	cell.labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%@%%", device.battery.stringValue];
     if (device.battery.integerValue >= 85) {
         [cell.batteryImage setImage:highBattImage];
@@ -475,9 +475,9 @@ typedef enum : NSInteger {
 		}
         else if (device.version.integerValue == 27) {
             cell.labelDeviceIdentifierValue.text = @"PEBBLE v27";
-            [cell.classTagImageView setHidden:YES];
-            [cell.classID setHidden:YES];
-            [cell.classIDHeadingLabel setHidden:YES];
+            [cell.classTagImageView setHidden:NO];
+            [cell.classID setHidden:NO];
+            [cell.classIDHeadingLabel setHidden:NO];
         }
 		else if (device.version.integerValue == 13) {
             cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T v13";
@@ -515,7 +515,7 @@ typedef enum : NSInteger {
 	//fill rest of the data
 	cell.labelPressureValue.text = device.currentPressure.stringValue;
 	cell.dewpointUnits.text = cell.temperatureUnits.text;
-    cell.labelCurrentDewPointValue.text = device.dewPoint.stringValue;
+    cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", device.dewPoint.floatValue];
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TDTempoDisc*)device {

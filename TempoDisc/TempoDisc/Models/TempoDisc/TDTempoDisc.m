@@ -143,6 +143,7 @@
         self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
         self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
         self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+        
         self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
         self.mode = @(data[14]);
         if (self.mode.integerValue > 100) {
@@ -279,6 +280,7 @@
 		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
 		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
 		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
+        NSLog(@"Current Humidity is %@", self.currentHumidity);
 		self.currentPressure = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
         float currentDewPointCalculation = (float)([self.currentTemperature floatValue] - ((100 - [self.currentHumidity floatValue]) /5));
         self.dewPoint = @(currentDewPointCalculation);

@@ -368,6 +368,7 @@
 		
 		if (device) {
 			Reading* firstReading = [[[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]] firstObject];
+                
 			_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:firstReading.timestamp];
 			_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:device.lastDownload];
 		}
@@ -383,6 +384,33 @@
         //Specific elements that relate to Version 23
         if (device.version.intValue == 23) {
 			
+            _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
+            [_labelDeviceIDValue setHidden:NO];
+            [_classIDTagImage setHidden:NO];
+            [_labelDeviceID setHidden:NO];
+            [_RSSIImage setHidden:NO];
+            if (device.numBreach.intValue > 0) {
+                _breachCount.text = [NSString stringWithFormat:@"%d", device.numBreach.intValue];
+                [_breachImage setImage:breachAlertImage];
+                [_breachCount setHidden:NO];
+                [_breachImage setHidden:NO];
+            } else {
+                [_breachCount setHidden:YES];
+                [_breachImage setHidden:YES];
+            }
+            if (device.referenceDateRawNumber.intValue == 0) {
+                _labelFirstLogDateValue.text = @"No Date Set";
+            } else {
+                (_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:device.startTimestamp]);
+            }
+        } else {
+            [_labelDeviceIDValue setHidden:YES];
+            [_classIDTagImage setHidden:YES];
+            [_labelDeviceID setHidden:YES];
+        }
+        
+        if (device.version.intValue == 27) {
+            
             _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
             [_labelDeviceIDValue setHidden:NO];
             [_classIDTagImage setHidden:NO];
@@ -406,6 +434,8 @@
             [_classIDTagImage setHidden:YES];
             [_labelDeviceID setHidden:YES];
         }
+        
+        
         
         //Specific elements that relate to Version 22
         if (device.version.intValue == 22) {
@@ -458,9 +488,9 @@
         
         
         //Sets Values for Last 24 Hours - Humidity
-		_labelLast24DeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.0f%%", device.highestDayHumidity.floatValue];
-		_labelLast24DeviceHumidityAverageValue.text = [NSString stringWithFormat:@"%.0f%%", device.averageDayHumidity.floatValue];
-		_labelLast24DeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.0f%%", device.lowestDayHumidity.floatValue];
+		_labelLast24DeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.1f%%", device.highestDayHumidity.floatValue];
+		_labelLast24DeviceHumidityAverageValue.text = [NSString stringWithFormat:@"%.1f%%", device.averageDayHumidity.floatValue];
+		_labelLast24DeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.1f%%", device.lowestDayHumidity.floatValue];
         
         
         //Sets Values for Last 24 Hours - Dew Point
@@ -472,8 +502,8 @@
         //Sets Values for Highest and Lowest Temperature and Humidity
 		_labelHighLowDeviceTemperatureHighValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.highestTemperature forDevice:device].floatValue];
 		_labelHighLowDeviceTemperatureLowValue.text = [NSString stringWithFormat:@"%.1f˚", [TDHelper temperature:device.lowestTemperature forDevice:device].floatValue];
-		_labelHighLowDeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.0f%%", device.highestHumidity.floatValue];
-		_labelHighLowDeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.0f%%", device.lowestHumidity.floatValue];
+		_labelHighLowDeviceHumidityHighValue.text = [NSString stringWithFormat:@"%.1f%%", device.highestHumidity.floatValue];
+		_labelHighLowDeviceHumidityLowValue.text = [NSString stringWithFormat:@"%.1f%%", device.lowestHumidity.floatValue];
 
 	}
 	

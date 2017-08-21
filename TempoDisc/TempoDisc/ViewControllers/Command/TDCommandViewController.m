@@ -36,6 +36,7 @@ typedef enum : NSInteger {
     DeviceSetDeviceID,
     DeviceSetTransmissionInterval,
     DeviceFirmwareUpgrade,
+    DeviceAltitude,
 	DeviceCommandCommandConsole
 } DeviceCommand;
 
@@ -127,7 +128,7 @@ typedef enum : NSInteger {
 	[_collectionViewCommands reloadData];
     }
     
-    if ((int)self.versionNumber != 23) {
+    if (((int)self.versionNumber != 23) && ((int)self.versionNumber != 23))  {
         _dataSourceCommands = @[
                                 @(DeviceCommandChangeName),
                                 @(DeviceCommandLogginInterval),
@@ -143,6 +144,28 @@ typedef enum : NSInteger {
                                 @(DeviceCommandResetDevice),
                                 @(DeviceCommandUnits),
                                 @(DeviceCommandLock),
+                                @(DeviceCommandCommandConsole)
+                                ];
+    [_collectionViewCommands reloadData];
+    }
+    
+    if ((int)self.versionNumber == 27) {
+        _dataSourceCommands = @[
+                                @(DeviceCommandChangeName),
+                                @(DeviceCommandLogginInterval),
+                                @(DeviceCommandSensorInterval),
+                                @(DeviceCommandReferenceDateAndTime),
+                                @(DeviceCommandAlarm1),
+                                @(DeviceCommandAlarm2),
+                                @(DeviceCommandClearAlarms),
+                                @(DeviceCommandAlarmOnOff),
+                                @(DeviceCommandAirplaneModeOnOff),
+                                @(DeviceCommandTransmitPower),
+                                @(DeviceCommandClearStoredData),
+                                @(DeviceCommandResetDevice),
+                                @(DeviceCommandUnits),
+                                @(DeviceCommandLock),
+                                @(DeviceAltitude),
                                 @(DeviceCommandCommandConsole)
                                 ];
     [_collectionViewCommands reloadData];
@@ -207,6 +230,8 @@ typedef enum : NSInteger {
             return@"Set Advertising\nFrequency";
         case DeviceFirmwareUpgrade:
             return@"Firmware\nUpgrade";
+        case DeviceAltitude:
+            return@"Set Altitude";
 		case DeviceCommandCommandConsole:
 			return @"Command\nConsole";
 	}
@@ -244,7 +269,7 @@ typedef enum : NSInteger {
         case DeviceCommandLogginInterval:
         {
             title = @"Logging Interval";
-            descript = @"Please enter logging interval in seconds.  The default is 3,600 seconds (1 hour).  Please enter a value between 2 and 86,400 (24 hours).";
+            descript = @"Please enter logging interval in seconds.  The default is 3,600 seconds (1 hour).  Please enter a value between 2 and 86,400 (24 hours).  WARNING:  Changing this interval will result in stored data being cleared in the device.";
             actionOne = [UIAlertAction actionWithTitle:@"Set" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 int value = [alert.textFields[0].text intValue];
                 if ((value < 2) || (value > 86400)) {
@@ -289,7 +314,7 @@ typedef enum : NSInteger {
 		case DeviceCommandReferenceDateAndTime:
         {
 			title = @"Reference Date & Time";
-			descript = @"Please enter a reference date and time for logging purposes.  This should be when the device was first turned on or reset since the first log is recorded straight away.  Each subsequent log timestamp will refer back to this.";
+			descript = @"Please enter a reference date and time for logging purposes.  This should be when the device was first turned on or reset since the first log is recorded straight away.  Each subsequent log timestamp will refer back to this.  WARNING:  Changing this will result in stored data being cleared in the device.";
 			placeholder = @"";
 			actionOne = [UIAlertAction actionWithTitle:@"Change" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 				NSDate *parsedDate = [weakself.dateFormatterCommand dateFromString:alert.textFields[0].text];
@@ -463,7 +488,7 @@ typedef enum : NSInteger {
 		case DeviceCommandClearStoredData:
         {
             title = @"Clear Stored Data";
-            descript = @"Clears the stored data, the reference date but leaves other settings such as name, units and logging interval unchanged.";
+            descript = @"Clears the stored data and the reference date but leaves other settings such as name, units and logging interval unchanged.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [weakself clearStoredData];
@@ -579,7 +604,7 @@ typedef enum : NSInteger {
         {
             
             title = @"Set Device Class ID";
-            descript = @"Enter a number between 1 - 255 that will be an additional identifier for the device.  This function is ideal if you want to organise devices into groups (based on location, for example) where the name alone is not sufficient to identify the device.";
+            descript = @"Enter a number between 1 - 254 that will be an additional identifier for the device.  This function is ideal if you want to organise devices into groups (based on location, for example) where the name alone is not sufficient to identify the device.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Set ID" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 NSString *enteredValue = alert.textFields[0].text;
@@ -626,6 +651,21 @@ typedef enum : NSInteger {
             actionOne = [UIAlertAction actionWithTitle:@"Upgrade" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [weakself enterDFU];
             }];
+            break;
+        }
+            
+        case DeviceAltitude:
+        {
+            title = @"Set Altitude";
+            descript = @"Set your current altitude to get a sea level adjusted pressure reading (as used in weather forecasts).  Enter altitude in meters above sea level.";
+            placeholder = @"";
+            actionOne = [UIAlertAction actionWithTitle:@"Set Altitude" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSString *enteredValue = alert.textFields[0].text;
+                [weakself setAltitude:enteredValue];
+                
+            }];
+            presentInputBox = true;
+            inputNumeralOnly = true;
             break;
         }
             
@@ -1060,6 +1100,13 @@ typedef enum : NSInteger {
     __weak typeof(self) weakself = self;
     [self connectAndWrite:[NSString stringWithFormat:@"*id%@",enteredValue] withCompletion:^(BOOL success, NSError *error) {
 //        [weakself showAlertForAction:success error:error];
+    }];
+}
+
+-(void)setAltitude:(NSString *)enteredValue {
+    __weak typeof(self) weakself = self;
+    [self connectAndWrite:[NSString stringWithFormat:@"*alt%@",enteredValue] withCompletion:^(BOOL success, NSError *error) {
+        //        [weakself showAlertForAction:success error:error];
     }];
 }
 
