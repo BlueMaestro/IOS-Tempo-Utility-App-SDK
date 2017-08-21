@@ -71,7 +71,8 @@ typedef enum : NSInteger {
 - (void)fillDewpointsDataForDevice:(TempoDevice*)device {
 	NSArray *temperatureReadings = [[device readingsForType:@"Temperature"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
 	NSArray *humidityReadings = [[device readingsForType:@"Humidity"] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]]];
-	NSMutableArray *dewPointsValues = [NSMutableArray array];
+	NSMutableArray *dewPointsValues = [NSMutableArray arrayWithCapacity:temperatureReadings.count];
+	
 	for (NSInteger i=0; i<MIN(temperatureReadings.count, humidityReadings.count); i++) {
 		Reading *temperatureReading = temperatureReadings[i];
 		Reading *humidityReading = humidityReadings[i];
@@ -83,7 +84,7 @@ typedef enum : NSInteger {
 									 @(temperatureReading.maxValue.floatValue-((100.-humidityReading.maxValue.floatValue)/5.))]];
 	}
 	
-	[[TDSharedDevice sharedDevice].selectedDevice addData:dewPointsValues forReadingType:@"DewPoint" startTimestamp:[(Reading*)[temperatureReadings firstObject] timestamp] interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
+	[self saveData:dewPointsValues type:DataDownloadTypeDewPoint];
 }
 
 - (int)getIntLsb:(char)lsb msb:(char)msb {
@@ -382,12 +383,14 @@ typedef enum : NSInteger {
 	}
 	if (readingType) {
 		NSDate *timestamp = _downloadStartTimestamp;
+		NSMutableArray *readingsToRemove = [NSMutableArray array];
 		for (ReadingType *type in [TDSharedDevice sharedDevice].selectedDevice.readingTypes) {
 			if ([type.type isEqualToString:readingType]) {
-				[[TDSharedDevice sharedDevice].selectedDevice removeReadingTypesObject:type];
-				break;
+				[readingsToRemove addObject:type];
+//				break;
 			}
 		}
+		[[TDSharedDevice sharedDevice].selectedDevice removeReadingTypes:[NSSet setWithArray:readingsToRemove]];
 //        [NSThread sleepForTimeInterval: 1.0];
 		[[TDSharedDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
 //        [NSThread sleepForTimeInterval: 1.0];
