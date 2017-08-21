@@ -334,7 +334,7 @@ int getInt(char lsb,char msb)
 			reading.timestamp = [timeStamp dateByAddingTimeInterval:interval*index];
 		}
 
-		NSLog(@"Timestamp: %@, calculated from a start date of %@ and an interval of %li", reading.timestamp, timeStamp, (long)interval);
+//		NSLog(@"Timestamp: %@, calculated from a start date of %@ and an interval of %li", reading.timestamp, timeStamp, (long)interval);
 		index++;
 	}
 	NSError *saveError;

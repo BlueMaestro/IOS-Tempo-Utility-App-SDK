@@ -226,7 +226,7 @@ typedef enum : NSInteger {
 				case DataDownloadTypeFinish:
 					break;
 			}
-			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
+//			NSLog(@"sample raw value: %@. Record number: %lu. Type: %@", [data subdataWithRange:NSMakeRange(i, 2)], (unsigned long)_currentDataSamples.count, type);
 			NSInteger value = 0;
 			if (_deviceVersion == 62) {
 				const unsigned char levelBytes[] = {d[i], d[i+1], d[i+2], d[i+3]};
@@ -237,17 +237,19 @@ typedef enum : NSInteger {
 			else {
 				value = [self getIntLsb:d[i+1] msb:d[i]];
 			}
-			NSLog(@"Sample parsed value: %ld", (long)value);
+//			NSLog(@"Sample parsed value: %ld", (long)value);
 			[_currentDataSamples addObject:@[@(value / 10.f)]];
+			float progress = 0;
 			if (_deviceVersion == 13 || _deviceVersion == 52 || _deviceVersion == 62) {
-				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)];
+				progress = baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample);
 			}
 			else if (_deviceVersion == 32) {
-				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5];
+				progress = baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.5;
 			}
 			else {
-				[self notifyUpdateForProgress:baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3];
+				progress = baseProgress+(_totalCurrentSample == 0 ? 0 : (float)_currentDataSamples.count / (float)_totalCurrentSample)*0.3;
 			}
+			[self notifyUpdateForProgress:progress];
 		}
 	}
 }
@@ -386,9 +388,9 @@ typedef enum : NSInteger {
 				break;
 			}
 		}
-        [NSThread sleepForTimeInterval: 1.0];
+//        [NSThread sleepForTimeInterval: 1.0];
 		[[TDSharedDevice sharedDevice].selectedDevice addData:data forReadingType:readingType startTimestamp:timestamp interval:[(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice timerInterval].integerValue context:[(AppDelegate*)[UIApplication sharedApplication].delegate managedObjectContext]];
-        [NSThread sleepForTimeInterval: 1.0];
+//        [NSThread sleepForTimeInterval: 1.0];
 	}
 	
 }

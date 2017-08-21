@@ -841,7 +841,9 @@
 			weakself.hudDownloadData.labelText = NSLocalizedString(@"Downloading data...", nil);
 		[weakself.uartAllDataDownloader downloadDataForDevice:(TempoDiscDevice*)[TDSharedDevice sharedDevice].selectedDevice withUpdate:^(float progress) {
 			dispatch_async(dispatch_get_main_queue(), ^{
-				weakself.hudDownloadData.progress = progress;
+				if (fabs(weakself.hudDownloadData.progress - progress) > 0.02) {
+					weakself.hudDownloadData.progress = progress;
+				}
 			});
 		} withCompletion:^(BOOL success) {
 			[weakself.hudDownloadData hide:YES];
