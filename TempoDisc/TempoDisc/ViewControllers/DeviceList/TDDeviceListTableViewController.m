@@ -414,8 +414,8 @@ typedef enum : NSInteger {
 	cell.labelDeviceName.text = device.name;
 	NSString *unit = device.isFahrenheit.boolValue ? @"Fahrenheit" : @"Celsius";
 	
-	cell.labelLogCountValue.text = device.intervalCounter.stringValue;
-	cell.labelLogIntervalValue.text = device.timerInterval.stringValue;
+	cell.labelLogCountValue.text = [NSString stringWithFormat:@"%@ logs", device.intervalCounter.stringValue];
+	cell.labelLogIntervalValue.text = [NSString stringWithFormat:@"%@ seconds", device.timerInterval.stringValue];
 
     cell.dewpointUnits.text = unit;
     cell.temperatureUnits.text = unit;
@@ -650,7 +650,7 @@ typedef enum : NSInteger {
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
 	
-	cell.backgroundColor = device.globalIdentifier.integerValue == 255 ? [UIColor colorWithWhite:200./255.0 alpha:1.0] : [UIColor whiteColor];
+	cell.backgroundColor = device.globalIdentifier.integerValue == 255 ? [UIColor colorWithWhite:230./255.0 alpha:1.0] : [UIColor whiteColor];
 	
 	if ([cell isMemberOfClass:[TDMovementDeviceTableViewCell class]]) {
 		[self fillMovemementDeviceCell:(TDMovementDeviceTableViewCell*)cell model:device];
