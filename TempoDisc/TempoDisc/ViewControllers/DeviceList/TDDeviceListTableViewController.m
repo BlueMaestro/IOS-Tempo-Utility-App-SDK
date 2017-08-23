@@ -460,9 +460,15 @@ typedef enum : NSInteger {
 	cell.labelDeviceUUIDValue.text = [NSString stringWithFormat:@"%@", device.peripheral ? device.peripheral.UUIDString : device.uuid];
 	
 	cell.labelDeviceIdentifierValue.text = @"OTHER TEMPO DISC";
+	
+	if ([device respondsToSelector:@selector(dewPoint)] && device.dewPoint) {
+		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.dewPoint forDiscDevice:device].floatValue];
+	}
+	else {
+		cell.labelCurrentDewPointValue.text = @"0";
+	}
+	
 	if ([device isKindOfClass:[TDTempoDisc class]]) {
-		TDTempoDisc* disc = (TDTempoDisc*)device;
-		cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:disc.dewPoint forDiscDevice:device].floatValue];
 		if (device.version.integerValue == 23) {
 			cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T/H/D v23";
             [cell.classTagImageView setHidden:NO];
@@ -506,8 +512,6 @@ typedef enum : NSInteger {
             [cell.classIDHeadingLabel setHidden:YES];
         }
         
-	} else {
-		cell.labelCurrentDewPointValue.text = @"0";
 	}
     
 }
