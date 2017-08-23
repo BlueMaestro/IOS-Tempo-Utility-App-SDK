@@ -521,7 +521,7 @@ typedef enum : NSInteger {
 	//fill rest of the data
 	cell.labelPressureValue.text = device.currentPressure.stringValue;
 	cell.dewpointUnits.text = cell.temperatureUnits.text;
-    cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", device.dewPoint.floatValue];
+    cell.labelCurrentDewPointValue.text = [NSString stringWithFormat:@"%.1fº", [TDHelper temperature:device.dewPoint forDiscDevice:device].floatValue];
 }
 
 - (void)fillOtherDeviceCell:(TDOtherDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
