@@ -606,11 +606,13 @@ typedef enum : NSInteger {
 				[weakself.timerUpdateList invalidate];
 				weakself.downloader = [[TDUARTAllDataDownloader alloc] init];
 				weakself.sendingData = YES;
+				[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 				[weakself.downloader writeData:@"*blink" toDevice:_dataSource[indexPath.row] withCompletion:^(BOOL sucess) {
 					dispatch_async(dispatch_get_main_queue(), ^{
 						weakself.sendingData = NO;
 						[weakself.tableView endEditing:YES];
 						[weakself scanForDevices];
+						[MBProgressHUD hideAllHUDsForView:weakself.view animated:NO];
 					});
 				}];
 			}
