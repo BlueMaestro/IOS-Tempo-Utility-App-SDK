@@ -101,7 +101,32 @@ typedef enum : NSInteger {
 	/**
 	 *	To reorder command list just adjust this list
 	 **/
-    if ((int)self.versionNumber == 23 || (int)self.versionNumber == 13) {
+    
+    if ((int)self.versionNumber == 13) {
+        _dataSourceCommands = @[
+                                @(DeviceCommandChangeName),
+                                @(DeviceCommandLogginInterval),
+                                @(DeviceCommandSensorInterval),
+                                @(DeviceCommandReferenceDateAndTime),
+                                @(DeviceCommandAlarm1),
+                                @(DeviceCommandAlarm2),
+                                @(DeviceCommandClearAlarms),
+                                @(DeviceCommandAlarmOnOff),
+                                @(DeviceCommandAirplaneModeOnOff),
+                                @(DeviceCommandTransmitPower),
+                                @(DeviceCommandClearStoredData),
+                                @(DeviceCommandResetDevice),
+                                @(DeviceCommandUnits),
+                                @(DeviceCommandLock),
+                                @(DeviceCalibrateTemperature),
+                                @(DeviceDisableButton),
+                                @(DeviceSetDeviceID),
+                                @(DeviceSetTransmissionInterval),
+                                @(DeviceCommandCommandConsole)
+                                ];
+        [_collectionViewCommands reloadData];
+    }
+    if ((int)self.versionNumber == 23) {
 	_dataSourceCommands = @[
 							@(DeviceCommandChangeName),
 							@(DeviceCommandLogginInterval),
@@ -122,13 +147,13 @@ typedef enum : NSInteger {
                             @(DeviceDisableButton),
                             @(DeviceSetDeviceID),
                             @(DeviceSetTransmissionInterval),
-                            @(DeviceFirmwareUpgrade),
 							@(DeviceCommandCommandConsole)
 							];
 	[_collectionViewCommands reloadData];
     }
     
-    if (((int)self.versionNumber != 23) && ((int)self.versionNumber != 23))  {
+    
+    if (((int)self.versionNumber != 23) && ((int)self.versionNumber != 13)  && ((int)self.versionNumber != 27) && ((int)self.versionNumber !=52))  {
         _dataSourceCommands = @[
                                 @(DeviceCommandChangeName),
                                 @(DeviceCommandLogginInterval),
@@ -146,7 +171,7 @@ typedef enum : NSInteger {
                                 @(DeviceCommandLock),
                                 @(DeviceCommandCommandConsole)
                                 ];
-    [_collectionViewCommands reloadData];
+        [_collectionViewCommands reloadData];
     }
     
     if ((int)self.versionNumber == 27) {
@@ -165,6 +190,11 @@ typedef enum : NSInteger {
                                 @(DeviceCommandResetDevice),
                                 @(DeviceCommandUnits),
                                 @(DeviceCommandLock),
+                                @(DeviceCalibrateTemperature),
+                                @(DeviceCalibrateHumidity),
+                                @(DeviceDisableButton),
+                                @(DeviceSetDeviceID),
+                                @(DeviceSetTransmissionInterval),
                                 @(DeviceAltitude),
                                 @(DeviceCommandCommandConsole)
                                 ];
