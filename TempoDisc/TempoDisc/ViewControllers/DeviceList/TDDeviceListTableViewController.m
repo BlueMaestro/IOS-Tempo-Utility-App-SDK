@@ -45,6 +45,8 @@ typedef enum : NSInteger {
 @property (nonatomic, strong) TDTempoDisc *selectedDevice;
 @property (nonatomic, strong) TDUARTAllDataDownloader *downloader;
 @property (nonatomic, assign) BOOL sendingData;
+@property (nonatomic, strong) MBProgressHUD *hudBlink;
+@property (nonatomic, strong) NSIndexPath *indexPathEdit;
 
 @end
 
@@ -93,6 +95,7 @@ typedef enum : NSInteger {
         [_timerUpdateList invalidate];
         _timerUpdateList = nil;
     }
+	[_hudBlink hide:YES];
 }
 
 #pragma mark - KVO
@@ -567,6 +570,9 @@ typedef enum : NSInteger {
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (_sendingData && _indexPathEdit.row == indexPath.row) {
+		return;
+	}
 	self.selectedDevice = _dataSource[indexPath.row];
     [TDSharedDevice sharedDevice].activeDevice = self.selectedDevice;
         
@@ -606,13 +612,17 @@ typedef enum : NSInteger {
 				[weakself.timerUpdateList invalidate];
 				weakself.downloader = [[TDUARTAllDataDownloader alloc] init];
 				weakself.sendingData = YES;
-				[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+				weakself.hudBlink = [MBProgressHUD showHUDAddedTo:[weakself.tableView cellForRowAtIndexPath:indexPath] animated:YES];
+				weakself.hudBlink.labelText = @"Attempting to blink device...";
+				weakself.indexPathEdit = indexPath;
+				[weakself.tableView setEditing:NO animated:YES];
 				[weakself.downloader writeData:@"*blink" toDevice:_dataSource[indexPath.row] withCompletion:^(BOOL sucess) {
 					dispatch_async(dispatch_get_main_queue(), ^{
 						weakself.sendingData = NO;
-						[weakself.tableView endEditing:YES];
 						[weakself scanForDevices];
-						[MBProgressHUD hideAllHUDsForView:weakself.view animated:NO];
+//						[MBProgressHUD hideAllHUDsForView:weakself.view animated:NO];
+						[weakself.hudBlink hide:YES];
+						weakself.indexPathEdit = nil;
 					});
 				}];
 			}
@@ -655,6 +665,14 @@ typedef enum : NSInteger {
 	}
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuse forIndexPath:indexPath];
+	
+	if (_hudBlink.superview == cell && indexPath.row != _indexPathEdit.row) {
+		[_hudBlink hide:YES];
+	}
+	else if (_sendingData && indexPath.row == _indexPathEdit.row && !_hudBlink.superview) {
+		_hudBlink = [MBProgressHUD showHUDAddedTo:cell animated:YES];
+		_hudBlink.labelText = @"Attempting to blink device...";
+	}
 	
 	cell.backgroundColor = device.globalIdentifier.integerValue == 255 ? [UIColor colorWithWhite:230./255.0 alpha:1.0] : [UIColor whiteColor];
 	

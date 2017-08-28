@@ -403,6 +403,9 @@ typedef enum : NSInteger {
 	if (_completion) {
 		_completion(NO);
 	}
+	if (_finish) {
+		_finish(NO);
+	}
 }
 
 - (void)handleDisconnectNotification:(NSNotification*)note {
