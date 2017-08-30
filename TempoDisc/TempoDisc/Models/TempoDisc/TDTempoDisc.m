@@ -292,6 +292,7 @@
 			self.isFahrenheit = @(0);
 		}
 		self.numBreach = @(data[15]);
+        NSLog(@"Current Humidity is %@", self.numBreach);
 		
         //Scan response packet
         self.highestDayPressure = @([self intValueLsb:data[manufacturerDataLength-24] msb:data[manufacturerDataLength-25]] / 10.f);

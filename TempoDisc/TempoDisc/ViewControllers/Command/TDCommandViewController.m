@@ -111,7 +111,7 @@ typedef enum : NSInteger {
                                 @(DeviceCommandAlarm1),
                                 @(DeviceCommandAlarm2),
                                 @(DeviceCommandClearAlarms),
-                                @(DeviceCommandAlarmOnOff),
+                                //@(DeviceCommandAlarmOnOff),
                                 @(DeviceCommandAirplaneModeOnOff),
                                 @(DeviceCommandTransmitPower),
                                 @(DeviceCommandClearStoredData),
@@ -135,7 +135,7 @@ typedef enum : NSInteger {
 							@(DeviceCommandAlarm1),
 							@(DeviceCommandAlarm2),
 							@(DeviceCommandClearAlarms),
-							@(DeviceCommandAlarmOnOff),
+							//@(DeviceCommandAlarmOnOff),
 							@(DeviceCommandAirplaneModeOnOff),
 							@(DeviceCommandTransmitPower),
 							@(DeviceCommandClearStoredData),
@@ -162,7 +162,7 @@ typedef enum : NSInteger {
                                 @(DeviceCommandAlarm1),
                                 @(DeviceCommandAlarm2),
                                 @(DeviceCommandClearAlarms),
-                                @(DeviceCommandAlarmOnOff),
+                                //@(DeviceCommandAlarmOnOff),
                                 @(DeviceCommandAirplaneModeOnOff),
                                 @(DeviceCommandTransmitPower),
                                 @(DeviceCommandClearStoredData),
@@ -183,7 +183,7 @@ typedef enum : NSInteger {
                                 @(DeviceCommandAlarm1),
                                 @(DeviceCommandAlarm2),
                                 @(DeviceCommandClearAlarms),
-                                @(DeviceCommandAlarmOnOff),
+                                //@(DeviceCommandAlarmOnOff),
                                 @(DeviceCommandAirplaneModeOnOff),
                                 @(DeviceCommandTransmitPower),
                                 @(DeviceCommandClearStoredData),
@@ -453,7 +453,7 @@ typedef enum : NSInteger {
 		case DeviceCommandClearAlarms:
         {
             title = @"Clear Alarms";
-            descript = @"This clears the alarms by reseting the alarm counter, but does not change any parameters.";
+            descript = @"This clears the alarms and turns them off.";
             placeholder = @"";
             actionOne = [UIAlertAction actionWithTitle:@"Confirm" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [weakself clearAlarms];
