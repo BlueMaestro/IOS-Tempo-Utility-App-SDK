@@ -382,13 +382,52 @@
 			_labelLastDownloadValue.text = [_formatterLastDownload stringFromDate:device.lastDownload];
 		}
 		else {
-			_labelFirstLogDateValue.text = NSLocalizedString(@"Not yet downloaded", nil);
+			_labelFirstLogDateValue.text = NSLocalizedString(@"Not yet set", nil);
 			_labelLastDownloadValue.text = NSLocalizedString(@"Not yet downloaded", nil);
 		}
 		
 		_labelDeviceBatteryValue.text = [NSString stringWithFormat:@"%ld%%", device.battery.longValue];
         
 		_labelDeviceID.text = @"CLASS ID";
+        
+        //Specific elements that relate to Version 13
+        if (device.version.intValue == 13) {
+            _labelDeviceIDValue.text = [NSString stringWithFormat:@"%d", device.globalIdentifier.intValue];
+            if (device.numBreach.intValue > 0) {
+                _breachCount.text = [NSString stringWithFormat:@"%d", device.numBreach.intValue];
+                [_breachImage setImage:breachAlertImage];
+                [_breachCount setHidden:NO];
+                [_breachImage setHidden:NO];
+            } else {
+                [_breachImage setImage:breachAlertImage];
+                [_breachCount setHidden:YES];
+                [_breachImage setHidden:YES];
+            }
+            if (device.referenceDateRawNumber.intValue == 0) {
+                _labelFirstLogDateValue.text = @"No Date Set";
+            } else {
+                (_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:device.startTimestamp]);
+            }
+            
+        }
+    
+        
+        //Specific elements that relate to Version 22
+        if (device.version.intValue == 22) {
+            if (device.numBreach.intValue > 0) {
+                _breachCount.text = [NSString stringWithFormat:@"%d", device.numBreach.intValue];
+                [_breachImage setImage:breachAlertImage];
+                [_breachCount setHidden:NO];
+                [_breachImage setHidden:NO];
+            } else {
+                [_breachCount setHidden:YES];
+                [_breachImage setHidden:YES];
+            }
+        }
+        else {
+            [_breachCount setHidden:YES];
+            [_breachImage setHidden:YES];
+        }
         
         //Specific elements that relate to Version 23
         if (device.version.intValue == 23) {
@@ -412,10 +451,6 @@
             } else {
                 (_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:device.startTimestamp]);
             }
-        } else {
-            [_labelDeviceIDValue setHidden:YES];
-            [_classIDTagImage setHidden:YES];
-            [_labelDeviceID setHidden:YES];
         }
         
         if (device.version.intValue == 27) {
@@ -438,30 +473,11 @@
             } else {
                 (_labelFirstLogDateValue.text = [_formatterLastDownload stringFromDate:device.startTimestamp]);
             }
-        } else {
-            [_labelDeviceIDValue setHidden:YES];
-            [_classIDTagImage setHidden:YES];
-            [_labelDeviceID setHidden:YES];
         }
         
         
         
-        //Specific elements that relate to Version 22
-        if (device.version.intValue == 22) {
-            if (device.numBreach.intValue > 0) {
-                _breachCount.text = [NSString stringWithFormat:@"%d", device.numBreach.intValue];
-                [_breachImage setImage:breachAlertImage];
-                [_breachCount setHidden:NO];
-                [_breachImage setHidden:NO];
-            } else {
-                [_breachCount setHidden:YES];
-                [_breachImage setHidden:YES];
-            }
-        }
-		else {
-			[_breachCount setHidden:YES];
-			[_breachImage setHidden:YES];
-		}
+        
 		
         
 		

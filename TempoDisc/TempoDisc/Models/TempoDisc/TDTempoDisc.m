@@ -33,6 +33,11 @@
 	return (((int) lsb) & 0xFF) | (((int) msb) << 8);
 }
 
+- (uint)uintValueLsb:(char)lsb msb:(char)msb {
+    return (((uint) lsb) & 0xFF) | (((uint) msb) << 8);
+    
+}
+
 -(float) convertedValue:(float)preconversion {
 	float converted = ((preconversion * 1.8) + 32);
 	return converted;
@@ -122,9 +127,69 @@
 		//Advertisement packet
 		self.version = @(data[2]);
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
 		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
+        self.mode = @(data[14]);
+        if (self.mode.integerValue > 100) {
+            self.isFahrenheit = @(1);
+        }
+        else {
+            self.isFahrenheit = @(0);
+        }
+        self.numBreach = @(data[15]);
+        
+        //Scan response packet
+        self.highestTemperature = @([self intValueLsb:data[manufacturerDataLength-24] msb:data[manufacturerDataLength-25]] / 10.f);
+        self.lowestTemperature = @([self intValueLsb:data[manufacturerDataLength-20] msb:data[manufacturerDataLength-21]] / 10.f);
+        self.highestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-16] msb:data[manufacturerDataLength-17]] / 10.f);
+        self.lowestDayTemperature = @([self intValueLsb:data[manufacturerDataLength-12] msb:data[manufacturerDataLength-13]] / 10.f);
+        self.averageDayTemperature = @([self intValueLsb:data[manufacturerDataLength-8] msb:data[manufacturerDataLength-9]] / 10.f);
+        
+        self.globalIdentifier = @(data[manufacturerDataLength-5]);
+        NSLog(@"Global identifier is %@", self.globalIdentifier);
+        
+        const unsigned char dateBytes[] = {data[manufacturerDataLength-4], data[manufacturerDataLength-3], data[manufacturerDataLength-2], data[manufacturerDataLength-1]};
+        NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
+        //date digits, should be reverse from what is written, not sure about indexes
+        unsigned dateValueRawValue = CFSwapInt32BigToHost(*(int*)([dateValues bytes]));
+        NSLog(@"Trying to reverse endian, value is %u", dateValueRawValue);
+        
+        NSNumber *fullValue = [NSNumber numberWithUnsignedInt:dateValueRawValue];
+        self.referenceDateRawNumber = fullValue;
+        long lowDate = 1700000000; //1 January 2017
+        long highDate = 1900000000; //1 January 2019
+        if (([fullValue intValue] != 0) || ([fullValue longValue] > lowDate) || ([fullValue longValue] < highDate)) {
+            NSInteger minutes = fullValue.integerValue % 100;
+            NSInteger hours = (fullValue.integerValue/100) % 100;
+            NSInteger days = (fullValue.integerValue/10000) % 100;
+            NSInteger months = (fullValue.integerValue/1000000) % 100;
+            NSInteger years = (fullValue.integerValue/100000000) % 100;
+            
+            NSCalendar* calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+            NSDateComponents *components = [[NSDateComponents alloc] init];
+            //MIN is for testing purposes as returning invalid values provides an unexpected date, can be removed once date parse is valid
+            components.minute = MIN(minutes, 60);
+            components.hour = MIN(hours, 24);
+            components.day = MIN(days, 31);
+            components.month = MIN(months, 12);
+            components.year = years+2000;//add century as its only last 2 digits
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            dateFormatter.dateFormat = @"yyyy MMM dd HH:mm";
+            NSDate *date = [calendar dateFromComponents:components];
+            
+            self.startTimestamp = [calendar dateFromComponents:components];
+            NSLog(@"%@", [dateFormatter stringFromDate:date]);
+            
+        }
+        NSLog(@"Parsed version 13 data");
+        
+        
+        
+        
+        
+        
+        
 	}
 	
 #pragma mark - Version 22
@@ -139,8 +204,8 @@
         //Advertisement packet
         self.version = @(data[2]);
         self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-        self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-        self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+        self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+        self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
         self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
         self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
         
@@ -187,8 +252,8 @@
         
         //Advertisement packet
         self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-        self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-        self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+        self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+        self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
         self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
         self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
         self.dewPoint = @([self intValueLsb:data[13] msb:data[12]] / 10.f);
@@ -276,8 +341,8 @@
 		//Advertisement packet
 		self.version = @(data[2]);
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
 		self.currentTemperature = @([self intValueLsb:data[9] msb:data[8]] / 10.f);
 		self.currentHumidity = @([self intValueLsb:data[11] msb:data[10]] / 10.f);
         NSLog(@"Current Humidity is %@", self.currentHumidity);
@@ -370,8 +435,8 @@
 		//Advertisement packet
 		self.version = @(data[2]);
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
 		
 		//device 32
 		self.humSensitivityLevel = @(data[8]);
@@ -394,8 +459,8 @@
 		self.name = advertisedData[@"kCBAdvDataLocalName"];
 		self.lastDetected = [NSDate date];
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
 		const unsigned char dateBytes[] = {data[8], data[9], data[10], data[11]};
 		NSData *dateValues = [NSData dataWithBytes:dateBytes length:4];
 		//date digits, should be reverse from what is written, not sure about indexes
@@ -454,9 +519,9 @@
 		self.name = advertisedData[@"kCBAdvDataLocalName"];
 		self.lastDetected = [NSDate date];
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
-		self.logPointer = @([self intValueLsb:data[9] msb:data[8]]);
+		self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
+		self.logPointer = @([self uintValueLsb:data[9] msb:data[8]]);
         int openClose = data[10];
         if (openClose == 1) self.openCloseStatus = false;
         if (openClose == 0) self.openCloseStatus = true;
@@ -505,8 +570,8 @@
 		self.name = advertisedData[@"kCBAdvDataLocalName"];
 		self.lastDetected = [NSDate date];
 		self.battery = [NSDecimalNumber decimalNumberWithDecimal:@(data[3]).decimalValue];
-		self.timerInterval = @([self intValueLsb:data[5] msb:data[4]]);
-		self.intervalCounter = @([self intValueLsb:data[7] msb:data[6]]);
+		self.timerInterval = @([self uintValueLsb:data[5] msb:data[4]]);
+		self.intervalCounter = @([self uintValueLsb:data[7] msb:data[6]]);
 		self.logPointer = @([self intValueLsb:data[9] msb:data[8]]);
 		
 		const unsigned char levelBytes[] = {data[10], data[11], data[12], data[13]};

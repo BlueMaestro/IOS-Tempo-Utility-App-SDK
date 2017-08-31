@@ -492,9 +492,9 @@ typedef enum : NSInteger {
         }
 		else if (device.version.integerValue == 13) {
             cell.labelDeviceIdentifierValue.text = @"TEMPO DISC T v13";
-            [cell.classTagImageView setHidden:YES];
-            [cell.classID setHidden:YES];
-            [cell.classIDHeadingLabel setHidden:YES];
+            [cell.classTagImageView setHidden:NO];
+            [cell.classID setHidden:NO];
+            [cell.classIDHeadingLabel setHidden:NO];
 		}
 		else if (device.version.integerValue == 52) {
 			cell.labelDeviceIdentifierValue.text = @"OPEN SENSOR DISC v13";
@@ -534,7 +534,7 @@ typedef enum : NSInteger {
 - (void)fillTemperatureDeviceCell:(TDTemperatureDeviceTableViewCell*)cell model:(TDTempoDisc*)device {
 	[self fillPressureDeviceCell:cell model:device];
 	//TODO: Tempo device version 13 data fill
-	cell.labelUnitsValue.text = device.isFahrenheit.boolValue ? @"Fahrenheit (˚ K)" : @"Celsius (˚ C)";
+	cell.labelUnitsValue.text = device.isFahrenheit.boolValue ? @"Fahrenheit (˚ F)" : @"Celsius (˚ C)";
 	cell.labelModeValue.text = device.mode.stringValue;
 	cell.labelThresholdBreachesValue.text = device.numBreach.stringValue;
 }
